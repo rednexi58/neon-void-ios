@@ -1,0 +1,2800 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Neon Void" />
+  <title>Neon Void: Cyber Defense — iOS App Store & TestFlight Sürümü</title>
+  <link rel="stylesheet" href="./tailwind.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #05070f;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    .font-cyber {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .neon-border-cyan {
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.35), inset 0 0 8px rgba(6, 182, 212, 0.15);
+    }
+    .neon-border-fuchsia {
+      box-shadow: 0 0 14px rgba(217, 70, 239, 0.35), inset 0 0 8px rgba(217, 70, 239, 0.15);
+    }
+    .neon-border-amber {
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.35), inset 0 0 8px rgba(245, 158, 11, 0.15);
+    }
+    canvas {
+      display: block;
+      touch-action: manipulation;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d1a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#05070f] text-slate-100">
+
+  <!-- ÜST KOMUTA BAR (HUD & META CURRENCIES & NAVIGATION) -->
+  <header class="w-full bg-[#090d1b]/95 border-b border-cyan-500/30 px-3 py-2 sticky top-0 z-30 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Sol: Logo & Bölüm Bilgisi -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-lg bg-cyan-500/15 border border-cyan-400/60 flex items-center justify-center neon-border-cyan">
+          <span class="font-cyber font-black text-cyan-400 text-sm tracking-tighter">NV</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-cyber font-bold text-sm sm:text-base text-cyan-300 tracking-wide">NEON VOID</h1>
+            <span id="badgeRemoveAds" class="hidden px-1.5 py-0.5 text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded">VIP REKLAMSIZ</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Bölüm <span id="hudLevelNum" class="text-cyan-300 font-bold">1</span>/100 • Dalga <span id="hudWaveNum" class="text-fuchsia-300 font-bold">1/3</span> • Çarpan: <span id="hudDifficultyMult" class="text-amber-300 font-semibold">1.00x HP</span></p>
+        </div>
+      </div>
+
+      <!-- Orta: Can, Oyun İçi Altın ve Kalıcı Meta Paralar -->
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2.5 text-xs">
+        <!-- Üs Canı (Cyber-Nexus) -->
+        <div class="flex items-center gap-1.5 bg-rose-950/50 border border-rose-500/40 px-2.5 py-1 rounded-lg" title="Cyber-Nexus Üs Canı">
+          <span class="text-rose-400 font-bold">♥ ÜS:</span>
+          <span id="hudBaseHp" class="font-cyber font-bold text-rose-200">20/20</span>
+        </div>
+        <!-- Oyun İçi Altın -->
+        <div class="flex items-center gap-1.5 bg-amber-950/50 border border-amber-500/40 px-2.5 py-1 rounded-lg" title="Oyun İçi Kule Altını (Gold)">
+          <span class="text-amber-400 font-bold">⚡ ALTIN:</span>
+          <span id="hudGold" class="font-cyber font-bold text-amber-200">250</span>
+        </div>
+        <!-- Standart Meta Para: Gear -->
+        <div class="flex items-center gap-1.5 bg-slate-800/80 border border-slate-600/60 px-2.5 py-1 rounded-lg" title="Standart Meta Para: Gear (Araştırma Laboratuvarı)">
+          <span class="text-sky-400 font-bold">⚙ GEAR:</span>
+          <span id="hudGear" class="font-cyber font-bold text-sky-200">120</span>
+        </div>
+        <!-- Premium Meta Para: Cyber-Core -->
+        <div class="flex items-center gap-1.5 bg-fuchsia-950/50 border border-fuchsia-500/40 px-2.5 py-1 rounded-lg" title="Premium Para Birimi: Cyber-Core (Elmas)">
+          <span class="text-fuchsia-400 font-bold">💎 CORE:</span>
+          <span id="hudCyberCore" class="font-cyber font-bold text-fuchsia-200">25</span>
+        </div>
+      </div>
+
+      <!-- Sağ: Hızlı Kontroller ve Menüler -->
+      <div class="flex items-center gap-1.5">
+        <button id="btnSpeedToggle" class="px-2.5 py-1.5 rounded-lg text-xs font-cyber font-bold bg-slate-800 hover:bg-slate-700 border border-slate-600 text-cyan-300 transition">1x HIZ</button>
+        <button id="btnPauseToggle" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 transition">Duraklat</button>
+        <button id="btnOpenLab" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 transition">🔬 Lab (Skill Tree)</button>
+        <button id="btnOpenShop" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-400/50 text-fuchsia-200 transition">🛒 Mağaza</button>
+        <button id="btnOpenIosGuide" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 transition">🍎 iOS TestFlight</button>
+        <button id="btnMuteAudio" class="px-2 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 transition" title="Sesi Aç/Kapat">🔊</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ANA OYUN ALANI VE KONTROL PANELİ -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-3 grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
+
+    <!-- SOL/ORTA: SİBERPUNK SAVAŞ HARİTASI (CANVAS) -->
+    <section class="lg:col-span-8 xl:col-span-9 flex flex-col gap-2">
+      <!-- Bölüm Seçici ve Dalga Durum Çubuğu -->
+      <div class="bg-[#0b1021] border border-slate-800 rounded-xl px-3 py-2 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <label for="selectLevel" class="text-xs font-semibold text-slate-300">Bölüm:</label>
+          <select id="selectLevel" class="bg-slate-900 border border-cyan-500/40 rounded-lg px-2 py-1 text-xs font-cyber text-cyan-300 focus:outline-none"></select>
+          <label for="selectMapSector" class="text-xs font-semibold text-slate-300 ml-1">Harita / Ortam:</label>
+          <select id="selectMapSector" class="bg-slate-900 border border-fuchsia-500/40 rounded-lg px-2 py-1 text-xs font-cyber text-fuchsia-300 focus:outline-none">
+            <option value="0">🛸 Sektör 1: Uzay Gemisi Güvertesi (USS Aegis)</option>
+            <option value="1">🌌 Sektör 2: Derin Uzay & Kızıl Nebula</option>
+            <option value="2">☄️ Sektör 3: Kuantum Asteroit Üssü</option>
+            <option value="3">👾 Sektör 4: Uzaylı Ana Gemi Çekirdeği</option>
+          </select>
+          <button id="btnQuickBoss10" class="px-2 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 text-[11px] font-semibold transition">🔥 Lv.10 Boss Test</button>
+          <button id="btnQuickBoss50" class="px-2 py-1 rounded bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-500/40 text-fuchsia-300 text-[11px] font-semibold transition">⚡ Lv.50 Boss Test</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="waveStatusBanner" class="text-xs font-medium text-cyan-300">Hazırlık Aşaması — Sokete tıklayıp kule kurun!</span>
+          <button id="btnNextWaveEarly" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-300 text-xs font-semibold transition">Dalgayı Başlat ▶</button>
+        </div>
+      </div>
+
+      <!-- Oyun Canvas Kapsayıcısı -->
+      <div id="canvasContainer" class="relative w-full aspect-[16/10] bg-[#060913] rounded-2xl border border-cyan-500/30 overflow-hidden shadow-2xl neon-border-cyan">
+        <canvas id="gameCanvas" class="w-full h-full cursor-crosshair"></canvas>
+
+        <!-- Boss Alarm Banner -->
+        <div id="bossAlertBanner" class="hidden absolute top-3 left-1/2 -translate-x-1/2 bg-rose-950/90 border border-rose-500 px-4 py-1.5 rounded-full shadow-lg pointer-events-none">
+          <p class="font-cyber font-bold text-xs sm:text-sm text-rose-300 tracking-wider animate-pulse">⚠ UYARI: MEKANİK BOSS SAHNEDE (EMP KULE DONDURMA AKTİF!) ⚠</p>
+        </div>
+
+        <!-- Köşe Butonu: Ödüllü Reklam ile Orbital Lazer Çağrısı -->
+        <div class="absolute bottom-3 right-3 flex items-center gap-2">
+          <button id="btnOrbitalLaser" class="group relative flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600/90 to-fuchsia-600/90 hover:from-rose-500 hover:to-fuchsia-500 border border-rose-300/60 text-white shadow-lg transition">
+            <span class="text-base">🛰️</span>
+            <div class="text-left">
+              <div class="font-cyber font-bold text-xs leading-tight">ORBİTAL LAZER</div>
+              <div id="orbitalStatusText" class="text-[10px] text-rose-100 leading-tight">🎬 Reklam İzle • Tümüne Hasar</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Sol Alt Bilgi: Seçili Soket Durumu -->
+        <div class="absolute bottom-3 left-3 pointer-events-none bg-slate-950/85 border border-slate-700/80 px-3 py-1.5 rounded-lg text-[11px] text-slate-300">
+          <span id="socketHintText">💡 Haritadaki numaralı <strong class="text-cyan-300">Neon Soketlere</strong> tıklayarak kule inşa edin veya yükseltin.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAĞ PANEL: SOKET KULE İNŞA / 3 SEVİYE UPGRADE & DÜŞMAN İSTİHBARATI -->
+    <aside class="lg:col-span-4 xl:col-span-3 flex flex-col gap-3">
+
+      <!-- Seçili Soket & Kule Kontrol Kartı -->
+      <div class="bg-[#0b1021] border border-cyan-500/30 rounded-2xl p-3.5 flex flex-col gap-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div>
+            <h2 class="font-cyber font-bold text-sm text-cyan-300" id="selectedSocketTitle">SOKET #1 SEÇİLİ</h2>
+            <p class="text-[11px] text-slate-400" id="selectedSocketSubtitle">Kule kurmak için aşağıdan seçim yapın</p>
+          </div>
+          <span id="socketBadge" class="px-2 py-0.5 text-[10px] font-cyber font-bold rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">BOŞ</span>
+        </div>
+
+        <!-- Kurulu Kule Varsa: 3 Seviye Upgrade & Satış Paneli -->
+        <div id="installedTowerPanel" class="hidden flex-col gap-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl p-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div id="instTowerName" class="font-cyber font-bold text-sm text-white">Rapid Laser</div>
+              <div id="instTowerLevel" class="text-xs text-cyan-400 font-semibold">Seviye 1 / 3</div>
+            </div>
+            <span id="instTowerTargetTag" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Kara + Hava</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-1.5 text-xs bg-slate-950/70 p-2 rounded-lg border border-slate-800">
+            <div>Hasar: <strong id="instTowerDmg" class="text-cyan-300">28</strong></div>
+            <div>Atış Hızı: <strong id="instTowerRate" class="text-cyan-300">3.2/sn</strong></div>
+            <div>Menzil: <strong id="instTowerRange" class="text-cyan-300">135m</strong></div>
+            <div>Özel: <strong id="instTowerSpecial" class="text-amber-300">Tek Hedef</strong></div>
+          </div>
+
+          <div id="bossFrozenWarning" class="hidden text-[11px] bg-rose-950/80 border border-rose-500/60 text-rose-200 px-2.5 py-1 rounded font-semibold">
+            ❄ BOSS EMP TARAFINDAN DONDURULDU!
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <button id="btnUpgradeTower" class="flex-1 py-2 px-3 rounded-lg font-cyber font-bold text-xs bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition">
+              ⬆ YÜKSELT (120 ⚡)
+            </button>
+            <button id="btnSellTower" class="py-2 px-3 rounded-lg font-semibold text-xs bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 transition">
+              Sat (+55 ⚡)
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Kule İnşa Listesi -->
+        <div id="buildTowerList" class="flex flex-col gap-2">
+          <!-- 1. Rapid Laser -->
+          <button data-tower="rapid" class="tower-build-btn w-full text-left p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border border-cyan-500/40 transition flex items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+                <span class="font-cyber font-bold text-xs text-cyan-300">1. RAPID LASER</span>
+                <span class="text-[10px] px-1.5 py-0.2 bg-cyan-950 text-cyan-200 rounded border border-cyan-700/50">Kara+Hava</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Çok hızlı lazer, tek hedef. Swarm ve Flying avcısı.</p>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="font-cyber font-bold text-xs text-amber-300">80 ⚡</span>
+            </div>
+          </button>
+
+          <!-- 2. Plasma Cannon -->
+          <button data-tower="plasma" class="tower-build-btn w-full text-left p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border border-fuchsia-500/40 transition flex items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-400 shadow-[0_0_8px_#e879f9]"></span>
+                <span class="font-cyber font-bold text-xs text-fuchsia-300">2. PLASMA CANNON</span>
+                <span class="text-[10px] px-1.5 py-0.2 bg-fuchsia-950 text-fuchsia-200 rounded border border-fuchsia-700/50">Sadece Kara</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Yavaş atış, yüksek AoE patlama hasarı.</p>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="font-cyber font-bold text-xs text-amber-300">125 ⚡</span>
+            </div>
+          </button>
+
+          <!-- 3. EMP Blaster -->
+          <button data-tower="emp" class="tower-build-btn w-full text-left p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border border-sky-500/40 transition flex items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]"></span>
+                <span class="font-cyber font-bold text-xs text-sky-300">3. EMP BLASTER</span>
+                <span class="text-[10px] px-1.5 py-0.2 bg-sky-950 text-sky-200 rounded border border-sky-700/50">Kara+Hava</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Menzildeki tüm düşmanları %55-%75 yavaşlatır.</p>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="font-cyber font-bold text-xs text-amber-300">100 ⚡</span>
+            </div>
+          </button>
+
+          <!-- 4. Sniper Railgun -->
+          <button data-tower="railgun" class="tower-build-btn w-full text-left p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border border-amber-500/40 transition flex items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
+                <span class="font-cyber font-bold text-xs text-amber-300">4. SNIPER RAILGUN</span>
+                <span class="text-[10px] px-1.5 py-0.2 bg-amber-950 text-amber-200 rounded border border-amber-700/50">Zırh Delici</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Uzun menzil, %85 zırh delme (Tank & Boss katili).</p>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="font-cyber font-bold text-xs text-amber-300">150 ⚡</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Düşman İstihbaratı & Aktif Dalga Formülü -->
+      <div class="bg-[#0b1021] border border-slate-800 rounded-2xl p-3.5 flex flex-col gap-2 text-xs">
+        <h3 class="font-cyber font-bold text-xs text-slate-300 uppercase tracking-wider">Uzaylı Filosu & Silah Mekanikleri</h3>
+        <div class="grid grid-cols-2 gap-2 text-[11px]">
+          <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+            <div class="font-bold text-lime-300">👽 Uzaylı Keşif Podu</div>
+            <div class="text-slate-400">Hızlı uzaylı saldırı aracı, sürü halinde gelir.</div>
+          </div>
+          <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+            <div class="font-bold text-orange-300">🛸 Zırhlı Kruvazör</div>
+            <div class="text-slate-400">Ağır kalkanlı uzaylı kara tankı.</div>
+          </div>
+          <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+            <div class="font-bold text-cyan-300">🚀 Uzaylı UFO (Hava)</div>
+            <div class="text-slate-400">Uçan disk; sadece Lazer/EMP/Railgun vurur.</div>
+          </div>
+          <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+            <div class="font-bold text-rose-400">👾 Uzaylı Ana Gemisi</div>
+            <div class="text-slate-400">Dev dreadnought; silahları EMP ile dondurur!</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- MODAL 1: ARAŞTIRMA LABORATUVARI (SKILL TREE / META PROGRESSION) -->
+  <div id="modalLab" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#0b1124] border border-cyan-400/50 rounded-2xl max-w-xl w-full p-5 shadow-2xl neon-border-cyan flex flex-col gap-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h2 class="font-cyber font-bold text-lg text-cyan-300">🔬 ARAŞTIRMA LABORATUVARI (SKILL TREE)</h2>
+          <p class="text-xs text-slate-400">Bölümlerden kazandığınız <strong class="text-sky-300">Gear</strong> ve <strong class="text-fuchsia-300">Cyber-Core</strong> ile kalıcı güçlendirmeler açın.</p>
+        </div>
+        <button id="btnCloseLab" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕ Kapat</button>
+      </div>
+
+      <div class="flex items-center justify-between bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800 text-xs">
+        <div>Mevcut Bakiye:</div>
+        <div class="flex items-center gap-4 font-cyber font-bold">
+          <span class="text-sky-300">⚙ <span id="labGearCount">120</span> GEAR</span>
+          <span class="text-fuchsia-300">💎 <span id="labCoreCount">25</span> CYBER-CORE</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <!-- Skill 1: Base Damage -->
+        <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-3 flex flex-col justify-between gap-2">
+          <div>
+            <div class="flex justify-between items-center">
+              <span class="font-cyber font-bold text-cyan-300">Foton Hasar Çekirdeği</span>
+              <span id="skillDmgLv" class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-200 font-bold">Lv.1</span>
+            </div>
+            <p class="text-slate-400 text-[11px] mt-1">Tüm kulelerin taban hasarını kalıcı olarak <strong class="text-white">+%15</strong> artırır.</p>
+          </div>
+          <button id="btnUpSkillDmg" class="w-full py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 font-cyber font-bold transition">
+            Geliştir (60 ⚙ + 5 💎)
+          </button>
+        </div>
+
+        <!-- Skill 2: Fire Rate -->
+        <div class="bg-slate-900/90 border border-fuchsia-500/30 rounded-xl p-3 flex flex-col justify-between gap-2">
+          <div>
+            <div class="flex justify-between items-center">
+              <span class="font-cyber font-bold text-fuchsia-300">Overclock Atış Bobini</span>
+              <span id="skillRateLv" class="px-1.5 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-200 font-bold">Lv.1</span>
+            </div>
+            <p class="text-slate-400 text-[11px] mt-1">Tüm kulelerin atış hızını kalıcı olarak <strong class="text-white">+%12</strong> artırır.</p>
+          </div>
+          <button id="btnUpSkillRate" class="w-full py-2 rounded-lg bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-400/50 text-fuchsia-200 font-cyber font-bold transition">
+            Geliştir (60 ⚙ + 5 💎)
+          </button>
+        </div>
+
+        <!-- Skill 3: Base Max HP -->
+        <div class="bg-slate-900/90 border border-rose-500/30 rounded-xl p-3 flex flex-col justify-between gap-2">
+          <div>
+            <div class="flex justify-between items-center">
+              <span class="font-cyber font-bold text-rose-300">Cyber-Nexus Kalkanı</span>
+              <span id="skillHpLv" class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-200 font-bold">Lv.1</span>
+            </div>
+            <p class="text-slate-400 text-[11px] mt-1">Ana üssün toplam canını kalıcı olarak <strong class="text-white">+5 HP</strong> yükseltir.</p>
+          </div>
+          <button id="btnUpSkillHp" class="w-full py-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/50 text-rose-200 font-cyber font-bold transition">
+            Geliştir (50 ⚙ + 3 💎)
+          </button>
+        </div>
+
+        <!-- Skill 4: Starting Gold -->
+        <div class="bg-slate-900/90 border border-amber-500/30 rounded-xl p-3 flex flex-col justify-between gap-2">
+          <div>
+            <div class="flex justify-between items-center">
+              <span class="font-cyber font-bold text-amber-300">Başlangıç Reaktörü</span>
+              <span id="skillGoldLv" class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-200 font-bold">Lv.1</span>
+            </div>
+            <p class="text-slate-400 text-[11px] mt-1">Bölüm başlangıç altınını kalıcı olarak <strong class="text-white">+45 ⚡</strong> artırır.</p>
+          </div>
+          <button id="btnUpSkillGold" class="w-full py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 font-cyber font-bold transition">
+            Geliştir (50 ⚙ + 3 💎)
+          </button>
+        </div>
+      </div>
+
+      <!-- ELİT CYBER-CORE (MONETİZASYON ODAKLI PREMIUM YETENEK AĞACI) -->
+      <div class="border-t border-fuchsia-500/30 pt-3">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-cyber font-bold text-xs sm:text-sm text-fuchsia-300">💎 ELİT OVERDRIVE AĞACI (PREMIUM CYBER-CORE MODÜLLERİ)</h3>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-200 border border-fuchsia-500/40 font-semibold">Yüksek Gelir Dönüşümü</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <!-- Elite Skill 5: Autonomous Defense Drones -->
+          <div class="bg-gradient-to-br from-fuchsia-950/60 to-slate-900 border border-fuchsia-400/50 rounded-xl p-3 flex flex-col justify-between gap-2">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="font-cyber font-bold text-fuchsia-300">🛸 Otonom Siber-Dron Filosu</span>
+                <span id="skillDroneLv" class="px-1.5 py-0.5 rounded bg-fuchsia-500/30 text-fuchsia-100 font-bold">Lv.0</span>
+              </div>
+              <p class="text-slate-300 text-[11px] mt-1">Haritada devriye gezip uzaylılara otomatik plazma sıkan <strong class="text-fuchsia-200">Yardımcı Savaş Dronu (+1 Dron/Lv)</strong> üretir.</p>
+            </div>
+            <button id="btnUpSkillDrone" class="w-full py-2 rounded-lg bg-fuchsia-500 hover:bg-fuchsia-400 text-slate-950 font-cyber font-bold transition">
+              Aç / Geliştir (15 💎 CORE)
+            </button>
+          </div>
+
+          <!-- Elite Skill 6: Critical Strike Matrix -->
+          <div class="bg-gradient-to-br from-amber-950/60 to-slate-900 border border-amber-400/50 rounded-xl p-3 flex flex-col justify-between gap-2">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="font-cyber font-bold text-amber-300">💥 Kuantum Kritik Matrisi</span>
+                <span id="skillCritLv" class="px-1.5 py-0.5 rounded bg-amber-500/30 text-amber-100 font-bold">Lv.0</span>
+              </div>
+              <p class="text-slate-300 text-[11px] mt-1">Tüm silah taretlerine <strong class="text-amber-200">+%10 Kritik Şansı (2.5x Hasar)</strong> kazandırır.</p>
+            </div>
+            <button id="btnUpSkillCrit" class="w-full py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-cyber font-bold transition">
+              Aç / Geliştir (12 💎 CORE)
+            </button>
+          </div>
+
+          <!-- Elite Skill 7: Alien Bounty Extractor -->
+          <div class="bg-gradient-to-br from-emerald-950/60 to-slate-900 border border-emerald-400/50 rounded-xl p-3 flex flex-col justify-between gap-2">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="font-cyber font-bold text-emerald-300">💰 Uzaylı Ganimet Sentezleyici</span>
+                <span id="skillBountyLv" class="px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-100 font-bold">Lv.0</span>
+              </div>
+              <p class="text-slate-300 text-[11px] mt-1">Yok edilen her uzaylı aracından düşen Altını ve bölüm sonu Gear ödülünü <strong class="text-emerald-200">+%25</strong> artırır.</p>
+            </div>
+            <button id="btnUpSkillBounty" class="w-full py-2 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-cyber font-bold transition">
+              Aç / Geliştir (10 💎 CORE)
+            </button>
+          </div>
+
+          <!-- Elite Skill 8: Orbital Satellite Overclock -->
+          <div class="bg-gradient-to-br from-rose-950/60 to-slate-900 border border-rose-400/50 rounded-xl p-3 flex flex-col justify-between gap-2">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="font-cyber font-bold text-rose-300">🛰️ Orbital Uydu Overclock</span>
+                <span id="skillOrbitalLv" class="px-1.5 py-0.5 rounded bg-rose-500/30 text-rose-100 font-bold">Lv.0</span>
+              </div>
+              <p class="text-slate-300 text-[11px] mt-1">Orbital Lazer bekleme süresini <strong class="text-rose-200">-5 sn düşürür</strong> ve hasarını <strong class="text-rose-200">+%40</strong> artırır.</p>
+            </div>
+            <button id="btnUpSkillOrbital" class="w-full py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-cyber font-bold transition">
+              Aç / Geliştir (12 💎 CORE)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: IAP MAĞAZASI (REMOVE ADS & CYBER-CORE PAKETLERİ) -->
+  <div id="modalShop" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#0b1124] border border-fuchsia-400/50 rounded-2xl max-w-lg w-full p-5 shadow-2xl neon-border-fuchsia flex flex-col gap-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h2 class="font-cyber font-bold text-lg text-fuchsia-300">🛒 SİBER MAĞAZA (IAP SİMÜLASYONU)</h2>
+          <p class="text-xs text-slate-400">Uygulama içi satın alma (Remove Ads ve Elmas paketleri) akışını test edin.</p>
+        </div>
+        <button id="btnCloseShop" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕ Kapat</button>
+      </div>
+
+      <div class="flex flex-col gap-3 text-xs">
+        <!-- Yüksek Dönüşümlü VIP Başlangıç Paketi -->
+        <div class="bg-gradient-to-r from-amber-950/90 via-fuchsia-950/80 to-slate-900 border border-amber-400/70 rounded-xl p-3.5 flex items-center justify-between gap-3 neon-border-amber">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="px-1.5 py-0.5 text-[10px] font-cyber font-bold bg-amber-400 text-slate-950 rounded">EN POPÜLER %300 DEĞER</span>
+              <span class="font-cyber font-bold text-sm text-amber-300">👑 KOMUTAN VIP PAKETİ</span>
+            </div>
+            <p class="text-slate-200 text-[11px] mt-1">Remove Ads + <strong>300 💎 Cyber-Core</strong> + <strong>1 Otonom Savaş Dronu</strong> + Altın Neon Kule Aurası!</p>
+          </div>
+          <button id="btnBuyVipBundle" class="shrink-0 px-3.5 py-2.5 rounded-lg bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-cyber font-bold transition shadow-lg">
+            VIP DEMO (Ücretsiz)
+          </button>
+        </div>
+
+        <div class="bg-gradient-to-r from-emerald-950/80 to-slate-900 border border-emerald-400/50 rounded-xl p-3.5 flex items-center justify-between gap-3">
+          <div>
+            <div class="font-cyber font-bold text-sm text-emerald-300">🚫 REMOVE ADS (GEÇİŞ REKLAMLARINI KALDIR)</div>
+            <p class="text-slate-300 text-[11px] mt-0.5">Her 2 bölümde bir çıkan otomatik geçiş reklamlarını (Interstitial) kalıcı olarak kapatır.</p>
+          </div>
+          <button id="btnBuyRemoveAds" class="shrink-0 px-3.5 py-2 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-cyber font-bold transition">
+            Reklamsız DEMO (Ücretsiz)
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-900 border border-fuchsia-500/40 rounded-xl p-3 flex flex-col justify-between gap-2">
+            <div>
+              <div class="font-cyber font-bold text-fuchsia-300">💎 100 CYBER-CORE</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Araştırma Laboratuvarı için hızlı elmas paketi.</p>
+            </div>
+            <button id="btnBuyCore100" class="w-full py-2 rounded-lg bg-fuchsia-500/25 hover:bg-fuchsia-500/40 border border-fuchsia-400/50 text-fuchsia-200 font-cyber font-bold transition">
+              +100 💎 Al (Ücretsiz Test)
+            </button>
+          </div>
+
+          <div class="bg-slate-900 border border-amber-500/40 rounded-xl p-3 flex flex-col justify-between gap-2">
+            <div>
+              <div class="font-cyber font-bold text-amber-300">💎 500 CYBER-CORE</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Mega Siber Çekirdek kasası +1000 Gear hediye!</p>
+            </div>
+            <button id="btnBuyCore500" class="w-full py-2 rounded-lg bg-amber-500/25 hover:bg-amber-500/40 border border-amber-400/50 text-amber-200 font-cyber font-bold transition">
+              +500 💎 Al (Ücretsiz Test)
+            </button>
+          </div>
+        </div>
+
+        <!-- Apple App Store Zorunlu StoreKit Geri Yükleme & ATT/Gizlilik Bölümü (Guideline 3.1.1 & 5.1.2) -->
+        <div class="border-t border-slate-800 pt-3 flex flex-wrap items-center justify-between gap-2">
+          <button id="btnRestorePurchases" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-semibold text-[11px] transition">
+            🔄 Demo Satın Alım Durumu (Gerçek StoreKit Değil)
+          </button>
+          <button id="btnTriggerAttPrompt" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-cyan-500/40 text-cyan-300 font-semibold text-[11px] transition">
+            🛡 ATT Arayüzü Demosu (Gerçek İzin Değil)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: BÖLÜM SONU (LEVEL COMPLETE / GAME OVER + 2X REWARDED AD) -->
+  <div id="modalLevelEnd" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#0b1124] border border-cyan-400/60 rounded-2xl max-w-md w-full p-5 shadow-2xl neon-border-cyan flex flex-col gap-4 text-center">
+      <h2 id="levelEndTitle" class="font-cyber font-black text-xl text-cyan-300">BÖLÜM TAMAMLANDI!</h2>
+      <p id="levelEndSubtitle" class="text-xs text-slate-300">Siber-Nexus başarıyla savunuldu.</p>
+
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 flex justify-around text-xs">
+        <div>
+          <div class="text-slate-400">Kazanılan Gear</div>
+          <div id="endEarnedGear" class="font-cyber font-bold text-base text-sky-300 mt-0.5">+75 ⚙</div>
+        </div>
+        <div class="border-l border-slate-800"></div>
+        <div>
+          <div class="text-slate-400">Kazanılan Cyber-Core</div>
+          <div id="endEarnedCore" class="font-cyber font-bold text-base text-fuchsia-300 mt-0.5">+5 💎</div>
+        </div>
+      </div>
+
+      <!-- Ödüllü Reklam: Kazanılan Altını/Gear'ı 2'ye Katla -->
+      <button id="btnRewardDouble" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-cyber font-bold text-xs shadow-lg transition flex items-center justify-center gap-2">
+        <span>🎬</span>
+        <span id="btnRewardDoubleText">ÖDÜLÜ 2'YE KATLA (REKLAM İZLE)</span>
+      </button>
+
+      <div class="flex items-center gap-2 pt-1">
+        <button id="btnRetryLevel" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-semibold text-xs transition">
+          Tekrar Oyna
+        </button>
+        <button id="btnNextLevel" class="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-cyber font-bold text-xs transition">
+          Sonraki Bölüm ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADMOB / UNITY ADS SİMÜLASYON EKRANI (INTERSTITIAL & REWARDED) -->
+  <div id="modalAdSimulation" class="hidden fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-400/60 rounded-2xl max-w-sm w-full p-5 text-center flex flex-col gap-3">
+      <div class="text-[11px] font-cyber uppercase tracking-widest text-amber-300" id="adSimTypeBadge">UNITY ADS / ADMOB SİMÜLASYONU</div>
+      <div class="font-cyber font-bold text-base text-white" id="adSimTitle">Ödüllü Video Reklam Oynatılıyor...</div>
+      <p class="text-xs text-slate-400" id="adSimDesc">Gerçek mobil sürümde burada AdMob / Unity Ads SDK tam ekran reklamı gösterilir.</p>
+      <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+        <div id="adSimProgress" class="bg-amber-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+      <div class="font-cyber text-xs text-amber-200" id="adSimTimerText">Kalan süre: 2 sn</div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: APPLE iOS ATT (APP TRACKING TRANSPARENCY) SİMÜLASYONU -->
+  <div id="modalAppleAtt" class="hidden fixed inset-0 z-[65] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#1c1c1e] border border-slate-700 rounded-2xl max-w-xs w-full overflow-hidden shadow-2xl text-center text-white">
+      <div class="p-5 flex flex-col gap-2">
+        <div class="text-sm font-semibold leading-snug">"Neon Void" uygulamasının diğer şirketlerin uygulamalarındaki ve web sitelerindeki etkinliğinizi takip etmesine izin verilsin mi?</div>
+        <p class="text-[11px] text-slate-300 leading-relaxed">Verileriniz; size kişiselleştirilmiş reklamlar sunmak ve oyun içi ödüllü reklam performansını ölçmek için kullanılacaktır (Apple Guideline 5.1.2).</p>
+      </div>
+      <div class="border-t border-slate-700 flex flex-col divide-y divide-slate-700 text-xs font-semibold">
+        <button id="btnAttDeny" class="py-3 text-sky-400 hover:bg-slate-800 transition">Uygulamaya Takip Etmemesini Söyle</button>
+        <button id="btnAttAllow" class="py-3 text-sky-400 font-bold hover:bg-slate-800 transition">İzin Ver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: APPLE iOS TESTFLIGHT & APP STORE HAZIRLIK PANELİ -->
+  <div id="modalIosGuide" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#0b1124] border border-emerald-400/50 rounded-2xl max-w-2xl w-full p-5 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h2 class="font-cyber font-bold text-base sm:text-lg text-emerald-300">🍎 APPLE TESTFLIGHT & APP STORE KONTROL PANELİ</h2>
+          <p class="text-xs text-slate-400">TESTFLIGHT PROTOTİPİ: Reklam, satın alma ve ATT işlevleri henüz simülasyondur; gerçek Apple SDK entegrasyonu gerekir.</p>
+        </div>
+        <button id="btnCloseIosGuide" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕ Kapat</button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
+          <div class="font-cyber font-bold text-emerald-300">✔ Safe Area & Dynamic Island</div>
+          <p class="text-slate-400 text-[11px] mt-1"><code>viewport-fit=cover</code> ve <code>env(safe-area-inset)</code> ile iPhone 14/15/16 Pro çentik alanlarına tam uyumlu.</p>
+        </div>
+        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
+          <div class="font-cyber font-bold text-emerald-300">⚠ StoreKit Satın Alma: Demo</div>
+          <p class="text-slate-400 text-[11px] mt-1">Bu düğme şu an yalnızca yerel oyun durumunu kontrol eder; gerçek App Store satın alımlarını sorgulamaz.</p>
+        </div>
+        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
+          <div class="font-cyber font-bold text-emerald-300">⚠ ATT: Demo Ekranı</div>
+          <p class="text-slate-400 text-[11px] mt-1">Bu ekran gerçek iOS takip izni değildir. Gerçek takip kullanılacaksa native ATT entegrasyonu gerekir.</p>
+        </div>
+        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
+          <div class="font-cyber font-bold text-emerald-300">⚠ Capacitor iOS Test Derlemesi</div>
+          <p class="text-slate-400 text-[11px] mt-1">Bu sürümün iOS derlemesi için Codemagic üzerinden gerçek imzalama ve cihaz testi gereklidir.</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/90 border border-cyan-500/40 rounded-xl p-3.5 text-xs flex flex-col gap-2">
+        <div class="font-cyber font-bold text-cyan-300">💻 WINDOWS'TAN (MAC OLMADAN) TESTFLIGHT'A YÜKLEME:</div>
+        <p class="text-[11px] text-slate-300 leading-relaxed">
+          Fiziksel bir Mac bilgisayarınız yoksa paketin içine eklediğim hazır <code>codemagic.yaml</code> ve <code>.github/workflows/ios-testflight.yml</code> dosyalarıyla <strong>Windows üzerinden ücretsiz Bulut Mac (Cloud macOS)</strong> kullanarak oyunu doğrudan TestFlight'a gönderebilirsiniz:
+        </p>
+        <ol class="list-decimal list-inside text-[11px] text-slate-300 space-y-1">
+          <li><strong>GitHub'a Yükle:</strong> İndirdiğiniz ZIP paketini Windows'ta bir GitHub deposuna (repository) yükleyin.</li>
+          <li><strong>App Store Connect API Anahtarı (.p8):</strong> Windows tarayıcınızdan <em>App Store Connect → Users and Access → Integrations → App Store Connect API</em> sekmesine girip <code>Issuer ID</code>, <code>Key ID</code> ve <code>.p8</code> dosyasını indirin (Mac Keychain gerektirmez!).</li>
+          <li><strong>Codemagic (Ücretsiz 500 dk/ay M2 Mac):</strong> <code>codemagic.io</code> hesabınızı GitHub deponuza bağlayın; paketteki <code>codemagic.yaml</code> bulutta otomatik olarak Xcode kurulumunu, imzalamayı (Auto Code Signing) ve <strong>TestFlight</strong> yüklemesini tamamlar.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- BİLDİRİM TOAST -->
+  <div id="toastNotification" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 border border-cyan-400/60 text-cyan-200 px-4 py-2 rounded-full text-xs font-semibold shadow-xl"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // ============================================================================
+      // 1. SES SENTEZLEYİCİ (WEB AUDIO API - SIFIR HARİCİ DOSYA)
+      // ============================================================================
+      const SoundFX = {
+        ctx: null,
+        muted: false,
+        init() {
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
+          }
+          if (this.ctx && this.ctx.state === "suspended") {
+            this.ctx.resume();
+          }
+        },
+        playTone(freq, type, duration, vol = 0.08, slideFreq = null) {
+          if (this.muted) return;
+          try {
+            this.init();
+            if (!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+            if (slideFreq) {
+              osc.frequency.exponentialRampToValueAtTime(slideFreq, this.ctx.currentTime + duration);
+            }
+            gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + duration);
+          } catch (e) {}
+        },
+        laser() { this.playTone(720, "sawtooth", 0.09, 0.05, 220); },
+        plasma() { this.playTone(180, "square", 0.22, 0.08, 45); },
+        emp() { this.playTone(520, "sine", 0.18, 0.06, 880); },
+        railgun() { this.playTone(980, "triangle", 0.16, 0.09, 120); },
+        orbital() { this.playTone(440, "sawtooth", 0.65, 0.12, 55); },
+        bossPulse() { this.playTone(140, "sawtooth", 0.45, 0.1, 320); },
+        uiClick() { this.playTone(600, "sine", 0.06, 0.05, 900); }
+      };
+
+      // ============================================================================
+      // 2. KULE VE DÜŞMAN VERİ TABLOLARI (SCRIPTABLEOBJECT KARŞILIKLARI)
+      // ============================================================================
+      const TOWER_TYPES = {
+        rapid: {
+          id: "rapid",
+          name: "Rapid Laser",
+          color: "#22d3ee",
+          canHitFlying: true,
+          targetLabel: "Kara + Hava",
+          specialLabel: "Hızlı Lazer",
+          levels: [
+            { cost: 80, refund: 55, damage: 24, fireRate: 3.4, range: 135, splash: 0, armorPen: 0.10, slow: 0, slowDur: 0 },
+            { cost: 110, refund: 130, damage: 42, fireRate: 4.2, range: 150, splash: 0, armorPen: 0.20, slow: 0, slowDur: 0 },
+            { cost: 160, refund: 245, damage: 72, fireRate: 5.2, range: 168, splash: 0, armorPen: 0.30, slow: 0, slowDur: 0 }
+          ]
+        },
+        plasma: {
+          id: "plasma",
+          name: "Plasma Cannon",
+          color: "#e879f9",
+          canHitFlying: false,
+          targetLabel: "Sadece Kara",
+          specialLabel: "AoE Patlama",
+          levels: [
+            { cost: 125, refund: 85, damage: 65, fireRate: 0.85, range: 145, splash: 58, armorPen: 0.25, slow: 0, slowDur: 0 },
+            { cost: 165, refund: 200, damage: 115, fireRate: 1.05, range: 160, splash: 72, armorPen: 0.35, slow: 0, slowDur: 0 },
+            { cost: 230, refund: 360, damage: 195, fireRate: 1.25, range: 175, splash: 88, armorPen: 0.45, slow: 0, slowDur: 0 }
+          ]
+        },
+        emp: {
+          id: "emp",
+          name: "EMP Blaster",
+          color: "#38bdf8",
+          canHitFlying: true,
+          targetLabel: "Kara + Hava",
+          specialLabel: "Yavaşlatma",
+          levels: [
+            { cost: 100, refund: 70, damage: 8, fireRate: 1.1, range: 125, splash: 125, armorPen: 1.0, slow: 0.50, slowDur: 2.2 },
+            { cost: 130, refund: 160, damage: 16, fireRate: 1.35, range: 142, splash: 142, armorPen: 1.0, slow: 0.65, slowDur: 2.8 },
+            { cost: 180, refund: 285, damage: 30, fireRate: 1.6, range: 160, splash: 160, armorPen: 1.0, slow: 0.78, slowDur: 3.4 }
+          ]
+        },
+        railgun: {
+          id: "railgun",
+          name: "Sniper Railgun",
+          color: "#fbbf24",
+          canHitFlying: true,
+          targetLabel: "Kara + Hava",
+          specialLabel: "%85 Zırh Delme",
+          levels: [
+            { cost: 150, refund: 105, damage: 130, fireRate: 0.65, range: 230, splash: 0, armorPen: 0.75, slow: 0, slowDur: 0 },
+            { cost: 200, refund: 245, damage: 240, fireRate: 0.80, range: 255, splash: 0, armorPen: 0.85, slow: 0, slowDur: 0 },
+            { cost: 280, refund: 440, damage: 420, fireRate: 1.00, range: 285, splash: 0, armorPen: 0.95, slow: 0, slowDur: 0 }
+          ]
+        }
+      };
+
+      const ENEMY_ARCHETYPES = {
+        swarm: {
+          id: "swarm",
+          name: "Uzaylı Keşif Podu",
+          color: "#a3e635",
+          radius: 11,
+          baseHp: 62,
+          baseArmor: 0.05,
+          speed: 82,
+          goldReward: 14,
+          nexusDamage: 1,
+          isFlying: false,
+          isBoss: false,
+          threatCost: 1
+        },
+        tank: {
+          id: "tank",
+          name: "Uzaylı Zırhlı Kruvazör",
+          color: "#fb923c",
+          radius: 16,
+          baseHp: 260,
+          baseArmor: 0.45,
+          speed: 42,
+          goldReward: 34,
+          nexusDamage: 3,
+          isFlying: false,
+          isBoss: false,
+          threatCost: 3
+        },
+        flying: {
+          id: "flying",
+          name: "Uzaylı UFO Avcısı",
+          color: "#22d3ee",
+          radius: 13,
+          baseHp: 105,
+          baseArmor: 0.15,
+          speed: 74,
+          goldReward: 22,
+          nexusDamage: 2,
+          isFlying: true,
+          isBoss: false,
+          threatCost: 2
+        },
+        boss: {
+          id: "boss",
+          name: "UZAYLI ANA GEMİSİ",
+          color: "#f43f5e",
+          radius: 24,
+          baseHp: 1150,
+          baseArmor: 0.50,
+          speed: 32,
+          goldReward: 150,
+          nexusDamage: 10,
+          isFlying: false,
+          isBoss: true,
+          threatCost: 10,
+          freezeInterval: 6.5,
+          freezeRadius: 155,
+          freezeDuration: 3.0
+        }
+      };
+
+      // ============================================================================
+      // 3. MATEMATİKSEL ZORLUK EĞRİSİ MOTORU (100 BÖLÜM LOGARİTMİK FORMÜL)
+      // ============================================================================
+      function calculateDifficulty(level, waveIndex = 0) {
+        const clampedLv = Math.max(1, Math.min(100, level));
+        const isBossLevel = (clampedLv % 10 === 0);
+        const baseWaves = Math.floor(3 + 1.85 * Math.log(clampedLv)) + (isBossLevel ? 1 : 0);
+        const totalWaves = Math.max(3, Math.min(12, baseWaves));
+
+        let hpMult = 1.0;
+        if (clampedLv > 1 || waveIndex > 0) {
+          const logTerm = 1.45 * Math.log2(clampedLv + 1);
+          const polyTerm = 0.042 * Math.pow(clampedLv - 1, 1.38);
+          const intraWave = 1.0 + waveIndex * 0.06;
+          hpMult = Math.max(1.0, Number(((0.35 + logTerm + polyTerm) * intraWave).toFixed(2)));
+        }
+
+        const armorBonus = clampedLv <= 1 ? 0 : Math.min(0.35, Number((0.048 * Math.log2(clampedLv)).toFixed(2)));
+        const baseBudget = 8 + clampedLv * 2.2 + 5 * Math.log(clampedLv + 1);
+        const progress = totalWaves > 1 ? waveIndex / (totalWaves - 1) : 0;
+        const threatBudget = Math.max(6, Math.round(baseBudget * (0.85 + 0.65 * progress)));
+
+        const gearReward = Math.round(50 + clampedLv * 18 + Math.log2(clampedLv + 1) * 35);
+        const coreReward = isBossLevel ? (15 + Math.floor(clampedLv / 10) * 5) : (clampedLv % 5 === 0 ? 5 : 2);
+
+        return {
+          level: clampedLv,
+          totalWaves,
+          isBossLevel,
+          hpMult,
+          armorBonus,
+          threatBudget,
+          gearReward,
+          coreReward
+        };
+      }
+
+      // ============================================================================
+      // 4. OYUN DURUMU VE META KAYIT SİSTEMİ
+      // ============================================================================
+      const state = {
+        level: 1,
+        maxUnlockedLevel: 100,
+        waveIndex: 0,
+        totalWaves: 3,
+        gold: 250,
+        baseHp: 20,
+        maxBaseHp: 20,
+        gear: 120,
+        cyberCore: 25,
+        removeAds: false,
+        completedOrFailedCount: 0,
+        lastEarnedGear: 0,
+        doubledThisLevel: false,
+        gameSpeed: 1,
+        paused: false,
+        levelEnded: false,
+        orbitalCooldown: 0,
+        orbitalMaxCooldown: 30,
+        orbitalFlashTimer: 0,
+        selectedSocketIndex: 0,
+        sectorIndex: 0,
+        manualSectorOverride: false,
+        vipGoldenAura: false,
+        skills: {
+          dmgLv: 1,
+          rateLv: 1,
+          hpLv: 1,
+          goldLv: 1,
+          droneLv: 0,
+          critLv: 0,
+          bountyLv: 0,
+          orbitalLv: 0
+        }
+      };
+
+      function loadProgress() {
+        try {
+          const raw = localStorage.getItem("NeonVoid_Save_v1");
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (typeof parsed.gear === "number") state.gear = parsed.gear;
+            if (typeof parsed.cyberCore === "number") state.cyberCore = parsed.cyberCore;
+            if (typeof parsed.removeAds === "boolean") state.removeAds = parsed.removeAds;
+            if (parsed.skills) Object.assign(state.skills, parsed.skills);
+          }
+        } catch (e) {}
+      }
+
+      function saveProgress() {
+        try {
+          localStorage.setItem("NeonVoid_Save_v1", JSON.stringify({
+            gear: state.gear,
+            cyberCore: state.cyberCore,
+            removeAds: state.removeAds,
+            skills: state.skills
+          }));
+        } catch (e) {}
+      }
+
+      function getDmgMultiplier() {
+        return 1 + (state.skills.dmgLv - 1) * 0.15;
+      }
+      function getRateMultiplier() {
+        return 1 + (state.skills.rateLv - 1) * 0.12;
+      }
+      function getMaxBaseHp() {
+        return 20 + (state.skills.hpLv - 1) * 5;
+      }
+      function getStartingGold() {
+        return 250 + (state.skills.goldLv - 1) * 45;
+      }
+      function getCritChance() {
+        return Math.min(0.65, (state.skills.critLv || 0) * 0.10);
+      }
+      function getBountyMultiplier() {
+        return 1 + (state.skills.bountyLv || 0) * 0.25;
+      }
+      function getEffectiveOrbitalCooldown() {
+        return Math.max(10, 30 - (state.skills.orbitalLv || 0) * 5);
+      }
+      function getOrbitalDamageMultiplier() {
+        return 1 + (state.skills.orbitalLv || 0) * 0.40;
+      }
+
+      // ============================================================================
+      // 5. HARİTA KOORDİNATLARI (800x500 SANAL KOORDİNAT SİSTEMİ)
+      // ============================================================================
+      const VIRTUAL_W = 800;
+      const VIRTUAL_H = 500;
+
+      const SECTOR_PRESETS = [
+        {
+          id: 0,
+          name: "🛸 Sektör 1: USS Aegis Uzay Gemisi Güvertesi",
+          pathColor: "#22d3ee",
+          waypoints: [
+            { x: 55, y: 110 },
+            { x: 245, y: 110 },
+            { x: 245, y: 255 },
+            { x: 450, y: 255 },
+            { x: 450, y: 115 },
+            { x: 645, y: 115 },
+            { x: 645, y: 385 },
+            { x: 195, y: 385 },
+            { x: 195, y: 445 },
+            { x: 725, y: 445 }
+          ],
+          sockets: [
+            { id: 1, x: 150, y: 175 },
+            { id: 2, x: 315, y: 175 },
+            { id: 3, x: 345, y: 320 },
+            { id: 4, x: 375, y: 175 },
+            { id: 5, x: 545, y: 185 },
+            { id: 6, x: 565, y: 315 },
+            { id: 7, x: 715, y: 245 },
+            { id: 8, x: 445, y: 320 },
+            { id: 9, x: 260, y: 320 },
+            { id: 10, x: 115, y: 320 },
+            { id: 11, x: 370, y: 440 },
+            { id: 12, x: 560, y: 440 }
+          ]
+        },
+        {
+          id: 1,
+          name: "🌌 Sektör 2: Derin Uzay & Kızıl Nebula",
+          pathColor: "#e879f9",
+          waypoints: [
+            { x: 55, y: 250 },
+            { x: 205, y: 95 },
+            { x: 410, y: 95 },
+            { x: 270, y: 265 },
+            { x: 540, y: 265 },
+            { x: 415, y: 420 },
+            { x: 665, y: 420 },
+            { x: 665, y: 155 },
+            { x: 745, y: 255 }
+          ],
+          sockets: [
+            { id: 1, x: 125, y: 135 },
+            { id: 2, x: 220, y: 175 },
+            { id: 3, x: 315, y: 155 },
+            { id: 4, x: 475, y: 155 },
+            { id: 5, x: 185, y: 295 },
+            { id: 6, x: 395, y: 205 },
+            { id: 7, x: 390, y: 335 },
+            { id: 8, x: 495, y: 350 },
+            { id: 9, x: 590, y: 195 },
+            { id: 10, x: 595, y: 345 },
+            { id: 11, x: 730, y: 360 },
+            { id: 12, x: 300, y: 420 }
+          ]
+        },
+        {
+          id: 2,
+          name: "☄️ Sektör 3: Kuantum Asteroit Üssü",
+          pathColor: "#fbbf24",
+          waypoints: [
+            { x: 60, y: 75 },
+            { x: 710, y: 75 },
+            { x: 710, y: 195 },
+            { x: 120, y: 195 },
+            { x: 120, y: 325 },
+            { x: 690, y: 325 },
+            { x: 690, y: 440 },
+            { x: 165, y: 440 }
+          ],
+          sockets: [
+            { id: 1, x: 200, y: 135 },
+            { id: 2, x: 360, y: 135 },
+            { id: 3, x: 520, y: 135 },
+            { id: 4, x: 635, y: 135 },
+            { id: 5, x: 220, y: 260 },
+            { id: 6, x: 380, y: 260 },
+            { id: 7, x: 540, y: 260 },
+            { id: 8, x: 640, y: 260 },
+            { id: 9, x: 240, y: 382 },
+            { id: 10, x: 400, y: 382 },
+            { id: 11, x: 560, y: 382 },
+            { id: 12, x: 65, y: 260 }
+          ]
+        },
+        {
+          id: 3,
+          name: "👾 Sektör 4: Uzaylı Ana Gemi Çekirdeği",
+          pathColor: "#f43f5e",
+          waypoints: [
+            { x: 60, y: 435 },
+            { x: 60, y: 80 },
+            { x: 730, y: 80 },
+            { x: 730, y: 430 },
+            { x: 185, y: 430 },
+            { x: 185, y: 185 },
+            { x: 600, y: 185 },
+            { x: 600, y: 325 },
+            { x: 335, y: 325 },
+            { x: 400, y: 255 }
+          ],
+          sockets: [
+            { id: 1, x: 122, y: 140 },
+            { id: 2, x: 122, y: 280 },
+            { id: 3, x: 270, y: 130 },
+            { id: 4, x: 440, y: 130 },
+            { id: 5, x: 610, y: 130 },
+            { id: 6, x: 665, y: 240 },
+            { id: 7, x: 665, y: 375 },
+            { id: 8, x: 495, y: 380 },
+            { id: 9, x: 310, y: 380 },
+            { id: 10, x: 260, y: 255 },
+            { id: 11, x: 515, y: 255 },
+            { id: 12, x: 122, y: 395 }
+          ]
+        }
+      ];
+
+      let WAYPOINTS = SECTOR_PRESETS[0].waypoints.slice();
+      let SOCKETS = SECTOR_PRESETS[0].sockets.map(s => ({ id: s.id, x: s.x, y: s.y, tower: null }));
+
+      // Parallax Uzay Yıldızları ve Asteroit Dekorları
+      const STARFIELD = Array.from({ length: 85 }, () => ({
+        x: Math.random() * VIRTUAL_W,
+        y: Math.random() * VIRTUAL_H,
+        size: 0.7 + Math.random() * 1.8,
+        speed: 4 + Math.random() * 16,
+        alpha: 0.3 + Math.random() * 0.7
+      }));
+
+      const ASTEROID_DECOR = [
+        { x: 85, y: 440, r: 22, rot: 0.2 },
+        { x: 745, y: 65, r: 28, rot: 1.1 },
+        { x: 755, y: 425, r: 19, rot: 2.4 },
+        { x: 65, y: 55, r: 16, rot: 0.8 }
+      ];
+
+      let autonomousDrones = [];
+
+      let activeEnemies = [];
+      let spawnQueue = [];
+      let spawnTimer = 0;
+      let waveBreakTimer = 2.5;
+      let waveInProgress = false;
+      let laserBeams = [];
+      let shockwaves = [];
+      let particles = [];
+      let floatingTexts = [];
+
+      // ============================================================================
+      // 6. DALGA ÜRETİMİ VE LEVEL BAŞLATMA
+      // ============================================================================
+      function syncAutonomousDrones() {
+        const count = Math.min(6, state.skills.droneLv || 0);
+        const nexus = WAYPOINTS[WAYPOINTS.length - 1];
+        while (autonomousDrones.length < count) {
+          const idx = autonomousDrones.length;
+          autonomousDrones.push({
+            orbitAngle: (idx * Math.PI * 2) / Math.max(1, count),
+            x: nexus.x,
+            y: nexus.y,
+            cooldown: 0
+          });
+        }
+        if (autonomousDrones.length > count) {
+          autonomousDrones.length = count;
+        }
+      }
+
+      function startLevel(levelNum, forcedSectorIdx = null) {
+        state.level = Math.max(1, Math.min(100, levelNum));
+        if (forcedSectorIdx !== null) {
+          state.sectorIndex = forcedSectorIdx;
+        } else if (!state.manualSectorOverride) {
+          // Her 3 bölümde veya çeyrek dilimde farklı sektör haritası gelir
+          state.sectorIndex = (state.level - 1) % SECTOR_PRESETS.length;
+        }
+        const preset = SECTOR_PRESETS[state.sectorIndex] || SECTOR_PRESETS[0];
+        WAYPOINTS = preset.waypoints.map(p => ({ x: p.x, y: p.y }));
+        SOCKETS = preset.sockets.map(s => ({ id: s.id, x: s.x, y: s.y, tower: null }));
+        const mapSel = document.getElementById("selectMapSector");
+        if (mapSel) mapSel.value = String(state.sectorIndex);
+
+        const diff = calculateDifficulty(state.level, 0);
+        state.waveIndex = 0;
+        state.totalWaves = diff.totalWaves;
+        state.maxBaseHp = getMaxBaseHp();
+        state.baseHp = state.maxBaseHp;
+        state.gold = getStartingGold();
+        state.levelEnded = false;
+        state.paused = false;
+        state.doubledThisLevel = false;
+        state.orbitalCooldown = 0;
+        state.selectedSocketIndex = 0;
+
+        activeEnemies = [];
+        spawnQueue = [];
+        laserBeams = [];
+        shockwaves = [];
+        particles = [];
+        floatingTexts = [];
+        autonomousDrones = [];
+        syncAutonomousDrones();
+
+        // İlk bölümü oynarken oyuncuya örnek olarak 1. sokete ücretsiz başlangıç Rapid Laser kuralım
+        SOCKETS[0].tower = {
+          typeKey: "rapid",
+          level: 1,
+          cooldown: 0,
+          frozenTimer: 0,
+          angle: 0
+        };
+
+        waveInProgress = false;
+        waveBreakTimer = 3.0;
+        document.getElementById("bossAlertBanner").classList.add("hidden");
+        document.getElementById("modalLevelEnd").classList.add("hidden");
+        document.getElementById("selectLevel").value = String(state.level);
+
+        updateHUD();
+        updateSocketInspector();
+      }
+
+      function buildWaveQueue(level, waveIdx) {
+        const diff = calculateDifficulty(level, waveIdx);
+        let budget = diff.threatBudget;
+        const queue = [];
+        const isLastWave = (waveIdx === diff.totalWaves - 1);
+
+        if (diff.isBossLevel && isLastWave) {
+          queue.push("boss");
+          budget = Math.max(5, budget - ENEMY_ARCHETYPES.boss.threatCost);
+          document.getElementById("bossAlertBanner").classList.remove("hidden");
+          SoundFX.bossPulse();
+        } else {
+          document.getElementById("bossAlertBanner").classList.add("hidden");
+        }
+
+        let guard = 0;
+        while (budget > 0 && guard < 180) {
+          guard++;
+          const r = Math.random();
+          if ((level >= 2 || waveIdx >= 1) && r < 0.24 && budget >= ENEMY_ARCHETYPES.tank.threatCost) {
+            queue.push("tank");
+            budget -= ENEMY_ARCHETYPES.tank.threatCost;
+          } else if ((level >= 2 || waveIdx >= 1) && r < 0.50 && budget >= ENEMY_ARCHETYPES.flying.threatCost) {
+            queue.push("flying");
+            budget -= ENEMY_ARCHETYPES.flying.threatCost;
+          } else {
+            queue.push("swarm");
+            budget -= ENEMY_ARCHETYPES.swarm.threatCost;
+          }
+        }
+        return queue;
+      }
+
+      function spawnNextWave() {
+        if (state.waveIndex >= state.totalWaves) return;
+        spawnQueue = buildWaveQueue(state.level, state.waveIndex);
+        spawnTimer = 0.2;
+        waveInProgress = true;
+        updateHUD();
+      }
+
+      function spawnEnemyFromArchetype(key) {
+        const arch = ENEMY_ARCHETYPES[key];
+        const diff = calculateDifficulty(state.level, state.waveIndex);
+        const maxHp = Math.round(arch.baseHp * diff.hpMult);
+        const armor = Math.min(0.85, arch.baseArmor + diff.armorBonus);
+
+        activeEnemies.push({
+          arch,
+          x: WAYPOINTS[0].x,
+          y: WAYPOINTS[0].y,
+          angle: 0,
+          animPhase: Math.random() * Math.PI * 2,
+          wpIndex: 1,
+          maxHp,
+          hp: maxHp,
+          armor,
+          slowRatio: 0,
+          slowTimer: 0,
+          bossFreezeTimer: arch.isBoss ? arch.freezeInterval : 999
+        });
+      }
+
+      // ============================================================================
+      // 7. SAVAŞ, HASAR VE BOSS EMP DONDURMA DÖNGÜSÜ
+      // ============================================================================
+      function applyDamageToEnemy(enemy, rawDamage, armorPen, isTrueDamage = false) {
+        let finalDmg = rawDamage;
+        let isCrit = false;
+        if (!isTrueDamage) {
+          if (Math.random() < getCritChance()) {
+            finalDmg *= 2.5;
+            isCrit = true;
+          }
+          const effArmor = Math.max(0, Math.min(0.90, enemy.armor * (1 - Math.min(1, armorPen))));
+          finalDmg = finalDmg * (1 - effArmor);
+        }
+        enemy.hp -= finalDmg;
+
+        floatingTexts.push({
+          x: enemy.x + (Math.random() * 14 - 7),
+          y: enemy.y - 10,
+          text: (isCrit ? "💥KRİTİK -" : "-") + Math.round(finalDmg),
+          color: isTrueDamage ? "#f43f5e" : (isCrit ? "#facc15" : "#38bdf8"),
+          life: isCrit ? 0.85 : 0.65
+        });
+
+        if (enemy.hp <= 0 && !enemy.dead) {
+          enemy.dead = true;
+          const goldEarned = Math.round(enemy.arch.goldReward * getBountyMultiplier());
+          state.gold += goldEarned;
+          spawnParticles(enemy.x, enemy.y, enemy.arch.color, enemy.arch.isBoss ? 32 : 12);
+          floatingTexts.push({
+            x: enemy.x,
+            y: enemy.y - 22,
+            text: "+" + goldEarned + "⚡",
+            color: "#fbbf24",
+            life: 0.9
+          });
+          updateHUD();
+          updateSocketInspector();
+        }
+      }
+
+      function spawnParticles(x, y, color, count = 10) {
+        for (let i = 0; i < count; i++) {
+          const ang = Math.random() * Math.PI * 2;
+          const spd = 25 + Math.random() * 85;
+          particles.push({
+            x,
+            y,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd,
+            color,
+            life: 0.35 + Math.random() * 0.35
+          });
+        }
+      }
+
+      function updateSimulation(dt) {
+        if (state.paused || state.levelEnded) return;
+
+        // Orbital Lazer bekleme süresi
+        if (state.orbitalCooldown > 0) {
+          state.orbitalCooldown = Math.max(0, state.orbitalCooldown - dt);
+          updateOrbitalButtonUI();
+        }
+        if (state.orbitalFlashTimer > 0) {
+          state.orbitalFlashTimer = Math.max(0, state.orbitalFlashTimer - dt);
+        }
+
+        // Dalga yönetimi
+        if (!waveInProgress) {
+          waveBreakTimer -= dt;
+          const banner = document.getElementById("waveStatusBanner");
+          if (waveBreakTimer > 0) {
+            banner.textContent = `Dalga ${state.waveIndex + 1}/${state.totalWaves} başlıyor: ${waveBreakTimer.toFixed(1)} sn`;
+          } else {
+            spawnNextWave();
+          }
+        } else {
+          const banner = document.getElementById("waveStatusBanner");
+          banner.textContent = `🔥 Dalga ${state.waveIndex + 1}/${state.totalWaves} Çatışması (${activeEnemies.length + spawnQueue.length} Düşman)`;
+
+          if (spawnQueue.length > 0) {
+            spawnTimer -= dt;
+            if (spawnTimer <= 0) {
+              const nextKey = spawnQueue.shift();
+              spawnEnemyFromArchetype(nextKey);
+              spawnTimer = nextKey === "swarm" ? 0.38 : 0.78;
+            }
+          } else if (activeEnemies.length === 0) {
+            // Dalga temizlendi!
+            if (state.waveIndex + 1 < state.totalWaves) {
+              state.waveIndex++;
+              waveInProgress = false;
+              waveBreakTimer = 4.0;
+              updateHUD();
+            } else {
+              handleLevelVictory();
+              return;
+            }
+          }
+        }
+
+        // Düşman hareketi ve Boss EMP Kule Dondurma yeteneği
+        for (let i = activeEnemies.length - 1; i >= 0; i--) {
+          const e = activeEnemies[i];
+          if (e.dead) {
+            activeEnemies.splice(i, 1);
+            continue;
+          }
+
+          if (e.slowTimer > 0) {
+            e.slowTimer -= dt;
+            if (e.slowTimer <= 0) e.slowRatio = 0;
+          }
+
+          // Boss EMP Kule Dondurma Şok Dalgası
+          if (e.arch.isBoss) {
+            e.bossFreezeTimer -= dt;
+            if (e.bossFreezeTimer <= 0) {
+              e.bossFreezeTimer = e.arch.freezeInterval;
+              SoundFX.bossPulse();
+              shockwaves.push({
+                x: e.x,
+                y: e.y,
+                maxR: e.arch.freezeRadius,
+                r: 8,
+                color: "#f43f5e",
+                life: 0.55
+              });
+              SOCKETS.forEach(s => {
+                if (s.tower) {
+                  const dist = Math.hypot(s.x - e.x, s.y - e.y);
+                  if (dist <= e.arch.freezeRadius) {
+                    s.tower.frozenTimer = Math.max(s.tower.frozenTimer, e.arch.freezeDuration);
+                  }
+                }
+              });
+              updateSocketInspector();
+            }
+          }
+
+          const target = WAYPOINTS[e.wpIndex];
+          if (!target) {
+            activeEnemies.splice(i, 1);
+            continue;
+          }
+
+          const effSpeed = e.arch.speed * (1 - Math.min(0.80, e.slowRatio));
+          const dx = target.x - e.x;
+          const dy = target.y - e.y;
+          const dist = Math.hypot(dx, dy);
+          const step = effSpeed * dt;
+
+          if (dist <= step) {
+            e.x = target.x;
+            e.y = target.y;
+            e.wpIndex++;
+            if (e.wpIndex >= WAYPOINTS.length) {
+              // Cyber-Nexus üssüne ulaştı!
+              state.baseHp = Math.max(0, state.baseHp - e.arch.nexusDamage);
+              spawnParticles(e.x, e.y, "#f43f5e", 14);
+              activeEnemies.splice(i, 1);
+              updateHUD();
+              if (state.baseHp <= 0) {
+                handleGameOver();
+                return;
+              }
+            }
+          } else {
+            e.x += (dx / dist) * step;
+            e.y += (dy / dist) * step;
+            e.angle = Math.atan2(dy, dx);
+            e.animPhase = (e.animPhase || 0) + dt * 8;
+          }
+        }
+
+        // Kule hedefleme ve ateşleme
+        SOCKETS.forEach(sock => {
+          const t = sock.tower;
+          if (!t) return;
+
+          if (t.frozenTimer > 0) {
+            t.frozenTimer = Math.max(0, t.frozenTimer - dt);
+            return;
+          }
+
+          const tDef = TOWER_TYPES[t.typeKey];
+          const lvStats = tDef.levels[t.level - 1];
+          const effDamage = lvStats.damage * getDmgMultiplier();
+          const effRate = lvStats.fireRate * getRateMultiplier();
+
+          t.cooldown -= dt;
+          t.recoil = Math.max(0, (t.recoil || 0) - dt * 28);
+          t.spinPhase = (t.spinPhase || 0) + dt * 4;
+
+          // Menzildeki ilk/en ileri düşmanı bul
+          let targetEnemy = null;
+          let bestProgress = -1;
+
+          for (let i = 0; i < activeEnemies.length; i++) {
+            const e = activeEnemies[i];
+            if (e.dead) continue;
+            if (e.arch.isFlying && !tDef.canHitFlying) continue;
+
+            const d = Math.hypot(e.x - sock.x, e.y - sock.y);
+            if (d <= lvStats.range) {
+              const prog = e.wpIndex * 1000 - d;
+              if (prog > bestProgress) {
+                bestProgress = prog;
+                targetEnemy = e;
+              }
+            }
+          }
+
+          if (targetEnemy) {
+            t.angle = Math.atan2(targetEnemy.y - sock.y, targetEnemy.x - sock.x);
+
+            if (t.cooldown <= 0) {
+              t.cooldown = 1 / effRate;
+              t.recoil = 5.5;
+
+              if (t.typeKey === "rapid") {
+                SoundFX.laser();
+                laserBeams.push({
+                  x1: sock.x, y1: sock.y,
+                  x2: targetEnemy.x, y2: targetEnemy.y,
+                  color: tDef.color, width: 2.2 + t.level * 0.6, life: 0.11
+                });
+                applyDamageToEnemy(targetEnemy, effDamage, lvStats.armorPen);
+              } else if (t.typeKey === "railgun") {
+                SoundFX.railgun();
+                laserBeams.push({
+                  x1: sock.x, y1: sock.y,
+                  x2: targetEnemy.x, y2: targetEnemy.y,
+                  color: tDef.color, width: 4.0, life: 0.18
+                });
+                spawnParticles(targetEnemy.x, targetEnemy.y, "#fbbf24", 7);
+                applyDamageToEnemy(targetEnemy, effDamage, lvStats.armorPen);
+              } else if (t.typeKey === "plasma") {
+                SoundFX.plasma();
+                laserBeams.push({
+                  x1: sock.x, y1: sock.y,
+                  x2: targetEnemy.x, y2: targetEnemy.y,
+                  color: tDef.color, width: 3.0, life: 0.14
+                });
+                shockwaves.push({
+                  x: targetEnemy.x, y: targetEnemy.y,
+                  maxR: lvStats.splash, r: 6,
+                  color: tDef.color, life: 0.28
+                });
+                activeEnemies.forEach(other => {
+                  if (!other.dead && !other.arch.isFlying) {
+                    if (Math.hypot(other.x - targetEnemy.x, other.y - targetEnemy.y) <= lvStats.splash) {
+                      applyDamageToEnemy(other, effDamage, lvStats.armorPen);
+                    }
+                  }
+                });
+              } else if (t.typeKey === "emp") {
+                SoundFX.emp();
+                shockwaves.push({
+                  x: sock.x, y: sock.y,
+                  maxR: lvStats.range, r: 10,
+                  color: tDef.color, life: 0.32
+                });
+                activeEnemies.forEach(other => {
+                  if (!other.dead) {
+                    if (Math.hypot(other.x - sock.x, other.y - sock.y) <= lvStats.range) {
+                      other.slowRatio = Math.max(other.slowRatio, lvStats.slow);
+                      other.slowTimer = Math.max(other.slowTimer, lvStats.slowDur);
+                      applyDamageToEnemy(other, effDamage, lvStats.armorPen);
+                    }
+                  }
+                });
+              }
+            }
+          }
+        });
+
+        // Yıldız alanı (Parallax) ve Otonom Savunma Dronları güncellemesi
+        STARFIELD.forEach(st => {
+          st.x -= st.speed * dt;
+          if (st.x < 0) st.x = VIRTUAL_W;
+        });
+
+        syncAutonomousDrones();
+        const nexusPt = WAYPOINTS[WAYPOINTS.length - 1];
+        autonomousDrones.forEach((dr, idx) => {
+          dr.orbitAngle += dt * (1.6 + idx * 0.25);
+          const orbitR = 54 + (idx % 2) * 20;
+          dr.x = nexusPt.x + Math.cos(dr.orbitAngle) * orbitR;
+          dr.y = nexusPt.y + Math.sin(dr.orbitAngle) * orbitR;
+          dr.cooldown -= dt;
+          if (dr.cooldown <= 0 && activeEnemies.length > 0) {
+            // En yakın uzaylı aracına plazma lazeri ateşle
+            let nearest = null;
+            let bestD = 260;
+            activeEnemies.forEach(e => {
+              if (!e.dead) {
+                const d = Math.hypot(e.x - dr.x, e.y - dr.y);
+                if (d < bestD) {
+                  bestD = d;
+                  nearest = e;
+                }
+              }
+            });
+            if (nearest) {
+              dr.cooldown = 0.55;
+              SoundFX.laser();
+              laserBeams.push({
+                x1: dr.x, y1: dr.y,
+                x2: nearest.x, y2: nearest.y,
+                color: "#f472b6", width: 2.4, life: 0.12
+              });
+              applyDamageToEnemy(nearest, 38 * getDmgMultiplier(), 0.5);
+            }
+          }
+        });
+
+        // Efektlerin ömrünü güncelle
+        for (let i = laserBeams.length - 1; i >= 0; i--) {
+          laserBeams[i].life -= dt;
+          if (laserBeams[i].life <= 0) laserBeams.splice(i, 1);
+        }
+        for (let i = shockwaves.length - 1; i >= 0; i--) {
+          const sw = shockwaves[i];
+          sw.life -= dt;
+          sw.r += (sw.maxR - sw.r) * Math.min(1, dt * 12);
+          if (sw.life <= 0) shockwaves.splice(i, 1);
+        }
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.life -= dt;
+          if (p.life <= 0) particles.splice(i, 1);
+        }
+        for (let i = floatingTexts.length - 1; i >= 0; i--) {
+          const ft = floatingTexts[i];
+          ft.y -= 24 * dt;
+          ft.life -= dt;
+          if (ft.life <= 0) floatingTexts.splice(i, 1);
+        }
+      }
+
+      // ============================================================================
+      // 8. BÖLÜM SONU, GEÇİŞ REKLAMI (INTERSTITIAL) VE ÖDÜLLÜ REKLAMLAR
+      // ============================================================================
+      function handleLevelVictory() {
+        state.levelEnded = true;
+        const diff = calculateDifficulty(state.level, 0);
+        state.lastEarnedGear = diff.gearReward;
+        state.gear += diff.gearReward;
+        state.cyberCore += diff.coreReward;
+        saveProgress();
+        updateHUD();
+
+        const showVictoryModal = () => {
+          document.getElementById("levelEndTitle").textContent = `BÖLÜM ${state.level} TAMAMLANDI!`;
+          document.getElementById("levelEndTitle").className = "font-cyber font-black text-xl text-cyan-300";
+          document.getElementById("levelEndSubtitle").textContent = "Cyber-Nexus başarıyla korundu. Meta ödüller hesabınıza eklendi.";
+          document.getElementById("endEarnedGear").textContent = `+${diff.gearReward} ⚙`;
+          document.getElementById("endEarnedCore").textContent = `+${diff.coreReward} 💎`;
+          document.getElementById("btnRewardDouble").classList.remove("hidden");
+          document.getElementById("btnRewardDouble").disabled = false;
+          document.getElementById("btnRewardDoubleText").textContent = `ÖDÜLÜ 2'YE KATLA (+${diff.gearReward} ⚙ REKLAM İZLE)`;
+          document.getElementById("btnNextLevel").classList.remove("hidden");
+          document.getElementById("modalLevelEnd").classList.remove("hidden");
+        };
+
+        checkInterstitialAdThen(showVictoryModal);
+      }
+
+      function handleGameOver() {
+        state.levelEnded = true;
+        const consolationGear = Math.round(calculateDifficulty(state.level, 0).gearReward * 0.25);
+        state.lastEarnedGear = consolationGear;
+        state.gear += consolationGear;
+        saveProgress();
+        updateHUD();
+
+        const showDefeatModal = () => {
+          document.getElementById("levelEndTitle").textContent = "CYBER-NEXUS ÇÖKTÜ (GAME OVER)";
+          document.getElementById("levelEndTitle").className = "font-cyber font-black text-xl text-rose-400";
+          document.getElementById("levelEndSubtitle").textContent = "Araştırma Laboratuvarında kulelerinizi güçlendirip tekrar deneyin!";
+          document.getElementById("endEarnedGear").textContent = `+${consolationGear} ⚙`;
+          document.getElementById("endEarnedCore").textContent = `+0 💎`;
+          document.getElementById("btnRewardDouble").classList.remove("hidden");
+          document.getElementById("btnRewardDouble").disabled = false;
+          document.getElementById("btnRewardDoubleText").textContent = `TESELLİ ÖDÜLÜNÜ 2'YE KATLA (+${consolationGear} ⚙)`;
+          document.getElementById("btnNextLevel").classList.add("hidden");
+          document.getElementById("modalLevelEnd").classList.remove("hidden");
+        };
+
+        checkInterstitialAdThen(showDefeatModal);
+      }
+
+      // KURAL: Her 2 bölüm tamamlandığında (Level Complete veya Game Over) otomatik Interstitial çıkar
+      function checkInterstitialAdThen(callback) {
+        state.completedOrFailedCount++;
+        if (!state.removeAds && state.completedOrFailedCount % 2 === 0) {
+          runSimulatedAd("GEÇİŞ REKLAMI (INTERSTITIAL - HER 2 BÖLÜMDE 1)", "AdMob / Unity Ads Interstitial", 1.8, callback);
+        } else {
+          callback();
+        }
+      }
+
+      function runSimulatedAd(badgeText, titleText, seconds, onComplete) {
+        const modal = document.getElementById("modalAdSimulation");
+        const bar = document.getElementById("adSimProgress");
+        const timerTxt = document.getElementById("adSimTimerText");
+        document.getElementById("adSimTypeBadge").textContent = badgeText;
+        document.getElementById("adSimTitle").textContent = titleText;
+        modal.classList.remove("hidden");
+        bar.style.width = "0%";
+
+        let elapsed = 0;
+        const stepMs = 100;
+        const interval = setInterval(() => {
+          elapsed += stepMs / 1000;
+          const pct = Math.min(100, Math.round((elapsed / seconds) * 100));
+          bar.style.width = pct + "%";
+          timerTxt.textContent = `Kalan süre: ${Math.max(0, (seconds - elapsed)).toFixed(1)} sn`;
+          if (elapsed >= seconds) {
+            clearInterval(interval);
+            modal.classList.add("hidden");
+            if (onComplete) onComplete();
+          }
+        }, stepMs);
+      }
+
+      // ============================================================================
+      // 9. CANVAS RENDERER (NEON BLOOM, YOL, SOKETLER, KULELER VE EFEKTLER)
+      // ============================================================================
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = Math.max(480, Math.floor(rect.width));
+        canvas.height = Math.max(300, Math.floor(rect.height));
+      }
+      window.addEventListener("resize", resizeCanvas);
+
+      function renderScene() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const scaleX = w / VIRTUAL_W;
+        const scaleY = h / VIRTUAL_H;
+
+        ctx.save();
+        ctx.clearRect(0, 0, w, h);
+        ctx.scale(scaleX, scaleY);
+
+        const nowAnim = performance.now() / 1000;
+        const currentPreset = SECTOR_PRESETS[state.sectorIndex] || SECTOR_PRESETS[0];
+
+        // 1. Derin Uzay Yıldız Alanı (Tüm sektörlerin altında akan canlı uzay boşluğu)
+        ctx.fillStyle = "#04060e";
+        ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
+
+        STARFIELD.forEach(st => {
+          ctx.fillStyle = `rgba(226, 232, 240, ${st.alpha})`;
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Sektöre Özel Atmosferik Arka Plan (Uzay Gemisi Güvertesi / Nebula / Asteroit Üssü / Ana Gemi Çekirdeği)
+        if (state.sectorIndex === 0) {
+          // SEKTÖR 1: DEV UZAY GEMİSİ ÜSTTEN GÖRÜNÜMÜ (USS AEGIS CRUISER DECK)
+          ctx.save();
+          // Sol arkada devasa İyon Motoru Alevleri
+          for (let ey of [125, 250, 375]) {
+            const flameLen = 38 + Math.sin(nowAnim * 18 + ey) * 10;
+            const grad = ctx.createLinearGradient(0, ey, flameLen, ey);
+            grad.addColorStop(0, "rgba(56, 189, 248, 0.95)");
+            grad.addColorStop(1, "rgba(56, 189, 248, 0)");
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.moveTo(28, ey - 22);
+            ctx.lineTo(28 - flameLen, ey);
+            ctx.lineTo(28, ey + 22);
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          // Uzay Gemisi Zırhlı Gövde Silüeti
+          ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+          ctx.strokeStyle = "rgba(56, 189, 248, 0.45)";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(25, 35);
+          ctx.lineTo(680, 20);
+          ctx.lineTo(785, 130);
+          ctx.lineTo(785, 370);
+          ctx.lineTo(680, 480);
+          ctx.lineTo(25, 465);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Gemi güvertesi zırh plakası çizgileri
+          ctx.strokeStyle = "rgba(34, 211, 238, 0.09)";
+          ctx.lineWidth = 1;
+          for (let gx = 60; gx <= 740; gx += 60) {
+            ctx.beginPath();
+            ctx.moveTo(gx, 30);
+            ctx.lineTo(gx, 470);
+            ctx.stroke();
+          }
+          ctx.restore();
+        } else if (state.sectorIndex === 1) {
+          // SEKTÖR 2: DERİN UZAY & KIZIL/MOR NEBULA BOŞLUĞU
+          ctx.save();
+          const neb1 = ctx.createRadialGradient(240, 180, 20, 240, 180, 260);
+          neb1.addColorStop(0, "rgba(217, 70, 239, 0.22)");
+          neb1.addColorStop(1, "rgba(15, 23, 42, 0)");
+          ctx.fillStyle = neb1;
+          ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
+
+          const neb2 = ctx.createRadialGradient(580, 340, 20, 580, 340, 250);
+          neb2.addColorStop(0, "rgba(244, 63, 94, 0.20)");
+          neb2.addColorStop(1, "rgba(15, 23, 42, 0)");
+          ctx.fillStyle = neb2;
+          ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
+          ctx.restore();
+        } else if (state.sectorIndex === 2) {
+          // SEKTÖR 3: KUANTUM ASTEROİT KUŞAĞI & MADEN KRİSTALLERİ
+          ctx.save();
+          ASTEROID_DECOR.forEach((ast, idx) => {
+            ctx.save();
+            ctx.translate(ast.x, ast.y);
+            ctx.rotate(ast.rot + nowAnim * 0.15 * (idx % 2 === 0 ? 1 : -1));
+            ctx.fillStyle = "#1e293b";
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            for (let k = 0; k < 7; k++) {
+              const a = (k * Math.PI * 2) / 7;
+              const r = ast.r * (k % 2 === 0 ? 1 : 0.78);
+              if (k === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+              else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+          });
+          ctx.restore();
+        } else {
+          // SEKTÖR 4: UZAYLI ANA GEMİ ÇEKİRDEĞİ (BIOMECHANICAL REACTOR)
+          ctx.save();
+          const coreGrad = ctx.createRadialGradient(400, 250, 10, 400, 250, 320);
+          coreGrad.addColorStop(0, "rgba(244, 63, 94, 0.24)");
+          coreGrad.addColorStop(1, "rgba(4, 6, 14, 0)");
+          ctx.fillStyle = coreGrad;
+          ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
+          ctx.strokeStyle = "rgba(244, 63, 94, 0.12)";
+          for (let r = 60; r <= 360; r += 60) {
+            ctx.beginPath();
+            ctx.arc(400, 250, r, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        // 2. Düşman Waypoint Yolu (Canlı Enerji Köprüsü + Akan Neon Oklar)
+        ctx.save();
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "rgba(15, 23, 42, 0.85)";
+        ctx.lineWidth = 38;
+        ctx.beginPath();
+        WAYPOINTS.forEach((pt, idx) => {
+          if (idx === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.stroke();
+
+        ctx.strokeStyle = currentPreset.pathColor;
+        ctx.globalAlpha = 0.24;
+        ctx.lineWidth = 28;
+        ctx.stroke();
+
+        ctx.globalAlpha = 0.85;
+        ctx.shadowColor = currentPreset.pathColor;
+        ctx.shadowBlur = 14;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Yol boyunca akan enerji darbesi çizgisi
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 26]);
+        ctx.lineDashOffset = -nowAnim * 48;
+        ctx.stroke();
+        ctx.restore();
+
+        // Doğuş Noktası (UZAYLI SOLUCAN DELİĞİ PORTALI) ve Üs (CYBER-NEXUS KALESİ)
+        const nowSec = performance.now() / 1000;
+        const sp = WAYPOINTS[0];
+        ctx.save();
+        ctx.translate(sp.x, sp.y);
+        ctx.rotate(nowSec * 1.8);
+        ctx.strokeStyle = "#e879f9";
+        ctx.shadowColor = "#d946ef";
+        ctx.shadowBlur = 18;
+        ctx.lineWidth = 2.5;
+        for (let arm = 0; arm < 4; arm++) {
+          ctx.rotate(Math.PI / 2);
+          ctx.beginPath();
+          ctx.arc(6, 0, 12, 0, Math.PI * 0.85);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "#a21caf";
+        ctx.beginPath();
+        ctx.arc(0, 0, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        ctx.save();
+        ctx.fillStyle = "#f5d0fe";
+        ctx.font = "bold 9px Orbitron, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("UZAYLI GEÇİDİ", sp.x, sp.y - 24);
+        ctx.restore();
+
+        const nexus = WAYPOINTS[WAYPOINTS.length - 1];
+        ctx.save();
+        ctx.translate(nexus.x, nexus.y);
+        ctx.strokeStyle = "#f43f5e";
+        ctx.fillStyle = "#1e1b4b";
+        ctx.shadowColor = "#f43f5e";
+        ctx.shadowBlur = 18;
+        ctx.lineWidth = 2.5;
+        // Sekizgen Kalkanlı Ana Üs
+        ctx.beginPath();
+        for (let i = 0; i < 8; i++) {
+          const a = (i * Math.PI) / 4 + nowSec * 0.4;
+          const rx = Math.cos(a) * 22;
+          const ry = Math.sin(a) * 22;
+          if (i === 0) ctx.moveTo(rx, ry);
+          else ctx.lineTo(rx, ry);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#f43f5e";
+        ctx.beginPath();
+        ctx.arc(0, 0, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        ctx.save();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 10px Orbitron, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(`ÜS (${state.baseHp})`, nexus.x, nexus.y - 28);
+        ctx.restore();
+
+        // 3. Kule Soketleri (Taktik Platformlar) ve Detaylı Silah Taretleri
+        SOCKETS.forEach((sock, idx) => {
+          const isSelected = (idx === state.selectedSocketIndex);
+
+          // Seçili soketin menzil halkası
+          if (isSelected && sock.tower) {
+            const tDef = TOWER_TYPES[sock.tower.typeKey];
+            const range = tDef.levels[sock.tower.level - 1].range;
+            ctx.save();
+            ctx.strokeStyle = tDef.color;
+            ctx.fillStyle = "rgba(34, 211, 238, 0.06)";
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            ctx.arc(sock.x, sock.y, range, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // Taktik Sekizgen Soket Platformu
+          ctx.save();
+          ctx.strokeStyle = isSelected ? "#22d3ee" : "rgba(148, 163, 184, 0.42)";
+          ctx.fillStyle = sock.tower ? "#090f1f" : "rgba(15, 23, 42, 0.78)";
+          ctx.lineWidth = isSelected ? 2.5 : 1.5;
+          if (isSelected) {
+            ctx.shadowColor = "#22d3ee";
+            ctx.shadowBlur = 14;
+          }
+          ctx.beginPath();
+          for (let i = 0; i < 8; i++) {
+            const a = (i * Math.PI) / 4 + Math.PI / 8;
+            const px = sock.x + Math.cos(a) * 22;
+            const py = sock.y + Math.sin(a) * 22;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // İç mekanik halka
+          ctx.strokeStyle = "rgba(51, 65, 85, 0.85)";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(sock.x, sock.y, 15, 0, Math.PI * 2);
+          ctx.stroke();
+
+          if (!sock.tower) {
+            ctx.fillStyle = isSelected ? "#22d3ee" : "#64748b";
+            ctx.font = "bold 10px Orbitron, sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("#" + sock.id, sock.x, sock.y);
+          } else {
+            const t = sock.tower;
+            const tDef = TOWER_TYPES[t.typeKey];
+            const recoilOffset = -(t.recoil || 0);
+            const mainColor = t.frozenTimer > 0 ? "#38bdf8" : tDef.color;
+
+            ctx.save();
+            ctx.translate(sock.x, sock.y);
+            ctx.rotate(t.angle);
+            ctx.shadowColor = mainColor;
+            ctx.shadowBlur = 12;
+
+            if (t.typeKey === "rapid") {
+              // 1. RAPID LASER: Çok Namlulu Döner Gatling Lazer Silahı
+              ctx.save();
+              ctx.translate(recoilOffset * 0.6, 0);
+
+              // Yan zırh omuzlukları
+              ctx.fillStyle = "#1e293b";
+              ctx.strokeStyle = mainColor;
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.roundRect(-12, -13, 18, 26, 4);
+              ctx.fill();
+              ctx.stroke();
+
+              // İkiz / Üçlü Gatling Namluları (Seviyeye göre namlu sayısı ve uzunluğu artar)
+              const barrelLen = 18 + t.level * 3;
+              ctx.fillStyle = "#cbd5e1";
+              ctx.fillRect(4, -7, barrelLen, 3.2);
+              ctx.fillRect(4, 3.8, barrelLen, 3.2);
+              if (t.level >= 2) {
+                ctx.fillStyle = mainColor;
+                ctx.fillRect(6, -1.6, barrelLen + 3, 3.2);
+              }
+              // Namlu ucu enerji bileziği
+              ctx.fillStyle = mainColor;
+              ctx.fillRect(barrelLen, -8, 3, 16);
+
+              // Merkez Lazer Çekirdeği Kubbesi
+              ctx.fillStyle = "#0f172a";
+              ctx.beginPath();
+              ctx.arc(-2, 0, 8, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = mainColor;
+              ctx.beginPath();
+              ctx.arc(-2, 0, 4.5, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+
+            } else if (t.typeKey === "plasma") {
+              // 2. PLASMA CANNON: Ağır Çift Omuzlu Plazma Havan/Top Tareti
+              ctx.save();
+              ctx.translate(recoilOffset, 0);
+
+              // Kalın ağır zırh gövdesi
+              ctx.fillStyle = "#1e1b4b";
+              ctx.strokeStyle = mainColor;
+              ctx.lineWidth = 1.8;
+              ctx.beginPath();
+              ctx.moveTo(-14, -14);
+              ctx.lineTo(8, -12);
+              ctx.lineTo(12, 0);
+              ctx.lineTo(8, 12);
+              ctx.lineTo(-14, 14);
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+
+              // Kalın Plazma Topu Namlusu + Enerji Haznesi
+              const barrelW = 16 + t.level * 2;
+              ctx.fillStyle = "#312e81";
+              ctx.strokeStyle = mainColor;
+              ctx.fillRect(4, -6.5, barrelW, 13);
+              ctx.strokeRect(4, -6.5, barrelW, 13);
+
+              // Namlu içi parlayan plazma bobinleri
+              ctx.fillStyle = mainColor;
+              ctx.fillRect(8, -4, barrelW - 6, 8);
+
+              // Namlu ağzı genişletici (Muzzle brake)
+              ctx.fillStyle = "#f0abfc";
+              ctx.fillRect(4 + barrelW, -8.5, 4, 17);
+
+              // Arka reaktör çekirdeği
+              ctx.beginPath();
+              ctx.arc(-5, 0, 6, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+
+            } else if (t.typeKey === "emp") {
+              // 3. EMP BLASTER: 4 Çatallı Tesla Elektromanyetik Bobin Silahı
+              ctx.save();
+              const spin = (t.spinPhase || 0);
+
+              // 4 Çatallı İletken Silah Kolları
+              ctx.strokeStyle = mainColor;
+              ctx.lineWidth = 2.5;
+              for (let k = 0; k < 4; k++) {
+                ctx.save();
+                ctx.rotate((k * Math.PI) / 2 + spin * 0.5);
+                ctx.fillStyle = "#1e293b";
+                ctx.fillRect(6, -3, 12 + t.level * 1.5, 6);
+                ctx.strokeRect(6, -3, 12 + t.level * 1.5, 6);
+                // Çatal ucu küresi
+                ctx.fillStyle = "#e0f2fe";
+                ctx.beginPath();
+                ctx.arc(19 + t.level * 1.5, 0, 3.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+              }
+
+              // Merkez Tesla Halkası ve Çekirdeği
+              ctx.fillStyle = "#0284c7";
+              ctx.beginPath();
+              ctx.arc(0, 0, 10, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.strokeStyle = "#e0f2fe";
+              ctx.lineWidth = 1.8;
+              ctx.beginPath();
+              ctx.arc(0, 0, 6 + Math.sin(spin * 3) * 2, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.restore();
+
+            } else if (t.typeKey === "railgun") {
+              // 4. SNIPER RAILGUN: Uzun Namlulu Manyetik Hızlandırıcı Keskin Nişancı Silahı
+              ctx.save();
+              ctx.translate(recoilOffset * 1.1, 0);
+
+              // Keskin nişancı silah gövdesi ve dipçik
+              ctx.fillStyle = "#1c1917";
+              ctx.strokeStyle = mainColor;
+              ctx.lineWidth = 1.6;
+              ctx.beginPath();
+              ctx.moveTo(-16, -9);
+              ctx.lineTo(6, -11);
+              ctx.lineTo(10, 0);
+              ctx.lineTo(6, 11);
+              ctx.lineTo(-16, 9);
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+
+              // İkiz Paralel Manyetik Raylar (Uzun Sniper Namlusu)
+              const railLen = 26 + t.level * 4;
+              ctx.fillStyle = "#cbd5e1";
+              ctx.fillRect(6, -5.5, railLen, 3);
+              ctx.fillRect(6, 2.5, railLen, 3);
+
+              // Rayların arasındaki parlayan enerji kanalı
+              ctx.fillStyle = mainColor;
+              ctx.fillRect(6, -1.5, railLen - 2, 3);
+
+              // Yan lazer dürbün modülü (Scope)
+              ctx.fillStyle = "#f59e0b";
+              ctx.fillRect(-4, -14, 12, 3.5);
+              ctx.restore();
+            }
+
+            ctx.restore();
+
+            // Seviye Rozeti (L1 / L2 / L3)
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 9px Orbitron, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("LV." + t.level, sock.x, sock.y + 32);
+
+            if (t.frozenTimer > 0) {
+              ctx.strokeStyle = "#38bdf8";
+              ctx.lineWidth = 2.5;
+              ctx.beginPath();
+              ctx.arc(sock.x, sock.y, 24, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          }
+          ctx.restore();
+        });
+
+        // 4. Düşmanlar: Uzaylı Araçları (Alien Craft & Mothership)
+        activeEnemies.forEach(e => {
+          ctx.save();
+          ctx.translate(e.x, e.y);
+          ctx.rotate(e.angle || 0);
+          ctx.shadowColor = e.arch.color;
+          ctx.shadowBlur = e.arch.isBoss ? 20 : 11;
+
+          const phase = e.animPhase || 0;
+
+          if (e.arch.id === "swarm") {
+            // 1. UZAYLI KEŞİF PODU (Alien Bio-Interceptor Craft)
+            // Arka plazma itici ateşi
+            ctx.fillStyle = "#38bdf8";
+            ctx.beginPath();
+            ctx.moveTo(-10, -3);
+            ctx.lineTo(-16 - Math.sin(phase * 2) * 4, 0);
+            ctx.lineTo(-10, 3);
+            ctx.closePath();
+            ctx.fill();
+
+            // Hilal kanatlı uzaylı gövdesi
+            ctx.fillStyle = "#1a2e05";
+            ctx.strokeStyle = e.arch.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(13, 0);
+            ctx.lineTo(-6, -10);
+            ctx.lineTo(-10, -4);
+            ctx.lineTo(-6, 0);
+            ctx.lineTo(-10, 4);
+            ctx.lineTo(-6, 10);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Parlayan uzaylı kokpit camı
+            ctx.fillStyle = e.arch.color;
+            ctx.beginPath();
+            ctx.ellipse(2, 0, 5, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+          } else if (e.arch.id === "tank") {
+            // 2. ZIRHLI UZAYLI KRUVAZÖRÜ (Heavy Alien Siege Tank / Cruiser)
+            // İkiz arka motor alevleri
+            ctx.fillStyle = "#f97316";
+            ctx.fillRect(-19, -8, 5, 4);
+            ctx.fillRect(-19, 4, 5, 4);
+
+            // Yan zırhlı hover-palet kanatları
+            ctx.fillStyle = "#431407";
+            ctx.strokeStyle = e.arch.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(-15, -14, 28, 6, 2);
+            ctx.roundRect(-15, 8, 28, 6, 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Ana altıgen zırhlı kruvazör gövdesi
+            ctx.fillStyle = "#27272a";
+            ctx.beginPath();
+            ctx.moveTo(17, -6);
+            ctx.lineTo(17, 6);
+            ctx.lineTo(6, 11);
+            ctx.lineTo(-14, 11);
+            ctx.lineTo(-14, -11);
+            ctx.lineTo(6, -11);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Uzaylı enerji çekirdeği ve ön koçbaşı
+            ctx.fillStyle = "#fde047";
+            ctx.beginPath();
+            ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
+            ctx.fill();
+
+          } else if (e.arch.isFlying) {
+            // 3. UZAYLI UFO AVCISI (Flying Alien Saucer / Starfighter)
+            ctx.save();
+            ctx.rotate(phase * 0.4); // Dönen dış UFO diski
+
+            // Dış anti-yerçekimi diski
+            ctx.fillStyle = "#083344";
+            ctx.strokeStyle = e.arch.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Disk üzerindeki 4 parlayan uzaylı ışığı
+            ctx.fillStyle = "#a5f3fc";
+            for (let k = 0; k < 4; k++) {
+              const a = (k * Math.PI) / 2;
+              ctx.beginPath();
+              ctx.arc(Math.cos(a) * 9, Math.sin(a) * 9, 2.2, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+
+            // Merkez cam kubbe (Kokpit)
+            ctx.fillStyle = e.arch.color;
+            ctx.beginPath();
+            ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
+            ctx.fill();
+
+          } else if (e.arch.isBoss) {
+            // 4. UZAYLI ANA GEMİSİ (ALIEN MOTHERSHIP DREADNOUGHT)
+            // Arka devasa plazma iticileri
+            ctx.fillStyle = "#fb7185";
+            for (let ty = -12; ty <= 12; ty += 12) {
+              ctx.beginPath();
+              ctx.arc(-24, ty, 4 + Math.sin(phase * 2) * 1.5, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            // Ana gemi kanatları ve zırhlı gövde
+            ctx.fillStyle = "#31102f";
+            ctx.strokeStyle = e.arch.color;
+            ctx.lineWidth = 2.8;
+            ctx.beginPath();
+            ctx.moveTo(26, 0);
+            ctx.lineTo(8, -22);
+            ctx.lineTo(-18, -24);
+            ctx.lineTo(-24, -10);
+            ctx.lineTo(-24, 10);
+            ctx.lineTo(-18, 24);
+            ctx.lineTo(8, 22);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Dönen iç EMP Reaktör Halkası
+            ctx.save();
+            ctx.rotate(-phase * 0.35);
+            ctx.strokeStyle = "#f472b6";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-10, -10, 20, 20);
+            ctx.restore();
+
+            // Merkez karanlık madde çekirdeği
+            ctx.fillStyle = "#fda4af";
+            ctx.beginPath();
+            ctx.arc(0, 0, 7, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.restore();
+
+          // Yavaşlatma (EMP) Halkası ve Can Barı (Dönüşten bağımsız düz çizilir)
+          ctx.save();
+          if (e.slowTimer > 0) {
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(e.x, e.y, e.arch.radius + 4, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          const bw = e.arch.isBoss ? 52 : 28;
+          const bh = e.arch.isBoss ? 5.5 : 3.8;
+          const hpRatio = Math.max(0, e.hp / e.maxHp);
+          ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+          ctx.fillRect(e.x - bw / 2, e.y - e.arch.radius - 12, bw, bh);
+          ctx.fillStyle = e.arch.isBoss ? "#f43f5e" : "#22d3ee";
+          ctx.fillRect(e.x - bw / 2, e.y - e.arch.radius - 12, bw * hpRatio, bh);
+          ctx.restore();
+        });
+
+        // 4B. Otonom Siber-Dron Filosu Çizimi
+        autonomousDrones.forEach(dr => {
+          ctx.save();
+          ctx.translate(dr.x, dr.y);
+          ctx.rotate(dr.orbitAngle + Math.PI / 2);
+          ctx.fillStyle = "#f472b6";
+          ctx.strokeStyle = "#fdf4ff";
+          ctx.shadowColor = "#e879f9";
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(10, 0);
+          ctx.lineTo(-7, -7);
+          ctx.lineTo(-3, 0);
+          ctx.lineTo(-7, 7);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        // 5. Çift Katmanlı Lazer Işınları (Dış Glow + Beyaz Sıcak Çekirdek) ve Şok Dalgaları
+        laserBeams.forEach(b => {
+          ctx.save();
+          ctx.lineCap = "round";
+          ctx.strokeStyle = b.color;
+          ctx.shadowColor = b.color;
+          ctx.shadowBlur = 16;
+          ctx.lineWidth = b.width * 1.6;
+          ctx.beginPath();
+          ctx.moveTo(b.x1, b.y1);
+          ctx.lineTo(b.x2, b.y2);
+          ctx.stroke();
+
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = Math.max(1.2, b.width * 0.55);
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        shockwaves.forEach(sw => {
+          ctx.save();
+          ctx.strokeStyle = sw.color;
+          ctx.shadowColor = sw.color;
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = 2.5;
+          ctx.globalAlpha = Math.max(0, sw.life * 2);
+          ctx.beginPath();
+          ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        // 6. Parçacıklar ve Uçan Hasar Yazıları
+        particles.forEach(p => {
+          ctx.save();
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, p.life * 2);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        floatingTexts.forEach(ft => {
+          ctx.save();
+          ctx.fillStyle = ft.color;
+          ctx.font = "bold 11px Orbitron, sans-serif";
+          ctx.textAlign = "center";
+          ctx.globalAlpha = Math.max(0, ft.life);
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
+        });
+
+        // 7. Orbital Lazer Tam Ekran Flaş Efekti
+        if (state.orbitalFlashTimer > 0) {
+          ctx.save();
+          ctx.fillStyle = `rgba(244, 63, 94, ${state.orbitalFlashTimer * 0.45})`;
+          ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
+          ctx.restore();
+        }
+
+        ctx.restore();
+      }
+
+      // ============================================================================
+      // 10. UI ETKİLEŞİMLERİ VE SOKET SEÇİMİ
+      // ============================================================================
+      function showToast(msg) {
+        const el = document.getElementById("toastNotification");
+        el.textContent = msg;
+        el.classList.remove("hidden");
+        clearTimeout(el._timer);
+        el._timer = setTimeout(() => el.classList.add("hidden"), 2500);
+      }
+
+      function updateHUD() {
+        const diff = calculateDifficulty(state.level, state.waveIndex);
+        document.getElementById("hudLevelNum").textContent = state.level;
+        document.getElementById("hudWaveNum").textContent = `${Math.min(state.waveIndex + 1, state.totalWaves)}/${state.totalWaves}`;
+        document.getElementById("hudDifficultyMult").textContent = `${diff.hpMult}x HP • +${Math.round(diff.armorBonus * 100)}% Zırh`;
+        document.getElementById("hudBaseHp").textContent = `${state.baseHp}/${state.maxBaseHp}`;
+        document.getElementById("hudGold").textContent = state.gold;
+        document.getElementById("hudGear").textContent = state.gear;
+        document.getElementById("hudCyberCore").textContent = state.cyberCore;
+        document.getElementById("labGearCount").textContent = state.gear;
+        document.getElementById("labCoreCount").textContent = state.cyberCore;
+
+        const badge = document.getElementById("badgeRemoveAds");
+        if (state.removeAds) badge.classList.remove("hidden");
+        else badge.classList.add("hidden");
+
+        document.getElementById("skillDmgLv").textContent = "Lv." + state.skills.dmgLv;
+        document.getElementById("skillRateLv").textContent = "Lv." + state.skills.rateLv;
+        document.getElementById("skillHpLv").textContent = "Lv." + state.skills.hpLv;
+        document.getElementById("skillGoldLv").textContent = "Lv." + state.skills.goldLv;
+        document.getElementById("skillDroneLv").textContent = "Lv." + (state.skills.droneLv || 0);
+        document.getElementById("skillCritLv").textContent = "Lv." + (state.skills.critLv || 0);
+        document.getElementById("skillBountyLv").textContent = "Lv." + (state.skills.bountyLv || 0);
+        document.getElementById("skillOrbitalLv").textContent = "Lv." + (state.skills.orbitalLv || 0);
+      }
+
+      function updateOrbitalButtonUI() {
+        const txt = document.getElementById("orbitalStatusText");
+        if (state.orbitalCooldown > 0) {
+          txt.textContent = `Bekleme Süresi: ${Math.ceil(state.orbitalCooldown)} sn`;
+        } else {
+          txt.textContent = "🎬 Reklam İzle • Tümüne Hasar";
+        }
+      }
+
+      function updateSocketInspector() {
+        const sock = SOCKETS[state.selectedSocketIndex];
+        if (!sock) return;
+
+        document.getElementById("selectedSocketTitle").textContent = `SOKET #${sock.id} SEÇİLİ`;
+        const instPanel = document.getElementById("installedTowerPanel");
+        const badge = document.getElementById("socketBadge");
+
+        if (!sock.tower) {
+          badge.textContent = "BOŞ SOKET";
+          badge.className = "px-2 py-0.5 text-[10px] font-cyber font-bold rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40";
+          document.getElementById("selectedSocketSubtitle").textContent = "Bu sokete kurmak istediğiniz kuleyi seçin";
+          instPanel.classList.add("hidden");
+          instPanel.classList.remove("flex");
+        } else {
+          const t = sock.tower;
+          const tDef = TOWER_TYPES[t.typeKey];
+          const lvStats = tDef.levels[t.level - 1];
+          const effDmg = Math.round(lvStats.damage * getDmgMultiplier());
+          const effRate = (lvStats.fireRate * getRateMultiplier()).toFixed(1);
+
+          badge.textContent = `SEVİYE ${t.level}/3`;
+          badge.className = "px-2 py-0.5 text-[10px] font-cyber font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+          document.getElementById("selectedSocketSubtitle").textContent = `${tDef.name} aktif durumda`;
+          instPanel.classList.remove("hidden");
+          instPanel.classList.add("flex");
+
+          document.getElementById("instTowerName").textContent = tDef.name;
+          document.getElementById("instTowerLevel").textContent = `Seviye ${t.level} / 3`;
+          document.getElementById("instTowerTargetTag").textContent = tDef.targetLabel;
+          document.getElementById("instTowerDmg").textContent = effDmg;
+          document.getElementById("instTowerRate").textContent = effRate + "/sn";
+          document.getElementById("instTowerRange").textContent = lvStats.range + "m";
+          document.getElementById("instTowerSpecial").textContent = tDef.specialLabel;
+
+          const frozenWarn = document.getElementById("bossFrozenWarning");
+          if (t.frozenTimer > 0) frozenWarn.classList.remove("hidden");
+          else frozenWarn.classList.add("hidden");
+
+          const upBtn = document.getElementById("btnUpgradeTower");
+          if (t.level >= 3) {
+            upBtn.textContent = "MAKSİMUM SEVİYE (LV.3)";
+            upBtn.disabled = true;
+            upBtn.className = "flex-1 py-2 px-3 rounded-lg font-cyber font-bold text-xs bg-slate-800 text-slate-500 cursor-not-allowed";
+          } else {
+            const nextCost = tDef.levels[t.level].cost;
+            upBtn.textContent = `⬆ LV.${t.level + 1} YÜKSELT (${nextCost} ⚡)`;
+            upBtn.disabled = false;
+            upBtn.className = "flex-1 py-2 px-3 rounded-lg font-cyber font-bold text-xs bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition";
+          }
+
+          document.getElementById("btnSellTower").textContent = `Sat (+${lvStats.refund} ⚡)`;
+        }
+      }
+
+      // Canvas üzerinde sokete tıklama
+      canvas.addEventListener("pointerdown", (ev) => {
+        SoundFX.init();
+        const rect = canvas.getBoundingClientRect();
+        const vx = ((ev.clientX - rect.left) / rect.width) * VIRTUAL_W;
+        const vy = ((ev.clientY - rect.top) / rect.height) * VIRTUAL_H;
+
+        let closestIdx = -1;
+        let closestDist = 36;
+        SOCKETS.forEach((s, idx) => {
+          const d = Math.hypot(s.x - vx, s.y - vy);
+          if (d < closestDist) {
+            closestDist = d;
+            closestIdx = idx;
+          }
+        });
+
+        if (closestIdx !== -1) {
+          SoundFX.uiClick();
+          state.selectedSocketIndex = closestIdx;
+          updateSocketInspector();
+        }
+      });
+
+      // Kule İnşa Butonları
+      document.querySelectorAll(".tower-build-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          SoundFX.uiClick();
+          const typeKey = btn.getAttribute("data-tower");
+          const tDef = TOWER_TYPES[typeKey];
+          const sock = SOCKETS[state.selectedSocketIndex];
+          if (!sock || !tDef) return;
+
+          if (sock.tower) {
+            showToast("Bu sokette zaten bir kule var! Önce yükseltin veya satın.");
+            return;
+          }
+
+          const cost = tDef.levels[0].cost;
+          if (state.gold < cost) {
+            showToast(`Yetersiz Altın! ${tDef.name} için ${cost} ⚡ gerekli.`);
+            return;
+          }
+
+          state.gold -= cost;
+          sock.tower = {
+            typeKey,
+            level: 1,
+            cooldown: 0,
+            frozenTimer: 0,
+            angle: 0
+          };
+          spawnParticles(sock.x, sock.y, tDef.color, 12);
+          updateHUD();
+          updateSocketInspector();
+        });
+      });
+
+      // Kule 3-Seviye Upgrade Butonu
+      document.getElementById("btnUpgradeTower").addEventListener("click", () => {
+        const sock = SOCKETS[state.selectedSocketIndex];
+        if (!sock || !sock.tower) return;
+        const t = sock.tower;
+        const tDef = TOWER_TYPES[t.typeKey];
+        if (t.level >= 3) return;
+
+        const nextCost = tDef.levels[t.level].cost;
+        if (state.gold < nextCost) {
+          showToast(`Yükseltme için ${nextCost} ⚡ altın gerekiyor!`);
+          return;
+        }
+
+        SoundFX.uiClick();
+        state.gold -= nextCost;
+        t.level++;
+        spawnParticles(sock.x, sock.y, "#22d3ee", 16);
+        showToast(`${tDef.name} Seviye ${t.level}'e yükseltildi!`);
+        updateHUD();
+        updateSocketInspector();
+      });
+
+      // Kule Satış Butonu
+      document.getElementById("btnSellTower").addEventListener("click", () => {
+        const sock = SOCKETS[state.selectedSocketIndex];
+        if (!sock || !sock.tower) return;
+        SoundFX.uiClick();
+        const tDef = TOWER_TYPES[sock.tower.typeKey];
+        const refund = tDef.levels[sock.tower.level - 1].refund;
+        state.gold += refund;
+        sock.tower = null;
+        showToast(`Kule satıldı (+${refund} ⚡ iade edildi).`);
+        updateHUD();
+        updateSocketInspector();
+      });
+
+      // Ödüllü Reklam 2: Orbital Lazer Çağrısı
+      document.getElementById("btnOrbitalLaser").addEventListener("click", () => {
+        if (state.orbitalCooldown > 0) {
+          showToast(`Orbital Lazer doluyor: ${Math.ceil(state.orbitalCooldown)} sn kaldı.`);
+          return;
+        }
+        runSimulatedAd("ÖDÜLLÜ REKLAM (REWARDED AD)", "Orbital Lazer Uydusu Şarj Ediliyor...", 1.6, () => {
+          SoundFX.orbital();
+          state.orbitalCooldown = getEffectiveOrbitalCooldown();
+          state.orbitalFlashTimer = 0.85;
+          updateOrbitalButtonUI();
+
+          const diff = calculateDifficulty(state.level, state.waveIndex);
+          const strikeDamage = Math.round(950 * diff.hpMult * getOrbitalDamageMultiplier());
+
+          for (let i = activeEnemies.length - 1; i >= 0; i--) {
+            const e = activeEnemies[i];
+            if (!e.dead) {
+              laserBeams.push({
+                x1: e.x, y1: 0,
+                x2: e.x, y2: e.y,
+                color: "#f43f5e", width: 7, life: 0.45
+              });
+              applyDamageToEnemy(e, strikeDamage, 1.0, true);
+            }
+          }
+          showToast(`🛰️ ORBİTAL LAZER ATEŞLENDİ! Tüm düşmanlara ${strikeDamage} Gerçek Hasar vuruldu!`);
+        });
+      });
+
+      // Ödüllü Reklam 1: Bölüm Sonu Ödülü 2'ye Katla
+      document.getElementById("btnRewardDouble").addEventListener("click", () => {
+        if (state.doubledThisLevel || state.lastEarnedGear <= 0) return;
+        runSimulatedAd("ÖDÜLLÜ REKLAM (REWARDED AD)", "Bölüm Sonu Kazancı 2'ye Katlanıyor...", 1.6, () => {
+          state.doubledThisLevel = true;
+          state.gear += state.lastEarnedGear;
+          saveProgress();
+          updateHUD();
+          document.getElementById("endEarnedGear").textContent = `+${state.lastEarnedGear * 2} ⚙ (2x!)`;
+          document.getElementById("btnRewardDouble").disabled = true;
+          document.getElementById("btnRewardDoubleText").textContent = "✔ ÖDÜL 2'YE KATLANDI!";
+          showToast(`+${state.lastEarnedGear} ekstra Gear hesabınıza eklendi!`);
+        });
+      });
+
+      // Bölüm Seçimi ve Kontroller
+      const selectEl = document.getElementById("selectLevel");
+      for (let i = 1; i <= 100; i++) {
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = i % 10 === 0 ? `Bölüm ${i} (👾 BOSS)` : `Bölüm ${i}`;
+        selectEl.appendChild(opt);
+      }
+      selectEl.addEventListener("change", () => {
+        startLevel(parseInt(selectEl.value, 10) || 1);
+      });
+
+      document.getElementById("btnQuickBoss10").addEventListener("click", () => startLevel(10));
+      document.getElementById("btnQuickBoss50").addEventListener("click", () => startLevel(50));
+      document.getElementById("btnNextWaveEarly").addEventListener("click", () => {
+        if (!waveInProgress) {
+          waveBreakTimer = 0;
+          spawnNextWave();
+        }
+      });
+
+      document.getElementById("btnSpeedToggle").addEventListener("click", (e) => {
+        state.gameSpeed = state.gameSpeed === 1 ? 2 : (state.gameSpeed === 2 ? 3 : 1);
+        e.currentTarget.textContent = state.gameSpeed + "x HIZ";
+      });
+
+      document.getElementById("btnPauseToggle").addEventListener("click", (e) => {
+        state.paused = !state.paused;
+        e.currentTarget.textContent = state.paused ? "Devam Et ▶" : "Duraklat";
+      });
+
+      document.getElementById("btnMuteAudio").addEventListener("click", (e) => {
+        SoundFX.muted = !SoundFX.muted;
+        e.currentTarget.textContent = SoundFX.muted ? "🔇" : "🔊";
+      });
+
+      document.getElementById("btnRetryLevel").addEventListener("click", () => startLevel(state.level));
+      document.getElementById("btnNextLevel").addEventListener("click", () => startLevel(Math.min(100, state.level + 1)));
+
+      // Araştırma Laboratuvarı (Skill Tree) Modalı
+      document.getElementById("btnOpenLab").addEventListener("click", () => {
+        updateHUD();
+        document.getElementById("modalLab").classList.remove("hidden");
+      });
+      document.getElementById("btnCloseLab").addEventListener("click", () => {
+        document.getElementById("modalLab").classList.add("hidden");
+      });
+
+      function tryUpgradeSkill(skillKey, gearCost, coreCost, label) {
+        if (state.gear < gearCost || state.cyberCore < coreCost) {
+          showToast(`Yetersiz kaynak! (${gearCost} ⚙ ve ${coreCost} 💎 gerekli)`);
+          return;
+        }
+        SoundFX.uiClick();
+        state.gear -= gearCost;
+        state.cyberCore -= coreCost;
+        state.skills[skillKey]++;
+        if (skillKey === "hpLv") {
+          state.maxBaseHp = getMaxBaseHp();
+          state.baseHp += 5;
+        }
+        saveProgress();
+        updateHUD();
+        updateSocketInspector();
+        showToast(`${label} yükseltildi!`);
+      }
+
+      document.getElementById("btnUpSkillDmg").addEventListener("click", () => tryUpgradeSkill("dmgLv", 60, 5, "Foton Hasar Çekirdeği"));
+      document.getElementById("btnUpSkillRate").addEventListener("click", () => tryUpgradeSkill("rateLv", 60, 5, "Overclock Atış Bobini"));
+      document.getElementById("btnUpSkillHp").addEventListener("click", () => tryUpgradeSkill("hpLv", 50, 3, "Cyber-Nexus Kalkanı"));
+      document.getElementById("btnUpSkillGold").addEventListener("click", () => tryUpgradeSkill("goldLv", 50, 3, "Başlangıç Reaktörü"));
+
+      // Elit Cyber-Core Yetenekleri
+      document.getElementById("btnUpSkillDrone").addEventListener("click", () => {
+        tryUpgradeSkill("droneLv", 0, 15, "🛸 Otonom Siber-Dron Filosu");
+        syncAutonomousDrones();
+      });
+      document.getElementById("btnUpSkillCrit").addEventListener("click", () => tryUpgradeSkill("critLv", 0, 12, "💥 Kuantum Kritik Matrisi"));
+      document.getElementById("btnUpSkillBounty").addEventListener("click", () => tryUpgradeSkill("bountyLv", 0, 10, "💰 Uzaylı Ganimet Sentezleyici"));
+      document.getElementById("btnUpSkillOrbital").addEventListener("click", () => tryUpgradeSkill("orbitalLv", 0, 12, "🛰️ Orbital Uydu Overclock"));
+
+      // Harita / Sektör Değiştirici
+      document.getElementById("selectMapSector").addEventListener("change", (e) => {
+        const chosenSector = parseInt(e.target.value, 10) || 0;
+        state.manualSectorOverride = true;
+        startLevel(state.level, chosenSector);
+        showToast(`${SECTOR_PRESETS[chosenSector].name} haritası yüklendi!`);
+      });
+
+      // VIP Komutan Paketi (Starter Bundle IAP)
+      document.getElementById("btnBuyVipBundle").addEventListener("click", () => {
+        state.removeAds = true;
+        state.vipGoldenAura = true;
+        state.cyberCore += 300;
+        state.skills.droneLv = Math.max(1, (state.skills.droneLv || 0) + 1);
+        syncAutonomousDrones();
+        saveProgress();
+        updateHUD();
+        showToast("👑 KOMUTAN VIP PAKETİ AKTİF! +300 Cyber-Core, Otonom Dron ve Reklamsız Mod açıldı!");
+      });
+
+      // iOS Native Haptic Feedback & StoreKit / AdMob Bridge Helper
+      function triggerIosHaptic() {
+        try {
+          if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Haptics) {
+            window.Capacitor.Plugins.Haptics.impact({ style: "MEDIUM" });
+          } else if (navigator.vibrate) {
+            navigator.vibrate(12);
+          }
+        } catch (e) {}
+      }
+
+      // iOS TestFlight Rehber Modalı
+      document.getElementById("btnOpenIosGuide").addEventListener("click", () => {
+        SoundFX.uiClick();
+        document.getElementById("modalIosGuide").classList.remove("hidden");
+      });
+      document.getElementById("btnCloseIosGuide").addEventListener("click", () => {
+        document.getElementById("modalIosGuide").classList.add("hidden");
+      });
+
+      // Apple Zorunlu Restore Purchases (Satın Alımları Geri Yükle)
+      document.getElementById("btnRestorePurchases").addEventListener("click", () => {
+        SoundFX.uiClick();
+        triggerIosHaptic();
+        loadProgress();
+        if (state.removeAds || state.vipGoldenAura) {
+          showToast("🧪 DEMO: Yerel kayıttaki VIP durumunuzu görüntülüyorsunuz; Apple satın alımı doğrulanmadı.");
+        } else {
+          showToast("🧪 DEMO: Apple hesabınız sorgulanmadı; StoreKit henüz entegre değil.");
+        }
+        updateHUD();
+      });
+
+      // Apple ATT (App Tracking Transparency) İzin Penceresi
+      document.getElementById("btnTriggerAttPrompt").addEventListener("click", () => {
+        document.getElementById("modalAppleAtt").classList.remove("hidden");
+      });
+      document.getElementById("btnAttAllow").addEventListener("click", () => {
+        document.getElementById("modalAppleAtt").classList.add("hidden");
+        showToast("🧪 DEMO: Gerçek iOS takip izni verilmedi; yalnızca örnek ekran kapatıldı.");
+      });
+      document.getElementById("btnAttDeny").addEventListener("click", () => {
+        document.getElementById("modalAppleAtt").classList.add("hidden");
+        showToast("🧪 DEMO: Gerçek iOS takip izni değiştirilmedi; yalnızca örnek ekran kapatıldı.");
+      });
+
+      // IAP Mağaza Modalı
+      document.getElementById("btnOpenShop").addEventListener("click", () => {
+        document.getElementById("modalShop").classList.remove("hidden");
+      });
+      document.getElementById("btnCloseShop").addEventListener("click", () => {
+        document.getElementById("modalShop").classList.add("hidden");
+      });
+
+      document.getElementById("btnBuyRemoveAds").addEventListener("click", () => {
+        state.removeAds = true;
+        saveProgress();
+        updateHUD();
+        showToast("🎉 Remove Ads aktif! Geçiş reklamları kalıcı olarak kapatıldı.");
+      });
+      document.getElementById("btnBuyCore100").addEventListener("click", () => {
+        state.cyberCore += 100;
+        saveProgress();
+        updateHUD();
+        showToast("💎 +100 Cyber-Core hesabınıza eklendi!");
+      });
+      document.getElementById("btnBuyCore500").addEventListener("click", () => {
+        state.cyberCore += 500;
+        state.gear += 1000;
+        saveProgress();
+        updateHUD();
+        showToast("💎 +500 Cyber-Core ve +1000 Gear hesabınıza eklendi!");
+      });
+
+      // ============================================================================
+      // 11. ANA OYUN DÖNGÜSÜ (REQUESTANIMATIONFRAME)
+      // ============================================================================
+      let lastTime = performance.now();
+      function gameLoop(now) {
+        const rawDt = Math.min(0.05, (now - lastTime) / 1000);
+        lastTime = now;
+
+        updateSimulation(rawDt * state.gameSpeed);
+        renderScene();
+        requestAnimationFrame(gameLoop);
+      }
+
+      window.addEventListener("load", () => {
+        loadProgress();
+        resizeCanvas();
+        startLevel(1);
+        requestAnimationFrame(gameLoop);
+      });
+    })();
+  </script>
+</body>
+</html>
