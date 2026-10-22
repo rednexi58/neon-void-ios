@@ -1,12 +1,13 @@
 {
   "name": "gezegeni-savun-ios",
   "version": "1.1.0",
-  "description": "Gezegeni Savun (Neon Void: Cyber Defense) — iOS App Store & TestFlight Build",
+  "description": "Gezegeni Koru - iOS TestFlight build from updated game source",
   "private": true,
   "scripts": {
     "ios:init": "npx cap add ios",
     "ios:sync": "npx cap sync ios",
-    "ios:open": "npx cap open ios"
+    "ios:open": "npx cap open ios",
+    "build": "tailwindcss -i ./src/tailwind.css -o ./www/tailwind.css --minify"
   },
   "dependencies": {
     "@capacitor/core": "^6.0.0",
@@ -15,6 +16,7 @@
     "@capacitor/status-bar": "^6.0.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^6.0.0"
+    "@capacitor/cli": "^6.0.0",
+    "tailwindcss": "3.4.17"
   }
 }
