@@ -1,11 +1,11 @@
 {
   "appId": "com.neonvoid.cyberdefense",
-  "appName": "Neon Void",
+  "appName": "Gezegeni Koru",
   "webDir": "www",
   "bundledWebRuntime": false,
   "ios": {
-    "contentInset": "always",
-    "backgroundColor": "#05070f",
+    "contentInset": "never",
+    "backgroundColor": "#030611",
     "preferredContentMode": "mobile"
   }
 }

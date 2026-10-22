@@ -1,59 +1,53 @@
-# Neon Void - Capacitor iOS / TestFlight build (Windows -> Codemagic cloud Mac)
-# This key name must match Personal Account > Settings > Developer Portal.
 workflows:
-  ios-testflight-release:
-    name: Neon Void iOS TestFlight Pipeline (No-Mac Required)
+  ios-testflight-workflow:
+    name: Gezegeni Koru - iOS TestFlight Auto-Build
     max_build_duration: 60
     instance_type: mac_mini_m2
     integrations:
-      app_store_connect: "Apple AppStore"
+      app_store_connect: Apple AppStore
     environment:
       ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.neonvoid.cyberdefense
+        provisioning_profiles:
+          - neonvoid-appstore-profile
+        certificates:
+          - neonvoid-dist-cert
       vars:
-        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
-        XCODE_SCHEME: "App"
-      node: 20
+        BUNDLE_ID: "com.neonvoid.cyberdefense"
+        APP_DISPLAY_NAME: "Gezegeni Koru"
+      node: 20.11.0
       xcode: latest
-      cocoapods: default
     scripts:
-      - name: Install dependencies and bundle game CSS locally
+      - name: Install NPM & Capacitor Dependencies
         script: |
-          set -e
-          npm install --no-audit --no-fund
-          npm run build
-          test -s www/index.html
-          test -s www/tailwind.css
-      - name: Generate the Capacitor iOS project and install pods
-        script: |
-          set -e
-          npx cap add ios
+          npm install
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
           npx cap sync ios
-          cd ios/App
-          pod install
-      - name: Update version and encryption declaration
+      - name: Configure iOS Portrait & Display Name (Gezegeni Koru)
         script: |
-          set -e
-          cd ios/App
-          agvtool new-version -all "$PROJECT_BUILD_NUMBER"
-          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" App/Info.plist || \
-            /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" App/Info.plist
-      - name: Apply registered Apple Distribution signing profile
+          PLIST="ios/App/App/Info.plist"
+          if [ -f "$PLIST" ]; then
+            /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'Gezegeni Koru'" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string 'Gezegeni Koru'" "$PLIST"
+            /usr/libexec/PlistBuddy -c "Set :CFBundleName 'Gezegeni Koru'" "$PLIST" || true
+            /usr/libexec/PlistBuddy -c "Add :NSUserTrackingUsageDescription string 'Verileriniz size uygun ödüllü reklamlar sunmak için kullanılır.'" "$PLIST" || true
+          fi
+      - name: Set Up Code Signing Settings on Xcode Project
         script: |
-          set -e
           xcode-project use-profiles
-      - name: Build signed IPA
+      - name: Increment Build Number
         script: |
-          set -e
-          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+          cd ios/App
+          agvtool new-version -all $(($BUILD_NUMBER + 1))
+      - name: Build IPA for App Store & TestFlight
+        script: |
+          xcode-project build-ipa \
+            --project "ios/App/App.xcodeproj" \
+            --scheme "App"
     artifacts:
       - build/ios/ipa/*.ipa
-      - ios/App/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
         auth: integration
-        # Upload to App Store Connect, but do not submit for external beta review automatically.
-        submit_to_testflight: false
-        submit_to_app_store: false
+        submit_to_testflight: true

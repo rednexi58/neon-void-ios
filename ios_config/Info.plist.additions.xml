@@ -1,0 +1,16 @@
+<!-- Xcode -> Info.plist içine eklenecek Apple App Store ve TestFlight zorunlu anahtarları -->
+<key>NSUserTrackingUsageDescription</key>
+<string>Verileriniz size kişiselleştirilmiş reklamlar sunmak ve ödüllü reklam performansını iyileştirmek için kullanılır.</string>
+
+<!-- TestFlight'ta her yüklemede Şifreleme (Export Compliance) onayı sormaması için: -->
+<key>ITSAppUsesNonExemptEncryption</key>
+<false/>
+
+<!-- Google AdMob iOS Test App ID (Canlıya geçerken kendi AdMob iOS App ID'nizi yazın) -->
+<key>GADApplicationIdentifier</key>
+<string>ca-app-pub-3940256099942544~1458002511</string>
+
+<key>UIRequiresFullScreen</key>
+<true/>
+<key>UIStatusBarHidden</key>
+<true/>
