@@ -1,0 +1,11 @@
+{
+  "appId": "com.neonvoid.cyberdefense",
+  "appName": "Neon Void",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#05070f",
+    "preferredContentMode": "mobile"
+  }
+}

@@ -1,0 +1,44 @@
+# ============================================================================
+# NEON VOID: CYBER DEFENSE — WINDOWS KULLANICILARI İÇİN OTOMATİK BULUT MAC DERLEMESİ
+# Mac bilgisayarınız olmadan doğrudan Windows'tan GitHub + Codemagic üzerinden
+# otomatik sertifika imzalama (Auto Code Signing) ve TestFlight yüklemesi yapar.
+# ============================================================================
+workflows:
+  ios-testflight-release:
+    name: Neon Void iOS TestFlight Pipeline (No-Mac Required)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: NeonVoid_AppStore_Key
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.neonvoid.cyberdefense
+      vars:
+        BUNDLE_ID: "com.neonvoid.cyberdefense"
+        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_SCHEME: "App"
+      node: 20
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: 1. NPM Paketlerini ve Capacitor iOS Köprüsünü Kur
+        script: |
+          npm install
+          npx cap add ios || npx cap sync ios
+      - name: 2. Info.plist içine Apple ATT ve Şifreleme Beyanını Ekle
+        script: |
+          /usr/libexec/PlistBuddy -c "Add :NSUserTrackingUsageDescription string 'Verileriniz size kişiselleştirilmiş reklamlar sunmak ve ödüllü reklam performansını iyileştirmek için kullanılır.'" ios/App/App/Info.plist || true
+          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || true
+      - name: 3. Xcode Otomatik İmzalama Ayarlarını Uygula
+        script: |
+          xcode-project use-profiles
+      - name: 4. IPA Dosyasını Derle (Archive & Export IPA)
+        script: |
+          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
