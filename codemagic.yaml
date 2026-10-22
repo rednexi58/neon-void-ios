@@ -1,44 +1,59 @@
-# ============================================================================
-# NEON VOID: CYBER DEFENSE — WINDOWS KULLANICILARI İÇİN OTOMATİK BULUT MAC DERLEMESİ
-# Mac bilgisayarınız olmadan doğrudan Windows'tan GitHub + Codemagic üzerinden
-# otomatik sertifika imzalama (Auto Code Signing) ve TestFlight yüklemesi yapar.
-# ============================================================================
+# Neon Void - Capacitor iOS / TestFlight build (Windows -> Codemagic cloud Mac)
+# This key name must match Personal Account > Settings > Developer Portal.
 workflows:
   ios-testflight-release:
     name: Neon Void iOS TestFlight Pipeline (No-Mac Required)
     max_build_duration: 60
     instance_type: mac_mini_m2
     integrations:
-      app_store_connect: app_store_connect: "Apple AppStore"
+      app_store_connect: "Apple AppStore"
     environment:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.neonvoid.cyberdefense
       vars:
-        BUNDLE_ID: "com.neonvoid.cyberdefense"
         XCODE_WORKSPACE: "ios/App/App.xcworkspace"
         XCODE_SCHEME: "App"
       node: 20
       xcode: latest
       cocoapods: default
     scripts:
-      - name: 1. NPM Paketlerini ve Capacitor iOS Köprüsünü Kur
+      - name: Install dependencies and bundle game CSS locally
         script: |
-          npm install
-          npx cap add ios || npx cap sync ios
-      - name: 2. Info.plist içine Apple ATT ve Şifreleme Beyanını Ekle
+          set -e
+          npm install --no-audit --no-fund
+          npm run build
+          test -s www/index.html
+          test -s www/tailwind.css
+      - name: Generate the Capacitor iOS project and install pods
         script: |
-          /usr/libexec/PlistBuddy -c "Add :NSUserTrackingUsageDescription string 'Verileriniz size kişiselleştirilmiş reklamlar sunmak ve ödüllü reklam performansını iyileştirmek için kullanılır.'" ios/App/App/Info.plist || true
-          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || true
-      - name: 3. Xcode Otomatik İmzalama Ayarlarını Uygula
+          set -e
+          npx cap add ios
+          npx cap sync ios
+          cd ios/App
+          pod install
+      - name: Update version and encryption declaration
         script: |
+          set -e
+          cd ios/App
+          agvtool new-version -all "$PROJECT_BUILD_NUMBER"
+          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" App/Info.plist || \
+            /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" App/Info.plist
+      - name: Apply registered Apple Distribution signing profile
+        script: |
+          set -e
           xcode-project use-profiles
-      - name: 4. IPA Dosyasını Derle (Archive & Export IPA)
+      - name: Build signed IPA
         script: |
+          set -e
           xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
     artifacts:
       - build/ios/ipa/*.ipa
+      - ios/App/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
+        # Upload to App Store Connect, but do not submit for external beta review automatically.
+        submit_to_testflight: false
+        submit_to_app_store: false
