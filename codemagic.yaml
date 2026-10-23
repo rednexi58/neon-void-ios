@@ -10,7 +10,7 @@ workflows:
         provisioning_profiles:
           - neonvoid-appstore-profile
         certificates:
-          - neonvoid-dist-cert
+          - ios-distribution
       vars:
         BUNDLE_ID: "com.neonvoid.cyberdefense"
         APP_DISPLAY_NAME: "Gezegeni Koru"
