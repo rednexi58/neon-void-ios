@@ -2464,27 +2464,29 @@
       function calculateDifficulty(level, waveIndex = 0) {
         const clampedLv = Math.max(1, Math.min(200, level));
         const isBossLevel = (clampedLv % 10 === 0);
-        const isMiniBossLevel = (clampedLv % 5 === 0 && !isBossLevel);
-        const baseWaves = Math.floor(3 + 1.65 * Math.log(clampedLv)) + (isBossLevel ? 1 : 0);
+        const isMiniBossLevel = (clampedLv > 5 && clampedLv % 5 === 0 && !isBossLevel);
+        const baseWaves = clampedLv <= 5
+          ? (clampedLv <= 3 ? 3 : 4)
+          : (Math.floor(3 + 1.65 * Math.log(clampedLv)) + (isBossLevel ? 1 : 0));
         const totalWaves = Math.max(3, Math.min(12, baseWaves));
 
         let baseCurve = 1.0;
-        if (clampedLv <= 3) {
-          // İLK 3 BÖLÜME DOKUNULMADI (Öğretici ve kolay)
-          baseCurve = 0.85 + 0.16 * (clampedLv - 1) + 0.018 * Math.pow(clampedLv - 1, 1.48);
+        if (clampedLv <= 5) {
+          // İLK 5 BÖLÜM KOLAYLAŞTIRILDI (Akıcı, öğretici ve keyifli başlangıç: 0.65x -> 1.09x HP)
+          baseCurve = 0.65 + 0.11 * (clampedLv - 1);
         } else {
-          // 4. Bölümden itibaren +%10 daha zor ve 200. bölüme kadar kademeli sertleşen eğri
+          // 6. Bölümden itibaren kademeli sertleşen 200 bölüm eğrisi
           const rawCurve = 0.85 + 0.175 * (clampedLv - 1) + 0.021 * Math.pow(clampedLv - 1, 1.50);
-          const progBoost = 1.10 + Math.min(0.25, (clampedLv - 4) * 0.0012);
+          const progBoost = 1.05 + Math.min(0.25, (clampedLv - 6) * 0.0012);
           baseCurve = rawCurve * progBoost;
         }
 
-        const intraWave = 1.0 + waveIndex * 0.055;
+        const intraWave = 1.0 + waveIndex * (clampedLv <= 5 ? 0.035 : 0.055);
         const hpMult = Number((baseCurve * intraWave).toFixed(2));
 
-        const armorBonus = clampedLv <= 3 ? 0 : Math.min(0.45, Number((0.048 * Math.log2(clampedLv)).toFixed(2)));
-        const baseBudget = clampedLv <= 3
-          ? (7 + clampedLv * 1.8)
+        const armorBonus = clampedLv <= 5 ? 0 : Math.min(0.45, Number((0.048 * Math.log2(clampedLv)).toFixed(2)));
+        const baseBudget = clampedLv <= 5
+          ? (5.5 + clampedLv * 1.35)
           : (8.5 + clampedLv * 2.15 + 4.2 * Math.log(clampedLv + 1));
         const progress = totalWaves > 1 ? waveIndex / (totalWaves - 1) : 0;
         const threatBudget = Math.max(5, Math.round(baseBudget * (0.84 + 0.58 * progress)));
@@ -2747,7 +2749,7 @@
       }
       function getMaxBaseHp() { return 20 + (state.skills.hpLv - 1) * 2; }
       function getStartingGold() {
-        const earlyHelp = state.level <= 3 ? 15 : 0;
+        const earlyHelp = state.level <= 3 ? 45 : (state.level <= 5 ? 30 : 0);
         const endlessBonus = state.endlessMode ? 65 : 0;
         return 175 + earlyHelp + endlessBonus + (state.skills.goldLv - 1) * 10;
       }
@@ -3333,7 +3335,7 @@
         // Bölüm 1-2: 1 kapı, Bölüm 3-5: 2 kapı, Bölüm 6+ veya Sonsuz: haritadaki tüm (2-3) kapılar aktif!
         const maxGates = state.endlessMode || forcedSectorIdx !== null
           ? rawPaths.length
-          : (state.level <= 2 ? 1 : (state.level <= 5 ? Math.min(2, rawPaths.length) : rawPaths.length));
+          : (state.level <= 3 ? 1 : (state.level <= 6 ? Math.min(2, rawPaths.length) : rawPaths.length));
         ACTIVE_PATHS = rawPaths.slice(0, maxGates).map(path => path.map(p => ({ x: p.x, y: p.y })));
         WAYPOINTS = ACTIVE_PATHS[0];
         spawnRouteCounter = 0;
@@ -3341,7 +3343,7 @@
         const effLvForFeatures = state.endlessMode ? Math.max(state.level, 8) : state.level;
         const crystalMaxHp = Math.round(95 + effLvForFeatures * 28);
         SOCKETS = preset.sockets.map((s, idx) => {
-          const isCrystalSlot = effLvForFeatures >= 3 && (idx === 4 || idx === 7 || (preset.sockets.length > 12 && idx === 11));
+          const isCrystalSlot = effLvForFeatures >= 4 && (idx === 4 || (effLvForFeatures >= 6 && idx === 7) || (preset.sockets.length > 12 && idx === 11));
           return {
             id: s.id,
             x: s.x,
@@ -3751,44 +3753,6 @@
           state.orbitalCooldown = Math.max(0, state.orbitalCooldown - dt);
           updateOrbitalButtonUI();
         }
-        // Yörünge İkmal Kapsülleri (Dokunup Toplanabilir)
-        supplyPods.forEach(pod => {
-          ctx.save();
-          ctx.translate(pod.x, pod.y + Math.sin(nowAnim * 5) * 3);
-          ctx.fillStyle = "rgba(250, 204, 21, 0.25)";
-          ctx.beginPath();
-          ctx.arc(0, 0, 18 + Math.sin(nowAnim * 7) * 3, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = "#854d0e";
-          ctx.strokeStyle = "#fde047";
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.roundRect(-11, -9, 22, 18, 5);
-          ctx.fill();
-          ctx.stroke();
-          ctx.fillStyle = "#fef08a";
-          ctx.font = "bold 8px Orbitron, sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText(`+${pod.rewardGold}⚡`, 0, 3);
-          ctx.restore();
-        });
-
-        // Aktif Kar Fırtınası Görsel Atmosferi
-        if (activeWeather && activeWeather.type === "blizzard" && activeWeather.activeTimer > 0) {
-          ctx.save();
-          ctx.fillStyle = "rgba(186, 230, 253, 0.14)";
-          ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
-          ctx.fillStyle = "rgba(224, 242, 254, 0.75)";
-          for (let s = 0; s < 28; s++) {
-            const sx = ((s * 73 + nowAnim * 190) % VIRTUAL_W);
-            const sy = ((s * 59 + nowAnim * 260) % VIRTUAL_H);
-            ctx.beginPath();
-            ctx.arc(sx, sy, 2, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          ctx.restore();
-        }
-
         if (state.orbitalFlashTimer > 0) {
           state.orbitalFlashTimer = Math.max(0, state.orbitalFlashTimer - dt);
         }
@@ -3846,24 +3810,37 @@
           // Yörünge İkmal Kapsülü (Dokunmatik Etkileşimli Ödül Kutusu)
           supplyPodTimer -= dt;
           if (supplyPodTimer <= 0 && supplyPods.length < 2) {
-            supplyPodTimer = 15 + Math.random() * 6;
+            supplyPodTimer = 14 + Math.random() * 5;
             const pathSample = ACTIVE_PATHS[Math.floor(Math.random() * ACTIVE_PATHS.length)] || WAYPOINTS;
             const pt = pathSample[Math.max(1, Math.min(pathSample.length - 2, Math.floor(Math.random() * pathSample.length)))];
             if (pt) {
+              const podX = Math.max(135, Math.min(VIRTUAL_W - 135, pt.x + (Math.random() - 0.5) * 40));
+              const podY = Math.max(175, Math.min(VIRTUAL_H - 185, pt.y + (Math.random() - 0.5) * 36));
+              const podReward = 45 + Math.min(65, state.level * 3);
               supplyPods.push({
-                x: Math.max(70, Math.min(VIRTUAL_W - 70, pt.x + (Math.random() - 0.5) * 60)),
-                y: Math.max(140, Math.min(VIRTUAL_H - 150, pt.y + (Math.random() - 0.5) * 50)),
-                life: 8.5,
-                rewardGold: 40 + Math.min(60, state.level * 2)
+                x: podX,
+                y: podY,
+                life: 11.0,
+                maxLife: 11.0,
+                rewardGold: podReward
               });
-              floatingTexts.push({ x: pt.x, y: pt.y - 24, text: L("🪂 İKMAL KAPSÜLÜ DÜŞTÜ! (DOKUN)", "🪂 SUPPLY POD DROPPED! (TAP)"), color: "#fde047", life: 1.1 });
+              floatingTexts.push({ x: podX, y: podY - 34, text: L("🪂 İKMAL SANDIĞI! (DOKUN)", "🪂 SUPPLY CRATE! (TAP)"), color: "#fde047", life: 1.3 });
             }
           }
         }
 
         for (let i = supplyPods.length - 1; i >= 0; i--) {
           supplyPods[i].life -= dt;
-          if (supplyPods[i].life <= 0) supplyPods.splice(i, 1);
+          if (supplyPods[i].life <= 0) {
+            // Süresi dolsa bile otonom dronlar paketi otomatik toplar (oyuncu asla mağdur olmaz!)
+            const expiredPod = supplyPods[i];
+            state.gold += expiredPod.rewardGold;
+            spawnParticles(expiredPod.x, expiredPod.y, "#facc15", 8);
+            floatingTexts.push({ x: expiredPod.x, y: expiredPod.y - 16, text: `+${expiredPod.rewardGold}⚡ OTO-İKMAL`, color: "#fde047", life: 0.9 });
+            supplyPods.splice(i, 1);
+            updateHUD();
+            updateSocketInspector();
+          }
         }
 
         if (state.waveWaitingForPlayer) {
@@ -4594,8 +4571,14 @@
       // Grant rewards only on the Google SDK's earned-reward callback, never a simulated timer.
       async function runSimulatedAd(badgeText, titleText, seconds, onComplete, onCancel = null) {
         let earned = false;
-        try { earned = Boolean(await window.GameMonetization?.showRewarded()); }
-        catch (error) { console.warn("AdMob ödüllü reklam:", error); }
+        try {
+          earned = Boolean(await window.GameMonetization?.showRewarded());
+        } catch (error) {
+          console.warn("AdMob ödüllü reklam:", error);
+        } finally {
+          lastTime = performance.now();
+          SoundFX.init();
+        }
         if (earned) {
           if (typeof onComplete === "function") onComplete();
         } else {
@@ -5957,12 +5940,99 @@
         floatingTexts.forEach(ft => {
           ctx.save();
           ctx.fillStyle = ft.color;
-          ctx.font = "bold 11px Orbitron, sans-serif";
+          ctx.font = "bold 10.5px Orbitron, sans-serif";
           ctx.textAlign = "center";
           ctx.globalAlpha = Math.max(0, ft.life);
-          ctx.fillText(ft.text, ft.x, ft.y);
+          const safeX = ft.text.length > 10 ? Math.max(115, Math.min(VIRTUAL_W - 115, ft.x)) : Math.max(45, Math.min(VIRTUAL_W - 45, ft.x));
+          ctx.fillText(ft.text, safeX, ft.y);
           ctx.restore();
         });
+
+        // Yörünge İkmal Kapsülleri (Büyük, Parlak ve Kolay Dokunulabilir Ödül Sandığı)
+        supplyPods.forEach(pod => {
+          ctx.save();
+          const bobY = Math.sin(nowAnim * 5.5) * 4;
+          ctx.translate(pod.x, pod.y + bobY);
+
+          // Dış Radar Halka Efekti
+          const pulseR = 30 + Math.sin(nowAnim * 8) * 5;
+          const auraGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, pulseR);
+          auraGrad.addColorStop(0, "rgba(250, 204, 21, 0.55)");
+          auraGrad.addColorStop(0.6, "rgba(245, 158, 11, 0.22)");
+          auraGrad.addColorStop(1, "rgba(245, 158, 11, 0)");
+          ctx.fillStyle = auraGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, pulseR, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = "#fde047";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.arc(0, 0, 26, nowAnim * 2, nowAnim * 2 + Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Mini Paraşüt Kubbesi (Üstte)
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(-12, -12); ctx.lineTo(-7, -2);
+          ctx.moveTo(12, -12); ctx.lineTo(7, -2);
+          ctx.stroke();
+
+          ctx.fillStyle = "#f97316";
+          ctx.strokeStyle = "#fef08a";
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.arc(0, -12, 13, Math.PI, 0, false);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Altın Enerji Sandığı Gövdesi
+          ctx.fillStyle = "#78350f";
+          ctx.strokeStyle = "#facc15";
+          ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          ctx.roundRect(-18, -8, 36, 22, 6);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#fef08a";
+          ctx.font = "bold 9.5px Orbitron, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(`+${pod.rewardGold}⚡`, 0, 6);
+
+          // Üst Bilgi Etiketi
+          ctx.fillStyle = "rgba(15, 23, 42, 0.92)";
+          ctx.strokeStyle = "#facc15";
+          ctx.lineWidth = 1.3;
+          ctx.beginPath();
+          ctx.roundRect(-34, 17, 68, 14, 5);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#fde047";
+          ctx.font = "bold 7.5px Orbitron, sans-serif";
+          ctx.fillText(L("👆 DOKUN AL", "👆 TAP CLAIM"), 0, 26.5);
+          ctx.restore();
+        });
+
+        // Aktif Kar Fırtınası Görsel Atmosferi
+        if (activeWeather && activeWeather.type === "blizzard" && activeWeather.activeTimer > 0) {
+          ctx.save();
+          ctx.fillStyle = "rgba(186, 230, 253, 0.14)";
+          ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
+          ctx.fillStyle = "rgba(224, 242, 254, 0.75)";
+          for (let s = 0; s < 28; s++) {
+            const sx = ((s * 73 + nowAnim * 190) % VIRTUAL_W);
+            const sy = ((s * 59 + nowAnim * 260) % VIRTUAL_H);
+            ctx.beginPath();
+            ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
 
         if (state.orbitalFlashTimer > 0) {
           ctx.save();
@@ -6238,10 +6308,10 @@
         SoundFX.init();
         const { vx, vy } = clientToVirtualCoords(ev.clientX, ev.clientY);
 
-        // 1. Önce Yörünge İkmal Kapsülüne dokunuldu mu kontrol et
+        // 1. Önce Yörünge İkmal Kapsülüne dokunuldu mu kontrol et (Geniş 68px dokunma alanı)
         for (let i = supplyPods.length - 1; i >= 0; i--) {
           const pod = supplyPods[i];
-          if (Math.hypot(pod.x - vx, pod.y - vy) <= 32) {
+          if (Math.hypot(pod.x - vx, pod.y - vy) <= 68) {
             SoundFX.repair();
             triggerHaptic("medium");
             state.gold += pod.rewardGold;
@@ -6639,14 +6709,14 @@
           showToast(`Orbital Lazer doluyor: ${Math.ceil(state.orbitalCooldown)} sn kaldı.`);
           return;
         }
-        const wasPaused = state.paused;
         state.paused = true;
         runSimulatedAd(
           L("🎬 ÖDÜLLÜ REKLAM (REWARDED AD)", "🎬 REWARDED VIDEO AD"),
           L("Orbital Lazer Uydusu Şarj Ediliyor...", "Charging Orbital Laser Satellite..."),
           1.6,
           () => {
-            state.paused = wasPaused;
+            state.paused = false;
+            lastTime = performance.now();
             SoundFX.orbital();
             state.orbitalCooldown = getEffectiveOrbitalCooldown();
             state.orbitalFlashTimer = 0.85;
@@ -6669,7 +6739,8 @@
             showToast(`🛰️ ORBİTAL LAZER ATEŞLENDİ! Tüm düşmanlara ${strikeDamage} Hasar vuruldu!`);
           },
           () => {
-            state.paused = wasPaused;
+            state.paused = false;
+            lastTime = performance.now();
             showToast("⚠ Reklam iptal edildiği için Orbital Lazer ateşlenmedi.");
           }
         );
@@ -6986,11 +7057,14 @@
       // ============================================================================
       let lastTime = performance.now();
       function gameLoop(now) {
-        const rawDt = Math.min(0.05, (now - lastTime) / 1000);
-        lastTime = now;
-
-        updateSimulation(rawDt * state.gameSpeed);
-        renderScene();
+        try {
+          const rawDt = Math.min(0.05, Math.max(0, (now - lastTime) / 1000));
+          lastTime = now;
+          updateSimulation(rawDt * state.gameSpeed);
+          renderScene();
+        } catch (err) {
+          console.error("GameLoop error recovered:", err);
+        }
         requestAnimationFrame(gameLoop);
       }
 
@@ -7413,14 +7487,14 @@
       // SAVAŞ İÇİ ACİL +150⚡ ENERJİ İKMALİ BUTONU
       document.getElementById("btnEmergencyEnergy").addEventListener("click", () => {
         if (!EnforceOnlineCheck()) return;
-        const wasPaused = state.paused;
         state.paused = true;
         runSimulatedAd(
           L("🎬 ACİL ENERJİ İKMAL REKLAMI", "🎬 EMERGENCY ENERGY SUPPLY AD"),
           L("+150 ⚡ Acil Füzyon Enerjisi Yükleniyor...", "Charging +150 ⚡ Emergency Fusion Energy..."),
           1.5,
           () => {
-            state.paused = wasPaused;
+            state.paused = false;
+            lastTime = performance.now();
             SoundFX.repair();
             triggerHaptic("medium");
             state.gold += 150;
@@ -7429,7 +7503,8 @@
             showToast(L("⚡ +150 Enerji İkmali hesabınıza eklendi!", "⚡ +150 Emergency Energy added!"));
           },
           () => {
-            state.paused = wasPaused;
+            state.paused = false;
+            lastTime = performance.now();
           }
         );
       });
