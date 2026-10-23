@@ -6,9 +6,9 @@
 <key>ITSAppUsesNonExemptEncryption</key>
 <false/>
 
-<!-- Google AdMob iOS Test App ID (Canlıya geçerken kendi AdMob iOS App ID'nizi yazın) -->
+<!-- Gezegeni Koru gerçek AdMob uygulama kimliği (TestFlight reklam birimleri yine Google demo IDs). -->
 <key>GADApplicationIdentifier</key>
-<string>ca-app-pub-3940256099942544~1458002511</string>
+<string>ca-app-pub-6370997467091906~2944398467</string>
 
 <key>UIRequiresFullScreen</key>
 <true/>
