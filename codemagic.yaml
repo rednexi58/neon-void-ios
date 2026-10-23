@@ -1,3 +1,4 @@
+
 workflows:
   ios-testflight-workflow:
     name: Gezegeni Koru - iOS TestFlight Auto-Build
@@ -26,6 +27,22 @@ workflows:
             npx cap add ios
           fi
           bash ios_config/apply_ios_settings.sh
+          # AdMob v6 uses UMP 2.x Swift names. UMP 3.x breaks ConsentExecutor.swift.
+          # Pin before cap sync, so CocoaPods resolves the matching UMP release.
+          ruby <<'RUBY'
+          podfile = 'ios/App/Podfile'
+          source = File.read(podfile)
+          pin = "pod 'GoogleUserMessagingPlatform', '2.7.0'"
+          unless source.include?(pin)
+            target = "target 'App' do"
+            abort "Missing App target in #{podfile}" unless source.include?(target)
+            source = source.sub(target, "#{target}\n  #{pin}")
+            File.write(podfile, source)
+          end
+          puts "Pinning GoogleUserMessagingPlatform to 2.7.0 for AdMob v6 compatibility"
+          RUBY
+          # cap add/sync can leave an old UMP 3.x Podfile.lock; re-resolve exact 2.7.0.
+          rm -f ios/App/Podfile.lock
           npx cap sync ios
       - name: Install Official Gezegeni Koru AppIcon into Xcode Assets.xcassets
         script: |
