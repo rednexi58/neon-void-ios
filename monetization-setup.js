@@ -468,31 +468,45 @@ if (IOS && TEST_ADS) {
     const root = document.createElement('div');
     root.id = 'gk-monetization-test';
 
+    let savedPos = null;
+    try {
+      savedPos = JSON.parse(localStorage.getItem('gk_test_pos') || 'null');
+    } catch (_) {}
+    const initLeft = savedPos && typeof savedPos.left === 'number'
+      ? Math.max(4, Math.min(window.innerWidth - 95, savedPos.left))
+      : Math.max(8, window.innerWidth - 102);
+    const initTop = savedPos && typeof savedPos.top === 'number'
+      ? Math.max(44, Math.min(window.innerHeight - 54, savedPos.top))
+      : 118;
+
     root.style.cssText =
-      'position:fixed;right:8px;top:78px;' +
+      `position:fixed;left:${initLeft}px;top:${initTop}px;` +
       'z-index:2147483000;' +
-      'font-family:Arial,sans-serif;font-size:12px';
+      'font-family:Arial,sans-serif;font-size:12px;touch-action:none;user-select:none;-webkit-user-select:none;';
 
     root.innerHTML = `
       <button id="gk-open-diagnostics"
-        style="border:1px solid #ffffff99;
-        background:#123854;color:#fff;
-        border-radius:10px;padding:6px 10px;
-        font-weight:bold">
-        🧪 TEST
+        style="border:1.5px solid #38bdf8;
+        background:linear-gradient(180deg,#123854,#091e32);color:#fff;
+        border-radius:999px;padding:6px 11px;
+        font-weight:bold;box-shadow:0 4px 14px rgba(0,0,0,0.6);
+        cursor:grab;touch-action:none;display:flex;align-items:center;gap:4px">
+        <span>✋</span><span>🧪 TEST</span>
       </button>
 
       <section id="gk-diagnostics-box"
-        style="display:none;margin-top:6px;
-        width:min(85vw,320px);max-height:68vh;
+        style="display:none;position:fixed;left:50%;top:50%;
+        transform:translate(-50%,-50%);
+        width:min(88vw,320px);max-height:72vh;
         overflow:auto;padding:12px;
-        background:#081a2cee;
-        border:1px solid #60a5fa;
-        color:#fff;border-radius:12px;
-        box-shadow:0 8px 28px #0007">
+        background:#081a2cf5;
+        border:1.5px solid #38bdf8;
+        color:#fff;border-radius:14px;
+        box-shadow:0 12px 36px rgba(0,0,0,0.85)">
 
-        <div style="font-weight:bold;margin-bottom:8px">
-          Gezegeni Koru — Test Paneli
+        <div id="gk-diagnostics-header" style="display:flex;align-items:center;justify-content:space-between;font-weight:bold;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #1e3a5f">
+          <span>🧪 Gezegeni Koru — Test Paneli</span>
+          <button id="gk-close-diagnostics" style="background:#1e293b;border:1px solid #475569;color:#e2e8f0;border-radius:6px;padding:2px 8px;font-weight:bold">✕</button>
         </div>
 
         <pre id="gk-diagnostics-text"
@@ -556,12 +570,62 @@ if (IOS && TEST_ADS) {
       ].filter(Boolean).join('\n');
     };
 
-    root.querySelector('#gk-open-diagnostics').onclick = () => {
-      panel.style.display =
-        panel.style.display === 'none' ? 'block' : 'none';
+    const toggleBtn = root.querySelector('#gk-open-diagnostics');
+    const closeBtn = root.querySelector('#gk-close-diagnostics');
+    let dragActive = false;
+    let dragMoved = false;
+    let startX = 0, startY = 0, origLeft = initLeft, origTop = initTop;
 
-      refreshDiagnosticsUI();
+    toggleBtn.addEventListener('pointerdown', (ev) => {
+      dragActive = true;
+      dragMoved = false;
+      startX = ev.clientX;
+      startY = ev.clientY;
+      const rect = root.getBoundingClientRect();
+      origLeft = rect.left;
+      origTop = rect.top;
+      try { toggleBtn.setPointerCapture(ev.pointerId); } catch (_) {}
+    });
+
+    toggleBtn.addEventListener('pointermove', (ev) => {
+      if (!dragActive) return;
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      if (Math.hypot(dx, dy) > 6) {
+        dragMoved = true;
+      }
+      if (dragMoved) {
+        const nextL = Math.max(4, Math.min(window.innerWidth - 92, origLeft + dx));
+        const nextT = Math.max(40, Math.min(window.innerHeight - 48, origTop + dy));
+        root.style.left = `${Math.round(nextL)}px`;
+        root.style.top = `${Math.round(nextT)}px`;
+        root.style.right = 'auto';
+      }
+    });
+
+    const endDrag = (ev) => {
+      if (!dragActive) return;
+      dragActive = false;
+      try { toggleBtn.releasePointerCapture(ev.pointerId); } catch (_) {}
+      if (dragMoved) {
+        try {
+          const rect = root.getBoundingClientRect();
+          localStorage.setItem('gk_test_pos', JSON.stringify({ left: Math.round(rect.left), top: Math.round(rect.top) }));
+        } catch (_) {}
+      } else {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        refreshDiagnosticsUI();
+      }
     };
+
+    toggleBtn.addEventListener('pointerup', endDrag);
+    toggleBtn.addEventListener('pointercancel', () => { dragActive = false; });
+
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        panel.style.display = 'none';
+      };
+    }
 
     root.querySelector('#gk-ad-reload').onclick = async () => {
       result.textContent = 'Yeniden yükleniyor…';

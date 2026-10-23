@@ -3170,6 +3170,11 @@
       let WAYPOINTS = ACTIVE_PATHS[0];
       let SOCKETS = SECTOR_PRESETS[0].sockets.map(s => ({ id: s.id, x: s.x, y: s.y, tower: null }));
       let spawnRouteCounter = 0;
+      let activeWeather = { type: "none", timer: 18, activeTimer: 0, labelTr: "", labelEn: "" };
+      let levelLavaPools = [];
+      let warpGenerator = null;
+      let supplyPods = [];
+      let supplyPodTimer = 14;
 
       function getLevelTacticalProfile(lv) {
         if (lv <= 2) return { tr: "1 Giriş • Keşif Kanyonu", en: "1 Gate • Scout Canyon", focus: "balanced" };
@@ -3332,9 +3337,65 @@
         ACTIVE_PATHS = rawPaths.slice(0, maxGates).map(path => path.map(p => ({ x: p.x, y: p.y })));
         WAYPOINTS = ACTIVE_PATHS[0];
         spawnRouteCounter = 0;
-        SOCKETS = preset.sockets.map(s => ({ id: s.id, x: s.x, y: s.y, tower: null }));
-
         const planet = getPlanetForLevel(state.level);
+        const effLvForFeatures = state.endlessMode ? Math.max(state.level, 8) : state.level;
+        const crystalMaxHp = Math.round(95 + effLvForFeatures * 28);
+        SOCKETS = preset.sockets.map((s, idx) => {
+          const isCrystalSlot = effLvForFeatures >= 3 && (idx === 4 || idx === 7 || (preset.sockets.length > 12 && idx === 11));
+          return {
+            id: s.id,
+            x: s.x,
+            y: s.y,
+            tower: null,
+            crystalHp: isCrystalSlot ? crystalMaxHp : 0,
+            crystalMaxHp: isCrystalSlot ? crystalMaxHp : 0,
+            crystalReward: isCrystalSlot ? (45 + Math.min(85, effLvForFeatures * 3)) : 0
+          };
+        });
+
+        // Gezegen İklimi ve Çevresel Olaylar (Bölüm 3+ / Sonsuz Mod)
+        const themeIdx = (state.level - 1) % PLANET_THEMES.length;
+        levelLavaPools = [];
+        if (effLvForFeatures >= 3) {
+          if (themeIdx === 2) {
+            activeWeather = { type: "blizzard", timer: 16, activeTimer: 0, labelTr: "❄️ Kar Fırtınası", labelEn: "❄️ Blizzard" };
+          } else if (themeIdx === 1) {
+            activeWeather = { type: "volcanic", timer: 999, activeTimer: 0, labelTr: "🌋 Lav Çatlakları", labelEn: "🌋 Lava Fissures" };
+            ACTIVE_PATHS.forEach((pArr) => {
+              if (pArr.length >= 4) {
+                const midPt = pArr[Math.floor(pArr.length / 2)];
+                levelLavaPools.push({ x: midPt.x, y: midPt.y, r: 30, dps: 16 + effLvForFeatures * 2.5 });
+              }
+            });
+          } else if (themeIdx === 6 || themeIdx === 4) {
+            activeWeather = { type: "ion_storm", timer: 17, activeTimer: 0, labelTr: "🌩️ İyon Fırtınası", labelEn: "🌩️ Ion Storm" };
+          } else if (themeIdx === 5 || themeIdx === 7) {
+            activeWeather = { type: "meteor_rain", timer: 16, activeTimer: 0, labelTr: "☄️ Meteor Yağmuru", labelEn: "☄️ Meteor Rain" };
+          } else {
+            activeWeather = { type: "solar_flare", timer: 18, activeTimer: 0, labelTr: "☀️ Güneş Patlaması", labelEn: "☀️ Solar Flare" };
+          }
+        } else {
+          activeWeather = { type: "none", timer: 99, activeTimer: 0, labelTr: "", labelEn: "" };
+        }
+
+        // 3. Kapıyı Besleyen Uzaylı Warp Jeneratörü (3 Kapılı Haritalarda)
+        if (ACTIVE_PATHS.length >= 3) {
+          const gate3Pt = ACTIVE_PATHS[2][0];
+          const genMaxHp = Math.round(300 + effLvForFeatures * 60);
+          warpGenerator = {
+            x: Math.max(72, Math.min(VIRTUAL_W - 72, gate3Pt.x + (gate3Pt.x < 270 ? 54 : -54))),
+            y: Math.max(128, Math.min(VIRTUAL_H - 160, gate3Pt.y + 32)),
+            hp: genMaxHp,
+            maxHp: genMaxHp,
+            dead: false,
+            rewardGold: 110
+          };
+        } else {
+          warpGenerator = null;
+        }
+
+        supplyPods = [];
+        supplyPodTimer = 11;
         const mapSel = document.getElementById("selectMapSector");
         if (mapSel) mapSel.value = String(state.sectorIndex);
         document.getElementById("socketHintText").textContent = planet.shortName;
@@ -3620,8 +3681,10 @@
         const waveTotalStr = state.endlessMode ? "∞" : state.totalWaves;
         const gateCount = ACTIVE_PATHS.length;
         const prof = getLevelTacticalProfile(state.level);
-        const gateTagTr = gateCount > 1 ? `⚠️ ${gateCount} Kapı Aktif` : `1 Giriş`;
-        const gateTagEn = gateCount > 1 ? `⚠️ ${gateCount} Gates Active` : `1 Gate`;
+        const wxTr = activeWeather && activeWeather.type !== "none" ? ` • ${activeWeather.labelTr}` : "";
+        const wxEn = activeWeather && activeWeather.type !== "none" ? ` • ${activeWeather.labelEn}` : "";
+        const gateTagTr = (gateCount > 1 ? `⚠️ ${gateCount} Kapı` : `1 Giriş`) + wxTr;
+        const gateTagEn = (gateCount > 1 ? `⚠️ ${gateCount} Gates` : `1 Gate`) + wxEn;
         if (state.waveWaitingForPlayer) {
           banner.textContent = state.endlessMode
             ? L(`♾️ SONSUZ (${gateCount} Kapı) — Kule kurup başlatın!`, `♾️ ENDLESS (${gateCount} Gates) — Build & start!`)
@@ -3688,6 +3751,44 @@
           state.orbitalCooldown = Math.max(0, state.orbitalCooldown - dt);
           updateOrbitalButtonUI();
         }
+        // Yörünge İkmal Kapsülleri (Dokunup Toplanabilir)
+        supplyPods.forEach(pod => {
+          ctx.save();
+          ctx.translate(pod.x, pod.y + Math.sin(nowAnim * 5) * 3);
+          ctx.fillStyle = "rgba(250, 204, 21, 0.25)";
+          ctx.beginPath();
+          ctx.arc(0, 0, 18 + Math.sin(nowAnim * 7) * 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#854d0e";
+          ctx.strokeStyle = "#fde047";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.roundRect(-11, -9, 22, 18, 5);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#fef08a";
+          ctx.font = "bold 8px Orbitron, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(`+${pod.rewardGold}⚡`, 0, 3);
+          ctx.restore();
+        });
+
+        // Aktif Kar Fırtınası Görsel Atmosferi
+        if (activeWeather && activeWeather.type === "blizzard" && activeWeather.activeTimer > 0) {
+          ctx.save();
+          ctx.fillStyle = "rgba(186, 230, 253, 0.14)";
+          ctx.fillRect(0, 0, VIRTUAL_W, VIRTUAL_H);
+          ctx.fillStyle = "rgba(224, 242, 254, 0.75)";
+          for (let s = 0; s < 28; s++) {
+            const sx = ((s * 73 + nowAnim * 190) % VIRTUAL_W);
+            const sy = ((s * 59 + nowAnim * 260) % VIRTUAL_H);
+            ctx.beginPath();
+            ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+
         if (state.orbitalFlashTimer > 0) {
           state.orbitalFlashTimer = Math.max(0, state.orbitalFlashTimer - dt);
         }
@@ -3696,6 +3797,73 @@
         }
         if (state.globalOverclockTimer > 0) {
           state.globalOverclockTimer = Math.max(0, state.globalOverclockTimer - dt);
+        }
+
+        // Gezegen İklimi (Çevresel Olaylar) ve Yörünge İkmal Kapsülü Döngüsü
+        if (!state.waveWaitingForPlayer && waveInProgress) {
+          if (activeWeather && activeWeather.type !== "none" && activeWeather.type !== "volcanic") {
+            if (activeWeather.activeTimer > 0) {
+              activeWeather.activeTimer = Math.max(0, activeWeather.activeTimer - dt);
+            } else {
+              activeWeather.timer -= dt;
+              if (activeWeather.timer <= 0) {
+                activeWeather.timer = 18.0;
+                activeWeather.activeTimer = 5.0;
+                if (activeWeather.type === "blizzard") {
+                  showToast(L("❄️ KAR FIRTINASI BAŞLADI! 5 sn kule menzili %18 daraldı, uzaylılar %20 yavaşladı!", "❄️ BLIZZARD! Tower range -18%, aliens slowed by 20% for 5s!"));
+                  activeEnemies.forEach(e => {
+                    if (!e.dead) {
+                      e.slowRatio = Math.max(e.slowRatio, 0.25);
+                      e.slowTimer = Math.max(e.slowTimer, 4.5);
+                    }
+                  });
+                } else if (activeWeather.type === "ion_storm") {
+                  showToast(L("🌩️ İYON FIRTINASI! Tüm uzaylıların kamuflajı bozuldu ve yıldırım hasarı aldılar!", "🌩️ ION STORM! All stealth aliens revealed and struck by lightning!"));
+                  activeEnemies.forEach(e => {
+                    if (!e.dead) {
+                      e.revealedByRadar = true;
+                      lightningArcs.push({ x1: e.x + (Math.random() - 0.5) * 40, y1: Math.max(80, e.y - 90), x2: e.x, y2: e.y, color: "#38bdf8", life: 0.25 });
+                      applyDamageToEnemy(e, 28 + state.level * 3, 1.0, true);
+                    }
+                  });
+                } else if (activeWeather.type === "meteor_rain") {
+                  showToast(L("☄️ METEOR YAĞMURU! Yola düşen meteorlar uzaylıları vuruyor!", "☄️ METEOR SHOWER! Falling meteors strike aliens on the road!"));
+                  activeEnemies.slice(0, 5).forEach(e => {
+                    if (!e.dead) {
+                      shockwaves.push({ x: e.x, y: e.y, maxR: 52, r: 6, color: "#f97316", life: 0.35 });
+                      spawnParticles(e.x, e.y, "#fb923c", 10);
+                      applyDamageToEnemy(e, 42 + state.level * 4, 0.65, false);
+                    }
+                  });
+                } else if (activeWeather.type === "solar_flare") {
+                  state.globalOverclockTimer = Math.max(state.globalOverclockTimer, 5.0);
+                  showToast(L("☀️ GÜNEŞ PATLAMASI! Tüm kuleler 5 sn +%25 Overclock hızında!", "☀️ SOLAR FLARE! All towers gain +25% Overclock fire rate for 5s!"));
+                }
+              }
+            }
+          }
+
+          // Yörünge İkmal Kapsülü (Dokunmatik Etkileşimli Ödül Kutusu)
+          supplyPodTimer -= dt;
+          if (supplyPodTimer <= 0 && supplyPods.length < 2) {
+            supplyPodTimer = 15 + Math.random() * 6;
+            const pathSample = ACTIVE_PATHS[Math.floor(Math.random() * ACTIVE_PATHS.length)] || WAYPOINTS;
+            const pt = pathSample[Math.max(1, Math.min(pathSample.length - 2, Math.floor(Math.random() * pathSample.length)))];
+            if (pt) {
+              supplyPods.push({
+                x: Math.max(70, Math.min(VIRTUAL_W - 70, pt.x + (Math.random() - 0.5) * 60)),
+                y: Math.max(140, Math.min(VIRTUAL_H - 150, pt.y + (Math.random() - 0.5) * 50)),
+                life: 8.5,
+                rewardGold: 40 + Math.min(60, state.level * 2)
+              });
+              floatingTexts.push({ x: pt.x, y: pt.y - 24, text: L("🪂 İKMAL KAPSÜLÜ DÜŞTÜ! (DOKUN)", "🪂 SUPPLY POD DROPPED! (TAP)"), color: "#fde047", life: 1.1 });
+            }
+          }
+        }
+
+        for (let i = supplyPods.length - 1; i >= 0; i--) {
+          supplyPods[i].life -= dt;
+          if (supplyPods[i].life <= 0) supplyPods.splice(i, 1);
         }
 
         if (state.waveWaitingForPlayer) {
@@ -3767,6 +3935,22 @@
 
           if (e.warpBoostTimer > 0) {
             e.warpBoostTimer = Math.max(0, e.warpBoostTimer - dt);
+          }
+
+          // Volkanik Gezegen Lav Çatlağı Yakma Hasarı
+          if (levelLavaPools.length > 0 && !e.arch.isFlying) {
+            for (let lp = 0; lp < levelLavaPools.length; lp++) {
+              const pool = levelLavaPools[lp];
+              if (Math.hypot(e.x - pool.x, e.y - pool.y) <= pool.r + 12) {
+                e.lavaTick = (e.lavaTick || 0) - dt;
+                if (e.lavaTick <= 0) {
+                  e.lavaTick = 0.45;
+                  applyDamageToEnemy(e, pool.dps * 0.45, 0.85, true);
+                  spawnParticles(e.x, e.y, "#f97316", 3);
+                }
+                break;
+              }
+            }
           }
 
           // Hayalet Kamuflajcı: Yakında Gelişmiş Tesla veya 115m içinde kule varsa görünür olur
@@ -3953,7 +4137,8 @@
           const effDamage = lvStats.damage * getDmgMultiplier() * branchDmgMult;
           const effRate = lvStats.fireRate * getRateMultiplier() * repairAuraBoost * branchRateMult;
           const vegaRangeBonus = (state.activeHero === "vega" && (t.typeKey === "rapid" || t.typeKey === "emp")) ? getHeroInfo("vega").vegaRangeBonus : 0;
-          const effRange = lvStats.range + vegaRangeBonus;
+          const blizzardMult = (activeWeather && activeWeather.type === "blizzard" && activeWeather.activeTimer > 0) ? 0.82 : 1.0;
+          const effRange = (lvStats.range + vegaRangeBonus) * blizzardMult;
 
           t.cooldown -= dt;
           t.recoil = Math.max(0, (t.recoil || 0) - dt * 28);
@@ -4012,6 +4197,73 @@
                 targetEnemy = e;
               } else if (!secondaryEnemy) {
                 secondaryEnemy = e;
+              }
+            }
+          }
+
+          // Menzilde düşman yoksa veya oyuncu kule kurduysa: 1) Uzaylı Warp Jeneratörünü veya 2) Kırılabilir Kristal Kayaları ateşle!
+          if (!targetEnemy && t.typeKey !== "repair") {
+            let obstacleTarget = null;
+            if (warpGenerator && !warpGenerator.dead && Math.hypot(warpGenerator.x - sock.x, warpGenerator.y - sock.y) <= effRange + 25) {
+              obstacleTarget = { isGenerator: true, obj: warpGenerator, x: warpGenerator.x, y: warpGenerator.y };
+            } else {
+              let bestCrystalDist = effRange + 15;
+              SOCKETS.forEach(otherS => {
+                if (otherS.crystalHp > 0) {
+                  const cd = Math.hypot(otherS.x - sock.x, otherS.y - sock.y);
+                  if (cd <= bestCrystalDist) {
+                    bestCrystalDist = cd;
+                    obstacleTarget = { isCrystal: true, sock: otherS, x: otherS.x, y: otherS.y };
+                  }
+                }
+              });
+            }
+
+            if (obstacleTarget) {
+              const desiredAngle = Math.atan2(obstacleTarget.y - sock.y, obstacleTarget.x - sock.x);
+              t.angle = desiredAngle;
+              if (t.cooldown <= 0) {
+                t.cooldown = 1 / effRate;
+                t.recoil = 4.5;
+                SoundFX.laser();
+                laserBeams.push({
+                  x1: sock.x, y1: sock.y - 8,
+                  x2: obstacleTarget.x, y2: obstacleTarget.y,
+                  color: tDef.color, width: 2.6, life: 0.11
+                });
+                spawnParticles(obstacleTarget.x, obstacleTarget.y, "#e879f9", 4);
+
+                if (obstacleTarget.isGenerator) {
+                  warpGenerator.hp -= effDamage;
+                  if (warpGenerator.hp <= 0 && !warpGenerator.dead) {
+                    warpGenerator.dead = true;
+                    SoundFX.explosion(true);
+                    triggerHaptic("heavy");
+                    state.gold += warpGenerator.rewardGold;
+                    if (ACTIVE_PATHS.length >= 3) {
+                      ACTIVE_PATHS.pop();
+                    }
+                    shockwaves.push({ x: warpGenerator.x, y: warpGenerator.y, maxR: 110, r: 8, color: "#facc15", life: 0.55 });
+                    floatingTexts.push({ x: warpGenerator.x, y: warpGenerator.y - 20, text: L(`💥 PORTAL KAPANDI! +${warpGenerator.rewardGold}⚡`, `💥 PORTAL CLOSED! +${warpGenerator.rewardGold}⚡`), color: "#fde047", life: 1.2 });
+                    showToast(L("🎯 Uzaylı Portal Jeneratörü imha edildi! 3. Giriş Kapısı kapandı ve +110⚡ kazandınız!", "🎯 Warp Generator destroyed! Gate 3 closed & +110⚡ earned!"));
+                    updateHUD();
+                    updateWaveBannerUI();
+                  }
+                } else if (obstacleTarget.isCrystal) {
+                  const cs = obstacleTarget.sock;
+                  cs.crystalHp -= effDamage;
+                  if (cs.crystalHp <= 0) {
+                    cs.crystalHp = 0;
+                    SoundFX.explosion(false);
+                    triggerHaptic("medium");
+                    state.gold += cs.crystalReward;
+                    shockwaves.push({ x: cs.x, y: cs.y, maxR: 68, r: 6, color: "#e879f9", life: 0.4 });
+                    floatingTexts.push({ x: cs.x, y: cs.y - 18, text: L(`💎 KRİSTAL KIRILDI! +${cs.crystalReward}⚡`, `💎 CRYSTAL SHATTERED! +${cs.crystalReward}⚡`), color: "#f5d0fe", life: 1.0 });
+                    showToast(L(`💎 Kristal Kaya parçalandı! CEP #${cs.id} kule kurulumuna açıldı ve +${cs.crystalReward}⚡ düştü!`, `💎 Crystal shattered! BAY #${cs.id} unlocked & +${cs.crystalReward}⚡ dropped!`));
+                    updateHUD();
+                    updateSocketInspector();
+                  }
+                }
               }
             }
           }
@@ -5011,6 +5263,68 @@
           ctx.restore();
         });
 
+        // 4.5 VOLKANİK YOL ÜSTÜ LAV ÇATLAKLARI VE UZAYLI WARP JENERATÖRÜ
+        levelLavaPools.forEach(lp => {
+          drawLavaFissure(ctx, lp.x, lp.y, lp.r, nowAnim);
+        });
+
+        if (warpGenerator && !warpGenerator.dead) {
+          ctx.save();
+          ctx.translate(warpGenerator.x, warpGenerator.y);
+          // 3. Kapıya giden enerji besleme hattı
+          if (ACTIVE_PATHS[2] && ACTIVE_PATHS[2][0]) {
+            const g3 = ACTIVE_PATHS[2][0];
+            ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
+            ctx.lineWidth = 2.5;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(g3.x - warpGenerator.x, g3.y - warpGenerator.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+          const genGlow = ctx.createRadialGradient(0, 0, 4, 0, 0, 28);
+          genGlow.addColorStop(0, "#fda4af");
+          genGlow.addColorStop(0.5, "#e11d48");
+          genGlow.addColorStop(1, "rgba(225, 29, 72, 0)");
+          ctx.fillStyle = genGlow;
+          ctx.beginPath();
+          ctx.arc(0, 0, 28, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#4c0519";
+          ctx.strokeStyle = "#fb7185";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = nowAnim * 1.5 + (i * Math.PI) / 3;
+            const px = Math.cos(a) * 16;
+            const py = Math.sin(a) * 16;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#fef08a";
+          ctx.beginPath();
+          ctx.arc(0, 0, 6 + Math.sin(nowAnim * 8) * 1.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Can Çubuğu ve Başlık
+          const gRatio = Math.max(0, warpGenerator.hp / warpGenerator.maxHp);
+          ctx.fillStyle = "rgba(15, 23, 42, 0.92)";
+          ctx.fillRect(-24, -26, 48, 5);
+          ctx.fillStyle = "#f43f5e";
+          ctx.fillRect(-24, -26, 48 * gRatio, 5);
+          ctx.fillStyle = "#ffe4e6";
+          ctx.font = "bold 7.5px Orbitron, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(L("⚡ PORTAL JENERATÖRÜ", "⚡ WARP GENERATOR"), 0, -30);
+          ctx.restore();
+        }
+
         // 5. ÇOKLU GİRİŞ MAĞARALARI / WARP KAPILARI VE KORUNAN GEZEGEN (1..200)
         ACTIVE_PATHS.forEach((pathArr, gateIdx) => {
           const sp = pathArr[0];
@@ -5131,11 +5445,24 @@
           }
 
           if (!sock.tower) {
-            ctx.fillStyle = isSelected ? "#38bdf8" : "rgba(148, 163, 184, 0.80)";
-            ctx.font = "bold 8.5px Orbitron, sans-serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(isSelected ? L("+ KUR", "+ BUILD") : "#" + sock.id, sock.x, sock.y + 1);
+            if (sock.crystalHp > 0) {
+              drawCrystalCluster(ctx, sock.x, sock.y + 5, 0.95, nowAnim * 4 + idx);
+              const cRatio = Math.max(0, sock.crystalHp / Math.max(1, sock.crystalMaxHp));
+              ctx.fillStyle = "rgba(15, 23, 42, 0.92)";
+              ctx.fillRect(sock.x - 18, sock.y - 24, 36, 4);
+              ctx.fillStyle = "#e879f9";
+              ctx.fillRect(sock.x - 18, sock.y - 24, 36 * cRatio, 4);
+              ctx.fillStyle = "#f5d0fe";
+              ctx.font = "bold 7px Orbitron, sans-serif";
+              ctx.textAlign = "center";
+              ctx.fillText(`💎 +${sock.crystalReward}⚡`, sock.x, sock.y + 14);
+            } else {
+              ctx.fillStyle = isSelected ? "#38bdf8" : "rgba(148, 163, 184, 0.80)";
+              ctx.font = "bold 8.5px Orbitron, sans-serif";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              ctx.fillText(isSelected ? L("+ KUR", "+ BUILD") : "#" + sock.id, sock.x, sock.y + 1);
+            }
           } else {
             const t = sock.tower;
             const recoilOffset = -(t.recoil || 0);
@@ -5911,6 +6238,44 @@
         SoundFX.init();
         const { vx, vy } = clientToVirtualCoords(ev.clientX, ev.clientY);
 
+        // 1. Önce Yörünge İkmal Kapsülüne dokunuldu mu kontrol et
+        for (let i = supplyPods.length - 1; i >= 0; i--) {
+          const pod = supplyPods[i];
+          if (Math.hypot(pod.x - vx, pod.y - vy) <= 32) {
+            SoundFX.repair();
+            triggerHaptic("medium");
+            state.gold += pod.rewardGold;
+            spawnParticles(pod.x, pod.y, "#facc15", 12);
+            floatingTexts.push({ x: pod.x, y: pod.y - 14, text: `+${pod.rewardGold}⚡ İKMAL!`, color: "#fde047", life: 0.95 });
+            supplyPods.splice(i, 1);
+            updateHUD();
+            updateSocketInspector();
+            return;
+          }
+        }
+
+        // 2. Uzaylı Warp Jeneratörüne dokunulduysa manuel plazma darbesi vur!
+        if (warpGenerator && !warpGenerator.dead && Math.hypot(warpGenerator.x - vx, warpGenerator.y - vy) <= 34) {
+          SoundFX.laser();
+          triggerHaptic("light");
+          const tapDmg = Math.round(22 * getDmgMultiplier());
+          warpGenerator.hp -= tapDmg;
+          spawnParticles(warpGenerator.x, warpGenerator.y, "#f43f5e", 5);
+          floatingTexts.push({ x: warpGenerator.x, y: warpGenerator.y - 16, text: `-${tapDmg}`, color: "#fda4af", life: 0.5 });
+          if (warpGenerator.hp <= 0) {
+            warpGenerator.dead = true;
+            SoundFX.explosion(true);
+            triggerHaptic("heavy");
+            state.gold += warpGenerator.rewardGold;
+            if (ACTIVE_PATHS.length >= 3) ACTIVE_PATHS.pop();
+            shockwaves.push({ x: warpGenerator.x, y: warpGenerator.y, maxR: 110, r: 8, color: "#facc15", life: 0.55 });
+            showToast(L("🎯 Uzaylı Portal Jeneratörü imha edildi! 3. Giriş Kapısı kapandı ve +110⚡ kazandınız!", "🎯 Warp Generator destroyed! Gate 3 closed & +110⚡ earned!"));
+            updateHUD();
+            updateWaveBannerUI();
+          }
+          return;
+        }
+
         let closestIdx = -1;
         let closestDist = 44;
         SOCKETS.forEach((s, idx) => {
@@ -5924,6 +6289,27 @@
         if (closestIdx !== -1) {
           SoundFX.uiClick();
           triggerHaptic("light");
+          // Eğer Kristal Kaya ile kapalı bir yuvaya dokunulduysa manuel lazer darbesi vurarak kırmaya yardım et!
+          if (SOCKETS[closestIdx].crystalHp > 0) {
+            const cs = SOCKETS[closestIdx];
+            const tapDmg = Math.round(25 * getDmgMultiplier());
+            cs.crystalHp -= tapDmg;
+            spawnParticles(cs.x, cs.y, "#e879f9", 5);
+            floatingTexts.push({ x: cs.x, y: cs.y - 15, text: `💎 -${tapDmg}`, color: "#f5d0fe", life: 0.5 });
+            if (cs.crystalHp <= 0) {
+              cs.crystalHp = 0;
+              SoundFX.explosion(false);
+              triggerHaptic("medium");
+              state.gold += cs.crystalReward;
+              showToast(L(`💎 Kristal Kaya kırıldı! CEP #${cs.id} açıldı ve +${cs.crystalReward}⚡ kazandınız!`, `💎 Crystal shattered! BAY #${cs.id} unlocked & +${cs.crystalReward}⚡ earned!`));
+              state.selectedSocketIndex = closestIdx;
+              updateHUD();
+              updateSocketInspector();
+            } else {
+              showToast(L(`💎 CEP #${cs.id} Kristal Kaya ile kaplı (${Math.ceil(cs.crystalHp)} HP). Kuleler ateş ederek veya dokunarak kırabilirsiniz!`, `💎 BAY #${cs.id} covered by Crystal (${Math.ceil(cs.crystalHp)} HP). Tap or let towers shatter it!`));
+            }
+            return;
+          }
           // Eğer zaten seçili olan kurulu bir kuleye tekrar dokunulduysa: doğrudan Yükselt veya Lv.3 Dal Değiştir!
           if (closestIdx === state.selectedSocketIndex && SOCKETS[closestIdx].tower) {
             const tw = SOCKETS[closestIdx].tower;
@@ -5973,8 +6359,8 @@
           let sock = SOCKETS[state.selectedSocketIndex];
           if (!sock) return;
 
-          if (sock.tower) {
-            const emptyIdx = SOCKETS.findIndex(s => !s.tower);
+          if (sock.tower || sock.crystalHp > 0) {
+            const emptyIdx = SOCKETS.findIndex(s => !s.tower && !(s.crystalHp > 0));
             if (emptyIdx === -1) {
               showToast("Boş taktik cep kalmadı!");
               return;
@@ -6007,7 +6393,7 @@
             updateTrainerUI();
           }
 
-          const nextEmpty = SOCKETS.findIndex((s, idx) => !s.tower && idx !== state.selectedSocketIndex);
+          const nextEmpty = SOCKETS.findIndex((s, idx) => !s.tower && !(s.crystalHp > 0) && idx !== state.selectedSocketIndex);
           if (nextEmpty !== -1) {
             state.selectedSocketIndex = nextEmpty;
           }
