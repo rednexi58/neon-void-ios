@@ -4,73 +4,100 @@ workflows:
     name: Gezegeni Koru - iOS TestFlight Auto-Build
     max_build_duration: 60
     instance_type: mac_mini_m2
+
     integrations:
       app_store_connect: Apple AppStore
+
     environment:
       ios_signing:
         provisioning_profiles:
           - neonvoid-appstore-profile
         certificates:
           - ios-distribution
+
       vars:
         BUNDLE_ID: "com.neonvoid.cyberdefense"
         APP_DISPLAY_NAME: "Gezegeni Koru"
-        GK_TEST_ADS: "1" # TestFlight: Google DEMO units only; change to 0 for production
+        GK_TEST_ADS: "1"
+
       node: 20.11.0
       xcode: latest
+
     scripts:
       - name: Install NPM & Capacitor Dependencies
         script: |
           npm install
           npm run build:web
+
           if [ ! -d "ios" ]; then
             npx cap add ios
           fi
+
           bash ios_config/apply_ios_settings.sh
-          # AdMob v6 uses UMP 2.x Swift names. UMP 3.x breaks ConsentExecutor.swift.
-          # Pin before cap sync, so CocoaPods resolves the matching UMP release.
+
+          # AdMob 6 compatibility with UMP 2.7.0
           ruby <<'RUBY'
           podfile = 'ios/App/Podfile'
           source = File.read(podfile)
           pin = "pod 'GoogleUserMessagingPlatform', '2.7.0'"
+
           unless source.include?(pin)
             target = "target 'App' do"
             abort "Missing App target in #{podfile}" unless source.include?(target)
             source = source.sub(target, "#{target}\n  #{pin}")
             File.write(podfile, source)
           end
-          puts "Pinning GoogleUserMessagingPlatform to 2.7.0 for AdMob v6 compatibility"
+
+          puts "Google UMP version pinned to 2.7.0"
           RUBY
-          # cap add/sync can leave an old UMP 3.x Podfile.lock; re-resolve exact 2.7.0.
+
           rm -f ios/App/Podfile.lock
           npx cap sync ios
-      - name: Install Official Gezegeni Koru AppIcon into Xcode Assets.xcassets
+
+      - name: Install Gezegeni Koru App Icon
         script: |
           ICONSET_DIR="ios/App/App/Assets.xcassets/AppIcon.appiconset"
           mkdir -p "$ICONSET_DIR"
           rm -f "$ICONSET_DIR"/*.png "$ICONSET_DIR"/Contents.json
           cp -R ios_config/AppIcon.appiconset/* "$ICONSET_DIR/"
-          echo "Installed AppIcon.appiconset files:"
+          echo "App icon installed:"
           ls -la "$ICONSET_DIR"
-      - name: Configure Apple display name + native AdMob + StoreKit 2
+
+      - name: Configure iOS App Settings
         script: |
           bash ios_config/apply_ios_settings.sh
-          cd ios/App && pod install --repo-update
-      - name: Set Up Code Signing Settings on Xcode Project
+          cd ios/App
+          pod install --repo-update
+
+      - name: Configure Apple Code Signing
         script: |
           xcode-project use-profiles
+
       - name: Increment Build Number
         script: |
           cd ios/App
-          agvtool new-version -all $(($BUILD_NUMBER + 1))
+
+          # Generate a build number above the previous Build 6
+          NEW_BUILD_NUMBER=$((BUILD_NUMBER + 100))
+
+          echo "Codemagic Build Number: $BUILD_NUMBER"
+          echo "New Apple Build Number: $NEW_BUILD_NUMBER"
+
+          agvtool new-version -all "$NEW_BUILD_NUMBER"
+
+          echo "Final iOS Build Number:"
+          agvtool what-version -terse
+
       - name: Build IPA for App Store & TestFlight
         script: |
           xcode-project build-ipa \
             --workspace "ios/App/App.xcworkspace" \
             --scheme "App"
+
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+
     publishing:
       app_store_connect:
         auth: integration
