@@ -4752,13 +4752,20 @@
       }
 
       function resizeCanvas() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        const cssW = Math.max(280, Math.floor(rect.width));
-        const cssH = Math.max(360, Math.floor(rect.height));
+        const cRect = canvas.getBoundingClientRect();
+        const pRect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : cRect;
+        const rawW = cRect.width > 50 ? cRect.width : pRect.width;
+        const rawH = cRect.height > 50 ? cRect.height : pRect.height;
+        const cssW = Math.max(120, Math.round(rawW));
+        const cssH = Math.max(120, Math.round(rawH));
         const dpr = getTargetDpr();
 
-        canvas.width = Math.floor(cssW * dpr);
-        canvas.height = Math.floor(cssH * dpr);
+        const targetW = Math.round(cssW * dpr);
+        const targetH = Math.round(cssH * dpr);
+        if (canvas.width !== targetW || canvas.height !== targetH) {
+          canvas.width = targetW;
+          canvas.height = targetH;
+        }
 
         const scale = Math.min(cssW / VIRTUAL_W, cssH / VIRTUAL_H);
         const offsetX = (cssW - VIRTUAL_W * scale) * 0.5;
@@ -4772,11 +4779,22 @@
         viewTransform.offsetY = offsetY;
       }
       window.addEventListener("resize", resizeCanvas);
+      if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
+        const ro = new ResizeObserver(() => resizeCanvas());
+        ro.observe(canvas.parentElement);
+        ro.observe(canvas);
+      }
 
       function clientToVirtualCoords(clientX, clientY) {
         const rect = canvas.getBoundingClientRect();
-        const localX = clientX - rect.left;
-        const localY = clientY - rect.top;
+        if (!rect.width || !rect.height) return { vx: -999, vy: -999 };
+        if (Math.abs(rect.width - viewTransform.cssW) > 1 || Math.abs(rect.height - viewTransform.cssH) > 1) {
+          resizeCanvas();
+        }
+        const scaleX = viewTransform.cssW / rect.width;
+        const scaleY = viewTransform.cssH / rect.height;
+        const localX = (clientX - rect.left) * scaleX;
+        const localY = (clientY - rect.top) * scaleY;
         const vx = (localX - viewTransform.offsetX) / viewTransform.scale;
         const vy = (localY - viewTransform.offsetY) / viewTransform.scale;
         return { vx, vy };
@@ -5085,6 +5103,10 @@
       }
 
       function renderScene() {
+        const liveRect = canvas.getBoundingClientRect();
+        if (liveRect.width > 50 && liveRect.height > 50 && (Math.abs(liveRect.width - viewTransform.cssW) > 1.5 || Math.abs(liveRect.height - viewTransform.cssH) > 1.5)) {
+          resizeCanvas();
+        }
         const dpr = viewTransform.dpr;
         ctx.save();
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -5390,31 +5412,31 @@
           }
 
           ctx.save();
-          ctx.fillStyle = "rgba(7, 13, 28, 0.90)";
-          ctx.strokeStyle = isSelected ? "#38bdf8" : "rgba(56, 189, 248, 0.32)";
-          ctx.lineWidth = isSelected ? 2.2 : 1.2;
+          ctx.fillStyle = isSelected ? "rgba(12, 32, 58, 0.94)" : "rgba(7, 15, 32, 0.92)";
+          ctx.strokeStyle = isSelected ? "#38bdf8" : (sock.tower ? "rgba(56, 189, 248, 0.65)" : "rgba(56, 189, 248, 0.48)");
+          ctx.lineWidth = isSelected ? 2.6 : 1.5;
           ctx.beginPath();
-          ctx.roundRect(sock.x - 22, sock.y - 16, 44, 32, 8);
+          ctx.roundRect(sock.x - 27, sock.y - 19, 54, 38, 9);
           ctx.fill();
           ctx.stroke();
 
-          ctx.strokeStyle = isSelected ? "#facc15" : "rgba(125, 211, 252, 0.55)";
-          ctx.lineWidth = 1.6;
-          const cw = 5;
+          ctx.strokeStyle = isSelected ? "#facc15" : "rgba(125, 211, 252, 0.72)";
+          ctx.lineWidth = 1.8;
+          const cw = 6;
           ctx.beginPath();
-          ctx.moveTo(sock.x - 22, sock.y - 16 + cw);
-          ctx.lineTo(sock.x - 22, sock.y - 16);
-          ctx.lineTo(sock.x - 22 + cw, sock.y - 16);
-          ctx.moveTo(sock.x + 22 - cw, sock.y + 16);
-          ctx.lineTo(sock.x + 22, sock.y + 16);
-          ctx.lineTo(sock.x + 22, sock.y + 16 - cw);
+          ctx.moveTo(sock.x - 27, sock.y - 19 + cw);
+          ctx.lineTo(sock.x - 27, sock.y - 19);
+          ctx.lineTo(sock.x - 27 + cw, sock.y - 19);
+          ctx.moveTo(sock.x + 27 - cw, sock.y + 19);
+          ctx.lineTo(sock.x + 27, sock.y + 19);
+          ctx.lineTo(sock.x + 27, sock.y + 19 - cw);
           ctx.stroke();
 
           ctx.fillStyle = isSelected ? "#164e63" : "#1e293b";
-          ctx.strokeStyle = isSelected ? "#38bdf8" : "rgba(148, 163, 184, 0.55)";
-          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = isSelected ? "#38bdf8" : "rgba(148, 163, 184, 0.68)";
+          ctx.lineWidth = 1.6;
           ctx.beginPath();
-          ctx.ellipse(sock.x, sock.y + 1, 18, 11, 0, 0, Math.PI * 2);
+          ctx.ellipse(sock.x, sock.y + 1, 22, 13, 0, 0, Math.PI * 2);
           ctx.fill();
           ctx.stroke();
 
@@ -5440,11 +5462,11 @@
               ctx.textAlign = "center";
               ctx.fillText(`💎 +${sock.crystalReward}⚡`, sock.x, sock.y + 14);
             } else {
-              ctx.fillStyle = isSelected ? "#38bdf8" : "rgba(148, 163, 184, 0.80)";
-              ctx.font = "bold 8.5px Orbitron, sans-serif";
+              ctx.fillStyle = isSelected ? "#38bdf8" : "rgba(226, 232, 240, 0.90)";
+              ctx.font = "bold 9.5px Orbitron, sans-serif";
               ctx.textAlign = "center";
               ctx.textBaseline = "middle";
-              ctx.fillText(isSelected ? L("+ KUR", "+ BUILD") : "#" + sock.id, sock.x, sock.y + 1);
+              ctx.fillText(isSelected ? L("+ KUR", "+ BUILD") : "+" + sock.id, sock.x, sock.y + 1);
             }
           } else {
             const t = sock.tower;
@@ -5602,16 +5624,16 @@
             // Seçili Kule Üzerinde Tek Parmakla Hızlı Eylem Etiketi (On-Canvas Floating Pill)
             if (isSelected) {
               const tDef = TOWER_TYPES[t.typeKey];
-              const pillY = sock.y - 33;
-              ctx.fillStyle = "rgba(6, 12, 26, 0.94)";
+              const pillY = sock.y - 34;
+              ctx.fillStyle = "rgba(6, 12, 26, 0.96)";
               ctx.strokeStyle = t.level < 3 ? "#22d3ee" : "#facc15";
-              ctx.lineWidth = 1.5;
+              ctx.lineWidth = 1.8;
               ctx.beginPath();
-              ctx.roundRect(sock.x - 36, pillY - 9, 72, 16, 6);
+              ctx.roundRect(sock.x - 42, pillY - 11, 84, 20, 7);
               ctx.fill();
               ctx.stroke();
               ctx.fillStyle = "#f8fafc";
-              ctx.font = "bold 7.5px Orbitron, sans-serif";
+              ctx.font = "bold 8px Orbitron, sans-serif";
               if (t.level < 3) {
                 const upCost = getTowerCostWithHero(tDef.levels[t.level].cost);
                 ctx.fillText(L(`⬆ ${upCost}⚡ DOKUN`, `⬆ ${upCost}⚡ TAP`), sock.x, pillY + 1);
@@ -6270,13 +6292,16 @@
             if (t.level < 3) {
               document.getElementById("lblBranchAState").textContent = "🔒 SV.3";
               document.getElementById("lblBranchBState").textContent = "🔒 SV.3";
-              if (branchRowEl) branchRowEl.className = "grid grid-cols-2 gap-1.5 opacity-55 transition";
-              if (branchHintEl) branchHintEl.textContent = L("🔒 Seviye 3 Evrim Dalı (Kule Sv.3 olunca aktifleşir):", "🔒 Lv.3 Evolution Branch (Unlocks at Tower Lv.3):");
+              if (branchRowEl) branchRowEl.className = "hidden";
+              if (branchHintEl) branchHintEl.className = "hidden";
             } else {
               document.getElementById("lblBranchAState").textContent = curBranch === "A" ? L("AKTİF", "ACTIVE") : L("SEÇ", "PICK");
               document.getElementById("lblBranchBState").textContent = curBranch === "B" ? L("AKTİF", "ACTIVE") : L("SEÇ", "PICK");
               if (branchRowEl) branchRowEl.className = "grid grid-cols-2 gap-1.5 opacity-100 transition";
-              if (branchHintEl) branchHintEl.textContent = L("✨ Seviye 3 Evrim Dalı Aktif (İstediğiniz Dalı Seçin):", "✨ Lv.3 Evolution Branch Active (Select Branch):");
+              if (branchHintEl) {
+                branchHintEl.className = "font-cyber font-bold text-slate-400 text-[9px]";
+                branchHintEl.textContent = L("✨ Seviye 3 Evrim Dalı Aktif (İstediğiniz Dalı Seçin):", "✨ Lv.3 Evolution Branch Active (Select Branch):");
+              }
             }
             bA.className = curBranch === "A"
               ? "py-1 px-2 rounded-lg text-[9.5px] font-cyber font-bold border transition flex items-center justify-between bg-amber-500/25 border-amber-400 text-amber-200"
@@ -6302,6 +6327,7 @@
 
           document.getElementById("btnSellTower").textContent = L(`Sat (+${lvStats.refund} ⚡)`, `Sell (+${lvStats.refund} ⚡)`);
         }
+        requestAnimationFrame(resizeCanvas);
       }
 
       canvas.addEventListener("pointerdown", (ev) => {
@@ -6347,9 +6373,23 @@
         }
 
         let closestIdx = -1;
-        let closestDist = 44;
+        let closestDist = 68;
         SOCKETS.forEach((s, idx) => {
-          const d = Math.hypot(s.x - vx, s.y - vy);
+          // Boş yuva merkezi + kurulu kule gövdesi + üst yükseltme etiketi (Floating Pill) için çok noktalı geniş dokunma alanı
+          let d = Math.hypot(s.x - vx, s.y - vy);
+          if (s.tower) {
+            const dTurretBody = Math.hypot(s.x - vx, (s.y - 12) - vy);
+            const dTurretTop = Math.hypot(s.x - vx, (s.y - 26) - vy);
+            d = Math.min(d, dTurretBody, dTurretTop);
+            if (idx === state.selectedSocketIndex && Math.abs(vx - s.x) <= 46 && Math.abs(vy - (s.y - 34)) <= 20) {
+              d = 0; // Doğrudan ⬆ DOKUN etiketine basıldı
+            }
+          } else {
+            // Dikdörtgen cep kutusu (54x38) içine dokunulduysa mesafeyi merkeze çek
+            if (Math.abs(vx - s.x) <= 32 && Math.abs(vy - s.y) <= 24) {
+              d = Math.min(d, 14);
+            }
+          }
           if (d < closestDist) {
             closestDist = d;
             closestIdx = idx;
