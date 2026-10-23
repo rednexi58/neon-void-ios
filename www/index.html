@@ -192,7 +192,7 @@
 
         <!-- Üst İnce Dalga Hazırlık & Başlatma Çubuğu -->
         <div class="absolute top-1.5 left-2 right-2 flex items-center justify-between gap-1.5 pointer-events-none z-10">
-          <div class="tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5">
+          <div id="waveStatusPillBox" class="tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 transition-opacity duration-300">
             <span id="waveStatusBanner">Hazırlık — Taktik cebine dokunup kule kurun!</span>
           </div>
           <div class="flex items-center gap-1.5 pointer-events-auto shrink-0">
@@ -233,8 +233,8 @@
           <p class="font-cyber font-bold text-[10px] text-rose-200 tracking-wide animate-pulse" id="i18n_bossAlert">⚠ DEV ÖRÜMCEK KRALİÇE SAHNEDE (EMP AKTİF!) ⚠</p>
         </div>
 
-        <!-- Harita Altı Kompakt Özel Yetenekler & Radar Şeridi -->
-        <div class="absolute bottom-1.5 left-2 right-2 flex items-center justify-between gap-1.5 pointer-events-none z-10">
+        <!-- Harita Altı Kompakt Özel Yetenekler Şeridi (Ortalanmış, Kesilme Yok) -->
+        <div class="absolute bottom-1.5 left-2 right-2 flex items-center justify-center gap-1.5 pointer-events-none z-10">
           <div class="pointer-events-auto flex items-center gap-1 bg-slate-950/85 border border-sky-500/35 backdrop-blur-md px-1.5 py-1 rounded-xl shadow-lg">
             <button id="btnOrbitalLaser" class="flex items-center gap-1 px-1.5 py-1 rounded-lg bg-rose-950/90 hover:bg-rose-900 active:scale-95 border border-rose-400/50 transition" title="Orbital Lazer Uydusu">
               <span class="text-xs">🛰️</span>
@@ -277,8 +277,8 @@
             </button>
           </div>
 
-          <!-- Sağ Alt Kompakt Canlı Radar -->
-          <div id="miniMapWidget" class="pointer-events-auto tactical-glass rounded-xl p-1 flex items-center gap-1.5">
+          <!-- Sağ Alt Kompakt Canlı Radar (Tek ekran haritada ekran taşmasını önlemek için gizlendi) -->
+          <div id="miniMapWidget" class="hidden pointer-events-auto tactical-glass rounded-xl p-1 items-center gap-1.5">
             <div class="hidden sm:flex flex-col text-right leading-tight px-1">
               <span class="text-[8px] font-cyber font-bold text-sky-300">RADAR</span>
               <span id="socketHintText" class="text-[8px] text-slate-400 truncate max-w-[68px]">TERRA-1</span>
@@ -315,8 +315,8 @@
           </div>
         </div>
 
-        <!-- DURUM A: "KULELER" — 6 ÖZEL İKONLU BİLİM KURGU KULE KARTI -->
-        <div id="buildTowerList" class="grid grid-cols-6 gap-1">
+        <!-- DURUM A: "KULELER" — 6 ÖZEL İKONLU BİLİM KURGU KULE KARTI (SABİT 76px YÜKSEKLİK) -->
+        <div id="buildTowerList" class="grid grid-cols-6 gap-1 h-[76px]">
           <!-- 1. Parçacık Lazer -->
           <button data-tower="rapid" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-cyan-300 active:scale-95 transition flex flex-col items-center text-center justify-between">
             <span class="text-[8px] text-cyan-300 font-semibold leading-none" id="i18n_tagRapid">Kara+Hava</span>
@@ -414,55 +414,47 @@
           </button>
         </div>
 
-        <!-- DURUM B: KURULU KULEYE DOKUNULDUĞUNDA -> YÜKSELT / HEDEF ÖNCELİĞİ / SEVİYE 3 EVRİM DALI / SAT PANELİ -->
-        <div id="installedTowerPanel" class="hidden flex-col gap-1.5 tactical-glass rounded-xl p-2">
-          <div class="flex items-center justify-between gap-1.5">
-            <div class="flex items-center gap-1.5 min-w-0">
-              <span id="instTowerName" class="font-cyber font-bold text-xs text-cyan-300 truncate">Parçacık Lazer</span>
-              <span id="instTowerLevel" class="text-[10px] text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/40">★ Lv.1/3</span>
-              <span id="instTowerTargetTag" class="hidden sm:inline text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Kara + Hava</span>
+        <!-- DURUM B: KURULU KULEYE DOKUNULDUĞUNDA -> SABİT 76px YÜKSEKLİKTE KOMPAKT YÜKSELT / DAL / SAT PANELİ -->
+        <div id="installedTowerPanel" class="hidden flex-col justify-between gap-1 tactical-glass rounded-xl px-2 py-1.5 h-[76px]">
+          <div class="flex items-center justify-between gap-1">
+            <div class="flex items-center gap-1 min-w-0">
+              <span id="instTowerName" class="font-cyber font-bold text-[11px] text-cyan-300 truncate">Parçacık Lazer</span>
+              <span id="instTowerLevel" class="text-[9.5px] text-amber-300 font-bold px-1.5 py-0.2 rounded bg-amber-500/20 border border-amber-400/40 shrink-0">★ Lv.1/3</span>
+              <div class="flex items-center gap-1.5 text-[9.5px] bg-slate-950/85 px-1.5 py-0.2 rounded border border-slate-800 shrink-0">
+                <span title="Hasar">⚔<strong id="instTowerDmg" class="text-cyan-300 ml-0.5">18</strong></span>
+                <span title="Atış Hızı">⚡<strong id="instTowerRate" class="text-cyan-300 ml-0.5">2.7/s</strong></span>
+                <span title="Menzil">🎯<strong id="instTowerRange" class="text-cyan-300 ml-0.5">138m</strong></span>
+              </div>
+              <span id="instTowerTargetTag" class="hidden">Kara + Hava</span>
+              <strong id="instTowerSpecial" class="hidden">Foton</strong>
+              <span id="lblBranchRowHint" class="hidden"></span>
+              <div id="bossFrozenWarning" class="hidden"></div>
             </div>
             <div class="flex items-center gap-1 shrink-0">
-              <button id="btnCycleTargetPriority" class="text-[10px] font-cyber font-bold text-amber-200 hover:text-white px-2 py-0.5 rounded-lg bg-amber-500/20 border border-amber-400/50 active:scale-95 transition" title="Hedef Önceliğini Değiştir">
+              <button id="btnCycleTargetPriority" class="text-[9.5px] font-cyber font-bold text-amber-200 hover:text-white px-2 py-0.5 rounded-lg bg-amber-500/20 border border-amber-400/50 active:scale-95 transition" title="Hedef Önceliğini Değiştir">
                 🎯 İlk Gelen
               </button>
-              <button id="btnBackToBuildHint" class="text-[10px] text-sky-300 hover:text-white px-2 py-0.5 rounded-lg bg-slate-800 border border-sky-500/30">
-                Boş Platform Seç
+              <button id="btnBackToBuildHint" class="text-[9.5px] font-cyber font-bold text-sky-200 hover:text-white px-2 py-0.5 rounded-lg bg-slate-800 border border-sky-400/50 active:scale-95 transition">
+                ✕ Kuleler
               </button>
             </div>
-          </div>
-
-          <div class="grid grid-cols-4 gap-1 text-[10px] bg-slate-950/80 p-1 rounded-lg border border-slate-800 text-center">
-            <div><span class="text-slate-400 block text-[8px]">Hasar/Etki</span><strong id="instTowerDmg" class="text-cyan-300">18</strong></div>
-            <div><span class="text-slate-400 block text-[8px]">Atış Hızı</span><strong id="instTowerRate" class="text-cyan-300">2.7/sn</strong></div>
-            <div><span class="text-slate-400 block text-[8px]">Menzil</span><strong id="instTowerRange" class="text-cyan-300">138m</strong></div>
-            <div><span class="text-slate-400 block text-[8px]">Uzmanlık</span><strong id="instTowerSpecial" class="text-amber-300 truncate block">Foton</strong></div>
-          </div>
-
-          <!-- SEVİYE 3 EVRİM DALI SEÇİMİ (MOD A vs MOD B) -->
-          <div class="flex items-center justify-between text-[9px] px-0.5">
-            <span class="font-cyber font-bold text-slate-400" id="lblBranchRowHint">🔒 Seviye 3 Özel Evrim Dalı (Kule Sv.3 olunca aktifleşir):</span>
-          </div>
-          <div id="branchSelectorRow" class="grid grid-cols-2 gap-1.5 opacity-60 transition">
-            <button id="btnSelectBranchA" class="py-1 px-2 rounded-lg text-[9.5px] font-cyber font-bold border transition flex items-center justify-between bg-amber-500/25 border-amber-400 text-amber-200">
-              <span id="lblBranchAName" class="truncate">⚡ Dal A: Keskin Foton</span>
-              <span id="lblBranchAState" class="text-[8px] px-1 rounded bg-amber-400 text-slate-950 font-black ml-1">AKTİF</span>
-            </button>
-            <button id="btnSelectBranchB" class="py-1 px-2 rounded-lg text-[9.5px] font-cyber font-bold border transition flex items-center justify-between bg-slate-900/90 border-fuchsia-400/40 text-fuchsia-200 hover:bg-fuchsia-500/20">
-              <span id="lblBranchBName" class="truncate">🌈 Dal B: Çatal Prizma</span>
-              <span id="lblBranchBState" class="text-[8px] px-1 rounded bg-slate-800 text-slate-400 ml-1">SEÇ</span>
-            </button>
-          </div>
-
-          <div id="bossFrozenWarning" class="hidden text-[9px] bg-rose-950/90 border border-rose-500/60 text-rose-200 px-2 py-0.5 rounded font-semibold text-center">
-            ❄ UZAYLI ANA GEMİSİ EMP DALGASI İLE DONDURDU!
           </div>
 
           <div class="flex items-center gap-1.5">
             <button id="btnUpgradeTower" class="flex-1 py-1.5 px-3 rounded-xl font-cyber font-bold text-xs bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-slate-950 transition">
               ⬆ YÜKSELT (120 ⚡)
             </button>
-            <button id="btnSellTower" class="py-1.5 px-3 rounded-xl font-semibold text-xs bg-rose-500/20 hover:bg-rose-500/30 active:scale-95 border border-rose-500/40 text-rose-300 transition">
+            <div id="branchSelectorRow" class="hidden flex-1 grid-cols-2 gap-1 transition">
+              <button id="btnSelectBranchA" class="py-1.5 px-1.5 rounded-xl text-[9px] font-cyber font-bold border transition flex items-center justify-between bg-amber-500/25 border-amber-400 text-amber-200">
+                <span id="lblBranchAName" class="truncate">⚡ Dal A</span>
+                <span id="lblBranchAState" class="text-[7.5px] px-1 rounded bg-amber-400 text-slate-950 font-black ml-1">AKTİF</span>
+              </button>
+              <button id="btnSelectBranchB" class="py-1.5 px-1.5 rounded-xl text-[9px] font-cyber font-bold border transition flex items-center justify-between bg-slate-900/90 border-fuchsia-400/40 text-fuchsia-200">
+                <span id="lblBranchBName" class="truncate">🌈 Dal B</span>
+                <span id="lblBranchBState" class="text-[7.5px] px-1 rounded bg-slate-800 text-slate-400 ml-1">SEÇ</span>
+              </button>
+            </div>
+            <button id="btnSellTower" class="py-1.5 px-3 rounded-xl font-semibold text-xs bg-rose-500/20 hover:bg-rose-500/30 active:scale-95 border border-rose-500/40 text-rose-300 transition shrink-0">
               Sat (+55 ⚡)
             </button>
           </div>
@@ -528,7 +520,8 @@
         </button>
         <button id="btnOpenShop" class="py-2 px-2 rounded-xl text-xs font-semibold bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-400/50 text-fuchsia-200 transition">🛒 Mağaza</button>
         <button id="btnOpenLeaderboardMenu" class="py-2 px-2 rounded-xl text-xs font-semibold bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 transition">🏆 Sıralama</button>
-        <button id="btnOpenIosGuide" class="py-2 px-2 rounded-xl text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 transition">🍎 iOS TestFlight</button>
+        <button id="btnOpenHeroesFromPause" class="py-2 px-2 rounded-xl text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 transition">🦸 Kahramanlar</button>
+        <button id="btnOpenIosGuide" class="hidden">🍎 iOS TestFlight</button>
         <button id="btnSpeedToggle" class="py-2 px-2 rounded-xl text-xs font-cyber font-bold bg-slate-800 hover:bg-slate-700 border border-slate-600 text-cyan-300 transition">1x HIZ</button>
       </div>
 
@@ -798,7 +791,7 @@
               </div>
               <div class="flex items-center justify-between text-[10px] mt-0.5">
                 <span id="heroLvBadge_vega" class="px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/50 text-amber-300 font-cyber font-bold">★ Lv.1 / 10</span>
-                <span id="heroXpText_vega" class="text-sky-200 font-cyber font-semibold">0 / 20 Bölüm</span>
+                <span id="heroXpText_vega" class="text-sky-200 font-cyber font-semibold">0 / 25 Bölüm</span>
               </div>
               <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-cyan-500/30">
                 <div id="heroXpBar_vega" class="bg-gradient-to-r from-cyan-400 to-amber-300 h-full transition-all duration-300" style="width:0%"></div>
@@ -824,7 +817,7 @@
               </div>
               <div class="flex items-center justify-between text-[10px] mt-0.5">
                 <span id="heroLvBadge_kaan" class="px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/50 text-amber-300 font-cyber font-bold">★ Lv.1 / 10</span>
-                <span id="heroXpText_kaan" class="text-emerald-200 font-cyber font-semibold">0 / 20 Bölüm</span>
+                <span id="heroXpText_kaan" class="text-emerald-200 font-cyber font-semibold">0 / 25 Bölüm</span>
               </div>
               <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-emerald-500/30">
                 <div id="heroXpBar_kaan" class="bg-gradient-to-r from-emerald-400 to-amber-300 h-full transition-all duration-300" style="width:0%"></div>
@@ -850,7 +843,7 @@
               </div>
               <div class="flex items-center justify-between text-[10px] mt-0.5">
                 <span id="heroLvBadge_nova" class="px-1.5 py-0.5 rounded bg-amber-400/20 border border-amber-400/50 text-amber-300 font-cyber font-bold">★ Lv.1 / 10</span>
-                <span id="heroXpText_nova" class="text-fuchsia-200 font-cyber font-semibold">0 / 20 Bölüm</span>
+                <span id="heroXpText_nova" class="text-fuchsia-200 font-cyber font-semibold">0 / 25 Bölüm</span>
               </div>
               <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-fuchsia-500/30">
                 <div id="heroXpBar_nova" class="bg-gradient-to-r from-fuchsia-400 to-amber-300 h-full transition-all duration-300" style="width:0%"></div>
@@ -1114,9 +1107,9 @@
         <div>
           <div class="flex items-center gap-2">
             <h2 class="font-cyber font-bold text-base sm:text-lg text-fuchsia-300">🛒 GEZEGEN MAĞAZASI</h2>
-            <span id="storeEnvironmentBadge" class="px-2 py-0.5 text-[10px] font-cyber font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/50">🔒 GÜVENLİ MAĞAZA (+%30 GÜNCEL FİYAT)</span>
+            <span id="storeEnvironmentBadge" class="px-2 py-0.5 text-[10px] font-cyber font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/50">🔒 APPLE STOREKİT GÜVENCESİ</span>
           </div>
-          <p class="text-[11px] text-slate-400">Tüm mağaza paketleri ve özel terfi ürünleri güncellendi! Evrim yükseltmeleri 5 💎'dan başlar.</p>
+          <p class="text-[11px] text-slate-400">VIP paket ile bölüm arası zorunlu reklamları kalıcı olarak kaldırabilirsiniz.</p>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
           <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold">🏠 Menü</button>
@@ -1349,9 +1342,7 @@
         </button>
       </div>
 
-      <p class="text-[10px] text-slate-400 leading-tight">
-        Her 2 başarılı bölümde bir geçiş reklamı gösterilir. 300 TL VIP satın alarak kaldırılabilir.
-      </p>
+
     </div>
   </div>
 
@@ -1593,8 +1584,9 @@
         ["KAHRAMANLAR & GÜNLÜK GÖREVLER", "HEROES & DAILY MISSIONS"],
         ["Oyun içi Kahramanınızı seçin, seviyesini yükseltin ve gezegen vergilerini toplayın!", "Select your in-game Hero, upgrade their level, and collect planet taxes!"],
         ["🦸 AKTİF KAHRAMAN SEÇİMİ (OYUN İÇİ KARAKTERİNİZ)", "🦸 ACTIVE HERO SELECTION (YOUR IN-GAME CHARACTER)"],
-        ["🔒 GÜVENLİ MAĞAZA (+%30 GÜNCEL FİYAT)", "🔒 SECURE STORE (OFFICIAL PRICING)"],
-        ["Tüm mağaza paketleri ve özel terfi ürünleri güncellendi! Evrim yükseltmeleri 5 💎'dan başlar.", "Official store packages & hero promotions! Cyber Evolution upgrades start at 5 💎."],
+        ["🔒 APPLE STOREKİT GÜVENCESİ", "🔒 APPLE STOREKIT SECURED"],
+        ["🦸 Kahramanlar", "🦸 Heroes"],
+        ["VIP paket ile bölüm arası zorunlu reklamları kalıcı olarak kaldırabilirsiniz.", "Permanently remove forced between-level ads with the one-time VIP upgrade."],
         ["🚫 REKLAMSIZ OYUN + 50 💎", "🚫 REMOVE ADS + 50 💎"],
         ["KAHRAMAN TERFİ", "HERO PROMOTION"],
         ["🦸 350 💎 KAHRAMAN SEVİYE PAKETİ", "🦸 350 💎 HERO LEVEL PACK"],
@@ -1862,8 +1854,8 @@
           "65% longer 6-tier serpentine canyon path, <strong>16 tower bays</strong>, and <strong>+1 Commander XP</strong> every 5 waves!"
         ],
         [
-          "Seçtiğiniz Komutanı 20 bölüm beklemeden <strong>anında +1 Seviye terfi ettirmeye</strong> yetecek <strong>1.500 💎 Cyber-Core + 500 ⚙ Gear</strong> verir.",
-          "Grants <strong>1,500 💎 Cyber-Core + 500 ⚙ Gear</strong> — enough to <strong>instantly promote any Commander by +1 Level</strong> without waiting 20 levels."
+          "Seçtiğiniz Komutanı 25 bölüm beklemeden <strong>anında +1 Seviye terfi ettirmeye</strong> yetecek <strong>1.500 💎 Cyber-Core + 500 ⚙ Gear</strong> verir.",
+          "Grants <strong>1,500 💎 Cyber-Core + 500 ⚙ Gear</strong> — enough to <strong>instantly promote any Commander by +1 Level</strong> without waiting 25 levels."
         ],
         [
           "Her 2 başarılı bölümde bir geçiş reklamı gösterilir. 300 TL VIP satın alarak kaldırılabilir.",
@@ -2523,7 +2515,7 @@
         developerMode: false,
         qualityMode: "high",
         attConsentStatus: "unset",
-        trainerActive: true,
+        trainerActive: false,
         trainerStep: 0, // 0..3
         trainerCompletedOnce: false,
         levelElapsedSeconds: 0,
@@ -2604,8 +2596,8 @@
         }
         const h = state.heroProgress[heroKey];
         const lv = Math.max(1, Math.min(10, h.lv || 1));
-        // 20 Bölümde bir seviye atlar (Lv1->2: 20 bölüm, Lv2->3: 25 bölüm, Lv3->4: 30 bölüm...)
-        const reqXp = 20 + (lv - 1) * 5;
+        // Her 25 Bölümde bir seviye atlar (25 bölümde bir güçlenir)
+        const reqXp = 25;
         // 1 Elmas = 1 TL ekonomisi: Elmas ile 1 tur seviye atlatma maliyeti Lv1->2 için 350 💎 (₺454.99 / $12.99), her seviyede +100 💎 artar
         const gemCost = 350 + (lv - 1) * 100;
         return {
@@ -2634,7 +2626,7 @@
         h.xp = (h.xp || 0) + amount;
         let leveledUp = false;
         while (h.lv < 10) {
-          const req = 20 + (h.lv - 1) * 5;
+          const req = 25;
           if (h.xp >= req) {
             h.xp -= req;
             h.lv++;
@@ -2680,6 +2672,10 @@
             }
             if (typeof parsed.trainerCompletedOnce === "boolean") {
               state.trainerCompletedOnce = parsed.trainerCompletedOnce;
+            }
+            if (localStorage.getItem("gk_tutorial_shown_once") === "1" || state.unlockedLevel > 1 || Object.keys(state.completedLevels || {}).length > 0) {
+              state.trainerCompletedOnce = true;
+              state.trainerActive = false;
             }
             if (typeof parsed.qualityMode === "string") state.qualityMode = parsed.qualityMode;
             if (typeof parsed.attConsentStatus === "string") state.attConsentStatus = parsed.attConsentStatus;
@@ -3438,10 +3434,15 @@
         autonomousDrones = [];
         syncAutonomousDrones();
 
-        // İlk kez Bölüm 1'e girildiğinde Trainer (Öğrenme) Modu otomatik açılır
-        if (state.level === 1 && !state.trainerCompletedOnce) {
+        // Eğitim (Trainer) sekmesi yalnızca oyuna İLK KEZ girildiğinde (Bölüm 1) bir defa açılır, bir daha otomatik gelmez!
+        if (state.level === 1 && state.unlockedLevel === 1 && !state.trainerCompletedOnce && localStorage.getItem("gk_tutorial_shown_once") !== "1") {
           state.trainerActive = true;
           state.trainerStep = 0;
+          state.trainerCompletedOnce = true;
+          try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
+          saveProgress();
+        } else {
+          state.trainerActive = false;
         }
 
         document.getElementById("bossAlertBanner").classList.add("hidden");
@@ -3514,9 +3515,18 @@
         spawnQueue = buildWaveQueue(state.level, state.waveIndex);
         spawnTimer = 0.15;
         waveInProgress = true;
-        if (state.trainerActive && state.trainerStep === 2) {
+        if (state.trainerActive && state.trainerStep >= 1) {
           state.trainerStep = 3;
+          state.trainerCompletedOnce = true;
+          try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
+          saveProgress();
           updateTrainerUI();
+          setTimeout(() => {
+            if (state.trainerActive) {
+              state.trainerActive = false;
+              updateTrainerUI();
+            }
+          }, 4000);
         }
         updateHUD();
         updateWaveBannerUI();
@@ -3687,22 +3697,26 @@
         const wxEn = activeWeather && activeWeather.type !== "none" ? ` • ${activeWeather.labelEn}` : "";
         const gateTagTr = (gateCount > 1 ? `⚠️ ${gateCount} Kapı` : `1 Giriş`) + wxTr;
         const gateTagEn = (gateCount > 1 ? `⚠️ ${gateCount} Gates` : `1 Gate`) + wxEn;
+        const pillBox = document.getElementById("waveStatusPillBox");
         if (state.waveWaitingForPlayer) {
+          if (pillBox) pillBox.className = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-100 transition-opacity duration-300";
           banner.textContent = state.endlessMode
             ? L(`♾️ SONSUZ (${gateCount} Kapı) — Kule kurup başlatın!`, `♾️ ENDLESS (${gateCount} Gates) — Build & start!`)
             : (state.lang === "en"
-              ? `${planet.shortName} • ${gateTagEn} (${prof.en})`
-              : `🌍 ${planet.shortName} • ${gateTagTr} (${prof.tr})`);
+              ? `${planet.shortName} • ${gateTagEn}`
+              : `🌍 ${planet.shortName} • ${gateTagTr}`);
           startBtn.classList.remove("hidden");
         } else if (!waveInProgress) {
+          if (pillBox) pillBox.className = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-95 transition-opacity duration-300";
           banner.textContent = state.lang === "en"
             ? `Next Wave (${state.waveIndex + 1}/${waveTotalStr}) [${gateTagEn}]: ${Math.max(0, waveBreakTimer).toFixed(1)}s`
             : `Sonraki Dalga (${state.waveIndex + 1}/${waveTotalStr}) [${gateTagTr}]: ${Math.max(0, waveBreakTimer).toFixed(1)} sn`;
           startBtn.classList.remove("hidden");
         } else {
+          if (pillBox) pillBox.className = "bg-slate-950/60 border border-sky-500/25 px-2 py-0.5 rounded-lg text-[9.5px] text-cyan-200/90 font-medium truncate flex items-center gap-1 opacity-75 transition-opacity duration-300";
           banner.textContent = state.lang === "en"
-            ? `🔥 Wave ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagEn} • ${planet.shortName}`
-            : `🔥 Dalga ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagTr} • ${planet.shortName}`;
+            ? `🔥 Wave ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagEn}`
+            : `🔥 Dalga ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagTr}`;
           startBtn.classList.add("hidden");
         }
       }
@@ -6154,7 +6168,7 @@
         document.getElementById("hudBaseHp").textContent = `${state.baseHp}/${state.maxBaseHp}`;
         const hpPct = Math.max(0, Math.round((state.baseHp / Math.max(1, state.maxBaseHp)) * 100));
         document.getElementById("hudBaseHpPct").textContent = hpPct + "%";
-        document.getElementById("hudDefenseLv").textContent = state.skills.hpLv + (state.hqShieldHp > 0 ? ` (+${state.hqShieldHp}🛡)` : "");
+        document.getElementById("hudDefenseLv").textContent = `${state.skills.hpLv} • 🛡${state.hqShieldHp}`;
         document.getElementById("hudGold").textContent = state.gold;
         document.getElementById("hudGearMini").textContent = state.gear;
         document.getElementById("hudGear").textContent = state.gear;
@@ -6226,23 +6240,22 @@
 
       function updateSocketInspector() {
         const sock = SOCKETS[state.selectedSocketIndex];
-        if (!sock) return;
 
         const buildList = document.getElementById("buildTowerList");
         const instPanel = document.getElementById("installedTowerPanel");
         const badge = document.getElementById("socketBadge");
         const bottomUpLbl = document.getElementById("lblBottomUpgrade");
 
-        badge.textContent = L(`CEP #${sock.id}`, `BAY #${sock.id}`);
-
-        if (!sock.tower) {
+        if (!sock || !sock.tower) {
+          badge.textContent = sock ? L(`CEP #${sock.id}`, `BAY #${sock.id}`) : L("KULELER", "TOWERS");
           badge.className = "px-2 py-0.5 text-[9px] font-cyber font-bold rounded bg-sky-500/20 text-sky-300 border border-sky-400/50 shrink-0";
-          document.getElementById("selectedSocketTitle").textContent = L("TAKTİK CEP SEÇİLİ", "TACTICAL BAY SELECTED");
+          document.getElementById("selectedSocketTitle").textContent = sock ? L("KULE SEÇİN", "SELECT TOWER") : L("YUVAYA DOKUNUN", "TAP A BAY");
           document.getElementById("selectedSocketSubtitle").textContent = L("— Kule seçin", "— Choose tower");
           if (bottomUpLbl) bottomUpLbl.textContent = L("Siber Evrim", "Evolution");
           buildList.classList.remove("hidden");
           instPanel.classList.add("hidden");
           instPanel.classList.remove("flex");
+          return;
         } else {
           const t = sock.tower;
           const tDef = TOWER_TYPES[t.typeKey];
@@ -6251,24 +6264,20 @@
           const effRate = (lvStats.fireRate * getRateMultiplier()).toFixed(1);
           const locName = getTowerName(t.typeKey);
 
+          badge.textContent = L(`CEP #${sock.id}`, `BAY #${sock.id}`);
           badge.className = "px-2 py-0.5 text-[9px] font-cyber font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0";
-          document.getElementById("selectedSocketTitle").textContent = L(`${locName.toUpperCase()} KURULU`, `${locName.toUpperCase()} DEPLOYED`);
+          document.getElementById("selectedSocketTitle").textContent = L(`${locName.toUpperCase()}`, `${locName.toUpperCase()}`);
           document.getElementById("selectedSocketSubtitle").textContent = L("— Yükselt / Sat", "— Upgrade / Sell");
           buildList.classList.add("hidden");
           instPanel.classList.remove("hidden");
           instPanel.classList.add("flex");
 
           document.getElementById("instTowerName").textContent = locName;
-          document.getElementById("instTowerLevel").textContent = `Lv.${t.level}/3`;
           document.getElementById("instTowerTargetTag").textContent = getTowerTargetLabel(t.typeKey);
           document.getElementById("instTowerDmg").textContent = effDmg;
-          document.getElementById("instTowerRate").textContent = effRate + L("/sn", "/s");
+          document.getElementById("instTowerRate").textContent = effRate + L("/s", "/s");
           document.getElementById("instTowerRange").textContent = lvStats.range + "m";
           document.getElementById("instTowerSpecial").textContent = getTowerSpecialLabel(t.typeKey);
-
-          const frozenWarn = document.getElementById("bossFrozenWarning");
-          if (t.frozenTimer > 0) frozenWarn.classList.remove("hidden");
-          else frozenWarn.classList.add("hidden");
 
           document.getElementById("instTowerLevel").textContent = `${"★".repeat(t.level)} Lv.${t.level}/3`;
           const targetLabels = {
@@ -6280,54 +6289,46 @@
           const prioBtn = document.getElementById("btnCycleTargetPriority");
           if (prioBtn) prioBtn.textContent = targetLabels[t.targetMode || "first"];
 
-          // Seviye 3 Evrim Dalı (Mod A / Mod B) Görünümü
           const bA = document.getElementById("btnSelectBranchA");
           const bB = document.getElementById("btnSelectBranchB");
-          if (bA && bB && tDef.branchA && tDef.branchB) {
-            const curBranch = t.branch || "A";
-            document.getElementById("lblBranchAName").textContent = state.lang === "en" ? tDef.branchA.nameEn : tDef.branchA.nameTr;
-            document.getElementById("lblBranchBName").textContent = state.lang === "en" ? tDef.branchB.nameEn : tDef.branchB.nameTr;
-            const branchRowEl = document.getElementById("branchSelectorRow");
-            const branchHintEl = document.getElementById("lblBranchRowHint");
-            if (t.level < 3) {
-              document.getElementById("lblBranchAState").textContent = "🔒 SV.3";
-              document.getElementById("lblBranchBState").textContent = "🔒 SV.3";
-              if (branchRowEl) branchRowEl.className = "hidden";
-              if (branchHintEl) branchHintEl.className = "hidden";
-            } else {
-              document.getElementById("lblBranchAState").textContent = curBranch === "A" ? L("AKTİF", "ACTIVE") : L("SEÇ", "PICK");
-              document.getElementById("lblBranchBState").textContent = curBranch === "B" ? L("AKTİF", "ACTIVE") : L("SEÇ", "PICK");
-              if (branchRowEl) branchRowEl.className = "grid grid-cols-2 gap-1.5 opacity-100 transition";
-              if (branchHintEl) {
-                branchHintEl.className = "font-cyber font-bold text-slate-400 text-[9px]";
-                branchHintEl.textContent = L("✨ Seviye 3 Evrim Dalı Aktif (İstediğiniz Dalı Seçin):", "✨ Lv.3 Evolution Branch Active (Select Branch):");
-              }
-            }
-            bA.className = curBranch === "A"
-              ? "py-1 px-2 rounded-lg text-[9.5px] font-cyber font-bold border transition flex items-center justify-between bg-amber-500/25 border-amber-400 text-amber-200"
-              : "py-1 px-2 rounded-lg text-[9.5px] font-cyber font-bold border transition flex items-center justify-between bg-slate-900/90 border-slate-700 text-slate-300";
-            bB.className = curBranch === "B"
-              ? "py-1 px-2 rounded-lg text-[9.5px] font-cyber font-bold border transition flex items-center justify-between bg-fuchsia-500/25 border-fuchsia-400 text-fuchsia-200"
-              : "py-1 px-2 rounded-lg text-[9.5px] font-cyber font-bold border transition flex items-center justify-between bg-slate-900/90 border-slate-700 text-slate-300";
-          }
-
+          const branchRowEl = document.getElementById("branchSelectorRow");
           const upBtn = document.getElementById("btnUpgradeTower");
-          if (t.level >= 3) {
-            upBtn.textContent = L("MAKSİMUM SEVİYE (LV.3)", "MAX LEVEL (LV.3)");
-            upBtn.disabled = true;
-            upBtn.className = "flex-1 py-1.5 px-3 rounded-xl font-cyber font-bold text-xs bg-slate-800 text-slate-500 cursor-not-allowed";
-            if (bottomUpLbl) bottomUpLbl.textContent = L("Maks. Sv", "Max Lv");
-          } else {
+
+          if (t.level < 3) {
+            if (branchRowEl) {
+              branchRowEl.classList.add("hidden");
+              branchRowEl.classList.remove("grid");
+            }
             const nextCost = getTowerCostWithHero(tDef.levels[t.level].cost);
             upBtn.textContent = L(`⬆ YÜKSELT (${nextCost} ⚡)`, `⬆ UPGRADE (${nextCost} ⚡)`);
             upBtn.disabled = false;
             upBtn.className = "flex-1 py-1.5 px-3 rounded-xl font-cyber font-bold text-xs bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-slate-950 transition";
             if (bottomUpLbl) bottomUpLbl.textContent = L(`Yükselt (${nextCost}⚡)`, `Upgrade (${nextCost}⚡)`);
+          } else {
+            // Seviye 3 olduğunda Yükselt butonu gizlenir, yerine aynı satırda Dal A / Dal B seçimi açılır (Ekran yüksekliği hiç değişmez!)
+            upBtn.className = "hidden";
+            if (branchRowEl) {
+              branchRowEl.classList.remove("hidden");
+              branchRowEl.classList.add("grid");
+            }
+            if (bA && bB && tDef.branchA && tDef.branchB) {
+              const curBranch = t.branch || "A";
+              document.getElementById("lblBranchAName").textContent = (state.lang === "en" ? tDef.branchA.nameEn : tDef.branchA.nameTr).split("(")[0].trim();
+              document.getElementById("lblBranchBName").textContent = (state.lang === "en" ? tDef.branchB.nameEn : tDef.branchB.nameTr).split("(")[0].trim();
+              document.getElementById("lblBranchAState").textContent = curBranch === "A" ? L("AKTİF", "ON") : L("SEÇ", "PICK");
+              document.getElementById("lblBranchBState").textContent = curBranch === "B" ? L("AKTİF", "ON") : L("SEÇ", "PICK");
+              bA.className = curBranch === "A"
+                ? "py-1.5 px-1.5 rounded-xl text-[9px] font-cyber font-bold border transition flex items-center justify-between bg-amber-500/25 border-amber-400 text-amber-200"
+                : "py-1.5 px-1.5 rounded-xl text-[9px] font-cyber font-bold border transition flex items-center justify-between bg-slate-900/90 border-slate-700 text-slate-300";
+              bB.className = curBranch === "B"
+                ? "py-1.5 px-1.5 rounded-xl text-[9px] font-cyber font-bold border transition flex items-center justify-between bg-fuchsia-500/25 border-fuchsia-400 text-fuchsia-200"
+                : "py-1.5 px-1.5 rounded-xl text-[9px] font-cyber font-bold border transition flex items-center justify-between bg-slate-900/90 border-slate-700 text-slate-300";
+            }
+            if (bottomUpLbl) bottomUpLbl.textContent = L("Maks. Sv", "Max Lv");
           }
 
           document.getElementById("btnSellTower").textContent = L(`Sat (+${lvStats.refund} ⚡)`, `Sell (+${lvStats.refund} ⚡)`);
         }
-        requestAnimationFrame(resizeCanvas);
       }
 
       canvas.addEventListener("pointerdown", (ev) => {
@@ -6439,17 +6440,33 @@
             updateTrainerUI();
           }
           updateSocketInspector();
+        } else {
+          // Haritada boş bir yere dokunulduğunda: kurulu kule seçiliyse seçimi kapat ve 6 kule kurulum listesine dön!
+          const curSock = SOCKETS[state.selectedSocketIndex];
+          if (curSock && curSock.tower) {
+            SoundFX.uiClick();
+            let nearestEmptyIdx = -1;
+            let bestEmptyDist = Infinity;
+            SOCKETS.forEach((s, idx) => {
+              if (!s.tower && !(s.crystalHp > 0)) {
+                const dEmpty = Math.hypot(s.x - vx, s.y - vy);
+                if (dEmpty < bestEmptyDist) {
+                  bestEmptyDist = dEmpty;
+                  nearestEmptyIdx = idx;
+                }
+              }
+            });
+            state.selectedSocketIndex = nearestEmptyIdx; // Boş cep yoksa -1 olur ve yine Kuleler listesi açılır
+            updateSocketInspector();
+          }
         }
       });
 
       document.getElementById("btnBackToBuildHint").addEventListener("click", () => {
-        const emptyIdx = SOCKETS.findIndex(s => !s.tower);
-        if (emptyIdx !== -1) {
-          state.selectedSocketIndex = emptyIdx;
-          updateSocketInspector();
-        } else {
-          showToast("Tüm taktik cepler dolu! Bir kuleyi yükseltin veya satın.");
-        }
+        SoundFX.uiClick();
+        const emptyIdx = SOCKETS.findIndex(s => !s.tower && !(s.crystalHp > 0));
+        state.selectedSocketIndex = emptyIdx; // Tüm cepler doluysa bile -1 olup kule listesine döner
+        updateSocketInspector();
       });
 
       // 1-Dokunuşla Kule Kurulumu
@@ -6462,14 +6479,12 @@
           if (!tDef) return;
 
           if (!isTowerUnlocked(typeKey)) {
-            showToast(`🔒 ${tDef.name} Bölüm ${tDef.unlockLevel}'de açılır! (Veya Menüden Test Modunu açın)`);
+            showToast(L(`🔒 ${tDef.name} Bölüm ${tDef.unlockLevel}'de açılır!`, `🔒 ${getTowerName(typeKey)} unlocks at Level ${tDef.unlockLevel}!`));
             return;
           }
 
           let sock = SOCKETS[state.selectedSocketIndex];
-          if (!sock) return;
-
-          if (sock.tower || sock.crystalHp > 0) {
+          if (!sock || sock.tower || sock.crystalHp > 0) {
             const emptyIdx = SOCKETS.findIndex(s => !s.tower && !(s.crystalHp > 0));
             if (emptyIdx === -1) {
               showToast("Boş taktik cep kalmadı!");
@@ -7049,6 +7064,16 @@
         });
       }
 
+      const btnHeroesPause = document.getElementById("btnOpenHeroesFromPause");
+      if (btnHeroesPause) {
+        btnHeroesPause.addEventListener("click", () => {
+          SoundFX.uiClick();
+          state.paused = true;
+          document.getElementById("modalPauseMenu").classList.add("hidden");
+          renderMissionsAndHeroesModal();
+          document.getElementById("modalMissions").classList.remove("hidden");
+        });
+      }
       document.getElementById("btnOpenIosGuide").addEventListener("click", () => {
         SoundFX.uiClick();
         state.paused = true;
