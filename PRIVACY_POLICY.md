@@ -14,7 +14,7 @@ The App uses Google AdMob to display banner, interstitial, and rewarded video ad
 - For more details, review Google's Privacy Policy: [https://policies.google.com/privacy](https://policies.google.com/privacy).
 
 ## 3. In-App Purchases (Apple StoreKit)
-In-app purchases (such as the "VIP Reklamsız" lifetime unlock) are processed directly and securely by Apple via StoreKit. We do not receive, process, or store your credit card or financial account information.
+In-app purchases (such as the "VIP Reklamsız" lifetime unlock and Consumable Gem Packs) are processed directly and securely by Apple via StoreKit. We do not receive, process, or store your credit card or financial account information.
 
 ## 4. Children’s Privacy
 The App does not knowingly collect personal information from children under the age of 13.

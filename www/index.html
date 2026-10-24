@@ -1118,7 +1118,16 @@
       </div>
 
       <div class="flex flex-col gap-2.5 text-xs">
-        <!-- Only the single App Store Connect product vip_lifetime is currently for sale. -->
+        <!-- Mevcut Hazine Özeti -->
+        <div class="bg-slate-900/95 border border-fuchsia-500/35 rounded-xl px-3 py-2 flex items-center justify-between">
+          <span class="text-slate-300 font-semibold">Mevcut Elmas Hazineniz:</span>
+          <div class="flex items-center gap-3 font-cyber font-bold text-sm">
+            <span class="text-fuchsia-300">💎 <span id="shopCoreCount">5</span> ELMAS</span>
+            <span class="text-sky-300">⚙ <span id="shopGearCount">35</span> GEAR</span>
+          </div>
+        </div>
+
+        <!-- 1. Kalıcı VIP Reklamsız Paket (vip_lifetime) -->
         <div class="bg-gradient-to-r from-emerald-950/90 to-slate-900 border-2 border-emerald-400/70 rounded-xl p-3 flex items-center justify-between gap-3">
           <div>
             <div class="flex items-center gap-1.5">
@@ -1130,6 +1139,127 @@
           <button id="btnBuyRemoveAds" class="shrink-0 px-3 py-2 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-cyber font-bold transition shadow-md">
             <span id="vipPriceLabel">300 TL</span>
           </button>
+        </div>
+
+        <!-- 2. 8 Kademeli Bonuslu Elmas Paketleri (1 Elmas = 1,5 TL Baz + Bonus) -->
+        <div class="pt-1">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-cyber font-bold text-xs text-fuchsia-300">💎 SİBER ELMAS PAKETLERİ (BONUSLU)</span>
+            <span class="text-[10px] text-amber-300 font-semibold">Üst Paketlerde +%50'ye Varan Bonus!</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <!-- 1: 50 Elmas -->
+            <div class="bg-slate-900/90 border border-sky-500/35 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-cyan-200 text-xs">💎 50 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">BAŞLANGIÇ</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-0.5">İlk Siber Evrim yükseltmeleri için hızlı destek.</p>
+              </div>
+              <button data-gem-pack="gems_50" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-sky-400 hover:bg-sky-300 text-slate-950 font-cyber font-bold text-xs transition shadow">
+                <span id="price_gems_50">75 TL</span>
+              </button>
+            </div>
+
+            <!-- 2: 100 + 15 Bonus = 115 Elmas -->
+            <div class="bg-slate-900/90 border border-cyan-500/40 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-cyan-300 text-xs">💎 115 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-300 font-bold">+15 BONUS</span>
+                </div>
+                <p class="text-[10px] text-slate-300 mt-0.5">100 + <strong>15 Bonus 💎</strong> (+%15 Hediye)</p>
+              </div>
+              <button data-gem-pack="gems_100" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-cyber font-bold text-xs transition shadow">
+                <span id="price_gems_100">150 TL</span>
+              </button>
+            </div>
+
+            <!-- 3: 200 + 40 Bonus = 240 Elmas -->
+            <div class="bg-slate-900/90 border border-fuchsia-500/40 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-fuchsia-200 text-xs">💎 240 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-fuchsia-500/25 text-fuchsia-300 font-bold">+40 BONUS</span>
+                </div>
+                <p class="text-[10px] text-slate-300 mt-0.5">200 + <strong>40 Bonus 💎</strong> (+%20 Hediye)</p>
+              </div>
+              <button data-gem-pack="gems_200" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-fuchsia-400 hover:bg-fuchsia-300 text-slate-950 font-cyber font-bold text-xs transition shadow">
+                <span id="price_gems_200">300 TL</span>
+              </button>
+            </div>
+
+            <!-- 4: 400 + 100 Bonus = 500 Elmas -->
+            <div class="bg-slate-900/90 border border-fuchsia-400/50 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-fuchsia-300 text-xs">💎 500 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-amber-500/25 text-amber-300 font-bold">+100 BONUS</span>
+                </div>
+                <p class="text-[10px] text-slate-300 mt-0.5">400 + <strong>100 Bonus 💎</strong> (Kahraman Terfisi!)</p>
+              </div>
+              <button data-gem-pack="gems_400" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-fuchsia-400 hover:bg-fuchsia-300 text-slate-950 font-cyber font-bold text-xs transition shadow">
+                <span id="price_gems_400">600 TL</span>
+              </button>
+            </div>
+
+            <!-- 5: 500 + 150 Bonus = 650 Elmas -->
+            <div class="bg-slate-900/95 border border-amber-500/45 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-amber-200 text-xs">💎 650 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-amber-500/25 text-amber-300 font-bold">+150 BONUS</span>
+                </div>
+                <p class="text-[10px] text-slate-300 mt-0.5">500 + <strong>150 Bonus 💎</strong> (+%30 Hediye)</p>
+              </div>
+              <button data-gem-pack="gems_500" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-cyber font-bold text-xs transition shadow">
+                <span id="price_gems_500">750 TL</span>
+              </button>
+            </div>
+
+            <!-- 6: 1.000 + 350 Bonus = 1.350 Elmas -->
+            <div class="bg-gradient-to-br from-amber-950/60 to-slate-900 border-2 border-amber-400/70 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-amber-300 text-xs">💎 1.350 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-black">🔥 POPÜLER</span>
+                </div>
+                <p class="text-[10px] text-slate-200 mt-0.5">1.000 + <strong>350 Bonus 💎</strong> (+%35 Hediye)</p>
+              </div>
+              <button data-gem-pack="gems_1000" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-cyber font-extrabold text-xs transition shadow-md">
+                <span id="price_gems_1000">1.500 TL</span>
+              </button>
+            </div>
+
+            <!-- 7: 5.000 + 2.000 Bonus = 7.000 Elmas -->
+            <div class="bg-gradient-to-br from-fuchsia-950/70 to-slate-900 border-2 border-fuchsia-400/75 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-fuchsia-200 text-xs">💎 7.000 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-fuchsia-400 text-slate-950 font-black">+2.000 BONUS</span>
+                </div>
+                <p class="text-[10px] text-slate-200 mt-0.5">5.000 + <strong>2.000 Bonus 💎</strong> (1 Kahraman Lv.10!)</p>
+              </div>
+              <button data-gem-pack="gems_5000" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-gradient-to-r from-fuchsia-400 to-cyan-400 hover:from-fuchsia-300 hover:to-cyan-300 text-slate-950 font-cyber font-extrabold text-xs transition shadow-md">
+                <span id="price_gems_5000">7.500 TL</span>
+              </button>
+            </div>
+
+            <!-- 8: 10.000 + 5.000 Bonus = 15.000 Elmas -->
+            <div class="bg-gradient-to-br from-amber-950/80 via-fuchsia-950/70 to-slate-900 border-2 border-yellow-300/80 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-cyber font-bold text-yellow-200 text-xs">💎 15.000 Elmas</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-yellow-300 text-slate-950 font-black">👑 +%50 BONUS</span>
+                </div>
+                <p class="text-[10px] text-slate-100 mt-0.5">10.000 + <strong>5.000 Bonus 💎</strong> (İmparator Paketi)</p>
+              </div>
+              <button data-gem-pack="gems_10000" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-400 hover:from-yellow-200 hover:to-orange-300 text-slate-950 font-cyber font-black text-xs transition shadow-lg">
+                <span id="price_gems_10000">15.000 TL</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="border-t border-slate-800 pt-2.5 flex flex-wrap items-center justify-between gap-2">
@@ -6175,6 +6305,10 @@
         document.getElementById("hudCyberCore").textContent = state.cyberCore;
         document.getElementById("labGearCount").textContent = state.gear;
         document.getElementById("labCoreCount").textContent = state.cyberCore;
+        const scEl = document.getElementById("shopCoreCount");
+        if (scEl) scEl.textContent = state.cyberCore;
+        const sgEl = document.getElementById("shopGearCount");
+        if (sgEl) sgEl.textContent = state.gear;
         document.getElementById("evoCurrencyMini").textContent = `${state.gear}⚙ • ${state.cyberCore}💎`;
 
         const evoReady = (state.gear >= 50 && state.cyberCore >= 5) || state.cyberCore >= 15;
@@ -6978,7 +7112,7 @@
       function tryUpgradeSkill(skillKey, gearCost, coreCost, label) {
         if (state.gear < gearCost || state.cyberCore < coreCost) {
           showToast(L(
-            `💎 Yetersiz Kaynak! ${gearCost > 0 ? gearCost + " ⚙ ve " : ""}${coreCost} 💎 gerekli (Mağazada 1 💎 = 1 ₺).`,
+            `💎 Yetersiz Kaynak! ${gearCost > 0 ? gearCost + " ⚙ ve " : ""}${coreCost} 💎 gerekli (Mağazada Bonuslu Elmas Paketleri Mevcut).`,
             `💎 Not enough resources! Need ${gearCost > 0 ? gearCost + " ⚙ & " : ""}${coreCost} 💎.`
           ));
           return;
@@ -7051,7 +7185,21 @@
         } catch (error) { showToast(error.message || "App Store satın alma açılamadı."); }
       });
 
-      // Sync UI when the App Store reports an existing or newly purchased entitlement.
+      // 8 Bonus Gem Packs Purchase Buttons (StoreKit 2 Consumables)
+      document.querySelectorAll(".btn-buy-gems").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          SoundFX.uiClick();
+          const packId = btn.getAttribute("data-gem-pack");
+          if (!packId) return;
+          try {
+            await window.GameMonetization.buyGemPack(packId);
+          } catch (error) {
+            showToast(error.message || "App Store satın alma penceresi açılamadı.");
+          }
+        });
+      });
+
+      // Sync UI when the App Store reports an existing or newly purchased entitlement or gem pack.
       if (window.GameMonetization) {
         window.GameMonetization.onVipChange((owned) => {
           state.removeAds = Boolean(owned);
@@ -7062,6 +7210,31 @@
         window.GameMonetization.onVipPrice((price) => {
           if (price) document.getElementById("vipPriceLabel").textContent = price;
         });
+        if (typeof window.GameMonetization.onGemPrices === "function") {
+          window.GameMonetization.onGemPrices((prices) => {
+            Object.entries(prices || {}).forEach(([packId, priceStr]) => {
+              const el = document.getElementById("price_" + packId);
+              if (el && priceStr) el.textContent = priceStr;
+            });
+          });
+        }
+        if (typeof window.GameMonetization.onGemGranted === "function") {
+          window.GameMonetization.onGemGranted((grantedGems, packInfo) => {
+            const added = Number(grantedGems) || 0;
+            if (added <= 0) return;
+            SoundFX.repair();
+            triggerHaptic("heavy");
+            state.cyberCore += added;
+            saveProgress();
+            updateHUD();
+            updateLobbyUI();
+            if (typeof renderMissionsAndHeroesModal === "function") renderMissionsAndHeroesModal();
+            showToast(L(
+              `💎 +${added} Elmas (${packInfo?.bonusGems ? "+" + packInfo.bonusGems + " Bonus Dahil" : "Başlangıç Paketi"}) hesabınıza eklendi!`,
+              `💎 +${added} Gems added to your treasury!`
+            ));
+          });
+        }
       }
 
       const btnHeroesPause = document.getElementById("btnOpenHeroesFromPause");
@@ -7428,7 +7601,7 @@
           if (state.cyberCore < info.gemCost) {
             SoundFX.uiClick();
             showToast(L(
-              `💎 Yetersiz Elmas! Komutan terfisi için ${info.gemCost} 💎 gerekli (Şimdilik oyun içi elmas biriktirebilirsiniz).`,
+              `💎 Yetersiz Elmas! Komutan terfisi için ${info.gemCost} 💎 gerekli (Mağazadan Bonuslu Elmas Paketi alabilirsiniz).`,
               `💎 Not enough Gems! Need ${info.gemCost} 💎 to promote Commander (Earn gems in the game).`
             ));
             document.getElementById("modalMissions").classList.add("hidden");

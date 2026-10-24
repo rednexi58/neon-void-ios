@@ -8,6 +8,19 @@ const IOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
 const TEST_ADS = __GK_TEST_ADS__;
 const VIP_ID = 'vip_lifetime';
 
+const GEM_PACKS = [
+  { id: 'gems_50', baseGems: 50, bonusGems: 0, totalGems: 50, defaultPrice: '75 TL' },
+  { id: 'gems_100', baseGems: 100, bonusGems: 15, totalGems: 115, defaultPrice: '150 TL' },
+  { id: 'gems_200', baseGems: 200, bonusGems: 40, totalGems: 240, defaultPrice: '300 TL' },
+  { id: 'gems_400', baseGems: 400, bonusGems: 100, totalGems: 500, defaultPrice: '600 TL' },
+  { id: 'gems_500', baseGems: 500, bonusGems: 150, totalGems: 650, defaultPrice: '750 TL' },
+  { id: 'gems_1000', baseGems: 1000, bonusGems: 350, totalGems: 1350, defaultPrice: '1.500 TL' },
+  { id: 'gems_5000', baseGems: 5000, bonusGems: 2000, totalGems: 7000, defaultPrice: '7.500 TL' },
+  { id: 'gems_10000', baseGems: 10000, bonusGems: 5000, totalGems: 15000, defaultPrice: '15.000 TL' }
+];
+
+const GEM_PACK_MAP = Object.fromEntries(GEM_PACKS.map(p => [p.id, p]));
+
 const ADS = {
   interstitial: TEST_ADS
     ? 'ca-app-pub-3940256099942544/4411468910'
@@ -26,8 +39,12 @@ let iapReady = false;
 let iapInitializing = null;
 let vipOwned = false;
 let vipPrice = '';
+let gemPrices = {};
 let vipChangeListener = null;
 let vipPriceListener = null;
+let gemPriceListener = null;
+let gemGrantListener = null;
+const processedTxIds = new Set();
 
 const diagnostics = {
   ios: IOS,
@@ -55,7 +72,7 @@ const log = (name, err) => {
   console.warn('[Gezegeni Koru]', name, err || '');
   const text = errorText(err);
 
-  if (/StoreKit|VIP|purchase/i.test(name)) {
+  if (/StoreKit|VIP|purchase|gem/i.test(name)) {
     report('storeError', `${name}: ${text}`);
   } else {
     report('adsError', `${name}: ${text}`);
@@ -108,6 +125,12 @@ const emitPrice = () => {
   }
 };
 
+const emitGemPrices = () => {
+  if (typeof gemPriceListener === 'function') {
+    gemPriceListener({ ...gemPrices });
+  }
+};
+
 const refreshVip = () => {
   if (!IOS || !iapReady) return false;
 
@@ -153,37 +176,61 @@ async function initializeIAP() {
 
       if (!iapHooksRegistered) {
         iapHooksRegistered = true;
-        store.register({
-          id: VIP_ID,
-          type: ProductType.NON_CONSUMABLE,
-          platform: Platform.APPLE_APPSTORE
-        });
+        const catalog = [
+          {
+            id: VIP_ID,
+            type: ProductType.NON_CONSUMABLE,
+            platform: Platform.APPLE_APPSTORE
+          },
+          ...GEM_PACKS.map(pack => ({
+            id: pack.id,
+            type: ProductType.CONSUMABLE,
+            platform: Platform.APPLE_APPSTORE
+          }))
+        ];
+        store.register(catalog);
 
         store.when()
           .productUpdated(product => {
+            const priceStr =
+              product.getOffer()?.pricingPhases?.[0]?.price ||
+              product.pricing?.price ||
+              '';
             if (product.id === VIP_ID) {
               report('vipProduct', 'App Store’dan yüklendi');
-
-              vipPrice =
-                product.getOffer()?.pricingPhases?.[0]?.price ||
-                product.pricing?.price ||
-                '';
-
+              vipPrice = priceStr;
               emitPrice();
               refreshVip();
+            } else if (GEM_PACK_MAP[product.id] && priceStr) {
+              gemPrices[product.id] = priceStr;
+              emitGemPrices();
             }
           })
           .receiptUpdated(() => refreshVip())
           .approved(async transaction => {
-            if (!transaction.products?.some(item => item.id === VIP_ID)) {
-              return;
-            }
-
             try {
+              const txKey = transaction.transactionId || `${Date.now()}_${Math.random()}`;
+              const hasVip = transaction.products?.some(item => item.id === VIP_ID);
+              const gemItems = (transaction.products || [])
+                .map(item => GEM_PACK_MAP[item.id])
+                .filter(Boolean);
+
               await transaction.finish();
-              vipOwned = true;
-              emitOwned();
-              refreshVip();
+
+              if (hasVip) {
+                vipOwned = true;
+                emitOwned();
+                refreshVip();
+              }
+
+              if (gemItems.length > 0 && !processedTxIds.has(txKey)) {
+                processedTxIds.add(txKey);
+                gemItems.forEach(pack => {
+                  if (typeof gemGrantListener === 'function') {
+                    gemGrantListener(pack.totalGems, pack);
+                  }
+                });
+              }
             } catch (e) {
               log('Apple purchase finish', e);
             }
@@ -210,6 +257,13 @@ async function initializeIAP() {
       } else {
         report('vipProduct', 'App Store Connect’te vip_lifetime / Paid Apps bekleniyor');
       }
+
+      GEM_PACKS.forEach(pack => {
+        const gp = store.get(pack.id, Platform.APPLE_APPSTORE) || store.get(pack.id);
+        const pStr = gp?.getOffer()?.pricingPhases?.[0]?.price || gp?.pricing?.price || '';
+        if (pStr) gemPrices[pack.id] = pStr;
+      });
+      emitGemPrices();
 
       refreshVip();
       return true;
@@ -278,7 +332,6 @@ async function initializeAds() {
     initializedAds = true;
     report('ads', 'SDK hazır, izin kontrolü');
 
-    // Wrap UMP consent in its own try/catch so missing GDPR form in AdMob console NEVER blocks ads!
     try {
       let consent = await AdMob.requestConsentInfo();
       if (
@@ -319,6 +372,14 @@ window.GameMonetization = {
     return vipOwned;
   },
 
+  get gemPacks() {
+    return GEM_PACKS.slice();
+  },
+
+  get gemPrices() {
+    return { ...gemPrices };
+  },
+
   getDebugInfo() {
     return {
       ...diagnostics,
@@ -327,7 +388,8 @@ window.GameMonetization = {
       interstitialReady,
       rewardedReady,
       vipOwned,
-      vipPrice
+      vipPrice,
+      gemPrices
     };
   },
 
@@ -339,6 +401,15 @@ window.GameMonetization = {
   onVipPrice(callback) {
     vipPriceListener = callback;
     if (vipPrice) emitPrice();
+  },
+
+  onGemPrices(callback) {
+    gemPriceListener = callback;
+    if (Object.keys(gemPrices).length > 0) emitGemPrices();
+  },
+
+  onGemGranted(callback) {
+    gemGrantListener = callback;
   },
 
   async buyVIP() {
@@ -384,6 +455,42 @@ window.GameMonetization = {
     }
 
     return refreshVip();
+  },
+
+  async buyGemPack(packId) {
+    const pack = GEM_PACK_MAP[packId];
+    if (!pack) {
+      throw new Error('Geçersiz elmas paketi seçildi.');
+    }
+    if (!IOS) {
+      throw new Error('Elmas satın alımı yalnızca iOS App Store üzerinden yapılabilir.');
+    }
+    if (!iapReady) {
+      await initializeIAP();
+    }
+    if (!iapReady) {
+      throw new Error('App Store bağlantısı hazırlanıyor, lütfen birkaç saniye sonra tekrar deneyin.');
+    }
+
+    const cdv = getCdvPurchase();
+    let prod = cdv.store.get(packId, cdv.Platform.APPLE_APPSTORE) || cdv.store.get(packId);
+    if (!prod?.getOffer()) {
+      try { await cdv.store.update(); } catch (_) {}
+      prod = cdv.store.get(packId, cdv.Platform.APPLE_APPSTORE) || cdv.store.get(packId);
+    }
+
+    const offer = prod?.getOffer();
+    if (!offer) {
+      throw new Error(
+        `Elmas paketi (${packId}) App Store’dan yüklenemedi. App Store Connect’te ürünün tanımlı olduğundan emin olun.`
+      );
+    }
+
+    const outcome = await offer.order();
+    if (outcome?.isError) {
+      throw new Error(outcome.message || 'Elmas satın alma işlemi tamamlanamadı.');
+    }
+    return true;
   },
 
   async restoreVIP() {
@@ -457,8 +564,6 @@ window.GameMonetization = {
     }
   }
 };
-
-// Production-ready: diagnostic test overlay removed for clean player UI.
 
 if (IOS) {
   window.addEventListener('load', () => {
