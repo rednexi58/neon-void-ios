@@ -14,34 +14,21 @@ workflows:
       vars:
         BUNDLE_ID: "com.neonvoid.cyberdefense"
         APP_DISPLAY_NAME: "Gezegeni Koru"
-        GK_TEST_ADS: "0" # Production AdMob units active for App Store release
+        GK_TEST_ADS: "1" # Google demo ad units for this test build
+        APP_STORE_APPLE_ID: "6825732487"
       node: 20.11.0
       xcode: latest
     scripts:
       - name: Install NPM & Capacitor Dependencies
         script: |
-          npm install
+          set -e
+          npm ci --no-audit --no-fund
           npm run build:web
+          npm test
           if [ ! -d "ios" ]; then
             npx cap add ios
           fi
-          bash ios_config/apply_ios_settings.sh
-          # AdMob v6 uses UMP 2.x Swift names. UMP 3.x breaks ConsentExecutor.swift.
-          # Pin before cap sync, so CocoaPods resolves the matching UMP release.
-          ruby <<'RUBY'
-          podfile = 'ios/App/Podfile'
-          source = File.read(podfile)
-          pin = "pod 'GoogleUserMessagingPlatform', '2.7.0'"
-          unless source.include?(pin)
-            target = "target 'App' do"
-            abort "Missing App target in #{podfile}" unless source.include?(target)
-            source = source.sub(target, "#{target}\n  #{pin}")
-            File.write(podfile, source)
-          end
-          puts "Pinning GoogleUserMessagingPlatform to 2.7.0 for AdMob v6 compatibility"
-          RUBY
-          # cap add/sync can leave an old UMP 3.x Podfile.lock; re-resolve exact 2.7.0.
-          rm -f ios/App/Podfile.lock
+          # The sync hook configures iOS 15 and UMP 2.7.0 before CocoaPods.
           npx cap sync ios
       - name: Install Official Gezegeni Koru AppIcon into Xcode Assets.xcassets
         script: |
@@ -61,7 +48,12 @@ workflows:
       - name: Increment Build Number
         script: |
           cd ios/App
-          NEW_BUILD_NUMBER=$((BUILD_NUMBER + 100))
+          set -e
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID")
+          case "$LATEST_BUILD_NUMBER" in
+            ''|*[!0-9]*) echo "Cannot read the latest TestFlight build number"; exit 1 ;;
+          esac
+          NEW_BUILD_NUMBER=$((LATEST_BUILD_NUMBER + 1))
           echo "iOS Build Number: $NEW_BUILD_NUMBER"
           agvtool new-version -all "$NEW_BUILD_NUMBER"
           agvtool what-version -terse

@@ -1,7 +1,9 @@
 // This file is compiled by esbuild into www/native-monetization.js.
 // TestFlight uses demo ads (GK_TEST_ADS=1). Production requires GK_TEST_ADS=0.
+import { commitGrant, createDelivery } from './purchase-delivery.cjs';
 import { Capacitor } from '@capacitor/core';
-import { AdMob, AdmobConsentStatus } from '@capacitor-community/admob';
+import { presentAd } from './ad-presentation.cjs';
+import { AdMob, AdmobConsentStatus, InterstitialAdPluginEvents, RewardAdPluginEvents } from '@capacitor-community/admob';
 import * as CdvPurchasePkg from 'capacitor-plugin-cdv-purchase';
 
 const IOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
@@ -9,14 +11,14 @@ const TEST_ADS = __GK_TEST_ADS__;
 const VIP_ID = 'vip_lifetime';
 
 const GEM_PACKS = [
-  { id: 'gems_50', baseGems: 50, bonusGems: 0, totalGems: 50, defaultPrice: '75 TL' },
-  { id: 'gems_100', baseGems: 100, bonusGems: 15, totalGems: 115, defaultPrice: '150 TL' },
-  { id: 'gems_200', baseGems: 200, bonusGems: 40, totalGems: 240, defaultPrice: '300 TL' },
-  { id: 'gems_400', baseGems: 400, bonusGems: 100, totalGems: 500, defaultPrice: '600 TL' },
-  { id: 'gems_500', baseGems: 500, bonusGems: 150, totalGems: 650, defaultPrice: '750 TL' },
-  { id: 'gems_1000', baseGems: 1000, bonusGems: 350, totalGems: 1350, defaultPrice: '1.500 TL' },
-  { id: 'gems_5000', baseGems: 5000, bonusGems: 2000, totalGems: 7000, defaultPrice: '7.500 TL' },
-  { id: 'gems_10000', baseGems: 10000, bonusGems: 5000, totalGems: 15000, defaultPrice: '15.000 TL' }
+  { id: 'gems_50', baseGems: 50, bonusGems: 0, totalGems: 50 },
+  { id: 'gems_100', baseGems: 100, bonusGems: 15, totalGems: 115 },
+  { id: 'gems_200', baseGems: 200, bonusGems: 40, totalGems: 240 },
+  { id: 'gems_400', baseGems: 400, bonusGems: 100, totalGems: 500 },
+  { id: 'gems_500', baseGems: 500, bonusGems: 150, totalGems: 650 },
+  { id: 'gems_1000', baseGems: 1000, bonusGems: 350, totalGems: 1350 },
+  { id: 'gems_5000', baseGems: 5000, bonusGems: 2000, totalGems: 7000 },
+  { id: 'gems_10000', baseGems: 10000, bonusGems: 5000, totalGems: 15000 }
 ];
 
 const GEM_PACK_MAP = Object.fromEntries(GEM_PACKS.map(p => [p.id, p]));
@@ -35,6 +37,7 @@ let interstitialReady = false;
 let rewardedReady = false;
 let interstitialBusy = false;
 let rewardedBusy = false;
+let adRequestBusy = false;
 let iapReady = false;
 let iapInitializing = null;
 let vipOwned = false;
@@ -44,7 +47,45 @@ let vipChangeListener = null;
 let vipPriceListener = null;
 let gemPriceListener = null;
 let gemGrantListener = null;
-const processedTxIds = new Set();
+let gameReady = false;
+let orderBusy = false;
+let catalogListener = null;
+let adsInitializing = null;
+window.GamePurchaseLedger = { commitGrant };
+const delivery = createDelivery({
+  packs: GEM_PACK_MAP, vipId: VIP_ID,
+  grant: grant => gameReady && gemGrantListener ? gemGrantListener(grant) : false,
+  unlockVip: () => { if (!gameReady) return false; vipOwned = true; emitOwned(); return true; },
+  finish: transaction => getCdvPurchase().store.finish(transaction),
+  onError: error => log('Apple purchase delivery', error)
+});
+function emitCatalog() {
+  if (catalogListener) catalogListener({ ready: iapReady, ios: IOS, testAds: TEST_ADS,
+    busy: orderBusy, status: diagnostics.store, error: diagnostics.storeError,
+    products: Object.fromEntries([VIP_ID, ...GEM_PACKS.map(p => p.id)].map(id => {
+      const cdv = getCdvPurchase();
+      const product = cdv?.store.get(id, cdv?.Platform.APPLE_APPSTORE);
+      const price = product?.getOffer()?.pricingPhases?.[0]?.price || product?.pricing?.price || '';
+      return [id, { price, available: Boolean(gameReady && iapReady && price && product?.canPurchase) }];
+    })) });
+}
+async function orderProduct(id) {
+  if (orderBusy) throw new Error('Bir satın alma işlemi zaten açık.');
+  if (!gameReady || !IOS) throw new Error('Satın alma yalnızca kayıtları yüklenmiş iOS uygulamasında kullanılabilir.');
+  orderBusy = true; emitCatalog();
+  try {
+    if (!await initializeIAP()) throw new Error('App Store bağlantısı hazır değil. Mağazayı yenileyin.');
+    const cdv = getCdvPurchase();
+    const product = cdv.store.get(id, cdv.Platform.APPLE_APPSTORE);
+    const offer = product?.getOffer();
+    if (!product?.canPurchase || !offer || !offer.pricingPhases?.[0]?.price) {
+      throw new Error('Bu ürün App Store’dan henüz yüklenmedi veya işlem bekliyor. Mağazayı yenileyin.');
+    }
+    const result = await offer.order();
+    if (result?.isError) throw new Error(result.message || 'Satın alma tamamlanamadı.');
+    return true;
+  } finally { orderBusy = false; emitCatalog(); }
+}
 
 const diagnostics = {
   ios: IOS,
@@ -63,6 +104,7 @@ let refreshDiagnosticsUI = () => {};
 const report = (field, value) => {
   diagnostics[field] = String(value);
   refreshDiagnosticsUI();
+  emitCatalog();
 };
 
 const errorText = error =>
@@ -88,9 +130,6 @@ function getCdvPurchase() {
   }
   if (CdvPurchasePkg && CdvPurchasePkg.CdvPurchase && CdvPurchasePkg.CdvPurchase.store) {
     return CdvPurchasePkg.CdvPurchase;
-  }
-  if (CdvPurchasePkg && CdvPurchasePkg.default && CdvPurchasePkg.default.store) {
-    return CdvPurchasePkg.default;
   }
   return null;
 }
@@ -153,7 +192,7 @@ const refreshVip = () => {
 
 let iapHooksRegistered = false;
 async function initializeIAP() {
-  if (!IOS) return false;
+  if (!IOS || !gameReady) return false;
   if (iapReady) {
     refreshVip();
     return true;
@@ -205,50 +244,22 @@ async function initializeIAP() {
               gemPrices[product.id] = priceStr;
               emitGemPrices();
             }
+            emitCatalog();
           })
           .receiptUpdated(() => refreshVip())
-          .approved(async transaction => {
-            try {
-              const txKey = transaction.transactionId || `${Date.now()}_${Math.random()}`;
-              const hasVip = transaction.products?.some(item => item.id === VIP_ID);
-              const gemItems = (transaction.products || [])
-                .map(item => GEM_PACK_MAP[item.id])
-                .filter(Boolean);
-
-              await transaction.finish();
-
-              if (hasVip) {
-                vipOwned = true;
-                emitOwned();
-                refreshVip();
-              }
-
-              if (gemItems.length > 0 && !processedTxIds.has(txKey)) {
-                processedTxIds.add(txKey);
-                gemItems.forEach(pack => {
-                  if (typeof gemGrantListener === 'function') {
-                    gemGrantListener(pack.totalGems, pack);
-                  }
-                });
-              }
-            } catch (e) {
-              log('Apple purchase finish', e);
-            }
-          })
-          .verified(receipt => {
-            receipt.finish();
-            refreshVip();
-          })
-          .finished(() => refreshVip());
+          .approved(transaction => { void delivery.approve(transaction); })
+          .finished(() => { refreshVip(); emitCatalog(); });
 
         store.error(error => log('StoreKit error', error));
       }
 
-      await store.initialize([Platform.APPLE_APPSTORE]);
+      const errors = await store.initialize([Platform.APPLE_APPSTORE]);
+      if (errors?.length) throw new Error(errors.map(errorText).join('; '));
       try { await store.update(); } catch (_) {}
 
       iapReady = true;
-      report('store', 'SDK hazır');
+      report('storeError', '');
+      report('store', 'App Store hazır');
 
       const product = store.get(VIP_ID, Platform.APPLE_APPSTORE) || store.get(VIP_ID);
 
@@ -319,7 +330,7 @@ async function prepareRewarded() {
   }
 }
 
-async function initializeAds() {
+async function initializeAdsOnce() {
   if (!IOS) return false;
   if (initializedAds) return true;
 
@@ -329,21 +340,19 @@ async function initializeAds() {
     await AdMob.initialize({
       initializeForTesting: TEST_ADS
     });
-    initializedAds = true;
+
     report('ads', 'SDK hazır, izin kontrolü');
 
-    try {
-      let consent = await AdMob.requestConsentInfo();
-      if (
-        consent &&
-        consent.isConsentFormAvailable &&
-        consent.status === AdmobConsentStatus.REQUIRED
-      ) {
-        consent = await AdMob.showConsentForm();
-      }
-    } catch (consentErr) {
-      console.warn('[Gezegeni Koru] UMP consent form skipped:', consentErr);
+    let consent = await AdMob.requestConsentInfo();
+    if (consent.isConsentFormAvailable && consent.status === AdmobConsentStatus.REQUIRED) {
+      consent = await AdMob.showConsentForm();
     }
+    if (![AdmobConsentStatus.OBTAINED, AdmobConsentStatus.NOT_REQUIRED].includes(consent.status)) {
+      report('ads', 'Reklam izni tamamlanmadı');
+      return false;
+    }
+    initializedAds = true;
+    report('adsError', '');
 
     report('ads', 'Hazır (Aktif)');
 
@@ -357,6 +366,12 @@ async function initializeAds() {
     log('AdMob initialization', e);
     return false;
   }
+}
+
+function initializeAds() {
+  if (!gameReady) return Promise.resolve(false);
+  if (!adsInitializing) adsInitializing = initializeAdsOnce().finally(() => { adsInitializing = null; });
+  return adsInitializing;
 }
 
 window.GameMonetization = {
@@ -412,85 +427,29 @@ window.GameMonetization = {
     gemGrantListener = callback;
   },
 
-  async buyVIP() {
-    if (!IOS) {
-      throw new Error(
-        'Apple satın alma yalnızca iOS uygulamasında yapılabilir.'
-      );
-    }
-
-    if (!iapReady) {
-      await initializeIAP();
-    }
-
-    if (!iapReady) {
-      throw new Error(
-        'App Store bağlantısı hazırlanıyor, lütfen birkaç saniye sonra tekrar deneyin.'
-      );
-    }
-
-    if (refreshVip()) return true;
-
-    const cdv = getCdvPurchase();
-    let prod = cdv.store.get(VIP_ID, cdv.Platform.APPLE_APPSTORE) || cdv.store.get(VIP_ID);
-    if (!prod?.getOffer()) {
-      try { await cdv.store.update(); } catch (_) {}
-      prod = cdv.store.get(VIP_ID, cdv.Platform.APPLE_APPSTORE) || cdv.store.get(VIP_ID);
-    }
-
-    const offer = prod?.getOffer();
-
-    if (!offer) {
-      throw new Error(
-        'VIP ürünü (vip_lifetime) App Store’dan yüklenemedi. App Store Connect’te vip_lifetime ürününün ve Paid Apps sözleşmesinin aktif olduğundan emin olun.'
-      );
-    }
-
-    const outcome = await offer.order();
-
-    if (outcome?.isError) {
-      throw new Error(
-        outcome.message || 'Satın alma tamamlanamadı.'
-      );
-    }
-
-    return refreshVip();
+  async buyVIP() { await orderProduct(VIP_ID); return refreshVip(); },
+  async buyGemPack(id) {
+    if (!GEM_PACK_MAP[id]) throw new Error('Geçersiz elmas paketi.');
+    return orderProduct(id);
   },
-
-  async buyGemPack(packId) {
-    const pack = GEM_PACK_MAP[packId];
-    if (!pack) {
-      throw new Error('Geçersiz elmas paketi seçildi.');
-    }
-    if (!IOS) {
-      throw new Error('Elmas satın alımı yalnızca iOS App Store üzerinden yapılabilir.');
-    }
-    if (!iapReady) {
-      await initializeIAP();
-    }
-    if (!iapReady) {
-      throw new Error('App Store bağlantısı hazırlanıyor, lütfen birkaç saniye sonra tekrar deneyin.');
-    }
-
-    const cdv = getCdvPurchase();
-    let prod = cdv.store.get(packId, cdv.Platform.APPLE_APPSTORE) || cdv.store.get(packId);
-    if (!prod?.getOffer()) {
-      try { await cdv.store.update(); } catch (_) {}
-      prod = cdv.store.get(packId, cdv.Platform.APPLE_APPSTORE) || cdv.store.get(packId);
-    }
-
-    const offer = prod?.getOffer();
-    if (!offer) {
-      throw new Error(
-        `Elmas paketi (${packId}) App Store’dan yüklenemedi. App Store Connect’te ürünün tanımlı olduğundan emin olun.`
-      );
-    }
-
-    const outcome = await offer.order();
-    if (outcome?.isError) {
-      throw new Error(outcome.message || 'Elmas satın alma işlemi tamamlanamadı.');
-    }
+  onCatalogChange(callback) { catalogListener = callback; emitCatalog(); },
+  async refreshStore() {
+    if (!await initializeIAP()) return false;
+    await getCdvPurchase().store.update();
+    await delivery.retry();
+    emitCatalog();
     return true;
+  },
+  start(ready) {
+    gameReady = ready === true;
+    if (!gameReady) { report('store', 'Kayıt dosyası okunamadı; satın alma kapalı'); return; }
+    if (!IOS) { report('store', 'Satın alma için TestFlight / iPhone gerekir'); return; }
+    void initializeIAP(); void initializeAds(); void delivery.retry();
+  },
+  async requestTrackingPermission() {
+    if (!IOS) throw new Error('Bu izin yalnızca iOS uygulamasında kullanılabilir.');
+    await AdMob.requestTrackingAuthorization();
+    return (await AdMob.trackingAuthorizationStatus()).status;
   },
 
   async restoreVIP() {
@@ -517,61 +476,42 @@ window.GameMonetization = {
   },
 
   async showInterstitial(forceTest = false) {
-    if (!IOS || (!forceTest && vipOwned) || interstitialBusy) return false;
-
-    if (!initializedAds) await initializeAds();
-    if (!interstitialReady) await prepareInterstitial();
-    if (!interstitialReady) return false;
-
-    report('interstitial', 'Gösteriliyor');
-
+    if (!IOS || (!forceTest && vipOwned) || interstitialBusy || rewardedBusy || adRequestBusy) return false;
+    adRequestBusy = true;
     interstitialBusy = true;
-    interstitialReady = false;
-
     try {
-      await AdMob.showInterstitial();
-      return true;
-    } catch (e) {
-      log('Interstitial display', e);
-      return false;
-    } finally {
+      if (!initializedAds) await initializeAds();
+      // Preload helpers are guarded while another presentation is active.
       interstitialBusy = false;
-      void prepareInterstitial();
-    }
+      if (!interstitialReady) await prepareInterstitial();
+      interstitialBusy = true;
+      if (!interstitialReady) return false;
+      interstitialReady = false;
+      report('interstitial', 'Gösteriliyor');
+      return await presentAd({ sdk: AdMob, events: InterstitialAdPluginEvents,
+        show: () => AdMob.showInterstitial(), rewarded: false });
+    } catch (error) { log('Interstitial display', error); return false; }
+    finally { adRequestBusy = false; interstitialBusy = false; void prepareInterstitial(); }
   },
-
   async showRewarded() {
-    if (!IOS || rewardedBusy) return false;
-
-    if (!initializedAds) await initializeAds();
-    if (!rewardedReady) await prepareRewarded();
-    if (!rewardedReady) return false;
-
-    report('rewarded', 'Gösteriliyor');
-
+    if (!IOS || rewardedBusy || interstitialBusy || adRequestBusy) return false;
+    adRequestBusy = true;
     rewardedBusy = true;
-    rewardedReady = false;
-
     try {
-      const earned = await AdMob.showRewardVideoAd();
-      return Boolean(earned);
-    } catch (e) {
-      log('Reward display', e);
-      return false;
-    } finally {
+      if (!initializedAds) await initializeAds();
       rewardedBusy = false;
-      void prepareRewarded();
-    }
+      if (!rewardedReady) await prepareRewarded();
+      rewardedBusy = true;
+      if (!rewardedReady) return false;
+      rewardedReady = false;
+      report('rewarded', 'Gösteriliyor');
+      return await presentAd({ sdk: AdMob, events: RewardAdPluginEvents,
+        show: () => AdMob.showRewardVideoAd(), rewarded: true });
+    } catch (error) { log('Reward display', error); return false; }
+    finally { adRequestBusy = false; rewardedBusy = false; void prepareRewarded(); }
   }
 };
-
-if (IOS) {
-  window.addEventListener('load', () => {
-    void initializeIAP();
-    void initializeAds();
-  });
-  document.addEventListener('deviceready', () => {
-    void initializeIAP();
-    void initializeAds();
-  });
-}
+// Start only after the game has loaded its saved balance and installed delivery callbacks.
+document.addEventListener('resume', () => {
+  if (gameReady && IOS) { void window.GameMonetization.refreshStore().catch(error => log('StoreKit refresh', error)); }
+});
