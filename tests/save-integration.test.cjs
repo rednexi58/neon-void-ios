@@ -7,7 +7,7 @@ const html=fs.readFileSync('www/index.html','utf8');
 const source=html.slice(html.indexOf('      let progressHealthy = false;'),html.indexOf('      // KURAL: Siber Evrim'));
 function game(storage) {
   const state={cyberCore:5,purchaseTransactions:{}, skills:{},heroProgress:{},stats:{},completedLevels:{},unlockedLevel:1};
-  const ctx=vm.createContext({state,localStorage:storage,SoundFX:{},console:{error(){}}});
+  const ctx=vm.createContext({state,localStorage:storage,SoundFX:{updateMix(){}}, Balance:require('../www/game-balance.js'), refreshDailyMissions(){},console:{error(){}}});
   vm.runInContext(source+'\nglobalThis.api={loadProgress,saveProgress};',ctx); return {state,...ctx.api};
 }
 test('actual game save atomically stores balance and ledger, survives legacy mirror failure',()=> {

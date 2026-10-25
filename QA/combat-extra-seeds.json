@@ -1,0 +1,482 @@
+[
+  {
+    "level": 1,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 37,
+    "hp": 20,
+    "wave": 3,
+    "towers": 5
+  },
+  {
+    "level": 1,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 36,
+    "hp": 24,
+    "wave": 3,
+    "towers": 5
+  },
+  {
+    "level": 1,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 37,
+    "hp": 20,
+    "wave": 3,
+    "towers": 5
+  },
+  {
+    "level": 6,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 81,
+    "hp": 20,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 6,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 75,
+    "hp": 24,
+    "wave": 4,
+    "towers": 11
+  },
+  {
+    "level": 6,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 81,
+    "hp": 20,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 10,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 122,
+    "hp": 20,
+    "wave": 5,
+    "towers": 12
+  },
+  {
+    "level": 10,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 117,
+    "hp": 24,
+    "wave": 5,
+    "towers": 12
+  },
+  {
+    "level": 10,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 118,
+    "hp": 20,
+    "wave": 5,
+    "towers": 12
+  },
+  {
+    "level": 25,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 103,
+    "hp": 22,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 25,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 91,
+    "hp": 26,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 25,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 96,
+    "hp": 20,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 50,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 145,
+    "hp": 24,
+    "wave": 6,
+    "towers": 12
+  },
+  {
+    "level": 50,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 136,
+    "hp": 30,
+    "wave": 6,
+    "towers": 12
+  },
+  {
+    "level": 50,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 173,
+    "hp": 20,
+    "wave": 6,
+    "towers": 12
+  },
+  {
+    "level": 100,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 206,
+    "hp": 30,
+    "wave": 7,
+    "towers": 12
+  },
+  {
+    "level": 100,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 215,
+    "hp": 36,
+    "wave": 7,
+    "towers": 12
+  },
+  {
+    "level": 100,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 217,
+    "hp": 20,
+    "wave": 7,
+    "towers": 12
+  },
+  {
+    "level": 150,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 278,
+    "hp": 36,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 150,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 275,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 150,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 285,
+    "hp": 20,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 200,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 319,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 200,
+    "mode": "paid",
+    "seed": 71,
+    "win": true,
+    "seconds": 326,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 200,
+    "mode": "none",
+    "seed": 71,
+    "win": true,
+    "seconds": 331,
+    "hp": 20,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 1,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 37,
+    "hp": 20,
+    "wave": 3,
+    "towers": 5
+  },
+  {
+    "level": 1,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 36,
+    "hp": 24,
+    "wave": 3,
+    "towers": 6
+  },
+  {
+    "level": 1,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 37,
+    "hp": 20,
+    "wave": 3,
+    "towers": 5
+  },
+  {
+    "level": 6,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 82,
+    "hp": 20,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 6,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 67,
+    "hp": 24,
+    "wave": 4,
+    "towers": 11
+  },
+  {
+    "level": 6,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 82,
+    "hp": 20,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 10,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 114,
+    "hp": 20,
+    "wave": 5,
+    "towers": 12
+  },
+  {
+    "level": 10,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 107,
+    "hp": 24,
+    "wave": 5,
+    "towers": 12
+  },
+  {
+    "level": 10,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 115,
+    "hp": 20,
+    "wave": 5,
+    "towers": 12
+  },
+  {
+    "level": 25,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 98,
+    "hp": 22,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 25,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 86,
+    "hp": 26,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 25,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 101,
+    "hp": 20,
+    "wave": 4,
+    "towers": 12
+  },
+  {
+    "level": 50,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 144,
+    "hp": 24,
+    "wave": 6,
+    "towers": 12
+  },
+  {
+    "level": 50,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 138,
+    "hp": 30,
+    "wave": 6,
+    "towers": 12
+  },
+  {
+    "level": 50,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 152,
+    "hp": 20,
+    "wave": 6,
+    "towers": 12
+  },
+  {
+    "level": 100,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 208,
+    "hp": 30,
+    "wave": 7,
+    "towers": 12
+  },
+  {
+    "level": 100,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 209,
+    "hp": 36,
+    "wave": 7,
+    "towers": 12
+  },
+  {
+    "level": 100,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 214,
+    "hp": 20,
+    "wave": 7,
+    "towers": 12
+  },
+  {
+    "level": 150,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 288,
+    "hp": 36,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 150,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 286,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 150,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 280,
+    "hp": 20,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 200,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 325,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 200,
+    "mode": "paid",
+    "seed": 913,
+    "win": true,
+    "seconds": 312,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12
+  },
+  {
+    "level": 200,
+    "mode": "none",
+    "seed": 913,
+    "win": true,
+    "seconds": 333,
+    "hp": 20,
+    "wave": 8,
+    "towers": 12
+  }
+]

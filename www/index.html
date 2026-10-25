@@ -998,6 +998,7 @@
         </div>
       </div>
 
+      <p id="balanceSummary" class="text-xs text-sky-200">Temel geliştirmeler Gear ile; tüm güçlendirmeler bölüm ilerlemesiyle sınırlıdır.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
         <div class="bg-slate-900/90 border border-cyan-500/35 rounded-xl p-3 flex flex-col justify-between gap-2">
           <div>
@@ -1078,7 +1079,7 @@
                 <span class="font-cyber font-bold text-amber-300">💥 Kuantum Kritik Matrisi</span>
                 <span id="skillCritLv" class="px-1.5 py-0.5 rounded bg-amber-500/30 text-amber-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Tüm kulelere <strong class="text-amber-200">+%3 Kritik Vuruş Şansı (1.65x Hasar)</strong> kazandırır.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Tüm kulelere <strong class="text-amber-200">+0,5 yüzde puanı kritik şansı / seviye (1,65× hasar)</strong> kazandırır.</p>
             </div>
             <button id="btnUpSkillCrit" class="w-full py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-cyber font-bold transition">
               Aç / Geliştir (26 💎)
@@ -1091,7 +1092,7 @@
                 <span class="font-cyber font-bold text-emerald-300">💰 Biyo-Ganimet Sentezleyici</span>
                 <span id="skillBountyLv" class="px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class="text-emerald-200">+%5</strong> artırır.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class="text-emerald-200">+%2</strong> artırır.</p>
             </div>
             <button id="btnUpSkillBounty" class="w-full py-2 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-cyber font-bold transition">
               Aç / Geliştir (20 💎)
@@ -1104,7 +1105,7 @@
                 <span class="font-cyber font-bold text-rose-300">🛰️ Orbital Uydu Overclock</span>
                 <span id="skillOrbitalLv" class="px-1.5 py-0.5 rounded bg-rose-500/30 text-rose-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Orbital Lazer bekleme süresini <strong class="text-rose-200">-3 sn düşürür</strong> ve hasarını <strong class="text-rose-200">+%12</strong> artırır.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Orbital Lazer bekleme süresini <strong class="text-rose-200">-1 sn düşürür</strong> ve hasarını <strong class="text-rose-200">+%4</strong> artırır.</p>
             </div>
             <button id="btnUpSkillOrbital" class="w-full py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-cyber font-bold transition">
               Aç / Geliştir (26 💎)
@@ -1164,7 +1165,7 @@
         <div class="pt-1">
           <div class="flex items-center justify-between mb-1.5">
             <span class="font-cyber font-bold text-xs text-fuchsia-300">💎 SİBER ELMAS PAKETLERİ (BONUSLU)</span>
-            <span class="text-[10px] text-amber-300 font-semibold">Üst Paketlerde +%50'ye Varan Bonus!</span>
+            <span class="text-[10px] text-amber-300 font-semibold">Elmaslar oyun oynayarak da kazanılır.</span>
           </div>
           <div class="grid grid-cols-2 gap-2">
             <!-- 1: 50 Elmas -->
@@ -1242,7 +1243,7 @@
               <div>
                 <div class="flex items-center justify-between">
                   <span class="font-cyber font-bold text-amber-300 text-xs">💎 1.350 Elmas</span>
-                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-black">🔥 POPÜLER</span>
+                  <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-black">BÜYÜK PAKET</span>
                 </div>
                 <p class="text-[10px] text-slate-200 mt-0.5">1.000 + <strong>350 Bonus 💎</strong> (+%35 Hediye)</p>
               </div>
@@ -1252,7 +1253,7 @@
             </div>
 
             <!-- 7: 5.000 + 2.000 Bonus = 7.000 Elmas -->
-            <div class="bg-gradient-to-br from-fuchsia-950/70 to-slate-900 border-2 border-fuchsia-400/75 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+            <div class="hidden bg-gradient-to-br from-fuchsia-950/70 to-slate-900 border-2 border-fuchsia-400/75 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="font-cyber font-bold text-fuchsia-200 text-xs">💎 7.000 Elmas</span>
@@ -1266,7 +1267,7 @@
             </div>
 
             <!-- 8: 10.000 + 5.000 Bonus = 15.000 Elmas -->
-            <div class="bg-gradient-to-br from-amber-950/80 via-fuchsia-950/70 to-slate-900 border-2 border-yellow-300/80 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+            <div class="hidden bg-gradient-to-br from-amber-950/80 via-fuchsia-950/70 to-slate-900 border-2 border-yellow-300/80 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="font-cyber font-bold text-yellow-200 text-xs">💎 15.000 Elmas</span>
@@ -1300,6 +1301,7 @@
     <div class="bg-[#0b1124] border border-cyan-400/60 rounded-2xl max-w-md w-full p-5 shadow-2xl neon-border-cyan flex flex-col gap-3.5 text-center">
       <h2 id="levelEndTitle" class="font-cyber font-black text-xl text-cyan-300">GEZEGEN KORUNDU!</h2>
       <p id="levelEndSubtitle" class="text-xs text-slate-300">Gezegen başarıyla savunuldu.</p>
+      <p id="starRules" class="text-[10px] text-slate-400"></p>
 
       <!-- Bitirme Süresi & Hız Rekoru Bilgisi -->
       <div id="endSpeedRecordBox" class="bg-slate-900/95 border border-amber-400/40 rounded-xl px-3 py-2 flex items-center justify-between text-xs">
@@ -1521,6 +1523,8 @@
   <div id="toastNotification" class="hidden fixed bottom-28 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 border border-cyan-400/60 text-cyan-200 px-4 py-2 rounded-full text-xs font-semibold shadow-xl whitespace-nowrap"></div>
 
   <script src="native-monetization.js"></script>
+  <script src="game-balance.js"></script>
+  <script src="game-audio.js"></script>
   <script>
     (function () {
       "use strict";
@@ -1906,7 +1910,7 @@
         ["✔ TR / EN Çift Dil & Trainer Modu", "✔ TR / EN Dual Language & Trainer Mode"],
         ["Tek dokunuşla Türkçe ve İngilizce geçişi; yeni oyuncular için 4 adımlı interaktif Eğitim (Trainer) Modu.", "1-tap Turkish & English switch; 4-step interactive Trainer Mode for new players."],
         ["✔ İlk 3 Bölüm Reklamsız & 149.99₺ Remove Ads", "✔ Every 2 Successful Levels: Ad · VIP 300 TL"],
-        ["Her 2 başarılı bölümde bir geçiş reklamı gösterilir; VIP ile kaldırılır.", "Interstitial after every two completed levels; optional VIP removes forced ads."],
+        ["Her 3 tamamlanan bölümün ardından ilk dalgadan önce geçiş reklamı gösterilir; VIP ile kaldırılır.", "Interstitial before the first wave after every three completed levels; optional VIP removes forced ads."],
         ["GÜÇLENDİR", "UPGRADE"],
         ["₺49.99 (Test)", "₺49.99 (Test)"],
         ["₺99.99 (Test)", "₺99.99 (Test)"],
@@ -1953,16 +1957,16 @@
           "Deploys an orbiting <strong class=\"text-fuchsia-200\">Autonomous Combat Drone (+1 Drone/Lv)</strong> that fires at aliens."
         ],
         [
-          "Tüm kulelere <strong class=\"text-amber-200\">+%3 Kritik Vuruş Şansı (1.65x Hasar)</strong> kazandırır.",
-          "Grants all towers <strong class=\"text-amber-200\">+3% Critical Hit Chance (1.65x Damage)</strong>."
+          "Tüm kulelere <strong class=\"text-amber-200\">+0,5 yüzde puanı kritik şansı / seviye (1,65× hasar)</strong> kazandırır.",
+          "Grants all towers <strong class=\"text-amber-200\">+0.5 percentage points crit chance per rank (1.65x damage)</strong>."
         ],
         [
-          "Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class=\"text-emerald-200\">+%5</strong> artırır.",
-          "Increases Energy dropped by aliens and end-of-level Gear rewards by <strong class=\"text-emerald-200\">+5%</strong>."
+          "Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class=\"text-emerald-200\">+%2</strong> artırır.",
+          "Increases Energy dropped by aliens and end-of-level Gear rewards by <strong class=\"text-emerald-200\">+2%</strong>."
         ],
         [
-          "Orbital Lazer bekleme süresini <strong class=\"text-rose-200\">-3 sn düşürür</strong> ve hasarını <strong class=\"text-rose-200\">+%12</strong> artırır.",
-          "Reduces Orbital Laser cooldown by <strong class=\"text-rose-200\">-3s</strong> and boosts its damage by <strong class=\"text-rose-200\">+12%</strong>."
+          "Orbital Lazer bekleme süresini <strong class=\"text-rose-200\">-1 sn düşürür</strong> ve hasarını <strong class=\"text-rose-200\">+%4</strong> artırır.",
+          "Reduces Orbital Laser cooldown by <strong class=\"text-rose-200\">-1s</strong> and boosts its damage by <strong class=\"text-rose-200\">+4%</strong>."
         ],
         [
           "<strong>16 Kule Yuvalı</strong>, 6 katmanlı dev kanyon haritasında sonsuz dalgalara karşı rekor kırın!",
@@ -1972,12 +1976,9 @@
           "Normal bölümlerden %65 daha uzun 6 katmanlı dev kanyon yolu, <strong>16 kule cebi</strong> ve her 5 dalgada bir <strong>+1 Komutan Deneyimi</strong>!",
           "65% longer 6-tier serpentine canyon path, <strong>16 tower bays</strong>, and <strong>+1 Commander XP</strong> every 5 waves!"
         ],
+
         [
-          "Seçtiğiniz Komutanı 25 bölüm beklemeden <strong>anında +1 Seviye terfi ettirmeye</strong> yetecek <strong>1.500 💎 Cyber-Core + 500 ⚙ Gear</strong> verir.",
-          "Grants <strong>1,500 💎 Cyber-Core + 500 ⚙ Gear</strong> — enough to <strong>instantly promote any Commander by +1 Level</strong> without waiting 25 levels."
-        ],
-        [
-          "Her 2 başarılı bölümde bir geçiş reklamı gösterilir. 300 TL VIP satın alarak kaldırılabilir.",
+          "Her 3 tamamlanan bölümün ardından ilk dalgadan önce geçiş reklamı gösterilir. 300 TL VIP satın alarak kaldırılabilir.",
           "First 3 levels are ad-free tutorial levels. Starting from Level 4, an ad appears between every level (Removable permanently in Store)."
         ],
         [
@@ -2128,177 +2129,8 @@
       // ============================================================================
       // 1. KULAĞA HOŞ GELEN, PENTATONİK VE YUMUŞAK BİLİM KURGU SES MOTORU
       // ============================================================================
-      const SoundFX = {
-        ctx: null,
-        muted: false,
-        musicVol: 0.65,
-        sfxVol: 0.70,
-        activeSoundCount: 0,
-        maxConcurrentSounds: 4,
-        lastPlayTimestamp: {},
-        ambientTimer: null,
-        ambientStep: 0,
-        isBossAtmosphere: false,
-
-        init() {
-          if (!this.ctx) {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (AudioCtx) this.ctx = new AudioCtx();
-          }
-          if (this.ctx && this.ctx.state === "suspended") {
-            this.ctx.resume().catch(() => {});
-          }
-          if (!this.ambientTimer) {
-            this.startAmbientLoop();
-          }
-        },
-
-        canTrigger(tag, minIntervalMs) {
-          if (this.muted || this.sfxVol <= 0.01) return false;
-          if (this.activeSoundCount >= this.maxConcurrentSounds) return false;
-          const now = performance.now();
-          if (this.lastPlayTimestamp[tag] && now - this.lastPlayTimestamp[tag] < minIntervalMs) {
-            return false;
-          }
-          this.lastPlayTimestamp[tag] = now;
-          return true;
-        },
-
-        playSoftChord(tag, freq1, freq2, endFreq1, duration, baseGain, cutoffFreq = 520, minGapMs = 95) {
-          if (!this.canTrigger(tag, minGapMs)) return;
-          try {
-            this.init();
-            if (!this.ctx) return;
-            const now = this.ctx.currentTime;
-            const filter = this.ctx.createBiquadFilter();
-            const gain = this.ctx.createGain();
-
-            filter.type = "lowpass";
-            filter.frequency.setValueAtTime(cutoffFreq, now);
-            filter.Q.setValueAtTime(0.7, now);
-
-            const effGain = Math.max(0.0008, baseGain * this.sfxVol);
-            gain.gain.setValueAtTime(0.0005, now);
-            gain.gain.linearRampToValueAtTime(effGain, now + 0.022);
-            gain.gain.exponentialRampToValueAtTime(0.0005, now + duration);
-
-            const osc1 = this.ctx.createOscillator();
-            osc1.type = "sine";
-            osc1.frequency.setValueAtTime(freq1, now);
-            if (endFreq1) {
-              osc1.frequency.exponentialRampToValueAtTime(Math.max(28, endFreq1), now + duration);
-            }
-            osc1.connect(filter);
-
-            let osc2 = null;
-            if (freq2) {
-              osc2 = this.ctx.createOscillator();
-              osc2.type = "sine";
-              osc2.frequency.setValueAtTime(freq2, now);
-              const g2 = this.ctx.createGain();
-              g2.gain.setValueAtTime(0.35, now);
-              osc2.connect(g2);
-              g2.connect(filter);
-            }
-
-            filter.connect(gain);
-            gain.connect(this.ctx.destination);
-
-            this.activeSoundCount++;
-            osc1.onended = () => {
-              this.activeSoundCount = Math.max(0, this.activeSoundCount - 1);
-            };
-
-            osc1.start(now);
-            osc1.stop(now + duration + 0.02);
-            if (osc2) {
-              osc2.start(now);
-              osc2.stop(now + duration + 0.02);
-            }
-          } catch (e) {}
-        },
-
-        laser() {
-          this.playSoftChord("laser", 261.63, 392.00, 196.00, 0.095, 0.032, 480, 105);
-        },
-        plasma() {
-          this.playSoftChord("plasma", 110.0, 164.81, 44.0, 0.24, 0.065, 340, 150);
-        },
-        emp() {
-          this.playSoftChord("emp", 293.66, 440.0, 246.94, 0.16, 0.035, 460, 140);
-        },
-        railgun() {
-          this.playSoftChord("railgun", 146.83, 220.0, 55.0, 0.13, 0.052, 410, 110);
-        },
-        cryo() {
-          this.playSoftChord("cryo", 329.63, 493.88, 293.66, 0.15, 0.032, 520, 140);
-        },
-        repair() {
-          this.playSoftChord("repair", 261.63, 329.63, 392.00, 0.22, 0.042, 540, 200);
-        },
-        explosion(isBoss = false) {
-          this.playSoftChord("exp", isBoss ? 82.41 : 98.0, 130.81, 32.7, isBoss ? 0.38 : 0.19, isBoss ? 0.075 : 0.045, 290, 110);
-        },
-        orbital() {
-          this.playSoftChord("orbital", 130.81, 196.0, 41.2, 0.55, 0.075, 380, 280);
-        },
-        bossPulse() {
-          this.playSoftChord("boss", 98.0, 146.83, 65.41, 0.42, 0.055, 360, 350);
-        },
-        uiClick() {
-          this.playSoftChord("ui", 329.63, 493.88, 392.00, 0.06, 0.028, 560, 55);
-        },
-
-        startAmbientLoop() {
-          const normalChords = [
-            [65.41, 98.00, 146.83, 164.81],
-            [55.00, 82.41, 130.81, 164.81],
-            [43.65, 87.31, 130.81, 146.83],
-            [49.00, 98.00, 146.83, 164.81]
-          ];
-          const bossChords = [
-            [55.00, 82.41, 123.47, 130.81],
-            [49.00, 73.42, 110.00, 130.81],
-            [43.65, 65.41, 98.00, 123.47],
-            [49.00, 73.42, 110.00, 123.47]
-          ];
-
-          this.ambientTimer = setInterval(() => {
-            if (this.muted || this.musicVol <= 0.01 || !this.ctx || this.ctx.state !== "running") return;
-            if (document.hidden) return;
-            try {
-              const chords = this.isBossAtmosphere ? bossChords : normalChords;
-              const notes = chords[this.ambientStep % chords.length];
-              this.ambientStep++;
-
-              const now = this.ctx.currentTime;
-              notes.forEach((freq, idx) => {
-                const osc = this.ctx.createOscillator();
-                const filter = this.ctx.createBiquadFilter();
-                const gain = this.ctx.createGain();
-
-                osc.type = "sine";
-                osc.frequency.setValueAtTime(freq, now);
-
-                filter.type = "lowpass";
-                filter.frequency.setValueAtTime(260, now);
-
-                const padGain = 0.013 * this.musicVol * (idx === 0 ? 1.15 : 0.65);
-                gain.gain.setValueAtTime(0.0004, now);
-                gain.gain.linearRampToValueAtTime(padGain, now + 1.2);
-                gain.gain.exponentialRampToValueAtTime(0.0004, now + 3.1);
-
-                osc.connect(filter);
-                filter.connect(gain);
-                gain.connect(this.ctx.destination);
-
-                osc.start(now);
-                osc.stop(now + 3.2);
-              });
-            } catch (e) {}
-          }, 3000);
-        }
-      };
+      const SoundFX = window.GameAudio;
+      const Balance = window.GameBalance;
 
       // ============================================================================
       // 2. DENGELENMİŞ 6 KULE SİSTEMİ
@@ -2573,52 +2405,7 @@
       //    - 4. bölümden itibaren +%10 daha zor ve kademeli artan 200 bölüm eğrisi
       // ============================================================================
       function calculateDifficulty(level, waveIndex = 0) {
-        const clampedLv = Math.max(1, Math.min(200, level));
-        const isBossLevel = (clampedLv % 10 === 0);
-        const isMiniBossLevel = (clampedLv > 5 && clampedLv % 5 === 0 && !isBossLevel);
-        const baseWaves = clampedLv <= 5
-          ? (clampedLv <= 3 ? 3 : 4)
-          : (Math.floor(3 + 1.65 * Math.log(clampedLv)) + (isBossLevel ? 1 : 0));
-        const totalWaves = Math.max(3, Math.min(12, baseWaves));
-
-        let baseCurve = 1.0;
-        if (clampedLv <= 5) {
-          // İLK 5 BÖLÜM KOLAYLAŞTIRILDI (Akıcı, öğretici ve keyifli başlangıç: 0.65x -> 1.09x HP)
-          baseCurve = 0.65 + 0.11 * (clampedLv - 1);
-        } else {
-          // 6. Bölümden itibaren kademeli sertleşen 200 bölüm eğrisi
-          const rawCurve = 0.85 + 0.175 * (clampedLv - 1) + 0.021 * Math.pow(clampedLv - 1, 1.50);
-          const progBoost = 1.05 + Math.min(0.25, (clampedLv - 6) * 0.0012);
-          baseCurve = rawCurve * progBoost;
-        }
-
-        const intraWave = 1.0 + waveIndex * (clampedLv <= 5 ? 0.035 : 0.055);
-        const hpMult = Number((baseCurve * intraWave).toFixed(2));
-
-        const armorBonus = clampedLv <= 5 ? 0 : Math.min(0.45, Number((0.048 * Math.log2(clampedLv)).toFixed(2)));
-        const baseBudget = clampedLv <= 5
-          ? (5.5 + clampedLv * 1.35)
-          : (8.5 + clampedLv * 2.15 + 4.2 * Math.log(clampedLv + 1));
-        const progress = totalWaves > 1 ? waveIndex / (totalWaves - 1) : 0;
-        const threatBudget = Math.max(5, Math.round(baseBudget * (0.84 + 0.58 * progress)));
-
-        const gearReward = Math.round(28 + clampedLv * 9 + Math.log2(clampedLv + 1) * 15);
-        const coreReward = isBossLevel ? 5 : (isMiniBossLevel ? 2 : 1);
-        // Bölüm hedef bitirme süresi (Hız Rekoru karşılaştırması için)
-        const parTimeSeconds = Number((26 + totalWaves * 9.5 + (isBossLevel ? 12 : 0)).toFixed(1));
-
-        return {
-          level: clampedLv,
-          totalWaves,
-          isBossLevel,
-          isMiniBossLevel,
-          hpMult,
-          armorBonus,
-          threatBudget,
-          gearReward,
-          coreReward,
-          parTimeSeconds
-        };
+        return Balance.difficulty(level, waveIndex);
       }
 
       // ============================================================================
@@ -2630,6 +2417,10 @@
         level: 1,
         unlockedLevel: 1,
         completedLevels: {},
+        balanceRevision: 1,
+        levelStars: {},
+        missionDay: "",
+        missionBaseline: {},
         bestTimes: {}, // { [level]: seconds }
         developerMode: false,
         qualityMode: "high",
@@ -2717,25 +2508,21 @@
         }
         const h = state.heroProgress[heroKey];
         const lv = Math.max(1, Math.min(10, h.lv || 1));
-        // Her 25 Bölümde bir seviye atlar (25 bölümde bir güçlenir)
-        const reqXp = 25;
-        // 1 Elmas = 1 TL ekonomisi: Elmas ile 1 tur seviye atlatma maliyeti Lv1->2 için 350 💎 (₺454.99 / $12.99), her seviyede +100 💎 artar
-        const gemCost = 350 + (lv - 1) * 100;
+        const reqXp = Balance.heroXp(lv);
+        const gemCost = Balance.heroCost(lv);
         return {
           lv,
           xp: h.xp || 0,
           reqXp,
           gemCost,
-          // Vega: Lv.1 +%12 Hasar & +14m Menzil -> Her seviyede +%4 Hasar & +3m Menzil artar
-          vegaDmgBonusPct: 12 + (lv - 1) * 4,
-          vegaRangeBonus: 14 + (lv - 1) * 3,
-          // Kaan: Lv.1 -%10 Maliyet & +%25 Onarım -> Her seviyede -%2 ucuzluk (maks -%28) ve +%6 Onarım
-          kaanDiscountPct: Math.min(28, 10 + (lv - 1) * 2),
+          vegaDmgBonusPct: 12 + (lv - 1) * 2,
+          vegaRangeBonus: 14 + (lv - 1) * 2,
+          kaanDiscountPct: Math.min(19, 10 + (lv - 1)),
           kaanRepairPct: 25 + (lv - 1) * 6,
-          kaanHealBonus: lv,
-          // Nova: Lv.1 +%8 Kritik & -6sn Orbital -> Her seviyede +%2.5 Kritik ve -1.5sn Orbital
-          novaCritPct: 8 + (lv - 1) * 2.5,
-          novaOrbitalCdRed: 6 + (lv - 1) * 1.5
+          kaanHealBonus: 1 + Math.floor((lv - 1) / 3),
+          // Nova: Lv.1 +%8 kritik, -4sn orbital; seviye başına +0.75 yüzde puan / -0.5sn.
+          novaCritPct: 8 + (lv - 1) * 0.75,
+          novaOrbitalCdRed: 4 + (lv - 1) * 0.5
         };
       }
 
@@ -2746,8 +2533,8 @@
         const h = state.heroProgress[key];
         h.xp = (h.xp || 0) + amount;
         let leveledUp = false;
-        while (h.lv < 10) {
-          const req = 25;
+        while (h.lv < Balance.heroLimit(state)) {
+          const req = Balance.heroXp(h.lv);
           if (h.xp >= req) {
             h.xp -= req;
             h.lv++;
@@ -2811,6 +2598,10 @@
             if (typeof parsed.sfxVol === "number") SoundFX.sfxVol = parsed.sfxVol;
             if (typeof parsed.muted === "boolean") SoundFX.muted = parsed.muted;
             if (parsed.skills) Object.assign(state.skills, parsed.skills);
+            state.balanceRevision = parsed.balanceRevision || 0;
+            state.levelStars = parsed.levelStars || {};
+            state.missionDay = parsed.missionDay || "";
+            state.missionBaseline = parsed.missionBaseline || {};
             if (typeof parsed.activeHero === "string") state.activeHero = parsed.activeHero;
             if (parsed.heroProgress && typeof parsed.heroProgress === "object") {
               ["vega", "kaan", "nova"].forEach(k => {
@@ -2829,6 +2620,9 @@
             if (parsed.stats && typeof parsed.stats === "object") Object.assign(state.stats, parsed.stats);
             if (parsed.claimedMissions && typeof parsed.claimedMissions === "object") state.claimedMissions = parsed.claimedMissions;
           }
+          Balance.migrate(state);
+          refreshDailyMissions();
+          SoundFX.updateMix();
           progressHealthy = true;
         } catch (e) { console.error("Kayıt okunamadı; üzerine yazma ve satın alma durduruldu", e); }
         return progressHealthy;
@@ -2863,6 +2657,10 @@
             idleTaxAccumulated: Math.floor(state.idleTaxAccumulated),
             stats: state.stats,
             claimedMissions: state.claimedMissions,
+            balanceRevision: state.balanceRevision,
+            levelStars: state.levelStars,
+            missionDay: state.missionDay,
+            missionBaseline: state.missionBaseline,
             skills: state.skills
           });
           localStorage.setItem("GezegeniKoru_Save_v4", payload);
@@ -2873,27 +2671,27 @@
       }
 
       // KURAL: Siber Evrim'de Foton Hasar Evrimi = +%1 / Lv, Overclock Atış Bobini = +%1 / Lv!
-      function getDmgMultiplier() { return 1 + (state.skills.dmgLv - 1) * 0.01; }
+      function getDmgMultiplier() { return (1 + (Math.min(200, state.level) - 1) * 0.012) * (1 + (Balance.level(state, "dmgLv") - 1) * 0.01); }
       function getRateMultiplier() {
-        const base = 1 + (state.skills.rateLv - 1) * 0.01;
+        const base = 1 + (Balance.level(state, "rateLv") - 1) * 0.01;
         return state.globalOverclockTimer > 0 ? base * 1.25 : base;
       }
-      function getMaxBaseHp() { return 20 + (state.skills.hpLv - 1) * 2; }
+      function getMaxBaseHp() { return 20 + (Balance.level(state, "hpLv") - 1) * 2; }
       function getStartingGold() {
         const earlyHelp = state.level <= 3 ? 45 : (state.level <= 5 ? 30 : 0);
         const endlessBonus = state.endlessMode ? 65 : 0;
-        return 175 + earlyHelp + endlessBonus + (state.skills.goldLv - 1) * 10;
+        return 175 + earlyHelp + endlessBonus + Math.min(650, (state.level - 1) * 6) + (Balance.level(state, "goldLv") - 1) * 10;
       }
       function getCritChance() {
         const heroCrit = state.activeHero === "nova" ? (getHeroInfo("nova").novaCritPct / 100) : 0;
-        return Math.min(0.60, (state.skills.critLv || 0) * 0.03 + heroCrit);
+        return Math.min(0.25, Balance.level(state, "critLv") * 0.005 + heroCrit);
       }
-      function getBountyMultiplier() { return 1 + (state.skills.bountyLv || 0) * 0.05; }
+      function getBountyMultiplier() { return 1 + Balance.level(state, "bountyLv") * 0.02; }
       function getEffectiveOrbitalCooldown() {
         const heroCd = state.activeHero === "nova" ? getHeroInfo("nova").novaOrbitalCdRed : 0;
-        return Math.max(10, 34 - (state.skills.orbitalLv || 0) * 3 - heroCd);
+        return Math.max(18, 34 - Balance.level(state, "orbitalLv") - heroCd);
       }
-      function getOrbitalDamageMultiplier() { return 1 + (state.skills.orbitalLv || 0) * 0.12; }
+      function getOrbitalDamageMultiplier() { return 1 + Balance.level(state, "orbitalLv") * 0.04; }
 
       function isTowerUnlocked(typeKey) {
         if (state.developerMode) return true;
@@ -3447,6 +3245,7 @@
       }
 
       function startLevel(levelNum, forcedSectorIdx = null) {
+        refreshDailyMissions();
         state.levelRunId++;
         state.waveStartPending = false;
         void window.GameMonetization?.preloadAds();
@@ -3476,7 +3275,7 @@
         const planet = getPlanetForLevel(state.level);
         const effLvForFeatures = state.endlessMode ? Math.max(state.level, 8) : state.level;
         const crystalMaxHp = Math.round(95 + effLvForFeatures * 28);
-        SOCKETS = preset.sockets.map((s, idx) => {
+        SOCKETS = Balance.placeSockets(preset.sockets, ACTIVE_PATHS).map((s, idx) => {
           const isCrystalSlot = effLvForFeatures >= 4 && (idx === 4 || (effLvForFeatures >= 6 && idx === 7) || (preset.sockets.length > 12 && idx === 11));
           return {
             id: s.id,
@@ -3550,6 +3349,7 @@
         state.levelElapsedSeconds = 0;
         state.gold = getStartingGold();
         state.levelEnded = false;
+        document.getElementById("starRules").textContent = "";
         state.paused = false;
         state.doubledThisLevel = false;
         state.orbitalCooldown = 0;
@@ -3654,10 +3454,11 @@
           const clears = state.adClears;
           state.waveStartPending = true;
           try {
+            if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(true);
             const shown = await window.GameMonetization.showInterstitial();
             if (shown) { state.lastInterstitialClear = clears; saveProgress(); }
           } catch (error) { console.warn("AdMob geçiş reklamı", error); }
-          finally { if (state.levelRunId === runId) state.waveStartPending = false; }
+          finally { if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(false); if (state.levelRunId === runId) state.waveStartPending = false; }
           if (state.levelRunId !== runId) return;
           lastTime = performance.now();
         }
@@ -3743,7 +3544,7 @@
             const mult = TOWER_TYPES[towerTypeKey].vsMultiplier[enemy.arch.id] || 1.0;
             finalDmg *= mult;
           }
-          // Amiral Vega komutan bonusu: Seviyesine göre Lazer ve Tesla hasar artışı (+%12 + her seviyede +%4)
+          // Amiral Vega komutan bonusu: Seviyesine göre Lazer ve Tesla hasar artışı (+%12 + her seviyede +%2)
           if (state.activeHero === "vega" && (towerTypeKey === "rapid" || towerTypeKey === "emp")) {
             finalDmg *= (1 + getHeroInfo("vega").vegaDmgBonusPct / 100);
           }
@@ -4219,6 +4020,7 @@
           }
 
           if (dist <= step + 6) {
+            SoundFX.explosion(false);
             shockwaves.push({
               x: m.tx, y: m.ty,
               maxR: m.splash, r: 6,
@@ -4612,6 +4414,7 @@
       // 9. BÖLÜM SONU, HIZ REKORU KAYDI VE REKLAM KURALI (İLK 3 BÖLÜM REKLAMSIZ!)
       // ============================================================================
       function handleLevelVictory() {
+        if (state.levelEnded) return;
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
         const diff = calculateDifficulty(state.level, 0);
@@ -4629,11 +4432,18 @@
         const beatPar = clearSec <= diff.parTimeSeconds;
         if (beatPar) state.stats.speedRecords = (state.stats.speedRecords || 0) + 1;
         const speedBonusGear = beatPar ? Math.round(diff.gearReward * 0.20) : 0;
-        const totalGear = diff.gearReward + speedBonusGear;
+        const reward = Balance.campaignReward(state, diff);
+        const stars = state.baseHp >= state.maxBaseHp ? 3 : state.baseHp >= state.maxBaseHp * 0.5 ? 2 : 1;
+        const previousStars = state.levelStars[state.level] || 0;
+        document.getElementById("starRules").textContent = L("Tam üs canı: 3★ • En az yarısı: 2★ • Her yeni yıldız: +1 elmas", "Full base HP: 3★ • At least half: 2★ • Each new star: +1 gem");
+        const starBonus = Math.max(0, stars - previousStars);
+        state.levelStars[state.level] = Math.max(previousStars, stars);
+        const totalCore = reward.core + starBonus;
+        const totalGear = Math.round((diff.gearReward + speedBonusGear) * getBountyMultiplier());
 
         state.lastEarnedGear = totalGear;
         state.gear += totalGear;
-        state.cyberCore += diff.coreReward;
+        state.cyberCore += totalCore;
 
         state.completedLevels[state.level] = true;
         if (state.level >= state.unlockedLevel && state.unlockedLevel < 200) {
@@ -4660,8 +4470,8 @@
             ? ` • 🎖️ COMMANDER LEVELED UP (Lv.${activeHeroStats.lv})!`
             : ` • 🎖️ Hero XP: ${activeHeroStats.xp}/${activeHeroStats.reqXp} Lvls (Lv.${activeHeroStats.lv})`;
           document.getElementById("levelEndSubtitle").textContent = L(
-            `Yeni Gezegen: Bölüm ${Math.min(200, state.level + 1)} (${nextP})${heroProgMsgTr}`,
-            `Next Planet: Level ${Math.min(200, state.level + 1)} (${nextP})${heroProgMsgEn}`
+            `${"★".repeat(stars)}${"☆".repeat(3-stars)} • Yeni Gezegen: Bölüm ${Math.min(200, state.level + 1)} (${nextP})${heroProgMsgTr}`,
+            `${"★".repeat(stars)}${"☆".repeat(3-stars)} • Next Planet: Level ${Math.min(200, state.level + 1)} (${nextP})${heroProgMsgEn}`
           );
           document.getElementById("endClearTimeText").textContent = L(
             `${clearSec} sn (Hedef: ${diff.parTimeSeconds} sn)`,
@@ -4671,7 +4481,8 @@
             ? (beatPar ? L("🥇 YENİ HIZ REKORU (+%20 GEAR)", "🥇 NEW SPEED RECORD (+20% GEAR)") : L("⚡ YENİ KİŞİSEL REKOR!", "⚡ NEW PERSONAL BEST!"))
             : L(`En İyi: ${state.bestTimes[state.level]} sn`, `Best: ${state.bestTimes[state.level]}s`);
           document.getElementById("endEarnedGear").textContent = `+${totalGear} ⚙`;
-          document.getElementById("endEarnedCore").textContent = `+${diff.coreReward} 💎`;
+          document.getElementById("endEarnedCore").textContent = `+${totalCore} 💎 (${stars}★)`;
+          document.getElementById("endEarnedCore").title = L("Tam üs canı: 3★ • En az yarısı: 2★ • Her yeni yıldız: +1 elmas", "Full base HP: 3★ • At least half: 2★ • Each new star: +1 gem");
           document.getElementById("btnRewardDouble").classList.remove("hidden");
           document.getElementById("btnRewardDouble").disabled = false;
           document.getElementById("btnRewardDoubleText").textContent = L(
@@ -4728,10 +4539,12 @@
       async function runSimulatedAd(badgeText, titleText, seconds, onComplete, onCancel = null) {
         let earned = false;
         try {
+          SoundFX.setAdMuted(true);
           earned = Boolean(await window.GameMonetization?.showRewarded());
         } catch (error) {
           console.warn("AdMob ödüllü reklam:", error);
         } finally {
+          SoundFX.setAdMuted(false);
           lastTime = performance.now();
           SoundFX.init();
         }
@@ -5270,6 +5083,31 @@
         miniCtx.beginPath();
         miniCtx.arc(nx.x * sx, nx.y * sy, 3.0, 0, Math.PI * 2);
         miniCtx.fill();
+      }
+
+      function drawCombatDrone(ctx, dr, time, detailed) {
+        ctx.save();
+        ctx.translate(dr.x, dr.y);
+        ctx.rotate(dr.orbitAngle + Math.PI / 2);
+        // Four ducted rotors, carbon arms, metal fuselage and a forward camera.
+        ctx.fillStyle = "rgba(0,0,0,0.28)";
+        ctx.beginPath(); ctx.ellipse(2, 4, 17, 12, 0, 0, Math.PI * 2); ctx.fill();
+        for (const x of [-11, 11]) for (const y of [-9, 9]) {
+          ctx.strokeStyle = "#475569"; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(x,y); ctx.stroke();
+          ctx.fillStyle = "#111827"; ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill(); ctx.stroke();
+          ctx.save(); ctx.translate(x,y); ctx.rotate(time*27 + x*y);
+          ctx.strokeStyle = "rgba(125,211,252,0.65)"; ctx.lineWidth = detailed ? 2 : 1;
+          ctx.beginPath(); ctx.moveTo(-3.8,0); ctx.lineTo(3.8,0); ctx.moveTo(0,-3.8); ctx.lineTo(0,3.8); ctx.stroke();
+          ctx.restore();
+        }
+        ctx.fillStyle = "#64748b"; ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.roundRect(-5,-9,10,18,3); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "#0f172a"; ctx.fillRect(-3,-5,6,8);
+        ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(0,-9,2.3,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#fb7185"; ctx.fillRect(-2,6,4,2);
+        ctx.restore();
       }
 
       function renderScene() {
@@ -6051,23 +5889,7 @@
           ctx.restore();
         });
 
-        autonomousDrones.forEach(dr => {
-          ctx.save();
-          ctx.translate(dr.x, dr.y);
-          ctx.rotate(dr.orbitAngle + Math.PI / 2);
-          ctx.fillStyle = "#f472b6";
-          ctx.strokeStyle = "#fdf4ff";
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.moveTo(9, 0);
-          ctx.lineTo(-6, -6);
-          ctx.lineTo(-2, 0);
-          ctx.lineTo(-6, 6);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-          ctx.restore();
-        });
+        autonomousDrones.forEach(dr => drawCombatDrone(ctx, dr, nowAnim, useHighDetail));
 
         laserBeams.forEach(b => {
           ctx.save();
@@ -6277,7 +6099,7 @@
           const opt = document.createElement("option");
           opt.value = String(i);
           const p = getPlanetForLevel(i);
-          const doneTag = state.completedLevels[i] ? " ✓" : "";
+          const doneTag = state.levelStars[i] ? " " + "★".repeat(state.levelStars[i]) : state.completedLevels[i] ? " ✓" : "";
           opt.textContent = `${lvWord} ${i}: ${p.shortName}${i % 10 === 0 ? " (BOSS)" : ""}${doneTag}`;
           playerSel.appendChild(opt);
         }
@@ -6332,7 +6154,7 @@
         if (sgEl) sgEl.textContent = state.gear;
         document.getElementById("evoCurrencyMini").textContent = `${state.gear}⚙ • ${state.cyberCore}💎`;
 
-        const evoReady = (state.gear >= 50 && state.cyberCore >= 5) || state.cyberCore >= 15;
+        const evoReady = Object.keys(Balance.skills).some(key => { const c = Balance.cost(state,key); return Balance.canUpgrade(state,key) && state.gear >= c.gear && state.cyberCore >= c.core; });
         const evoBadge = document.getElementById("evoReadyBadge");
         if (evoBadge) {
           evoBadge.textContent = evoReady ? L("🔥 HAZIR!", "🔥 READY!") : L("EVRİM", "EVOLVE");
@@ -6356,7 +6178,6 @@
         document.getElementById("skillBountyLv").textContent = "Lv." + (state.skills.bountyLv || 0);
         document.getElementById("skillOrbitalLv").textContent = "Lv." + (state.skills.orbitalLv || 0);
 
-        // 1 Elmas = 1 TL Matematiksel Döngü: Hiçbir yükseltme 1 Elmas değildir, minimum 5 💎 ile başlar ve kademeli artar!
         const dmgCost = getBaseSkillCost("dmgLv");
         const rateCost = getBaseSkillCost("rateLv");
         const hpCost = getBaseSkillCost("hpLv");
@@ -6382,6 +6203,15 @@
         if (btnCrit) btnCrit.textContent = L(`Aç / Geliştir (${critCore} 💎)`, `Unlock / Upgrade (${critCore} 💎)`);
         if (btnBounty) btnBounty.textContent = L(`Aç / Geliştir (${bountyCore} 💎)`, `Unlock / Upgrade (${bountyCore} 💎)`);
         if (btnOrbital) btnOrbital.textContent = L(`Aç / Geliştir (${orbitalCore} 💎)`, `Unlock / Upgrade (${orbitalCore} 💎)`);
+        const buttons = {dmgLv:btnDmg,rateLv:btnRate,hpLv:btnHp,goldLv:btnGold,droneLv:btnDrone,critLv:btnCrit,bountyLv:btnBounty,orbitalLv:btnOrbital};
+        for (const [key,button] of Object.entries(buttons)) {
+          if (!button) continue;
+          button.disabled = !Balance.canUpgrade(state,key);
+          if (button.disabled) { const n=Balance.nextUnlock(state,key);button.textContent=n?L(`🔒 ${n} farklı bölüm tamamla`, `🔒 Clear ${n} different levels`):L("MAKSİMUM", "MAXIMUM"); }
+        }
+        document.getElementById("skillCritLv").textContent = `Lv.${state.skills.critLv}/20 • %${(getCritChance()*100).toFixed(1)}`;
+        const summary = document.getElementById("balanceSummary");
+        if(summary) summary.textContent = L(`Temel geliştirmeler yalnızca Gear ile açılır. Elmas oynayarak da kazanılır. Sefer araştırması: +%${((state.level-1)*1.2).toFixed(1)} hasar. Kritik: %${(getCritChance()*100).toFixed(1)} (kahraman dahil).`, `Basic upgrades cost Gear only. Gems can also be earned by playing. Campaign research: +${((state.level-1)*1.2).toFixed(1)}% damage. Crit: ${(getCritChance()*100).toFixed(1)}% (including hero).`);
       }
 
       function updateOrbitalButtonUI() {
@@ -7068,6 +6898,7 @@
 
       document.getElementById("btnMuteAudio").addEventListener("click", (e) => {
         SoundFX.muted = !SoundFX.muted;
+        SoundFX.updateMix();
         e.currentTarget.textContent = SoundFX.muted ? "🔇" : "🔊";
         saveProgress();
       });
@@ -7075,6 +6906,7 @@
       document.getElementById("sliderMusicVol").addEventListener("input", (e) => {
         const val = parseInt(e.target.value, 10) || 0;
         SoundFX.musicVol = val / 100;
+        SoundFX.updateMix();
         document.getElementById("lblMusicVol").textContent = val + "%";
         saveProgress();
       });
@@ -7082,6 +6914,7 @@
       document.getElementById("sliderSfxVol").addEventListener("input", (e) => {
         const val = parseInt(e.target.value, 10) || 0;
         SoundFX.sfxVol = val / 100;
+        SoundFX.updateMix();
         document.getElementById("lblSfxVol").textContent = val + "%";
         saveProgress();
       });
@@ -7107,25 +6940,21 @@
       });
 
       // 1 ELMAS = 1 TL MATEMATİKSEL YÜKSELTME DÖNGÜSÜ:
-      // Temel yetenekler Lv.1->2 için 5 💎 + 50 ⚙ ile başlar; her seviyede +3 💎 ve +25 ⚙ artar (5💎, 8💎, 11💎, 14💎...).
       function getBaseSkillCost(skillKey) {
-        const lv = Math.max(1, state.skills[skillKey] || 1);
-        return {
-          gear: 65 + (lv - 1) * 35,
-          core: 5 + (lv - 1) * 4
-        };
+        return Balance.cost(state, skillKey);
       }
 
-      // Elit Siber-Genetik Modüller +%30 zamlı (20💎 / 26💎 / 33💎) başlar ve her seviyede +13💎 / +20💎 artar.
       function getEliteSkillCoreCost(skillKey) {
-        const lv = Math.max(0, state.skills[skillKey] || 0);
-        if (skillKey === "droneLv") return 33 + lv * 20;
-        if (skillKey === "critLv") return 26 + lv * 13;
-        if (skillKey === "orbitalLv") return 26 + lv * 13;
-        return 20 + lv * 13; // bountyLv
+        return Balance.cost(state, skillKey).core;
       }
 
       function tryUpgradeSkill(skillKey, gearCost, coreCost, label) {
+        if (!Balance.canUpgrade(state, skillKey)) {
+          const next = Balance.nextUnlock(state, skillKey);
+          showToast(next ? L(`${next} farklı bölüm tamamlayınca yeni seviye açılır.`, `Complete ${next} different levels to unlock the next rank.`) : L("Maksimum seviye.", "Maximum level."));
+          return;
+        }
+        ({gear: gearCost, core: coreCost} = Balance.cost(state, skillKey));
         if (state.gear < gearCost || state.cyberCore < coreCost) {
           showToast(L(
             `💎 Yetersiz Kaynak! ${gearCost > 0 ? gearCost + " ⚙ ve " : ""}${coreCost} 💎 gerekli (Mağazada Bonuslu Elmas Paketleri Mevcut).`,
@@ -7489,6 +7318,7 @@
       ];
 
       function renderMissionsAndHeroesModal() {
+        refreshDailyMissions();
         const heroNamesTr = { vega: "⚡ Amiral Vega", kaan: "🛠️ Mühendis Kaan", nova: "☄️ Kaptan Nova" };
         const heroNamesEn = { vega: "⚡ Admiral Vega", kaan: "🛠️ Engineer Kaan", nova: "☄️ Captain Nova" };
         const hMap = state.lang === "en" ? heroNamesEn : heroNamesTr;
@@ -7524,12 +7354,12 @@
           if (descEl) {
             if (hKey === "vega") {
               descEl.innerHTML = state.lang === "en"
-                ? `Particle Laser & Tesla gain <strong>+${info.vegaDmgBonusPct}% Damage</strong> & <strong>+${info.vegaRangeBonus}m Range</strong> <span class="text-cyan-300 text-[9.5px]">(Next Lv: +${info.vegaDmgBonusPct + 4}%)</span>.`
-                : `Parçacık Lazer ve Tesla kulelerine <strong>+%${info.vegaDmgBonusPct} Hasar</strong> ve <strong>+${info.vegaRangeBonus}m Menzil</strong> verir <span class="text-cyan-300 text-[9.5px]">(Sonraki Sv: +%${info.vegaDmgBonusPct + 4})</span>.`;
+                ? `Particle Laser & Tesla gain <strong>+${info.vegaDmgBonusPct}% Damage</strong> & <strong>+${info.vegaRangeBonus}m Range</strong> <span class="text-cyan-300 text-[9.5px]">(Next Lv: +${info.vegaDmgBonusPct + 2}%)</span>.`
+                : `Parçacık Lazer ve Tesla kulelerine <strong>+%${info.vegaDmgBonusPct} Hasar</strong> ve <strong>+${info.vegaRangeBonus}m Menzil</strong> verir <span class="text-cyan-300 text-[9.5px]">(Sonraki Sv: +%${info.vegaDmgBonusPct + 2})</span>.`;
             } else if (hKey === "kaan") {
               descEl.innerHTML = state.lang === "en"
-                ? `Tower builds & upgrades are <strong>-${info.kaanDiscountPct}% cheaper</strong>; Repair Tower is <strong>+${info.kaanRepairPct}% (+${info.kaanHealBonus} HP)</strong> stronger.`
-                : `Tüm kule kurulum ve yükseltmeleri <strong>-%${info.kaanDiscountPct} ucuzdur</strong>; Onarım Kulesi <strong>+%${info.kaanRepairPct} (+${info.kaanHealBonus} Can)</strong> güçlenir.`;
+                ? `Tower builds & upgrades are <strong>-${info.kaanDiscountPct}% cheaper</strong>; Repair Tower is <strong>+${info.kaanHealBonus} HP</strong> stronger.`
+                : `Tüm kule kurulum ve yükseltmeleri <strong>-%${info.kaanDiscountPct} ucuzdur</strong>; Onarım Kulesi <strong>+${info.kaanHealBonus} Can</strong> güçlenir.`;
             } else if (hKey === "nova") {
               descEl.innerHTML = state.lang === "en"
                 ? `Grants <strong>+${info.novaCritPct}% Crit Chance</strong> to all towers and reduces Orbital Laser cooldown by <strong>-${info.novaOrbitalCdRed}s</strong>.`
@@ -7556,8 +7386,8 @@
         document.querySelectorAll(".hero-gem-up-btn").forEach(btn => {
           const hKey = btn.getAttribute("data-hero-gem");
           const info = getHeroInfo(hKey);
-          if (info.lv >= 10) {
-            btn.textContent = L("👑 MAKSİMUM SEVİYE", "👑 MAX LEVEL");
+          if (info.lv >= Balance.heroLimit(state)) {
+            btn.textContent = info.lv >= 10 ? L("👑 MAKSİMUM SEVİYE", "👑 MAX LEVEL") : L("🔒 Daha fazla farklı bölüm tamamla", "🔒 Complete more different levels");
             btn.disabled = true;
           } else {
             btn.disabled = false;
@@ -7592,7 +7422,7 @@
         const listEl = document.getElementById("dailyMissionsList");
         listEl.innerHTML = "";
         DAILY_MISSIONS.forEach(m => {
-          const curVal = Math.min(m.target, state.stats[m.statKey] || 0);
+          const curVal = Math.min(m.target, Math.max(0, (state.stats[m.statKey] || 0) - (state.missionBaseline[m.statKey] || 0)));
           const pct = Math.round((curVal / m.target) * 100);
           const isDone = curVal >= m.target;
           const isClaimed = Boolean(state.claimedMissions[m.id]);
@@ -7628,8 +7458,9 @@
           btn.addEventListener("click", () => {
             const mId = btn.getAttribute("data-mission");
             const m = DAILY_MISSIONS.find(x => x.id === mId);
+            refreshDailyMissions();
             if (!m || state.claimedMissions[mId]) return;
-            const curVal = state.stats[m.statKey] || 0;
+            const curVal = Math.max(0, (state.stats[m.statKey] || 0) - (state.missionBaseline[m.statKey] || 0));
             if (curVal < m.target) {
               showToast(`Görev henüz tamamlanmadı (${curVal}/${m.target})!`);
               return;
@@ -7671,13 +7502,12 @@
         });
       });
 
-      // ELMAS İLE KOMUTAN SEVİYE ATLATMA (1.500 💎, +500 💎/Sv)
       document.querySelectorAll(".hero-gem-up-btn").forEach(btn => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
           const hKey = btn.getAttribute("data-hero-gem") || "vega";
           const info = getHeroInfo(hKey);
-          if (info.lv >= 10) return;
+          if (info.lv >= Balance.heroLimit(state)) return;
           if (state.cyberCore < info.gemCost) {
             SoundFX.uiClick();
             showToast(L(
@@ -7692,7 +7522,7 @@
           triggerHaptic("heavy");
           state.cyberCore -= info.gemCost;
           state.heroProgress[hKey].lv = Math.min(10, info.lv + 1);
-          state.heroProgress[hKey].xp = 0;
+          // Preserve previously earned XP when a gem promotion is used.
           state.activeHero = hKey;
           saveProgress();
           updateTowerUnlockBadges();
@@ -7838,6 +7668,15 @@
         { day: 7, gear: 300, core: 10, icon: "👑" }
       ];
 
+      function refreshDailyMissions() {
+        const day = getTodayKey();
+        if (state.missionDay !== day) {
+          state.missionDay = day;
+          state.missionBaseline = {...state.stats};
+          state.claimedMissions = {};
+        }
+      }
+
       function getTodayKey() {
         const d = new Date();
         return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -7938,7 +7777,7 @@
         const hMap = state.lang === "en" ? heroNamesEn : heroNamesTr;
 
         const progEl = document.getElementById("lobbyProgressText");
-        if (progEl) progEl.textContent = L(`Bölüm ${lv}/200 (${p.shortName})`, `Lv.${lv}/200 (${p.shortName})`);
+        if (progEl) { const stars = Object.values(state.levelStars).reduce((a,b)=>a+b,0); progEl.textContent = L(`Bölüm ${lv}/200 • ${stars}/600 ★`, `Level ${lv}/200 • ${stars}/600 ★`); }
         const heroEl = document.getElementById("lobbyHeroText");
         if (heroEl) heroEl.textContent = `${hMap[state.activeHero] || "⚡ Vega"} (★Lv.${hInfo.lv})`;
         const resEl = document.getElementById("lobbyResourcesText");

@@ -1,0 +1,95 @@
+{
+  "milestones": [
+    {
+      "level": 5,
+      "firstClearGemsWith3Stars": 30,
+      "baseGear": 415,
+      "hpMult": 1.09,
+      "waves": 4
+    },
+    {
+      "level": 10,
+      "firstClearGemsWith3Stars": 58,
+      "baseGear": 958,
+      "hpMult": 1.22,
+      "waves": 5
+    },
+    {
+      "level": 25,
+      "firstClearGemsWith3Stars": 138,
+      "baseGear": 3344,
+      "hpMult": 1.64,
+      "waves": 4
+    },
+    {
+      "level": 50,
+      "firstClearGemsWith3Stars": 274,
+      "baseGear": 9585,
+      "hpMult": 2.39,
+      "waves": 6
+    },
+    {
+      "level": 100,
+      "firstClearGemsWith3Stars": 544,
+      "baseGear": 30050,
+      "hpMult": 4.15,
+      "waves": 7
+    },
+    {
+      "level": 200,
+      "firstClearGemsWith3Stars": 1084,
+      "baseGear": 101965,
+      "hpMult": 8.63,
+      "waves": 8
+    }
+  ],
+  "costs": {
+    "dmgLv": {
+      "max": 21,
+      "gear": 5950,
+      "core": 0
+    },
+    "rateLv": {
+      "max": 21,
+      "gear": 5950,
+      "core": 0
+    },
+    "hpLv": {
+      "max": 11,
+      "gear": 2725,
+      "core": 0
+    },
+    "goldLv": {
+      "max": 11,
+      "gear": 2825,
+      "core": 0
+    },
+    "droneLv": {
+      "max": 6,
+      "gear": 0,
+      "core": 192
+    },
+    "critLv": {
+      "max": 20,
+      "gear": 0,
+      "core": 440
+    },
+    "bountyLv": {
+      "max": 10,
+      "gear": 0,
+      "core": 195
+    },
+    "orbitalLv": {
+      "max": 8,
+      "gear": 0,
+      "core": 176
+    }
+  },
+  "crit": {
+    "perRankPercentagePoints": 0.5,
+    "maxMatrix": 10,
+    "maxNova": 14.75,
+    "maxCombined": 24.75,
+    "expectedExtraDamageAtCombinedMaxPercent": 16.087500000000002
+  }
+}
