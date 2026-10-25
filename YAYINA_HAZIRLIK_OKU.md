@@ -1,4 +1,4 @@
-# Gezegeni Koru — yayın adayı · 25 Ekim 2026
+# Gezegeni Koru — sabit harita ve mağaza geçişi düzeltmesi · 25 Ekim 2026
 
 Bu tam kaynak paketi yeni bir iOS build gerektirir. Derlenmiş IPA veya Apple onayı değildir.
 
@@ -10,7 +10,19 @@ Bu tam kaynak paketi yeni bir iOS build gerektirir. Derlenmiş IPA veya Apple on
 4. İmzalama isimleri korundu: `Apple AppStore`, `neonvoid-appstore-profile`, `ios-distribution`. Build numarası son TestFlight numarasından bir artırılır. `submit_to_testflight: false`, IPA yüklemesini engellemez; dış test beta incelemesini otomatik istemez.
 5. Apple işlemesi tamamlanınca yeni yayın build'ini App Store sürümünde seç. Kaynak değişiklikleri eski build'lere uygulanmaz. Sürüm/iç satın alma incelemesi ayrı gönderim adımıdır.
 
-## Bu düzeltme
+## Bu güncellemede düzeltilenler
+
+- Haritanın tamamını rastgele kaydıran ekran sallanması kaldırıldı. Telefonun dokunsal geri bildirimi, kule tepkileri ve çatışma efektleri korunuyor.
+- Canvas normal flex yerleşiminden çıkarılıp harita alanına sabitlendi. Bitmap boyutu, çizimden hemen önce güncellenir; ResizeObserver çizimden sonra ekranı temizlemez. Bir piksele kadar ölçüm dalgalanması haritayı tekrar boyutlandırmaz.
+- Mağaza, lobi, duraklatma, laboratuvar, kahramanlar, kule bilgisi ve gizlilik pencereleri açıkken simülasyon ve görsel animasyon saati ilerlemez. Şimşek geometrisi de duraklatılmış karede sabittir.
+- Lobiden açılan mağazayı kapatmak lobiye döner. Mağazanın altında duraklatma menüsü açıksa oyun başlamaz. Son pencere kapandığında oyun devam eder.
+- Elmas miktarları/fiyat eşleştirmeleri, reklam birimleri, 3 bölüm reklam kuralı, kayıtlar ve önceki düzeltmeler korunmuştur.
+
+## Cihazda son kontrol
+
+TestFlight test iş akışı ile yeni build al. Lobiden mağazayı 10 kez aç/kapat; her seferinde lobiye dönmeli. Savaş sırasında menü → mağaza → kapat yap; savaş menü kapanana kadar durmalı, harita yerinden oynamamalı. Kahraman, günlük ödül, kule bilgisi ve laboratuvar pencerelerini dene. Grafik kalitesini değiştirip kule seçimini dene. Her 3 bölüm sonrası geçiş reklamı ve isteğe bağlı ödüllü reklamı test reklamlarıyla kontrol et. Eski ilerlemeni silmen gerekmez.
+
+## Önceki reklam ve satın alma düzeltmeleri
 
 - Geçiş reklamı iki bölümde bir zafer ekranından kaldırıldı; her 3 tamamlanan bölümden sonra sonraki bölümün ilk dalgasından önce gösterilir.
 - Dalga başlatmaya çift dokunmak iki reklam veya iki dalga oluşturmaz. Bölüm değişirse eski reklam isteği yeni bölümde dalga başlatmaz.
@@ -22,7 +34,7 @@ Bu tam kaynak paketi yeni bir iOS build gerektirir. Derlenmiş IPA veya Apple on
 
 ## Kontrol ve sınırlar
 
-Web derlemesi ve 28 otomatik test; kayıt/tekrar teslimat, satın alma köprüsü, reklam kapanışı, 3 bölüm sayacı, çift dokunma, bölüm değişimi, UMP izin koşulları ve native yamanın tekrarlanabilirliği kontrol edilir. Gerçek iPhone, Xcode/IPA derlemesi, canlı AdMob doluluk oranı ve Apple ödeme akışı bu Linux ortamında çalıştırılamadı; Codemagic ve TestFlight doğrulaması gerekir.
+Web derlemesi ve 36 otomatik test; sabit kamera, 30 tekrarlı lobi/mağaza geçişi, pencere açıkken duraklama, sabit şimşek geometrisi, 100 tekrarlı boyut ölçüm dalgalanması, ekran yönü/kalite değişimi ve dokunma koordinatları dahil; kayıt/tekrar teslimat, satın alma köprüsü, reklam kapanışı, 3 bölüm sayacı, çift dokunma, bölüm değişimi, UMP izin koşulları ve native yamanın tekrarlanabilirliği kontrol edilir. Gerçek iPhone, Xcode/IPA derlemesi, canlı AdMob doluluk oranı ve Apple ödeme akışı bu Linux ortamında çalıştırılamadı; Codemagic ve TestFlight doğrulaması gerekir.
 
 Üretim reklamı gösterilmiyorsa Destek bilgileri ekranını kontrol et. AdMob sunucu onayı, uygulama/reklam birimi durumu, UMP mesaj yapılandırması ve reklam bulunabilirliği ayrıca etkili olabilir. Test için canlı reklamlara tıklama. TestFlight'ta VIP aldıysan zorunlu reklamların görünmemesi beklenen davranıştır; gerçek ilerlemeyi silme.
 
@@ -32,8 +44,12 @@ Web derlemesi ve 28 otomatik test; kayıt/tekrar teslimat, satın alma köprüs�
 
 24 Ekim oturumunda kaydedilenler: 13+ yaş derecelendirmesi (bölgeye göre değişebilir), Strategy/Action alt kategorileri, Türkçe alt başlık, ücretsiz indirme, 175 ülkede onaydan sonra erişilebilirlik ve AdMob veri türlerini içeren yayınlanmış gizlilik beyanı. Elmas paketlerinin fiyatları değiştirilmedi. Bunlar uygulamanın yayında olduğu anlamına gelmez.
 
-Son görülen sürüm: 1.0 / Prepare for Submission; seçili eski build 114. Bu paketten henüz IPA oluşturulmadı ve Apple'a yüklenmedi.
+Son doğrulanan sürüm: 1.0 / Prepare for Submission; seçili build 118. Telefon ve inceleme iletişim bilgileri, Copyright, İngilizce açıklama/anahtar kelimeler/destek URL'si ve İngilizce gizlilik URL'si kaydedildi. Sürümde Game Center kapalı ve Apple onayından sonra otomatik yayın seçili.
 
-Gönderim öncesi kalanlar: yeni yayın build'i ve gerçek cihaz reklam testi; sekiz elmas paketi için güncel mağaza inceleme ekran görüntüleri; App Review iletişim alanları (özellikle telefon); Copyright; içerik hakları beyanı; oyunda gerçek entegrasyon bulunmadığı için sürümün Game Center seçiminin kaldırılması; uygulama ekran görüntülerinin kontrolü; güncellenen politika dosyasının GitHub'a aktarılması. Game Center ve iletişim alanlarını kaydetme girişimi tamamlanmadı. 25 Ekimde Apple oturumu kapalı bulundu; yeni giriş gerekiyor.
+Bu kaynak değişikliği build 118'e uygulanmış değildir. Yeni IPA Codemagic ile alınmalı ve gerçek cihazda test edilmelidir. Sonra yayın iş akışıyla alınmış yeni build App Store sürümünde seçilmelidir.
+
+Apple'ın son doğrulamasında kalan zorunlu eksikler: iPhone Dynamic Island orta boy ekran görüntüsü, 13 inç iPad ekran görüntüsü ve içerik hakları beyanı. Ayrıca sekiz elmas ürünü için mağaza inceleme görselleri hazırlanmalı ve ürünler ilk uygulama sürümüyle incelemeye eklenmelidir. Draft Submissions inceleme taslağıdır; VIP ürünü taslakta, uygulama sürümü eksikler nedeniyle henüz eklenemedi. Yeni politika dosyası GitHub'daki herkese açık URL'ye de aktarılmalı.
+
+İçerik hakları beyanı tahmin edilmemeli: oyundaki ikon/görsel/seslerin sahipliği veya ticari kullanım lisansı geliştirici tarafından doğrulanmalıdır. Kodla çizilen oyun grafikleri ve sentezlenen sesler görüldü; uygulama ikonunun kaynağı kaynak dosyadan doğrulanamıyor.
 
 Politika beyanı Google'ın AdMob veri açıklaması ve mevcut kaynak kod üzerinden hazırlandı. Yeni native build'in SDK gizlilik raporu ve AdMob hesap yapılandırması ile son kontrol de yapılmalı.

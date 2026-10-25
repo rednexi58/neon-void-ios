@@ -102,6 +102,9 @@
       display: block;
       touch-action: none;
     }
+    /* The canvas bitmap must never contribute an intrinsic size to the flex layout. */
+    #canvasContainer { flex: 1 1 0%; min-width: 0; min-height: 0; }
+    #gameCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     ::-webkit-scrollbar {
       width: 5px;
       height: 5px;
@@ -2677,7 +2680,6 @@
         simulatedOffline: false,
         bestEndlessWave: 0,
         idleTaxAccumulated: 25,
-        screenShake: 0,
         stats: {
           killsTotal: 0,
           lv3Upgrades: 0,
@@ -2703,8 +2705,7 @@
             navigator.vibrate(intensity === "heavy" ? [28, 35, 45] : (intensity === "medium" ? 18 : 8));
           }
         } catch (e) {}
-        if (intensity === "heavy") state.screenShake = Math.max(state.screenShake, 7.5);
-        else if (intensity === "medium") state.screenShake = Math.max(state.screenShake, 3.5);
+        // Haptic feedback must not translate the map, including UI rewards/upgrades.
       }
 
       function getHeroInfo(heroKey) {
@@ -3552,7 +3553,6 @@
         state.paused = false;
         state.doubledThisLevel = false;
         state.orbitalCooldown = 0;
-        state.screenShake = 0;
         state.selectedSocketIndex = 0;
 
         state.waveWaitingForPlayer = true;
@@ -3902,11 +3902,8 @@
       }
 
       function updateSimulation(dt) {
-        if (state.screenShake > 0) {
-          state.screenShake = Math.max(0, state.screenShake - dt * 18);
-        }
         if (state.waveStartPending) return;
-        if (state.paused || state.levelEnded) return;
+        if (state.paused || state.levelEnded || hasBlockingModalOpen() || document.hidden) return;
 
         roadFlowOffset = (roadFlowOffset + dt * 36) % 28;
         // Kurtarılan gezegenlerden saniyelik pasif Gear vergisi birikimi
@@ -4910,13 +4907,24 @@
         return Math.min(3, rawDpr);
       }
 
+      let canvasResizePending = true;
+      let canvasSizeInitialized = false;
       function resizeCanvas() {
+        // ResizeObserver can fire after drawing. Defer bitmap resets until the next draw.
+        canvasResizePending = true;
+      }
+
+      function applyCanvasResize() {
+        if (!canvasResizePending) return;
         const pRect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : canvas.getBoundingClientRect();
         const rawW = pRect.width;
         const rawH = pRect.height;
         if (rawW < 50 || rawH < 50) return;
-        const cssW = Math.max(120, Math.round(rawW));
-        const cssH = Math.max(120, Math.round(rawH));
+        const measuredW = Math.round(rawW);
+        const measuredH = Math.round(rawH);
+        // Ignore subpixel layout noise around a rounding boundary, but honor real resizes.
+        const cssW = canvasSizeInitialized && Math.abs(measuredW - viewTransform.cssW) <= 1 ? viewTransform.cssW : measuredW;
+        const cssH = canvasSizeInitialized && Math.abs(measuredH - viewTransform.cssH) <= 1 ? viewTransform.cssH : measuredH;
         const dpr = getTargetDpr();
 
         const targetW = Math.round(cssW * dpr);
@@ -4936,6 +4944,8 @@
         viewTransform.scale = scale;
         viewTransform.offsetX = offsetX;
         viewTransform.offsetY = offsetY;
+        canvasResizePending = false;
+        canvasSizeInitialized = true;
       }
       window.addEventListener("resize", resizeCanvas);
       if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
@@ -4949,6 +4959,7 @@
         if (Math.abs(rect.width - viewTransform.cssW) > 1 || Math.abs(rect.height - viewTransform.cssH) > 1) {
           resizeCanvas();
         }
+        applyCanvasResize();
         const scaleX = viewTransform.cssW / rect.width;
         const scaleY = viewTransform.cssH / rect.height;
         const localX = (clientX - rect.left) * scaleX;
@@ -4969,8 +4980,9 @@
         const segments = 5;
         for (let i = 1; i < segments; i++) {
           const t = i / segments;
-          const mx = x1 + (x2 - x1) * t + (Math.random() - 0.5) * 14;
-          const my = y1 + (y2 - y1) * t + (Math.random() - 0.5) * 14;
+          const phase = sceneAnimationTime * 35 + i * 12.9898 + x1 * 0.13 + y2 * 0.17;
+          const mx = x1 + (x2 - x1) * t + Math.sin(phase) * 7;
+          const my = y1 + (y2 - y1) * t + Math.cos(phase * 1.7) * 7;
           ctx.lineTo(mx, my);
         }
         ctx.lineTo(x2, y2);
@@ -5261,23 +5273,17 @@
       }
 
       function renderScene() {
-        const liveRect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : canvas.getBoundingClientRect();
-        if (liveRect.width > 50 && liveRect.height > 50 && (Math.abs(liveRect.width - viewTransform.cssW) > 1.5 || Math.abs(liveRect.height - viewTransform.cssH) > 1.5)) {
-          resizeCanvas();
-        }
+        applyCanvasResize();
         const dpr = viewTransform.dpr;
         ctx.save();
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.fillStyle = "#030611";
         ctx.fillRect(0, 0, viewTransform.cssW, viewTransform.cssH);
 
-        const activeShake = (!state.paused && !state.levelEnded && !state.waveStartPending && state.screenShake > 0) ? state.screenShake : 0;
-        const shakeX = activeShake > 0 ? (Math.random() - 0.5) * activeShake * 2 : 0;
-        const shakeY = activeShake > 0 ? (Math.random() - 0.5) * activeShake * 2 : 0;
-        ctx.translate(viewTransform.offsetX + shakeX, viewTransform.offsetY + shakeY);
+        ctx.translate(viewTransform.offsetX, viewTransform.offsetY);
         ctx.scale(viewTransform.scale, viewTransform.scale);
 
-        const nowAnim = performance.now() / 1000;
+        const nowAnim = sceneAnimationTime;
         const preset = SECTOR_PRESETS[state.sectorIndex] || SECTOR_PRESETS[0];
         const useHighDetail = state.qualityMode !== "performance";
 
@@ -6780,9 +6786,7 @@
       document.getElementById("btnOpenLeaderboardEnd").addEventListener("click", openLeaderboardModal);
       document.getElementById("btnCloseLeaderboard").addEventListener("click", () => {
         document.getElementById("modalLeaderboard").classList.add("hidden");
-        if (document.getElementById("modalPauseMenu").classList.contains("hidden") && !state.levelEnded) {
-          state.paused = false;
-        }
+        resumeIfNoModalOpen();
       });
 
       document.getElementById("btnSaveCommanderName").addEventListener("click", () => {
@@ -6981,9 +6985,8 @@
 
       function closePauseMenu() {
         SoundFX.uiClick();
-        state.paused = false;
-        document.getElementById("btnPauseToggle").textContent = "Duraklat";
         document.getElementById("modalPauseMenu").classList.add("hidden");
+        resumeIfNoModalOpen();
       }
 
       document.getElementById("btnPauseToggle").addEventListener("click", () => {
@@ -7100,9 +7103,7 @@
       });
       document.getElementById("btnCloseLab").addEventListener("click", () => {
         document.getElementById("modalLab").classList.add("hidden");
-        if (document.getElementById("modalPauseMenu").classList.contains("hidden")) {
-          state.paused = false;
-        }
+        resumeIfNoModalOpen();
       });
 
       // 1 ELMAS = 1 TL MATEMATİKSEL YÜKSELTME DÖNGÜSÜ:
@@ -7337,35 +7338,48 @@
         } catch (error) { showToast(error.message || "iOS izin ekranı açılamadı."); }
       });
 
-      document.getElementById("btnOpenShop").addEventListener("click", () => {
+      let shopReturnToLobby = false;
+      function openShop(returnToLobby = false) {
+        shopReturnToLobby = returnToLobby;
         state.paused = true;
+        if (returnToLobby) document.getElementById("modalStartLobby").classList.add("hidden");
         document.getElementById("modalShop").classList.remove("hidden");
-      });
-      function resumeIfNoModalOpen() {
-        const blockingIds = ["modalStartLobby", "modalPauseMenu", "modalMissions", "modalLeaderboard", "modalLab", "modalShop", "modalDailyLogin", "modalIosGuide", "modalOfflineBlock"];
-        const anyOpen = blockingIds.some(id => {
+      }
+      document.getElementById("btnOpenShop").addEventListener("click", () => openShop());
+      function hasBlockingModalOpen() {
+        const blockingIds = ["modalStartLobby", "modalPauseMenu", "modalMissions", "modalLeaderboard", "modalLab", "modalShop", "modalDailyLogin", "modalIosGuide", "modalOfflineBlock", "modalTowerInfo", "modalPrivacyPolicy", "modalLevelEnd", "modalAdSimulation"];
+        return blockingIds.some(id => {
           const el = document.getElementById(id);
           return el && !el.classList.contains("hidden");
         });
-        if (!anyOpen && !state.levelEnded) {
+      }
+      function resumeIfNoModalOpen() {
+        if (!hasBlockingModalOpen() && !state.levelEnded) {
           state.paused = false;
+          lastTime = performance.now();
           const pauseBtn = document.getElementById("btnPauseToggle");
           if (pauseBtn) pauseBtn.textContent = state.lang === "en" ? "Pause" : "Duraklat";
         }
       }
       document.getElementById("btnCloseShop").addEventListener("click", () => {
         document.getElementById("modalShop").classList.add("hidden");
-        resumeIfNoModalOpen();
+        if (shopReturnToLobby) openStartLobby();
+        else resumeIfNoModalOpen();
+        shopReturnToLobby = false;
       });
 
       // ============================================================================
       // 13. ANA OYUN DÖNGÜSÜ
       // ============================================================================
       let lastTime = performance.now();
+      let sceneAnimationTime = 0;
       function gameLoop(now) {
         try {
           const rawDt = Math.min(0.05, Math.max(0, (now - lastTime) / 1000));
           lastTime = now;
+          if (!state.paused && !state.levelEnded && !state.waveStartPending && !hasBlockingModalOpen() && !document.hidden) {
+            sceneAnimationTime += rawDt;
+          }
           updateSimulation(rawDt * state.gameSpeed);
           renderScene();
         } catch (err) {
@@ -7641,9 +7655,7 @@
       });
       document.getElementById("btnCloseMissions").addEventListener("click", () => {
         document.getElementById("modalMissions").classList.add("hidden");
-        if (document.getElementById("modalPauseMenu").classList.contains("hidden") && !state.levelEnded) {
-          state.paused = false;
-        }
+        resumeIfNoModalOpen();
       });
 
       document.querySelectorAll(".hero-select-btn").forEach(btn => {
@@ -7673,7 +7685,7 @@
               `💎 Not enough Gems! Need ${info.gemCost} 💎 to promote Commander (Earn gems in the game).`
             ));
             document.getElementById("modalMissions").classList.add("hidden");
-            document.getElementById("modalShop").classList.remove("hidden");
+            openShop();
             return;
           }
           SoundFX.repair();
@@ -8034,9 +8046,7 @@
 
       document.getElementById("btnLobbyOpenShop").addEventListener("click", () => {
         SoundFX.uiClick();
-        state.paused = true;
-        document.getElementById("modalStartLobby").classList.add("hidden");
-        document.getElementById("modalShop").classList.remove("hidden");
+        openShop(true);
       });
 
       window.addEventListener("load", () => {
