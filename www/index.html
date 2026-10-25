@@ -532,7 +532,7 @@
         <button id="btnOpenShop" class="py-2 px-2 rounded-xl text-xs font-semibold bg-fuchsia-500/20 hover:bg-fuchsia-500/30 border border-fuchsia-400/50 text-fuchsia-200 transition">🛒 Mağaza</button>
         <button id="btnOpenLeaderboardMenu" class="py-2 px-2 rounded-xl text-xs font-semibold bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 transition">🏆 Sıralama</button>
         <button id="btnOpenHeroesFromPause" class="py-2 px-2 rounded-xl text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 transition">🦸 Kahramanlar</button>
-        <button id="btnOpenIosGuide" class="hidden">🍎 iOS TestFlight</button>
+        <button id="btnOpenIosGuide" class="py-2 px-2 rounded-xl text-xs bg-slate-800 text-slate-300">Destek bilgileri</button>
         <button id="btnSpeedToggle" class="py-2 px-2 rounded-xl text-xs font-cyber font-bold bg-slate-800 hover:bg-slate-700 border border-slate-600 text-cyan-300 transition">1x HIZ</button>
       </div>
 
@@ -657,6 +657,7 @@
           <span class="text-2xl">🏆</span>
           <div>
             <h2 class="font-cyber font-black text-base sm:text-lg text-amber-300" id="i18n_lbTitle">OYUNCU SIRALAMASI (LEADERBOARD)</h2>
+          <p class="text-[10px] text-slate-400">Yerel skorlar ve bilgisayar rakipleri · Local scores and computer rivals</p>
             <p class="text-[11px] text-slate-300" id="i18n_lbSubtitle">Gezegenleri en hızlı kurtaran oyuncular, 200 Bölüm ve Sonsuz Mod Liderleri</p>
           </div>
         </div>
@@ -1278,6 +1279,8 @@
         </div>
 
         <div class="border-t border-slate-800 pt-2.5 flex flex-wrap items-center justify-between gap-2">
+          <button id="btnAdPrivacy" class="hidden px-3 py-2 rounded-lg bg-slate-800 text-slate-200 text-xs">Reklam gizlilik tercihleri</button>
+          <button id="btnPrivacyPolicy" class="text-sky-200 text-xs underline">Gizlilik politikası / Privacy policy</button>
           <button id="btnRestorePurchases" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-semibold text-[11px] transition">
             🔄 Satın Alımları Geri Yükle (Restore Purchases)
           </button>
@@ -1337,7 +1340,7 @@
     <div class="bg-slate-900 border border-amber-400/60 rounded-2xl max-w-sm w-full p-5 text-center flex flex-col gap-3">
       <div class="text-[11px] font-cyber uppercase tracking-widest text-amber-300" id="adSimTypeBadge">🎬 SPONSORLU VİDEO REKLAM</div>
       <div class="font-cyber font-bold text-base text-white" id="adSimTitle">Ödüllü Video Reklam Oynatılıyor...</div>
-      <p class="text-xs text-slate-400" id="adSimDesc">Tamamlanan her iki bölümden sonra geçiş reklamı görünür. VIP ile kalıcı kapatılabilir.</p>
+      <p class="text-xs text-slate-400" id="adSimDesc">Tamamlanan her üç bölümden sonra, yeni bölümün ilk dalgasından önce geçiş reklamı gösterilebilir. VIP ile kalıcı kapatılabilir.</p>
       <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
         <div id="adSimProgress" class="bg-amber-400 h-full w-0 transition-all duration-150"></div>
       </div>
@@ -1350,35 +1353,17 @@
     </div>
   </div>
 
-  <!-- MODAL 6: APPLE iOS TESTFLIGHT & CODEMAGIC BİLGİ PANELİ -->
-  <div id="modalIosGuide" class="hidden fixed inset-0 z-50 bg-slate-950/88 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#0b1124] border border-emerald-400/50 rounded-2xl max-w-2xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3.5 max-h-[90dvh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-        <div>
-          <h2 class="font-cyber font-bold text-base sm:text-lg text-emerald-300">🍎 GEZEGENİ KORU — iOS TESTFLIGHT & CODEMAGIC UYUMLULUĞU</h2>
-          <p class="text-xs text-slate-400">200 Bölüm, TR/EN Dil, Trainer Modu ve Rekabetçi Skor Tablosu ile TestFlight'a hazır.</p>
-        </div>
-        <button id="btnCloseIosGuide" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕ Kapat</button>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
-          <div class="font-cyber font-bold text-emerald-300">✔ Korunan Codemagic & Bundle Yapısı</div>
-          <p class="text-slate-400 text-[11px] mt-1">Görünen Ad: <strong>Gezegeni Koru</strong><br>Bundle ID: <code>com.neonvoid.cyberdefense</code><br>Profile: <code>neonvoid-appstore-profile</code></p>
-        </div>
-        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
-          <div class="font-cyber font-bold text-emerald-300">✔ 200 Dinamik Gezegen & Skor Tablosu</div>
-          <p class="text-slate-400 text-[11px] mt-1">Her bölümde (`1..200`) varış gezegeni değişir; en hızlı bitirme süreleri ve en yüksek bölüm sıralaması kaydedilir.</p>
-        </div>
-        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
-          <div class="font-cyber font-bold text-emerald-300">✔ TR / EN Çift Dil & Trainer Modu</div>
-          <p class="text-slate-400 text-[11px] mt-1">Tek dokunuşla Türkçe ve İngilizce geçişi; yeni oyuncular için 4 adımlı interaktif Eğitim (Trainer) Modu.</p>
-        </div>
-        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
-          <div class="font-cyber font-bold text-emerald-300">✔ Her 2 Tamamlanan Bölümde Reklam · VIP 300 TL</div>
-          <p class="text-slate-400 text-[11px] mt-1">Her 2 başarılı bölümde bir geçiş reklamı gösterilir; VIP ile kaldırılır.</p>
-        </div>
-      </div>
+  <div id="modalPrivacyPolicy" class="hidden fixed inset-0 z-[70] bg-slate-950 flex flex-col p-4" style="padding-top:calc(env(safe-area-inset-top) + 16px);padding-bottom:calc(env(safe-area-inset-bottom) + 16px)">
+    <button id="btnClosePrivacyPolicy" class="self-end px-4 py-3 bg-slate-800 rounded-lg">Kapat / Close</button>
+    <iframe title="Gizlilik politikası / Privacy policy" src="privacy.html" class="w-full flex-1 border-0"></iframe>
+  </div>
+  <!-- Support and privacy controls -->
+  <div id="modalIosGuide" class="hidden fixed inset-0 z-50 bg-slate-950/90 flex items-center justify-center p-4">
+    <div class="bg-[#0b1124] border border-slate-600 rounded-2xl max-w-lg w-full p-4 max-h-[85dvh] overflow-y-auto">
+      <h2 class="font-bold text-white">Destek bilgileri / Support</h2>
+      <pre id="adSupportStatus" class="text-xs text-slate-300 whitespace-pre-wrap my-4"></pre>
+      <button id="btnRetryAds" class="px-3 py-2 rounded-lg bg-sky-900 text-sky-100">Reklam bağlantısını yenile</button>
+      <button id="btnCloseIosGuide" class="px-3 py-2 rounded-lg bg-slate-800 text-white">Kapat</button>
     </div>
   </div>
 
@@ -1910,7 +1895,7 @@
         ["ÖDÜLÜ 2'YE KATLA (REKLAM İZLE)", "DOUBLE REWARD (WATCH AD)"],
         ["🎬 ÖDÜLLÜ REKLAM", "🎬 REWARDED AD"],
         ["Ödüllü Video Reklam Oynatılıyor...", "Playing Rewarded Video Ad..."],
-        ["Tamamlanan her iki bölümden sonra geçiş reklamı görünür. VIP ile kalıcı kapatılabilir.", "An interstitial may show after every two completed levels. Permanently removable with VIP."],
+        ["Tamamlanan her üç bölümden sonra, yeni bölümün ilk dalgasından önce geçiş reklamı gösterilebilir. VIP ile kalıcı kapatılabilir.", "An interstitial may show after every two completed levels. Permanently removable with VIP."],
         ["✔ Korunan Codemagic & Bundle Yapısı", "✔ Preserved Codemagic & Bundle Setup"],
         ["Görünen Ad:", "Display Name:"],
         ["✔ 200 Dinamik Gezegen & Skor Tablosu", "✔ 200 Dynamic Planets & Scoreboard"],
@@ -2665,6 +2650,9 @@
         removeAds: false,
         completedOrFailedCount: 0,
         adClears: 0,
+        lastInterstitialClear: 0,
+        waveStartPending: false,
+        levelRunId: 0,
         lastEarnedGear: 0,
         doubledThisLevel: false,
         gameSpeed: 1,
@@ -2800,6 +2788,7 @@
             if (typeof parsed.cyberCore === "number") state.cyberCore = parsed.cyberCore;
             // VIP ownership is never accepted from an editable local save; StoreKit restores it.
             state.removeAds = false;
+            if (Number.isSafeInteger(parsed.lastInterstitialClear)) state.lastInterstitialClear = Math.max(0, parsed.lastInterstitialClear);
             if (typeof parsed.adClears === "number") state.adClears = Math.max(0, Math.floor(parsed.adClears));
             if (typeof parsed.unlockedLevel === "number") state.unlockedLevel = Math.max(1, Math.min(200, parsed.unlockedLevel));
             if (parsed.completedLevels && typeof parsed.completedLevels === "object") {
@@ -2855,6 +2844,7 @@
             purchaseTransactions: state.purchaseTransactions,
             removeAds: state.removeAds,
             adClears: state.adClears,
+            lastInterstitialClear: state.lastInterstitialClear,
             unlockedLevel: state.unlockedLevel,
             completedLevels: state.completedLevels,
             bestTimes: state.bestTimes,
@@ -3456,6 +3446,9 @@
       }
 
       function startLevel(levelNum, forcedSectorIdx = null) {
+        state.levelRunId++;
+        state.waveStartPending = false;
+        void window.GameMonetization?.preloadAds();
         state.level = Math.max(1, Math.min(200, levelNum));
         if (forcedSectorIdx !== null) {
           state.sectorIndex = forcedSectorIdx;
@@ -3653,7 +3646,24 @@
         return queue;
       }
 
-      function spawnNextWave() {
+      async function spawnNextWave() {
+        if (state.waveStartPending || waveInProgress || state.levelEnded) return;
+        if (window.GameMonetization?.isInterstitialDue(state)) {
+          const runId = state.levelRunId;
+          const clears = state.adClears;
+          state.waveStartPending = true;
+          try {
+            const shown = await window.GameMonetization.showInterstitial();
+            if (shown) { state.lastInterstitialClear = clears; saveProgress(); }
+          } catch (error) { console.warn("AdMob geçiş reklamı", error); }
+          finally { if (state.levelRunId === runId) state.waveStartPending = false; }
+          if (state.levelRunId !== runId) return;
+          lastTime = performance.now();
+        }
+        beginWaveAfterInterstitial();
+      }
+
+      function beginWaveAfterInterstitial() {
         if (!state.endlessMode && state.waveIndex >= state.totalWaves) return;
         state.waveWaitingForPlayer = false;
         spawnQueue = buildWaveQueue(state.level, state.waveIndex);
@@ -3891,6 +3901,7 @@
       }
 
       function updateSimulation(dt) {
+        if (state.waveStartPending) return;
         if (state.paused || state.levelEnded) return;
 
         roadFlowOffset = (roadFlowOffset + dt * 36) % 28;
@@ -4675,7 +4686,7 @@
 
         state.adClears++;
         saveProgress();
-        checkInterstitialAdThen(showVictoryModal, true);
+        showVictoryModal();
       }
 
       function handleGameOver() {
@@ -4709,22 +4720,11 @@
           document.getElementById("modalLevelEnd").classList.remove("hidden");
         };
 
-        checkInterstitialAdThen(showDefeatModal, false);
+        showDefeatModal();
       }
 
       // Real AdMob ads are native-only. Never use a timer/fake modal to grant a reward.
       // Every 2 successful completed levels: natural break at victory (not on defeat).
-      async function checkInterstitialAdThen(callback, didWin) {
-        if (!EnforceOnlineCheck()) return;
-        try {
-          if (didWin && !state.removeAds && state.adClears % 2 === 0) {
-            await window.GameMonetization?.showInterstitial();
-          }
-        } catch (error) {
-          console.warn("AdMob geçiş reklamı:", error);
-        } finally { callback(); }
-      }
-
       // Keep the existing callback structure for the game's optional rewarded placements.
       // Grant rewards only on the Google SDK's earned-reward callback, never a simulated timer.
       async function runSimulatedAd(badgeText, titleText, seconds, onComplete, onCancel = null) {
@@ -7284,9 +7284,33 @@
           document.getElementById("modalMissions").classList.remove("hidden");
         });
       }
+      document.getElementById("btnPrivacyPolicy").addEventListener("click", () => document.getElementById("modalPrivacyPolicy").classList.remove("hidden"));
+      document.getElementById("btnClosePrivacyPolicy").addEventListener("click", () => document.getElementById("modalPrivacyPolicy").classList.add("hidden"));
+      function updateAdSupport() {
+        const info = window.GameMonetization.getDebugInfo();
+        document.getElementById("btnAdPrivacy").classList.toggle("hidden", !info.privacyOptionsRequired);
+        document.getElementById("adSupportStatus").textContent = [
+          info.testAds ? "Test reklamları" : "Canlı reklamlar",
+          "Reklam bağlantısı: " + info.ads,
+          "Geçiş reklamı: " + info.interstitial,
+          "Ödüllü reklam: " + info.rewarded,
+          state.removeAds ? "VIP aktif: zorunlu reklamlar kapalı" : "Her 3 tamamlanan bölüm sonrası ilk dalgadan önce",
+          "Tamamlanan bölüm sayacı: " + state.adClears,
+          info.adsError ? "Ayrıntı: " + info.adsError : ""
+        ].filter(Boolean).join("\n");
+      }
+      window.addEventListener("gk-monetization-status", updateAdSupport);
+      document.getElementById("btnRetryAds").addEventListener("click", async () => {
+        await window.GameMonetization.preloadAds(); updateAdSupport();
+      });
+      document.getElementById("btnAdPrivacy").addEventListener("click", async () => {
+        try { await window.GameMonetization.openPrivacyOptions(); }
+        catch (error) { showToast(error.message || "Gizlilik tercihleri açılamadı."); }
+      });
       document.getElementById("btnOpenIosGuide").addEventListener("click", () => {
         SoundFX.uiClick();
         state.paused = true;
+        updateAdSupport();
         document.getElementById("modalIosGuide").classList.remove("hidden");
       });
       document.getElementById("btnCloseIosGuide").addEventListener("click", () => {

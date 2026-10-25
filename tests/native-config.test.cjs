@@ -9,3 +9,10 @@ test('native hook pins UMP and iOS before first sync, repeatable on existing Pod
   assert.ok(patched.includes("pod 'Capacitor'"));
   assert.equal(pinPodfile(patched).match(/pod 'GoogleUserMessagingPlatform'/g).length,1);
 });
+
+const {extendPlugin}=require('../ios_config/patch-admob.cjs');
+test('UMP extension is idempotent and fails on incompatible plugin layout',()=> {
+  const base='import GoogleMobileAds\n        CAPPluginMethod(name: "resetConsentInfo", returnType: CAPPluginReturnPromise),\n    var testingDevices: [String] = []';
+  const patched=extendPlugin(base);assert.ok(patched.includes('info.canRequestAds'));assert.ok(patched.includes('presentPrivacyOptionsForm'));
+  assert.equal(extendPlugin(patched),patched);assert.throws(()=>extendPlugin('unknown'));
+});

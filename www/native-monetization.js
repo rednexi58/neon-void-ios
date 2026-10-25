@@ -32,6 +32,16 @@
     mod
   ));
 
+  // interstitial-cadence.cjs
+  var require_interstitial_cadence = __commonJS({
+    "interstitial-cadence.cjs"(exports, module) {
+      function isInterstitialDue2(state) {
+        return !state.removeAds && !state.endlessMode && state.waveIndex === 0 && state.adClears - (state.lastInterstitialClear || 0) >= 3;
+      }
+      module.exports = { isInterstitialDue: isInterstitialDue2 };
+    }
+  });
+
   // purchase-delivery.cjs
   var require_purchase_delivery = __commonJS({
     "purchase-delivery.cjs"(exports, module) {
@@ -767,6 +777,7 @@
   });
 
   // monetization-setup.js
+  var import_interstitial_cadence = __toESM(require_interstitial_cadence());
   var import_purchase_delivery = __toESM(require_purchase_delivery());
   init_dist();
   var import_ad_presentation = __toESM(require_ad_presentation());
@@ -9020,7 +9031,7 @@ Enter "E" to fail with an error.Anything else to cancel.`);
 
   // monetization-setup.js
   var IOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
-  var TEST_ADS = true;
+  var TEST_ADS = false;
   var VIP_ID = "vip_lifetime";
   var GEM_PACKS = [
     { id: "gems_50", baseGems: 50, bonusGems: 0, totalGems: 50 },
@@ -9043,6 +9054,8 @@ Enter "E" to fail with an error.Anything else to cancel.`);
   var interstitialBusy = false;
   var rewardedBusy = false;
   var adRequestBusy = false;
+  var interstitialLoading = null;
+  var rewardedLoading = null;
   var iapReady = false;
   var iapInitializing = null;
   var vipOwned = false;
@@ -9116,6 +9129,8 @@ Enter "E" to fail with an error.Anything else to cancel.`);
     adsError: "",
     interstitial: "Haz\u0131rlan\u0131yor",
     rewarded: "Haz\u0131rlan\u0131yor",
+    canRequestAds: "Bekleniyor",
+    privacyOptionsRequired: false,
     vipProduct: "Bekleniyor"
   };
   var refreshDiagnosticsUI = () => {
@@ -9124,6 +9139,7 @@ Enter "E" to fail with an error.Anything else to cancel.`);
     diagnostics[field] = String(value);
     refreshDiagnosticsUI();
     emitCatalog();
+    window.dispatchEvent(new CustomEvent("gk-monetization-status"));
   };
   var errorText = (error) => String(error?.message || error?.code || error || "Bilinmeyen hata");
   var log = (name, err) => {
@@ -9282,7 +9298,7 @@ Enter "E" to fail with an error.Anything else to cancel.`);
     })();
     return iapInitializing;
   }
-  async function prepareInterstitial() {
+  async function loadInterstitial() {
     if (!initializedAds || interstitialReady || interstitialBusy) return interstitialReady;
     try {
       await AdMob.prepareInterstitial({
@@ -9299,7 +9315,7 @@ Enter "E" to fail with an error.Anything else to cancel.`);
       return false;
     }
   }
-  async function prepareRewarded() {
+  async function loadRewarded() {
     if (!initializedAds || rewardedReady || rewardedBusy) return rewardedReady;
     try {
       await AdMob.prepareRewardVideoAd({
@@ -9316,6 +9332,18 @@ Enter "E" to fail with an error.Anything else to cancel.`);
       return false;
     }
   }
+  function prepareInterstitial() {
+    if (!interstitialLoading) interstitialLoading = loadInterstitial().finally(() => {
+      interstitialLoading = null;
+    });
+    return interstitialLoading;
+  }
+  function prepareRewarded() {
+    if (!rewardedLoading) rewardedLoading = loadRewarded().finally(() => {
+      rewardedLoading = null;
+    });
+    return rewardedLoading;
+  }
   async function initializeAdsOnce() {
     if (!IOS) return false;
     if (initializedAds) return true;
@@ -9325,12 +9353,19 @@ Enter "E" to fail with an error.Anything else to cancel.`);
         initializeForTesting: TEST_ADS
       });
       report("ads", "SDK haz\u0131r, izin kontrol\xFC");
-      let consent = await AdMob.requestConsentInfo();
-      if (consent.isConsentFormAvailable && consent.status === AdmobConsentStatus.REQUIRED) {
-        consent = await AdMob.showConsentForm();
+      try {
+        let consent = await AdMob.requestConsentInfo();
+        if (consent.isConsentFormAvailable && consent.status === AdmobConsentStatus.REQUIRED) {
+          await AdMob.showConsentForm();
+        }
+      } catch (error) {
+        log("AdMob consent update", error);
       }
-      if (![AdmobConsentStatus.OBTAINED, AdmobConsentStatus.NOT_REQUIRED].includes(consent.status)) {
-        report("ads", "Reklam izni tamamlanmad\u0131");
+      const consentInfo = await AdMob.getConsentInfo();
+      diagnostics.privacyOptionsRequired = consentInfo.privacyOptionsRequired === true;
+      report("canRequestAds", String(consentInfo.canRequestAds === true));
+      if (consentInfo.canRequestAds !== true) {
+        report("ads", "Reklam izni bekleniyor");
         return false;
       }
       initializedAds = true;
@@ -9355,6 +9390,21 @@ Enter "E" to fail with an error.Anything else to cancel.`);
     return adsInitializing;
   }
   window.GameMonetization = {
+    isInterstitialDue: import_interstitial_cadence.isInterstitialDue,
+    async openPrivacyOptions() {
+      if (!IOS) return;
+      await AdMob.showPrivacyOptionsForm();
+      initializedAds = false;
+      interstitialReady = false;
+      rewardedReady = false;
+      await initializeAds();
+    },
+    async preloadAds() {
+      if (gameReady) {
+        await initializeAds();
+        await Promise.allSettled([prepareInterstitial(), prepareRewarded()]);
+      }
+    },
     get isIOS() {
       return IOS;
     },
@@ -9459,11 +9509,10 @@ Enter "E" to fail with an error.Anything else to cancel.`);
       adRequestBusy = true;
       interstitialBusy = true;
       try {
-        if (!initializedAds) await initializeAds();
-        interstitialBusy = false;
-        if (!interstitialReady) await prepareInterstitial();
-        interstitialBusy = true;
-        if (!interstitialReady) return false;
+        if (!initializedAds || !interstitialReady) {
+          void window.GameMonetization.preloadAds();
+          return false;
+        }
         interstitialReady = false;
         report("interstitial", "G\xF6steriliyor");
         return await (0, import_ad_presentation.presentAd)({

@@ -8,6 +8,7 @@ function pinPodfile(source) {
   return source.replace("target 'App' do", "target 'App' do\n  pod 'GoogleUserMessagingPlatform', '2.7.0'");
 }
 if (require.main === module) {
+  require('./patch-admob.cjs').patch();
   // This hook runs even inside `cap add ios`, before its first pod install.
   if (process.platform === 'darwin' && fs.existsSync('ios/App/Podfile')) {
     execFileSync('bash', ['ios_config/apply_ios_settings.sh'], {stdio:'inherit'});

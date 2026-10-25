@@ -69,3 +69,74 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: false
+
+  ios-appstore-release:
+    name: Gezegeni Koru - App Store Release
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Apple AppStore
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - neonvoid-appstore-profile
+        certificates:
+          - ios-distribution
+      vars:
+        BUNDLE_ID: "com.neonvoid.cyberdefense"
+        APP_DISPLAY_NAME: "Gezegeni Koru"
+        GK_TEST_ADS: "0" # Live AdMob units for the App Store release
+        APP_STORE_APPLE_ID: "6825732487"
+      node: 20.11.0
+      xcode: latest
+    scripts:
+      - name: Install NPM & Capacitor Dependencies
+        script: |
+          set -e
+          npm ci --no-audit --no-fund
+          npm run build:web
+          npm test
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
+          # The sync hook configures iOS 15 and UMP 2.7.0 before CocoaPods.
+          npx cap sync ios
+      - name: Install Official Gezegeni Koru AppIcon into Xcode Assets.xcassets
+        script: |
+          ICONSET_DIR="ios/App/App/Assets.xcassets/AppIcon.appiconset"
+          mkdir -p "$ICONSET_DIR"
+          rm -f "$ICONSET_DIR"/*.png "$ICONSET_DIR"/Contents.json
+          cp -R ios_config/AppIcon.appiconset/* "$ICONSET_DIR/"
+          echo "Installed AppIcon.appiconset files:"
+          ls -la "$ICONSET_DIR"
+      - name: Configure Apple display name + native AdMob + StoreKit 2
+        script: |
+          bash ios_config/apply_ios_settings.sh
+          cd ios/App && pod install --repo-update
+      - name: Set Up Code Signing Settings on Xcode Project
+        script: |
+          xcode-project use-profiles
+      - name: Increment Build Number
+        script: |
+          cd ios/App
+          set -e
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID")
+          case "$LATEST_BUILD_NUMBER" in
+            ''|*[!0-9]*) echo "Cannot read the latest TestFlight build number"; exit 1 ;;
+          esac
+          NEW_BUILD_NUMBER=$((LATEST_BUILD_NUMBER + 1))
+          echo "iOS Build Number: $NEW_BUILD_NUMBER"
+          agvtool new-version -all "$NEW_BUILD_NUMBER"
+          agvtool what-version -terse
+      - name: Build IPA for App Store & TestFlight
+        script: |
+          xcode-project build-ipa \
+            --workspace "ios/App/App.xcworkspace" \
+            --scheme "App"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false

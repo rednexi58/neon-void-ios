@@ -1,3 +1,4 @@
+import { isInterstitialDue } from './interstitial-cadence.cjs';
 // This file is compiled by esbuild into www/native-monetization.js.
 // TestFlight uses demo ads (GK_TEST_ADS=1). Production requires GK_TEST_ADS=0.
 import { commitGrant, createDelivery } from './purchase-delivery.cjs';
@@ -38,6 +39,8 @@ let rewardedReady = false;
 let interstitialBusy = false;
 let rewardedBusy = false;
 let adRequestBusy = false;
+let interstitialLoading = null;
+let rewardedLoading = null;
 let iapReady = false;
 let iapInitializing = null;
 let vipOwned = false;
@@ -96,6 +99,8 @@ const diagnostics = {
   adsError: '',
   interstitial: 'Hazırlanıyor',
   rewarded: 'Hazırlanıyor',
+  canRequestAds: 'Bekleniyor',
+  privacyOptionsRequired: false,
   vipProduct: 'Bekleniyor',
 };
 
@@ -105,6 +110,7 @@ const report = (field, value) => {
   diagnostics[field] = String(value);
   refreshDiagnosticsUI();
   emitCatalog();
+  window.dispatchEvent(new CustomEvent('gk-monetization-status'));
 };
 
 const errorText = error =>
@@ -290,7 +296,7 @@ async function initializeIAP() {
   return iapInitializing;
 }
 
-async function prepareInterstitial() {
+async function loadInterstitial() {
   if (!initializedAds || interstitialReady || interstitialBusy) return interstitialReady;
 
   try {
@@ -310,7 +316,7 @@ async function prepareInterstitial() {
   }
 }
 
-async function prepareRewarded() {
+async function loadRewarded() {
   if (!initializedAds || rewardedReady || rewardedBusy) return rewardedReady;
 
   try {
@@ -330,6 +336,15 @@ async function prepareRewarded() {
   }
 }
 
+function prepareInterstitial() {
+  if (!interstitialLoading) interstitialLoading = loadInterstitial().finally(() => { interstitialLoading = null; });
+  return interstitialLoading;
+}
+function prepareRewarded() {
+  if (!rewardedLoading) rewardedLoading = loadRewarded().finally(() => { rewardedLoading = null; });
+  return rewardedLoading;
+}
+
 async function initializeAdsOnce() {
   if (!IOS) return false;
   if (initializedAds) return true;
@@ -343,12 +358,20 @@ async function initializeAdsOnce() {
 
     report('ads', 'SDK hazır, izin kontrolü');
 
-    let consent = await AdMob.requestConsentInfo();
-    if (consent.isConsentFormAvailable && consent.status === AdmobConsentStatus.REQUIRED) {
-      consent = await AdMob.showConsentForm();
+    try {
+      let consent = await AdMob.requestConsentInfo();
+      if (consent.isConsentFormAvailable && consent.status === AdmobConsentStatus.REQUIRED) {
+        await AdMob.showConsentForm();
+      }
+    } catch (error) {
+      // UMP itself may still authorize requests using valid consent from an earlier session.
+      log('AdMob consent update', error);
     }
-    if (![AdmobConsentStatus.OBTAINED, AdmobConsentStatus.NOT_REQUIRED].includes(consent.status)) {
-      report('ads', 'Reklam izni tamamlanmadı');
+    const consentInfo = await AdMob.getConsentInfo();
+    diagnostics.privacyOptionsRequired = consentInfo.privacyOptionsRequired === true;
+    report('canRequestAds', String(consentInfo.canRequestAds === true));
+    if (consentInfo.canRequestAds !== true) {
+      report('ads', 'Reklam izni bekleniyor');
       return false;
     }
     initializedAds = true;
@@ -375,6 +398,14 @@ function initializeAds() {
 }
 
 window.GameMonetization = {
+  isInterstitialDue,
+  async openPrivacyOptions() {
+    if (!IOS) return;
+    await AdMob.showPrivacyOptionsForm();
+    initializedAds = false; interstitialReady = false; rewardedReady = false;
+    await initializeAds();
+  },
+  async preloadAds() { if (gameReady) { await initializeAds(); await Promise.allSettled([prepareInterstitial(), prepareRewarded()]); } },
   get isIOS() {
     return IOS;
   },
@@ -480,12 +511,11 @@ window.GameMonetization = {
     adRequestBusy = true;
     interstitialBusy = true;
     try {
-      if (!initializedAds) await initializeAds();
-      // Preload helpers are guarded while another presentation is active.
-      interstitialBusy = false;
-      if (!interstitialReady) await prepareInterstitial();
-      interstitialBusy = true;
-      if (!interstitialReady) return false;
+      // Never delay a level transition while waiting for an ad network request.
+      if (!initializedAds || !interstitialReady) {
+        void window.GameMonetization.preloadAds();
+        return false;
+      }
       interstitialReady = false;
       report('interstitial', 'Gösteriliyor');
       return await presentAd({ sdk: AdMob, events: InterstitialAdPluginEvents,

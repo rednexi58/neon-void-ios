@@ -1,6 +1,6 @@
 # Gezegeni Koru — Codemagic test paketi · 24 Ekim 2026
 
-Bu ZIP tam kaynak projedir; derlenmiş veya Apple onaylı IPA değildir.
+Bu ZIP tam kaynak projedir; derlenmiş veya Apple onaylı IPA değildir. Güncel reklam düzeltmesi ve yayın iş akışı için önce **YAYINA_HAZIRLIK_OKU.md** dosyasını oku.
 
 ## Build alma
 
@@ -20,7 +20,7 @@ Bundle ID: `com.neonvoid.cyberdefense`. Apple uygulama ID: `6825732487`.
 - Kayıt yüklenmeden satın alma başlamaz. Bozuk kayıt sessizce sıfırlanıp üzerine yazılmaz.
 - Ödülsüz kapatılan reklam oyunu beklemede bırakmaz. Ödül yalnızca SDK'nın kazanıldı bildirimiyle verilir.
 - `GK_TEST_ADS: "1"` ile Google test reklamları açıktır; gelir üretmez. Bu değişken Apple satın alma ortamını belirlemez.
-- Sahte ATT penceresi kaldırıldı; mevcut izin düğmesi gerçek iOS API'sini çağırır. UMP gerekli/belirsiz durumda kalırsa reklam yüklenmez.
+- Sahte ATT penceresi kaldırıldı; mevcut izin düğmesi gerçek iOS API'sini çağırır. Reklam yükleme yetkisi UMP `canRequestAds` sonucuyla belirlenir.
 - Tailwind ve Türkçe/Latin fontlar pakete alındı. Arayüz için CDN gerekmez; oyunun mevcut internet gereksinimi korunur.
 - Kilit dosyası, otomatik kontroller ve ilk native senkronizasyon öncesi yapılandırma eklendi. Oyun mekaniği ve ürün kimlikleri korundu.
 
@@ -51,7 +51,7 @@ Türkiye baz fiyatları App Store Connect'te yönetilir. Önceki yapılandırmad
 
 ## Doğrulama ve sınırlar
 
-- Web derlemesi başarılı; **19 otomatik kontrol geçti**. Bunlar kayıt/tekrar teslimat, bonuslar, mock SDK ile StoreKit köprüsü, reklam kapanışı ve native hazırlık scriptini kapsar.
+- **28 otomatik kontrol** kayıt/tekrar teslimat, bonuslar, mock SDK ile StoreKit köprüsü, reklam kapanışı, 3 bölüm sayacı, UMP izin koşulları ve native hazırlık scriptini kapsar.
 - Bu ortamda Xcode/CocoaPods IPA derlemesi, gerçek iPhone görünümü, Apple ödeme ekranı ve AdMob sunucu akışı çalıştırılmadı. TestFlight ile doğrulanacak.
 - İşlem kaydı cihazdadır. Sunucu makbuz doğrulaması, hesaplar arası bakiye senkronizasyonu veya uygulama silindikten sonra tüketilebilir elmas kurtarma servisi eklenmedi. Önceki build'de tamamlanmış ama teslim edilmemiş işlemler geriye dönük otomatik onarılamaz.
 - Bu paket App Store Connect inceleme görsellerini, yaş derecelendirmesini, gizlilik beyanlarını, indirme fiyatını veya yayın ülkelerini değiştirmez. Bunlar canlı yayın öncesinde ayrıca tamamlanmalı; gizlilik beyanları AdMob veri kullanımıyla eşleştirilmeli.
