@@ -3552,6 +3552,7 @@
         state.paused = false;
         state.doubledThisLevel = false;
         state.orbitalCooldown = 0;
+        state.screenShake = 0;
         state.selectedSocketIndex = 0;
 
         state.waveWaitingForPlayer = true;
@@ -3901,13 +3902,13 @@
       }
 
       function updateSimulation(dt) {
+        if (state.screenShake > 0) {
+          state.screenShake = Math.max(0, state.screenShake - dt * 18);
+        }
         if (state.waveStartPending) return;
         if (state.paused || state.levelEnded) return;
 
         roadFlowOffset = (roadFlowOffset + dt * 36) % 28;
-        if (state.screenShake > 0) {
-          state.screenShake = Math.max(0, state.screenShake - dt * 18);
-        }
         // Kurtarılan gezegenlerden saniyelik pasif Gear vergisi birikimi
         state.idleTaxAccumulated = Math.min(2500, (state.idleTaxAccumulated || 0) + dt * (0.35 + state.unlockedLevel * 0.12));
 
@@ -4910,10 +4911,10 @@
       }
 
       function resizeCanvas() {
-        const cRect = canvas.getBoundingClientRect();
-        const pRect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : cRect;
-        const rawW = cRect.width > 50 ? cRect.width : pRect.width;
-        const rawH = cRect.height > 50 ? cRect.height : pRect.height;
+        const pRect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : canvas.getBoundingClientRect();
+        const rawW = pRect.width;
+        const rawH = pRect.height;
+        if (rawW < 50 || rawH < 50) return;
         const cssW = Math.max(120, Math.round(rawW));
         const cssH = Math.max(120, Math.round(rawH));
         const dpr = getTargetDpr();
@@ -4940,7 +4941,6 @@
       if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
         const ro = new ResizeObserver(() => resizeCanvas());
         ro.observe(canvas.parentElement);
-        ro.observe(canvas);
       }
 
       function clientToVirtualCoords(clientX, clientY) {
@@ -5261,7 +5261,7 @@
       }
 
       function renderScene() {
-        const liveRect = canvas.getBoundingClientRect();
+        const liveRect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : canvas.getBoundingClientRect();
         if (liveRect.width > 50 && liveRect.height > 50 && (Math.abs(liveRect.width - viewTransform.cssW) > 1.5 || Math.abs(liveRect.height - viewTransform.cssH) > 1.5)) {
           resizeCanvas();
         }
@@ -5271,8 +5271,9 @@
         ctx.fillStyle = "#030611";
         ctx.fillRect(0, 0, viewTransform.cssW, viewTransform.cssH);
 
-        const shakeX = state.screenShake > 0 ? (Math.random() - 0.5) * state.screenShake * 2 : 0;
-        const shakeY = state.screenShake > 0 ? (Math.random() - 0.5) * state.screenShake * 2 : 0;
+        const activeShake = (!state.paused && !state.levelEnded && !state.waveStartPending && state.screenShake > 0) ? state.screenShake : 0;
+        const shakeX = activeShake > 0 ? (Math.random() - 0.5) * activeShake * 2 : 0;
+        const shakeY = activeShake > 0 ? (Math.random() - 0.5) * activeShake * 2 : 0;
         ctx.translate(viewTransform.offsetX + shakeX, viewTransform.offsetY + shakeY);
         ctx.scale(viewTransform.scale, viewTransform.scale);
 
@@ -7315,6 +7316,7 @@
       });
       document.getElementById("btnCloseIosGuide").addEventListener("click", () => {
         document.getElementById("modalIosGuide").classList.add("hidden");
+        resumeIfNoModalOpen();
       });
 
       document.getElementById("btnRestorePurchases").addEventListener("click", async () => {
@@ -7339,8 +7341,21 @@
         state.paused = true;
         document.getElementById("modalShop").classList.remove("hidden");
       });
+      function resumeIfNoModalOpen() {
+        const blockingIds = ["modalStartLobby", "modalPauseMenu", "modalMissions", "modalLeaderboard", "modalLab", "modalShop", "modalDailyLogin", "modalIosGuide", "modalOfflineBlock"];
+        const anyOpen = blockingIds.some(id => {
+          const el = document.getElementById(id);
+          return el && !el.classList.contains("hidden");
+        });
+        if (!anyOpen && !state.levelEnded) {
+          state.paused = false;
+          const pauseBtn = document.getElementById("btnPauseToggle");
+          if (pauseBtn) pauseBtn.textContent = state.lang === "en" ? "Pause" : "Duraklat";
+        }
+      }
       document.getElementById("btnCloseShop").addEventListener("click", () => {
         document.getElementById("modalShop").classList.add("hidden");
+        resumeIfNoModalOpen();
       });
 
       // ============================================================================
@@ -7898,6 +7913,7 @@
       });
       document.getElementById("btnCloseDailyLogin").addEventListener("click", () => {
         document.getElementById("modalDailyLogin").classList.add("hidden");
+        resumeIfNoModalOpen();
       });
 
       // ANA GİRİŞ EKRANI (START LOBBY) GÜNCELLEME VE BUTONLARI
