@@ -998,7 +998,7 @@
         </div>
       </div>
 
-      <p id="balanceSummary" class="text-xs text-sky-200">Temel geliştirmeler Gear ile; tüm güçlendirmeler bölüm ilerlemesiyle sınırlıdır.</p>
+      <p id="balanceSummary" class="text-xs text-sky-200">Temel geliştirmeler Gear + elmas ile alınır; bölüm tamamlama şartı yoktur.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
         <div class="bg-slate-900/90 border border-cyan-500/35 rounded-xl p-3 flex flex-col justify-between gap-2">
           <div>
@@ -1066,7 +1066,7 @@
                 <span class="font-cyber font-bold text-fuchsia-300">🛸 Otonom Siber-Dron Filosu</span>
                 <span id="skillDroneLv" class="px-1.5 py-0.5 rounded bg-fuchsia-500/30 text-fuchsia-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Gezegen yörüngesinde devriye gezip otomatik ateş eden <strong class="text-fuchsia-200">Yardımcı Savaş Dronu (+1 Dron/Lv)</strong> üretir.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Gezegen yörüngesinde devriye gezip otomatik ateş eden <strong class="text-fuchsia-200">Dron filo gücü (+1 Dron/Lv; büyük filolar güçlendirilmiş gruplar halinde görünür)</strong> üretir.</p>
             </div>
             <button id="btnUpSkillDrone" class="w-full py-2 rounded-lg bg-fuchsia-500 hover:bg-fuchsia-400 text-slate-950 font-cyber font-bold transition">
               Aç / Geliştir (33 💎)
@@ -1079,7 +1079,7 @@
                 <span class="font-cyber font-bold text-amber-300">💥 Kuantum Kritik Matrisi</span>
                 <span id="skillCritLv" class="px-1.5 py-0.5 rounded bg-amber-500/30 text-amber-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Tüm kulelere <strong class="text-amber-200">+0,5 yüzde puanı kritik şansı / seviye (1,65× hasar)</strong> kazandırır.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Tüm kulelere <strong class="text-amber-200">+0,5 yüzde puanı kritik şansı / seviye (en fazla +60 puan; 1,65× hasar)</strong> kazandırır.</p>
             </div>
             <button id="btnUpSkillCrit" class="w-full py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-cyber font-bold transition">
               Aç / Geliştir (26 💎)
@@ -1092,7 +1092,7 @@
                 <span class="font-cyber font-bold text-emerald-300">💰 Biyo-Ganimet Sentezleyici</span>
                 <span id="skillBountyLv" class="px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class="text-emerald-200">+%2</strong> artırır.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class="text-emerald-200">+%5</strong> artırır.</p>
             </div>
             <button id="btnUpSkillBounty" class="w-full py-2 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-cyber font-bold transition">
               Aç / Geliştir (20 💎)
@@ -1105,7 +1105,7 @@
                 <span class="font-cyber font-bold text-rose-300">🛰️ Orbital Uydu Overclock</span>
                 <span id="skillOrbitalLv" class="px-1.5 py-0.5 rounded bg-rose-500/30 text-rose-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Orbital Lazer bekleme süresini <strong class="text-rose-200">-1 sn düşürür</strong> ve hasarını <strong class="text-rose-200">+%4</strong> artırır.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Orbital Lazer bekleme süresini <strong class="text-rose-200">-3 sn düşürür</strong> ve hasarını <strong class="text-rose-200">+%12</strong> artırır.</p>
             </div>
             <button id="btnUpSkillOrbital" class="w-full py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-cyber font-bold transition">
               Aç / Geliştir (26 💎)
@@ -1253,13 +1253,13 @@
             </div>
 
             <!-- 7: 5.000 + 2.000 Bonus = 7.000 Elmas -->
-            <div class="hidden bg-gradient-to-br from-fuchsia-950/70 to-slate-900 border-2 border-fuchsia-400/75 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+            <div class="bg-gradient-to-br from-fuchsia-950/70 to-slate-900 border-2 border-fuchsia-400/75 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="font-cyber font-bold text-fuchsia-200 text-xs">💎 7.000 Elmas</span>
                   <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-fuchsia-400 text-slate-950 font-black">+2.000 BONUS</span>
                 </div>
-                <p class="text-[10px] text-slate-200 mt-0.5">5.000 + <strong>2.000 Bonus 💎</strong> (1 Kahraman Lv.10!)</p>
+                <p class="text-[10px] text-slate-200 mt-0.5">5.000 + <strong>2.000 Bonus 💎</strong> (+%40 Bonus)</p>
               </div>
               <button disabled data-gem-pack="gems_5000" class="btn-buy-gems w-full py-1.5 px-2 rounded-lg bg-gradient-to-r from-fuchsia-400 to-cyan-400 hover:from-fuchsia-300 hover:to-cyan-300 text-slate-950 font-cyber font-extrabold text-xs transition shadow-md">
                 <span id="price_gems_5000">Yükleniyor…</span>
@@ -1267,7 +1267,7 @@
             </div>
 
             <!-- 8: 10.000 + 5.000 Bonus = 15.000 Elmas -->
-            <div class="hidden bg-gradient-to-br from-amber-950/80 via-fuchsia-950/70 to-slate-900 border-2 border-yellow-300/80 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
+            <div class="bg-gradient-to-br from-amber-950/80 via-fuchsia-950/70 to-slate-900 border-2 border-yellow-300/80 rounded-xl p-2.5 flex flex-col justify-between gap-1.5">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="font-cyber font-bold text-yellow-200 text-xs">💎 15.000 Elmas</span>
@@ -1849,8 +1849,8 @@
         ["🔥 Overclock Atış Bobini", "🔥 Overclock Fire Coil"],
         ["🛡️ Gezegen Kalkan Kubbesi", "🛡️ Planet Shield Dome"],
         ["🔋 Başlangıç Füzyon Reaktörü", "🔋 Starting Fusion Reactor"],
-        ["Geliştir (65 ⚙ + 5 💎)", "Upgrade (60 ⚙ + 5 💎)"],
-        ["Geliştir (65 ⚙ + 5 💎)", "Upgrade (50 ⚙ + 3 💎)"],
+        ["Geliştir (65 ⚙ + 5 💎)", "Upgrade (65 ⚙ + 5 💎)"],
+        ["Geliştir (65 ⚙ + 5 💎)", "Upgrade (65 ⚙ + 5 💎)"],
         ["💎 ELİT SİBER-GENETİK MODÜLLER (CYBER-CORE)", "💎 ELITE CYBER-GENETIC MODULES (CYBER-CORE)"],
         ["Üst Düzey Evrim", "Apex Evolution"],
         ["🛸 Otonom Siber-Dron Filosu", "🛸 Autonomous Cyber-Drone Fleet"],
@@ -1953,20 +1953,20 @@
           "Permanently increases starting level energy by <strong class=\"text-white\">+10 ⚡</strong>."
         ],
         [
-          "Gezegen yörüngesinde devriye gezip otomatik ateş eden <strong class=\"text-fuchsia-200\">Yardımcı Savaş Dronu (+1 Dron/Lv)</strong> üretir.",
-          "Deploys an orbiting <strong class=\"text-fuchsia-200\">Autonomous Combat Drone (+1 Drone/Lv)</strong> that fires at aliens."
+          "Gezegen yörüngesinde devriye gezip otomatik ateş eden <strong class=\"text-fuchsia-200\">Dron filo gücü (+1 Dron/Lv; büyük filolar güçlendirilmiş gruplar halinde görünür)</strong> üretir.",
+          "Deploys an orbiting <strong class=\"text-fuchsia-200\">Drone fleet power (+1 Drone/Lv; large fleets appear as reinforced groups)</strong> that fires at aliens."
         ],
         [
-          "Tüm kulelere <strong class=\"text-amber-200\">+0,5 yüzde puanı kritik şansı / seviye (1,65× hasar)</strong> kazandırır.",
-          "Grants all towers <strong class=\"text-amber-200\">+0.5 percentage points crit chance per rank (1.65x damage)</strong>."
+          "Tüm kulelere <strong class=\"text-amber-200\">+0,5 yüzde puanı kritik şansı / seviye (en fazla +60 puan; 1,65× hasar)</strong> kazandırır.",
+          "Grants all towers <strong class=\"text-amber-200\">+0.5 percentage points crit chance per rank (up to +60 points; 1.65x damage)</strong>."
         ],
         [
-          "Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class=\"text-emerald-200\">+%2</strong> artırır.",
-          "Increases Energy dropped by aliens and end-of-level Gear rewards by <strong class=\"text-emerald-200\">+2%</strong>."
+          "Yok edilen her uzaylıdan düşen Enerjiyi ve bölüm sonu Gear ödülünü <strong class=\"text-emerald-200\">+%5</strong> artırır.",
+          "Increases Energy dropped by aliens and end-of-level Gear rewards by <strong class=\"text-emerald-200\">+5%</strong>."
         ],
         [
-          "Orbital Lazer bekleme süresini <strong class=\"text-rose-200\">-1 sn düşürür</strong> ve hasarını <strong class=\"text-rose-200\">+%4</strong> artırır.",
-          "Reduces Orbital Laser cooldown by <strong class=\"text-rose-200\">-1s</strong> and boosts its damage by <strong class=\"text-rose-200\">+4%</strong>."
+          "Orbital Lazer bekleme süresini <strong class=\"text-rose-200\">-3 sn düşürür</strong> ve hasarını <strong class=\"text-rose-200\">+%12</strong> artırır.",
+          "Reduces Orbital Laser cooldown by <strong class=\"text-rose-200\">-3s</strong> and boosts its damage by <strong class=\"text-rose-200\">+12%</strong>."
         ],
         [
           "<strong>16 Kule Yuvalı</strong>, 6 katmanlı dev kanyon haritasında sonsuz dalgalara karşı rekor kırın!",
@@ -2417,7 +2417,7 @@
         level: 1,
         unlockedLevel: 1,
         completedLevels: {},
-        balanceRevision: 1,
+        balanceRevision: 2,
         levelStars: {},
         missionDay: "",
         missionBaseline: {},
@@ -2515,14 +2515,14 @@
           xp: h.xp || 0,
           reqXp,
           gemCost,
-          vegaDmgBonusPct: 12 + (lv - 1) * 2,
-          vegaRangeBonus: 14 + (lv - 1) * 2,
-          kaanDiscountPct: Math.min(19, 10 + (lv - 1)),
+          vegaDmgBonusPct: 12 + (lv - 1) * 4,
+          vegaRangeBonus: 14 + (lv - 1) * 3,
+          kaanDiscountPct: Math.min(28, 10 + (lv - 1) * 2),
           kaanRepairPct: 25 + (lv - 1) * 6,
-          kaanHealBonus: 1 + Math.floor((lv - 1) / 3),
-          // Nova: Lv.1 +%8 kritik, -4sn orbital; seviye başına +0.75 yüzde puan / -0.5sn.
-          novaCritPct: 8 + (lv - 1) * 0.75,
-          novaOrbitalCdRed: 4 + (lv - 1) * 0.5
+          kaanHealBonus: lv,
+          // Nova: original hero bonuses; matrix adds 0.5 percentage points per rank separately.
+          novaCritPct: 8 + (lv - 1) * 2.5,
+          novaOrbitalCdRed: 6 + (lv - 1) * 1.5
         };
       }
 
@@ -2671,7 +2671,7 @@
       }
 
       // KURAL: Siber Evrim'de Foton Hasar Evrimi = +%1 / Lv, Overclock Atış Bobini = +%1 / Lv!
-      function getDmgMultiplier() { return (1 + (Math.min(200, state.level) - 1) * 0.012) * (1 + (Balance.level(state, "dmgLv") - 1) * 0.01); }
+      function getDmgMultiplier() { return 1 + (Balance.level(state, "dmgLv") - 1) * 0.01; }
       function getRateMultiplier() {
         const base = 1 + (Balance.level(state, "rateLv") - 1) * 0.01;
         return state.globalOverclockTimer > 0 ? base * 1.25 : base;
@@ -2680,18 +2680,18 @@
       function getStartingGold() {
         const earlyHelp = state.level <= 3 ? 45 : (state.level <= 5 ? 30 : 0);
         const endlessBonus = state.endlessMode ? 65 : 0;
-        return 175 + earlyHelp + endlessBonus + Math.min(650, (state.level - 1) * 6) + (Balance.level(state, "goldLv") - 1) * 10;
+        return 175 + earlyHelp + endlessBonus + (Balance.level(state, "goldLv") - 1) * 10;
       }
       function getCritChance() {
         const heroCrit = state.activeHero === "nova" ? (getHeroInfo("nova").novaCritPct / 100) : 0;
-        return Math.min(0.25, Balance.level(state, "critLv") * 0.005 + heroCrit);
+        return Math.min(0.60, Balance.level(state, "critLv") * 0.005) + heroCrit;
       }
-      function getBountyMultiplier() { return 1 + Balance.level(state, "bountyLv") * 0.02; }
+      function getBountyMultiplier() { return 1 + Balance.level(state, "bountyLv") * 0.05; }
       function getEffectiveOrbitalCooldown() {
         const heroCd = state.activeHero === "nova" ? getHeroInfo("nova").novaOrbitalCdRed : 0;
-        return Math.max(18, 34 - Balance.level(state, "orbitalLv") - heroCd);
+        return Math.max(10, 34 - Balance.level(state, "orbitalLv") * 3 - heroCd);
       }
-      function getOrbitalDamageMultiplier() { return 1 + Balance.level(state, "orbitalLv") * 0.04; }
+      function getOrbitalDamageMultiplier() { return 1 + Balance.level(state, "orbitalLv") * 0.12; }
 
       function isTowerUnlocked(typeKey) {
         if (state.developerMode) return true;
@@ -3212,7 +3212,7 @@
       // 7. DALGA ÜRETİMİ VE BÖLÜM BAŞLATMA (1..200)
       // ============================================================================
       function syncAutonomousDrones() {
-        const count = Math.min(6, state.skills.droneLv || 0);
+        const count = Balance.droneFleet(state).count;
         const nexus = WAYPOINTS[WAYPOINTS.length - 1];
         while (autonomousDrones.length < count) {
           const idx = autonomousDrones.length;
@@ -3544,7 +3544,7 @@
             const mult = TOWER_TYPES[towerTypeKey].vsMultiplier[enemy.arch.id] || 1.0;
             finalDmg *= mult;
           }
-          // Amiral Vega komutan bonusu: Seviyesine göre Lazer ve Tesla hasar artışı (+%12 + her seviyede +%2)
+          // Amiral Vega komutan bonusu: Seviyesine göre Lazer ve Tesla hasar artışı (+%12 + her seviyede +%4)
           if (state.activeHero === "vega" && (towerTypeKey === "rapid" || towerTypeKey === "emp")) {
             finalDmg *= (1 + getHeroInfo("vega").vegaDmgBonusPct / 100);
           }
@@ -4368,7 +4368,7 @@
                 x2: nearest.x, y2: nearest.y,
                 color: "#f472b6", width: 2.2, life: 0.11
               });
-              applyDamageToEnemy(nearest, 26 * getDmgMultiplier(), 0.45);
+              applyDamageToEnemy(nearest, Balance.droneFleet(state).damagePerShot * getDmgMultiplier(), 0.45);
             }
           }
         });
@@ -6209,9 +6209,9 @@
           button.disabled = !Balance.canUpgrade(state,key);
           if (button.disabled) { const n=Balance.nextUnlock(state,key);button.textContent=n?L(`🔒 ${n} farklı bölüm tamamla`, `🔒 Clear ${n} different levels`):L("MAKSİMUM", "MAXIMUM"); }
         }
-        document.getElementById("skillCritLv").textContent = `Lv.${state.skills.critLv}/20 • %${(getCritChance()*100).toFixed(1)}`;
+        document.getElementById("skillCritLv").textContent = `Lv.${state.skills.critLv}/120 • %${(getCritChance()*100).toFixed(1)}`;
         const summary = document.getElementById("balanceSummary");
-        if(summary) summary.textContent = L(`Temel geliştirmeler yalnızca Gear ile açılır. Elmas oynayarak da kazanılır. Sefer araştırması: +%${((state.level-1)*1.2).toFixed(1)} hasar. Kritik: %${(getCritChance()*100).toFixed(1)} (kahraman dahil).`, `Basic upgrades cost Gear only. Gems can also be earned by playing. Campaign research: +${((state.level-1)*1.2).toFixed(1)}% damage. Crit: ${(getCritChance()*100).toFixed(1)}% (including hero).`);
+        if(summary) summary.textContent = L(`Temel geliştirmeler Gear + elmas ister. Bölüm tamamlama şartı yoktur. Dron filosunun geliştirme sınırı yoktur. Toplam kritik: %${(getCritChance()*100).toFixed(1)}.`, `Basic upgrades cost Gear + gems. No completed-level requirements. Drone fleet upgrades have no level cap. Total critical chance: ${(getCritChance()*100).toFixed(1)}%.`);
       }
 
       function updateOrbitalButtonUI() {

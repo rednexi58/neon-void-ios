@@ -7,5 +7,5 @@ Local styles and Turkish/Latin fonts built.
 
   www/native-monetization.js  417.3kb
 
-⚡ Done in 44ms
+⚡ Done in 60ms
 Production AdMob units enabled (App Store only).

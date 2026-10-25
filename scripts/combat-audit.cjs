@@ -29,18 +29,14 @@ function simulate(root,level,mode,seed) {
   const {api:g}=createGame(root,seed);g.state.qualityMode='performance';g.state.trainerCompletedOnce=true;
   g.state.unlockedLevel=level;g.state.completedLevels=Object.fromEntries(Array.from({length:level-1},(_,i)=>[i+1,true]));
   const balanceFile=path.join(root,'www/game-balance.js');const b=require('node:fs').existsSync(balanceFile)?require(balanceFile):null;
-  if(mode==='paid'){
-    if(b)for(const k of Object.keys(b.skills))g.state.skills[k]=b.limit(g.state,k);
-    else Object.assign(g.state.skills,{dmgLv:21,rateLv:21,hpLv:11,goldLv:11,critLv:20,droneLv:6,bountyLv:10,orbitalLv:8});
-  } else if(mode==='free'){
-    // Estimated modest progression, no ads, no purchases, no emergency/orbital buttons.
-    Object.assign(g.state.skills,{dmgLv:Math.min(21,1+Math.floor(level/8)),rateLv:Math.min(21,1+Math.floor(level/10)),hpLv:Math.min(11,1+Math.floor(level/18)),goldLv:Math.min(11,1+Math.floor(level/18)),critLv:Math.min(20,Math.floor(level/18)),droneLv:Math.min(6,Math.floor(level/30)),bountyLv:Math.min(10,Math.floor(level/25)),orbitalLv:0});
-  }
-  g.state.heroProgress.vega.lv=mode==='paid'?(b?b.heroLimit(g.state):10):Math.min(10,1+Math.floor(level/20));
+  const extra=mode==='paid'?1350:mode.startsWith('gems_')?Number(mode.slice(5)):0;
+  const profile=require('./economy-profile.cjs').makeProfile(level,extra);
+  if(mode!=='none')Object.assign(g.state.skills,profile.skills);
+  g.state.heroProgress.vega=profile.heroProgress.vega;
   g.startLevel(level);while(shop(g)){};g.beginWaveAfterInterstitial();
   let t=0,nextBuy=0;
   for(;t<900&&!g.state.levelEnded;t+=.05){if(t>=nextBuy){while(shop(g)){};nextBuy=t+.5;}g.tick(.05);}
-  return {level,mode,seed,win:g.state.levelEnded&&g.state.baseHp>0,seconds:Math.round(t),hp:g.state.baseHp,wave:g.state.waveIndex+1,towers:g.sockets.filter(s=>s.tower).length};
+  return {level,mode,seed,win:g.state.levelEnded&&g.state.baseHp>0,seconds:Math.round(t),hp:g.state.baseHp,wave:g.state.waveIndex+1,towers:g.sockets.filter(s=>s.tower).length,skills:{...g.state.skills},initial:profile.initial,remaining:{gear:profile.gear,gems:profile.cyberCore}};
 }
 module.exports={simulate,shop,coverage};
 if(require.main===module){const root=path.resolve(process.argv[2]||path.join(__dirname,'..'));const levels=(process.argv[3]||'1,5,6,10,25,50,100,150,200').split(',').map(Number);for(const lv of levels)for(const mode of ['free','paid'])console.log(JSON.stringify(simulate(root,lv,mode,17)));}

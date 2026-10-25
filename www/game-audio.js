@@ -21,22 +21,43 @@
     updateMix(){if(!this.ctx||!this.master)return;const t=this.ctx.currentTime;const set=(p,v)=>{p.cancelScheduledValues(t);p.setTargetAtTime(v,t,.035);};set(this.master.gain,this.muted||this.adMuted||doc.hidden?0:1);set(this.musicBus.gain,Math.max(0,Math.min(1,this.musicVol)));set(this.sfxBus.gain,Math.max(0,Math.min(1,this.sfxVol)));},
     setAdMuted(value){this.adMuted=!!value;this.updateMix();},
     canTrigger(tag,gap){const now=this.ctx?.currentTime||0;if(this.muted||this.adMuted||doc.hidden||this.sfxVol<=.001||this.activeSoundCount>=this.maxConcurrentSounds)return false;if(this.lastPlayTimestamp[tag]!==undefined&&now-this.lastPlayTimestamp[tag]<gap)return false;this.lastPlayTimestamp[tag]=now;return true;},
-    voice({start=0,duration=.15,freq=200,end=freq,type='sine',volume=.05,noise=false,cutoff=1600,filterType='lowpass',attack=.005,music=false}){
+    voice({start=0,duration=.15,freq=200,end=freq,type='sine',volume=.05,noise=false,cutoff=1600,filterType='lowpass',attack=.005,music=false,tremolo=0,depth=.3}){
       const ctx=this.ctx;if(!ctx)return;
       const t=ctx.currentTime+start,source=noise?ctx.createBufferSource():ctx.createOscillator();
       if(noise)source.buffer=this.noise;else{source.type=type;source.frequency.setValueAtTime(freq,t);source.frequency.exponentialRampToValueAtTime(Math.max(20,end),t+duration);}
       const filter=ctx.createBiquadFilter();filter.type=filterType;filter.frequency.value=cutoff;filter.Q.value=.65;
       const gain=ctx.createGain();gain.gain.setValueAtTime(.00001,t);gain.gain.linearRampToValueAtTime(volume,t+attack);gain.gain.exponentialRampToValueAtTime(.00001,t+duration);
-      source.connect(filter);filter.connect(gain);gain.connect(music?this.musicBus:this.sfxBus);
+      source.connect(filter);filter.connect(gain);
+      const bus=music?this.musicBus:this.sfxBus;
+      const extra=[];
+      if(tremolo>0){
+        // Amplitude modulation gives an electrical buzz rather than a UI beep.
+        const amp=ctx.createGain(),lfo=ctx.createOscillator(),amount=ctx.createGain();
+        const d=Math.max(0,Math.min(.95,depth));amp.gain.value=1-d;amount.gain.value=d;
+        lfo.type='sine';lfo.frequency.value=tremolo;lfo.connect(amount);amount.connect(amp.gain);
+        gain.connect(amp);amp.connect(bus);lfo.start(t);lfo.stop(t+duration+.02);
+        extra.push(amp,lfo,amount);
+      }else gain.connect(bus);
       if(!music)this.activeSoundCount++;
-      source.onended=()=>{if(!music)this.activeSoundCount=Math.max(0,this.activeSoundCount-1);source.disconnect();filter.disconnect();gain.disconnect();};
+      source.onended=()=>{if(!music)this.activeSoundCount=Math.max(0,this.activeSoundCount-1);source.disconnect();filter.disconnect();gain.disconnect();extra.forEach(n=>n.disconnect());};
       source.start(t);source.stop(t+duration+.02);
     },
     effect(tag,gap,layers){this.init();if(!this.ctx||!this.canTrigger(tag,gap))return;for(const layer of layers){if(this.activeSoundCount>=this.maxConcurrentSounds)break;this.voice(layer);}},
-    laser(){this.effect('laser',.11,[{freq:720,end:260,duration:.09,volume:.035,type:'triangle',cutoff:1700}]);},
-    emp(){this.effect('tesla',.16,[{noise:true,duration:.16,volume:.085,filterType:'bandpass',cutoff:1900},{freq:120,end:70,type:'sawtooth',duration:.12,volume:.025,cutoff:900}]);},
+    laser(){this.effect('laser',.10,[
+      {freq:1350,end:580,duration:.095,volume:.028,type:'sine',cutoff:2300},
+      {noise:true,duration:.075,volume:.038,filterType:'bandpass',cutoff:2100,attack:.004},
+      {freq:2350,end:1180,duration:.045,volume:.009,type:'triangle',cutoff:3000}
+    ]);},
+    emp(){this.effect('tesla',.25,[
+      {freq:110,end:98,type:'sawtooth',duration:.38,volume:.068,cutoff:1700,tremolo:100,depth:.36,attack:.012},
+      {noise:true,duration:.31,volume:.072,filterType:'bandpass',cutoff:2300,tremolo:47,depth:.44,attack:.008}
+    ]);},
     plasma(){this.effect('missile',.22,[{noise:true,duration:.36,volume:.13,cutoff:950,attack:.045},{freq:130,end:38,duration:.3,volume:.06}]);},
-    railgun(){this.effect('cannon',.10,[{noise:true,duration:.07,volume:.10,cutoff:2200},{freq:105,end:42,duration:.11,volume:.055}]);},
+    railgun(){this.effect('cannon',.18,[
+      {noise:true,duration:.10,volume:.13,cutoff:2600,attack:.002},
+      {freq:92,end:32,duration:.34,volume:.105,type:'sine',cutoff:500,attack:.003},
+      {noise:true,start:.035,duration:.46,volume:.065,cutoff:390,attack:.015}
+    ]);},
     cryo(){this.effect('cryo',.2,[{noise:true,duration:.24,volume:.065,filterType:'bandpass',cutoff:2600,attack:.025}]);},
     repair(){this.effect('repair',.25,[{freq:330,end:440,duration:.23,volume:.025},{freq:495,end:660,duration:.29,volume:.018}]);},
     explosion(boss=false){this.effect('impact',boss?.18:.12,[{noise:true,duration:boss?.5:.24,volume:boss?.14:.08,cutoff:550},{freq:90,end:28,duration:.3,volume:boss?.09:.045}]);},

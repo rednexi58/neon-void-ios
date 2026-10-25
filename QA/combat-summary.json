@@ -1,0 +1,90 @@
+{
+  "campaign": {
+    "free": {
+      "cases": 200,
+      "wins": 158,
+      "losses": [
+        84,
+        89,
+        99,
+        108,
+        113,
+        115,
+        116,
+        121,
+        123,
+        124,
+        126,
+        129,
+        131,
+        134,
+        139,
+        144,
+        148,
+        153,
+        155,
+        156,
+        158,
+        161,
+        163,
+        164,
+        166,
+        168,
+        169,
+        171,
+        174,
+        176,
+        179,
+        180,
+        181,
+        184,
+        185,
+        188,
+        193,
+        195,
+        196,
+        198,
+        199,
+        200
+      ],
+      "meanVictorySeconds": 215.8
+    },
+    "paid": {
+      "cases": 200,
+      "wins": 200,
+      "losses": [],
+      "meanVictorySeconds": 222.6
+    }
+  },
+  "extra": {
+    "free": {
+      "cases": 8,
+      "wins": 6,
+      "losses": [
+        200,
+        200
+      ],
+      "meanVictorySeconds": 209.3
+    },
+    "gems_15000": {
+      "cases": 8,
+      "wins": 8,
+      "losses": [],
+      "meanVictorySeconds": 231.2
+    },
+    "gems_7000": {
+      "cases": 8,
+      "wins": 8,
+      "losses": [],
+      "meanVictorySeconds": 238.9
+    },
+    "paid": {
+      "cases": 8,
+      "wins": 7,
+      "losses": [
+        200
+      ],
+      "meanVictorySeconds": 224.4
+    }
+  }
+}

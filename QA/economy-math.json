@@ -1,95 +1,247 @@
 {
-  "milestones": [
-    {
-      "level": 5,
-      "firstClearGemsWith3Stars": 30,
-      "baseGear": 415,
-      "hpMult": 1.09,
-      "waves": 4
-    },
-    {
-      "level": 10,
-      "firstClearGemsWith3Stars": 58,
-      "baseGear": 958,
-      "hpMult": 1.22,
-      "waves": 5
-    },
-    {
-      "level": 25,
-      "firstClearGemsWith3Stars": 138,
-      "baseGear": 3344,
-      "hpMult": 1.64,
-      "waves": 4
-    },
-    {
-      "level": 50,
-      "firstClearGemsWith3Stars": 274,
-      "baseGear": 9585,
-      "hpMult": 2.39,
-      "waves": 6
-    },
-    {
-      "level": 100,
-      "firstClearGemsWith3Stars": 544,
-      "baseGear": 30050,
-      "hpMult": 4.15,
-      "waves": 7
-    },
-    {
-      "level": 200,
-      "firstClearGemsWith3Stars": 1084,
-      "baseGear": 101965,
-      "hpMult": 8.63,
-      "waves": 8
-    }
-  ],
-  "costs": {
+  "prices": {
     "dmgLv": {
-      "max": 21,
-      "gear": 5950,
-      "core": 0
+      "base": 1,
+      "max": null,
+      "gear": 65,
+      "gearStep": 35,
+      "core": 5,
+      "step": 4
     },
     "rateLv": {
-      "max": 21,
-      "gear": 5950,
-      "core": 0
+      "base": 1,
+      "max": null,
+      "gear": 65,
+      "gearStep": 35,
+      "core": 5,
+      "step": 4
     },
     "hpLv": {
-      "max": 11,
-      "gear": 2725,
-      "core": 0
+      "base": 1,
+      "max": null,
+      "gear": 65,
+      "gearStep": 35,
+      "core": 5,
+      "step": 4
     },
     "goldLv": {
-      "max": 11,
-      "gear": 2825,
-      "core": 0
+      "base": 1,
+      "max": null,
+      "gear": 65,
+      "gearStep": 35,
+      "core": 5,
+      "step": 4
     },
     "droneLv": {
-      "max": 6,
-      "gear": 0,
-      "core": 192
+      "base": 0,
+      "max": null,
+      "core": 33,
+      "step": 20
     },
     "critLv": {
-      "max": 20,
-      "gear": 0,
-      "core": 440
+      "base": 0,
+      "max": 120,
+      "core": 26,
+      "step": 13
     },
     "bountyLv": {
-      "max": 10,
-      "gear": 0,
-      "core": 195
+      "base": 0,
+      "max": null,
+      "core": 20,
+      "step": 13
     },
     "orbitalLv": {
-      "max": 8,
-      "gear": 0,
-      "core": 176
+      "base": 0,
+      "max": null,
+      "core": 26,
+      "step": 13
     }
   },
-  "crit": {
-    "perRankPercentagePoints": 0.5,
-    "maxMatrix": 10,
-    "maxNova": 14.75,
-    "maxCombined": 24.75,
-    "expectedExtraDamageAtCombinedMaxPercent": 16.087500000000002
-  }
+  "packs": [
+    {
+      "gems": 50,
+      "drone": {
+        "ranks": 1,
+        "cost": 33,
+        "left": 17
+      },
+      "damage": {
+        "ranks": 4,
+        "cost": 44,
+        "left": 6
+      },
+      "crit": {
+        "ranks": 1,
+        "cost": 26,
+        "left": 24
+      },
+      "hero": {
+        "ranks": 0,
+        "cost": 0,
+        "left": 50
+      }
+    },
+    {
+      "gems": 115,
+      "drone": {
+        "ranks": 2,
+        "cost": 86,
+        "left": 29
+      },
+      "damage": {
+        "ranks": 6,
+        "cost": 90,
+        "left": 25
+      },
+      "crit": {
+        "ranks": 2,
+        "cost": 65,
+        "left": 50
+      },
+      "hero": {
+        "ranks": 0,
+        "cost": 0,
+        "left": 115
+      }
+    },
+    {
+      "gems": 240,
+      "drone": {
+        "ranks": 3,
+        "cost": 159,
+        "left": 81
+      },
+      "damage": {
+        "ranks": 10,
+        "cost": 230,
+        "left": 10
+      },
+      "crit": {
+        "ranks": 4,
+        "cost": 182,
+        "left": 58
+      },
+      "hero": {
+        "ranks": 0,
+        "cost": 0,
+        "left": 240
+      }
+    },
+    {
+      "gems": 500,
+      "drone": {
+        "ranks": 6,
+        "cost": 498,
+        "left": 2
+      },
+      "damage": {
+        "ranks": 15,
+        "cost": 495,
+        "left": 5
+      },
+      "crit": {
+        "ranks": 7,
+        "cost": 455,
+        "left": 45
+      },
+      "hero": {
+        "ranks": 1,
+        "cost": 350,
+        "left": 150
+      }
+    },
+    {
+      "gems": 650,
+      "drone": {
+        "ranks": 6,
+        "cost": 498,
+        "left": 152
+      },
+      "damage": {
+        "ranks": 17,
+        "cost": 629,
+        "left": 21
+      },
+      "crit": {
+        "ranks": 8,
+        "cost": 572,
+        "left": 78
+      },
+      "hero": {
+        "ranks": 1,
+        "cost": 350,
+        "left": 300
+      }
+    },
+    {
+      "gems": 1350,
+      "drone": {
+        "ranks": 10,
+        "cost": 1230,
+        "left": 120
+      },
+      "damage": {
+        "ranks": 25,
+        "cost": 1325,
+        "left": 25
+      },
+      "crit": {
+        "ranks": 12,
+        "cost": 1170,
+        "left": 180
+      },
+      "hero": {
+        "ranks": 3,
+        "cost": 1350,
+        "left": 0
+      }
+    },
+    {
+      "gems": 7000,
+      "drone": {
+        "ranks": 25,
+        "cost": 6825,
+        "left": 175
+      },
+      "damage": {
+        "ranks": 58,
+        "cost": 6902,
+        "left": 98
+      },
+      "crit": {
+        "ranks": 31,
+        "cost": 6851,
+        "left": 149
+      },
+      "hero": {
+        "ranks": 9,
+        "cost": 6750,
+        "left": 250
+      }
+    },
+    {
+      "gems": 15000,
+      "drone": {
+        "ranks": 37,
+        "cost": 14541,
+        "left": 459
+      },
+      "damage": {
+        "ranks": 85,
+        "cost": 14705,
+        "left": 295
+      },
+      "crit": {
+        "ranks": 46,
+        "cost": 14651,
+        "left": 349
+      },
+      "hero": {
+        "ranks": 9,
+        "cost": 6750,
+        "left": 8250
+      }
+    }
+  ],
+  "note": "Each column spends the entire pack on that upgrade only; basic upgrades also require Gear. null max means no gameplay rank cap."
 }

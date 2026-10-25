@@ -1,59 +1,75 @@
-# Gezegeni Koru — ses, ekonomi ve oynanabilirlik güncellemesi
-25 Ekim 2026. Bu paket kaynak koddur; IPA, cihaz testi veya Apple yayın onayı değildir.
+# Gezegeni Koru — eski satın alma modeli ve yeni taret sesleri
+25 Ekim 2026. Bu rapor önceki ücretsiz geliştirme/bölüm kilidi raporunun yerine geçer.
 
-## Yapılan değişiklikler
+## İsteğe göre geri alınanlar
 
-- Sakin, yavaş akorlu arka plan müziği ve seyrek melodi eklendi. Tesla elektrik çatırtısı, füze fırlatma/çarpma, top, lazer, buz ve onarım sesleri ayrıldı. Tamamı kodla sentezlenir; gerçek ses kaydı değildir. Varsayılan müzik %32, efekt %55; önceki kişisel ses tercihleri korunur. Ses sıkışması için kompresör, aynı anda en fazla 8 efekt katmanı ve tekrar aralığı var. Sessize alma, arka plana geçme ve reklamlar mevcut seslerin çıkışını da kısar.
-- Kule yuvaları aktif yoldan 42–86 oyun birimi uzaklıkta, birbirinden en az 60 birim ayrı yerleştirilir. Eski bazı yuvalar aktif yoldan 210 birim uzaktaydı. Hesaplanan yerleşimler yeniden kullanılır; bölüm açılışında gereksiz tekrar hesaplama azaltıldı.
-- Ok şeklindeki drone yerine dört pervaneli, gövdeli, kamera ve konum ışıkları olan küçük drone çizilir. Menü açıkken pervaneler de durur.
-- Bölüm 5 → 6 can çarpanı eski 1,09 → 2,06 yerine 1,09 → 1,12. Bölümler 3–8 dalga ile sınırlı; 200. bölüm başlangıç can çarpanı 8,63. Her bölümde ücretsiz sefer araştırması hasarı artırır ve başlangıç enerjisi ilerlemeyle artar.
-- Temel geliştirmeler artık elmas istemez. Elit ve kahraman geliştirmelerinde farklı tamamlanan bölüm sayısına bağlı açılma sınırları var. Aynı bölümü tekrar oynamak bu sınırı ilerletmez. Eski kayıtların kazanılmış seviyeleri genel üst sınıra kadar korunur.
-- Maksimum seviyede veya kilitli seviyede kaynak kesilmez. Eski temel geliştirmelerin elmas harcamaları ve ucuzlayan elit geliştirmelerin farkları bir defa iade edilir. Satın alma işlem kayıtları korunur. Kahraman terfileri XP/elmas ayrımı kayıtlı olmadığı için onlara geriye dönük iade hesaplanmaz.
-- Günlük görevler artık gün değişince yenilenir; eski ömür boyu istatistikler günlük hedefi otomatik tamamlamaz.
-- Bölüm yıldızları: tam üs canıyla 3, en az yarısıyla 2, diğer zaferlerde 1 yıldız. Her bölümde yalnızca yeni kazanılan yıldız başına 1 elmas. Tekrar kazanmak 1 temel elmas verir; aynı yıldız tekrar ödenmez. İlk zafer temel ödülü normal bölümde 2, mini boss'ta 3, boss'ta 5 elmas. Aynı zafer işleminin iki kez ödül yazması engellendi.
-- Önceki titreme, menüde savaşın durması ve mağazadan lobiye dönüş düzeltmeleri korundu.
+- Laboratuvarda ve kahraman terfisinde farklı bölüm tamamlama şartı kaldırıldı.
+- Foton hasarı, atış hızı, üs canı ve başlangıç enerjisi yeniden hem Gear hem elmas ister. İlk alım 65 Gear + 5 elmas; her sonraki alım +35 Gear ve +4 elmas pahalıdır.
+- Bu dört temel geliştirme, drone, ganimet ve orbital geliştirmesinin oyun tasarımı kaynaklı seviye tavanı yoktur. Kaynak yeterliyse alınabilir; sayısal taşma gibi geçersiz işlemler yine reddedilir.
+- Drone fiyatı tekrar 33 + mevcut seviye × 20 elmas. Eski altı seviyelik güç sınırı kaldırıldı. Her yeni seviye toplam teorik filo hasarına bir drone daha ekler. Telefonu yormamak için en fazla 12 uçan gövde çizilir; daha büyük filolar güçlendirilmiş gruplar halinde temsil edilir. Bu görsel bütçe geliştirme/güç sınırı değildir. Arayüzde bu durum açıklanır.
+- Ganimet 20 + seviye × 13 elmas; seviye başına +%5 öldürme enerjisi ve bölüm Gear ödülü. Orbital 26 + seviye × 13 elmas; seviye başına -3 saniye ve +%12 hasar. Bekleme en az 10 saniyedir; bu noktadan sonra da her alım hasarı artırır.
+- Kahraman terfisi yeniden 350 + (seviye−1) × 100 elmas. Kahramanın eski 10 seviye sınırı ve 25 zafer başına XP ilerleyişi korunur; ek bölüm kilidi yoktur. Vega/Kaan/Nova etkileri önceki değerlerine döndü.
+- Bölüm numarasıyla bedava gelen hasar araştırması ve otomatik başlangıç enerjisi artışı kaldırıldı. İlk bölümlerdeki eski başlangıç yardımı kaldı.
+- Sekiz elmas paketi yeniden görünür. Apple fiyatları, kimlikler, teslimat miktarları ve bonusları değişmedi.
+- Önceki indirim sürümünün otomatik elmas iadesi artık yeni kayıtlara uygulanmaz. Daha önce verilmiş iade geri çekilmez; satın alınmış seviyeler, elmaslar, Gear ve işlem kayıtları korunur. Eski bir test build'inde altı seviyeye düşürülmüş drone kaydının orijinal seviyesi mevcut kayıttan bilinemez; bu paket tahmin ederek seviye eklemez.
 
-## Geliştirme matematiği
+Harita yerleşimi, titreme düzeltmesi, menüde duraklama, yeni drone çizimi, yıldızlar ve günlük görevler korunur. Kazanılan kaynaklarla geliştirme satın alınabilir; otomatik ücretsiz laboratuvar geliştirmesi yoktur.
 
-| Geliştirme | Üst seviye | Toplam maliyet | Etki sınırı |
-|---|---:|---:|---|
-| Hasar | 21 | 5.950 Gear | +%20; ücretsiz bölüm araştırmasından ayrı |
-| Atış hızı | 21 | 5.950 Gear | +%20 |
-| Üs canı | 11 | 2.725 Gear | +20 can, +10 kalkan |
-| Başlangıç enerjisi | 11 | 2.825 Gear | +100 enerji; ücretsiz bölüm katkısından ayrı |
-| Drone | 6 | 192 elmas | En fazla 6 drone |
-| Kritik matrisi | 20 | 440 elmas | Seviye başına +0,5 yüzde puan; toplam +10 puan |
-| Ganimet | 10 | 195 elmas | Öldürme enerjisi ve bölüm Gear ödülüne +%20 |
-| Orbital | 8 | 176 elmas | -8 saniye, +%32 hasar; toplam bekleme en az 18 saniye |
+## Kritik matrisi
 
-Kritik gerçekten çalışır: normal hasarı 1,65 ile çarpar; zırh sonra uygulanır. Gerçek hasar kritik atmaz. En üst Nova +%14,75 kritik verir; matrisle toplam %24,75 olur. Ortalama hasar katkısı 0,2475 × 0,65 = %16,0875'tir. Bu yalnızca kritik etkisidir; diğer geliştirmelerin toplam etkisiyle karıştırılmamalıdır.
+Daha önce istenen seviye başına +0,5 yüzde puanı korunur. Matris fiyatı eski 26 + seviye × 13 elmasa döndü. Matrisin kendi katkısı en fazla +60 yüzde puandır (120 seviye). Bu, drone/bölüm kilidi değildir; etkisiz kritik olasılığı satın almayı engeller. Nova bonusu bu katkıya ayrıca eklenir; en üst eski Nova +%30,5 verir. Birlikte en fazla %90,5 kritik ihtimali olur. Bu kadar yüksek olasılık 120 matris seviyesi ve en güçlü Nova gerektirir; matris tek başına 95.940 elmas tutar. Eski 20 seviye sınırı kaldırıldı.
 
-Tüm temel geliştirmeler 17.450 Gear, dört elit geliştirme toplam 1.003 elmas tutar. Kahramanların 1→10 elmas terfisi kişi başı 540, üç kahraman toplam 1.620 elmas; kahramanlar oynayarak XP ile de yükselir. Elmasla terfi mevcut XP'yi silmez.
+Kritik hasar 1,65×, yani olasılık × 0,65 kadar beklenen hasar katkısı sağlar. Örneğin 20 matris seviyesi +%10 olasılık ve tek başına ortalama +%6,5 hasar getirir. Matris 20 + Nova 10 birlikte %40,5 kritik ve ortalama +%26,325 kritik hasar katkısı verir. Zırh sonradan uygulanır; gerçek hasar kritik atmaz.
 
-200 bölüm ilk zaferlerinin temel Gear toplamı 101.965'tir; hız bonusu, ganimet, günlük ödül ve reklamlar buna dahil değildir. Başlangıçtaki 5 elmasla birlikte, bütün bölümlerde 3 yıldız alan oyuncunun ilk zafer gelirleri 1.084 elmas eder; 1 yıldızla bitirirse 684 olur. Bütün oyuncuların ilk denemede üç yıldız alacağı varsayılmamalıdır. Günlük görev/giriş ödülleri, tekrarlar ve mevcut diğer ödüller ek kaynak sağlar. Dolayısıyla matematikte temel ilerleme satın alma veya reklam izlemeye mecbur bırakılmadı.
+Önemli fiyat/değer bulgusu: İlk Foton alımı 5 elmas + 65 Gear ile +%1 hasar verirken ilk matris alımı 26 elmas ile ortalama +%0,325 kritik hasar katkısı verir. Gear maliyeti hariç tutulursa, ilk alımda matrisin elmas başına ortalama hasar getirisi Foton'un 1/16'sıdır. Kullanıcı eski fiyatları istediği için fiyatı tekrar kendiliğimden değiştirmedim. Kritik ilk satın alma için zayıf değer sunabilir; yayın sonrası tercih edilme oranı izlenmeli.
 
-## Elmas fiyatları hakkında değerlendirme
+## Paket karşılığı ve artan maliyet
 
-Apple fiyatları, ürün kimlikleri ve satın alınan elmas miktarları değiştirilmedi. 75–300 TL giriş paketleriyle başlayıp gerçek oyuncu davranışını ölçmek daha doğru. Daha pahalı paketlerin dönüşümünü ancak yayın sonrası görebiliriz; bu rapor gelir veya oyuncu tutma garantisi vermez.
+Aşağıdaki her sütun paketin yalnızca o geliştirmeye harcandığı ayrı bir senaryodur. Başlangıç/oynayarak kazanılmış bakiye dahil değildir. Foton ayrıca Gear ister; elmas almak Gear şartını kaldırmaz.
 
-7.000 ve 15.000 elmas paketleri mevcut kalıcı geliştirme ihtiyacının çok üzerinde kaldığı için oyun arayüzünde gizlendi. Ürün ve teslimat desteği silinmedi; önceden alınmış elmaslar korunur. Görünür paketler 50/115/240/500/650/1.350 elmas. App Store Connect'teki ürünleri bu çalışma sırasında kaldırmadım veya fiyatlandırmadım.
+| Paket | Drone seviyeleri (0'dan) | Foton satın alma sayısı (Lv.1'den) | Foton için gereken Gear |
+|---|---:|---:|---:|
+| 50 elmas | 1 | 4 (+%4) | 470 |
+| 115 elmas | 2 | 6 (+%6) | 915 |
+| 240 elmas | 3 | 10 (+%10) | 2.225 |
+| 500 elmas | 6 | 15 (+%15) | 4.650 |
+| 650 elmas | 6 | 17 (+%17) | 5.865 |
+| 1.350 elmas | 10 | 25 (+%25) | 12.125 |
+| 7.000 elmas | 25 | 58 (+%58) | 61.625 |
+| 15.000 elmas | 37 | 85 (+%85) | 130.475 |
 
-25 Ekim 2026 tarihinde incelenen Türkiye App Store örnekleri: Bloons TD 6 ve Kingdom Rush Vengeance. Ürün kapsamları farklı olduğundan fiyatlar birebir eşdeğer kabul edilmedi:
-- https://apps.apple.com/tr/app/bloons-td-6/id1118115766
-- https://apps.apple.com/tr/app/kingdom-rush-vengeance-td/id1248033433
+Drone toplam maliyeti n seviye için 10n² + 23n elmas. İlk 10 seviye 1.230, ilk 20 seviye 4.460, ilk 30 seviye 9.690 elmas. Artan maliyet ilerlemeyi yavaşlatır fakat yüksek harcayanın büyük avantaj elde etmesini engellemez. Bu, sınırsız güç geliştirme tercihinin sonucudur.
 
-## Doğrulama ve sınırlar
+650 elmas paketi, sıfır bakiyeden yedi drone için gereken 651 elmasın bir altında kalır. Oyuncunun başlangıçta veya oynayarak kazandığı elmaslar bunu karşılayabilir; yine de tek paket karşılığında yedi drone vaat edilmemelidir. Sekiz paketin fiyatları bu çalışma sırasında değiştirilmedi.
 
-49 otomatik test geçti. Satın alma teslimatı/kayıt, reklam kapanışı ve 3 bölüm sayacı, sabit harita/menü davranışları, ekonomi kapıları, iade, günlük görev sıfırlama, tekrar yıldız ödülleri, harita mesafeleri ve ses çıkış kontrolü dahil. Gerçek hasar fonksiyonunda 50.000 vuruşla kritik olasılığı ayrıca sınandı. Web derlemesi başarılı. Test reklamları test iş akışında açık, yayın iş akışında kapalı kalır; AdMob kimlikleri korunmuştur.
+Tek kahraman Lv.1→10 toplam 6.750 elmas; üç kahraman 20.250 elmas. XP ile ücretsiz ilerleme seçeneği eski oyunda olduğu gibi sürer. Büyük paketin bütün oyun gelişimini bitirdiği söylenemez; sınırsız laboratuvar ilerleyişi vardır. Ancak büyük satın alma mevcut bölümleri çok kolaylaştırabilir.
 
-Gerçek savaş fonksiyonlarını çalıştıran Node modelinde 200 bölüm × 2 profil = 400 senaryo ve iki ilave rastgelelik tohumu ile 48 örnek senaryo çalıştırıldı. 448/448 zafer. Ana ücretsiz profil toplam 37.379, ödeme yapan profil 36.730 oyun saniyesi sürdü: yaklaşık %1,7 fark. Bu süreler 1× simülasyon süresidir; menü, reklam, düşünme veya insan hatası içermez. Oyunun reklam dahil toplam oynanma süresi olarak kullanılmamalıdır.
+## Ses değişiklikleri
 
-Model kuleleri düzenli ve etkili yerleştirir, satın alma yapmadan kazanılabilir tahmini geliştirme seviyeleri kullanır; bölüm başında profil kurulması tam bir hesap ilerleme simülasyonu değildir. Reklam/manuel orbital/acil yardım kullanmaz. Ek örneklerin 16'sında laboratuvar geliştirmesi olmadan da zafer alındı; ücretsiz bölüm araştırması ve kahraman seviyesi bu profilde de vardır. Bu sonuçlar ödeme duvarı görmediğimizi destekler, oyunun herkese uygun zorlukta veya eğlenceli olduğunu ispatlamaz. Özellikle deneyimli oyuncuya kolay gelme ihtimali cihaz testinde değerlendirilmeli. Ham sonuçlar ve teşhis çizimleri QA klasöründedir; çizimler App Store ekran görüntüsü değildir.
+Beğenilen arka plan müziğinin akor, melodi, zamanlama ve varsayılan ses ayarları değiştirilmedi. Tesla iki katmanlı elektrik uğultusu/vızıltısı ve kıvılcım çatırdaması; zırh delici kısa patlama, düşük frekanslı tank topu gövdesi ve kuyruk; parçacık lazeri kısa yüksek frekanslı atış ve hava/enerji dokusu kullanır. Sesler kodla sentezlenmiştir, gerçek silah kayıtları değildir.
 
-Gerçek iPhone/iPad, StoreKit sandbox, AdMob gösterimi ve duyulan ses bu Linux ortamında test edilmedi. Codemagic imzalı IPA ve TestFlight kontrolü hâlâ gerekir.
+Aynı anda efekt katmanı sınırı, tekrar aralığı, kompresör, ses sürgüleri, sessiz mod, reklamda ses kısılması ve arka plan davranışı korunur. Yeni elektrik modülasyon düğümleri ses bittiğinde ayrılır. Duyulan karakter ve telefon hoparlöründeki bas mutlaka cihazda dinlenmelidir.
 
-## Oyuncuyu tutmak için sonraki güncellemeler
+## Test yöntemi ve sınırları
 
-Bu pakette günlük görev, üç yıldız ve kademeli açılma var. Yayından sonra öncelik: haftalık eşit koşullu taktik meydan okuma, güç satmayan kozmetik drone/kule görünümleri, yeni düşman-harita kombinasyonları ve oyuncunun takıldığı bölümün yeniden dengelenmesi. Bunlar bu pakette uygulanmış özellikler değildir. Sonsuz mod ve mevcut günlük giriş ödülleri korunmuştur.
+Otomatik test, derleme ve savaş sonuçları QA klasöründedir. Yeni savaş profili her varsayılan ilk zaferde temel Gear ve iki yıldızlı elmas ödülünü biriktirir, gerçek fiyatlarla alım yapar; önceki alımlar korunur. Kaynak açıkları, eksi bakiyeler ve sonradan kaybolan geliştirmeler test edilir.
 
-İlk ölçülecekler: ilk oturumda bırakılan bölüm, bölüm başına kaybetme/tekrar sayısı, 1. ve 7. gün dönüş, isteğe bağlı reklam seçimi ve satın alma sonrası devam etme. Bu çalışmada yeni analitik SDK eklenmedi. Reklam sayısını artırmak yerine isteğe bağlı ödülün anlamlı kalması ve savaş akışının kesilmemesi tercih edildi.
+Ücretsiz profil: satın alma, günlük görev/giriş, reklam, tekrar ödülü ve hız bonusu yok. Ücretli profil: buna bir defalık 1.350 elmas eklenir. Kule yerleştiren bot hasar/menzil/maliyet tahmini kullanır; manuel orbital ve acil yardım kullanmaz. Bunlar bütün insan oyuncuların davranışlarını temsil etmez. Her bölüm ayrı savaş denemesidir: kaybedilen bölümlerden sonraki profil, önceki bölümler tamamlanmış varsayımıyla kurulur. Bu yüzden 200 bölümü kesintisiz geçen oyuncu yolculuğu olarak okunmamalıdır.
+
+200 bölüm × iki profil = 400 ana savaş: ücretsiz 158/200, bir defalık +1.350 elmas profili 200/200 zafer. Ücretsiz profilin ilk kaybı 84. bölüm. İki ek rastgelelik tohumu, 10/50/100/200. bölümler ve dört bütçeyle 32 ek deneme: ücretsiz 6/8, +1.350 elmas 7/8, +7.000 elmas 8/8, +15.000 elmas 8/8. Toplam 432 savaş senaryosu. Başarısızlıkları gizlemek için kaybedilen bölümlerin zorluğu değiştirilmedi.
+
+Bu sonuçlar satın almanın anlamlı avantaj verdiğini gösterir. Ücretsiz oyuncunun bazı ileri bölümlerde kaynak biriktirme, yeniden deneme veya taktik değiştirme ihtiyacı var. Bunun keyifli hedef mi yoksa sıkıcı engel mi olduğu gerçek oyuncu testiyle anlaşılır. Bütün oyuncular için dengeli veya gelir garantili olduğu söylenemez. Bu turda zorluk eğrisi yeniden değiştirilmedi.
+
+51 otomatik test geçti. Gerçek hasar yolunda 50.000 vuruşluk kritik testi; çift kaynak kesimi; bölüm kilitsiz alım; 6/12/13/50/1000 seviyeli drone gücü; eski kayıtların korunması; harita/menü, satın alma, reklam ve ses davranışları dahil. Web derlemesi başarılı. iOS imzalı IPA ve gerçek cihaz sesi bu ortamda doğrulanmadı.
+
+## Gelir hakkında doğrudan değerlendirme
+
+Satın alma motivasyonu var: ilk paketle görünür drone gücü, sonraki paketlerle daha fazla güç, temel geliştirmeler için Gear toplama ve mevcut ödüllü reklamlar. Gelirin miktarı ise oyun içi fiyat tablosundan hesaplanamaz; oyuncu sayısı, devam etme, satın alma oranı ve reklam gösterimleri gerekir.
+
+Örnek, tahmin değildir: ayda 1.000 aktif oyuncunun %2'si ortalama 150 TL harcarsa 3.000 TL brüt satın alma hacmi olur. Aynı oranlarla 10.000 aktif oyuncu 30.000 TL brüt eder. Bu net kazanç değildir; komisyon, vergi, iade ve diğer giderler dahil değil. Sadece pahalı paket koymak bu oyuncu sayısını veya dönüşümü sağlamaz.
+
+Reklam tahmini = gerçekleşen gösterim / 1.000 × gerçekleşen eCPM. Google eCPM'nin piyasa, platform ve ülkeye göre değişebildiğini belirtir; burada sabit bir reklam kazancı vaat edilmedi. Kaynak: https://support.google.com/admob/answer/15337570?hl=en
+
+Apple Small Business Program uygun ve kabul edilmiş hesaplarda ücretli uygulama/IAP komisyonunu %15 olarak açıklar. Kullanıcının bu programa kayıtlı olduğu doğrulanmadı; banka hesabına yatacak tutar bu varsayımla hesaplanmadı. Kaynak: https://developer.apple.com/app-store/small-business-program/
+
+İlk yayın sonrası karar: satın alan/almayan oyuncuların hangi bölümde bıraktığı, D1/D7 dönüş, paket tercihleri ve ödüllü reklam kullanımı. Yeni analitik SDK eklenmedi. Fiyat/etki değişiklikleri bu verilerden sonra ayrı bir güncellemeyle yapılabilir.

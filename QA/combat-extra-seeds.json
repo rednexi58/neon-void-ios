@@ -1,73 +1,31 @@
 [
   {
-    "level": 1,
-    "mode": "free",
-    "seed": 71,
-    "win": true,
-    "seconds": 37,
-    "hp": 20,
-    "wave": 3,
-    "towers": 5
-  },
-  {
-    "level": 1,
-    "mode": "paid",
-    "seed": 71,
-    "win": true,
-    "seconds": 36,
-    "hp": 24,
-    "wave": 3,
-    "towers": 5
-  },
-  {
-    "level": 1,
-    "mode": "none",
-    "seed": 71,
-    "win": true,
-    "seconds": 37,
-    "hp": 20,
-    "wave": 3,
-    "towers": 5
-  },
-  {
-    "level": 6,
-    "mode": "free",
-    "seed": 71,
-    "win": true,
-    "seconds": 81,
-    "hp": 20,
-    "wave": 4,
-    "towers": 12
-  },
-  {
-    "level": 6,
-    "mode": "paid",
-    "seed": 71,
-    "win": true,
-    "seconds": 75,
-    "hp": 24,
-    "wave": 4,
-    "towers": 11
-  },
-  {
-    "level": 6,
-    "mode": "none",
-    "seed": 71,
-    "win": true,
-    "seconds": 81,
-    "hp": 20,
-    "wave": 4,
-    "towers": 12
-  },
-  {
     "level": 10,
     "mode": "free",
     "seed": 71,
     "win": true,
-    "seconds": 122,
-    "hp": 20,
+    "seconds": 125,
+    "hp": 24,
     "wave": 5,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 3,
+      "droneLv": 0,
+      "critLv": 0,
+      "bountyLv": 0,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 41
+    },
+    "remaining": {
+      "gear": 378,
+      "gems": 3
+    }
   },
   {
     "level": 10,
@@ -77,406 +35,864 @@
     "seconds": 117,
     "hp": 24,
     "wave": 5,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 3,
+      "droneLv": 8,
+      "critLv": 0,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 1391
+    },
+    "remaining": {
+      "gear": 378,
+      "gems": 5
+    }
   },
   {
     "level": 10,
-    "mode": "none",
+    "mode": "gems_7000",
     "seed": 71,
     "win": true,
-    "seconds": 118,
-    "hp": 20,
-    "wave": 5,
-    "towers": 12
-  },
-  {
-    "level": 25,
-    "mode": "free",
-    "seed": 71,
-    "win": true,
-    "seconds": 103,
-    "hp": 22,
-    "wave": 4,
-    "towers": 12
-  },
-  {
-    "level": 25,
-    "mode": "paid",
-    "seed": 71,
-    "win": true,
-    "seconds": 91,
-    "hp": 26,
-    "wave": 4,
-    "towers": 12
-  },
-  {
-    "level": 25,
-    "mode": "none",
-    "seed": 71,
-    "win": true,
-    "seconds": 96,
-    "hp": 20,
-    "wave": 4,
-    "towers": 12
-  },
-  {
-    "level": 50,
-    "mode": "free",
-    "seed": 71,
-    "win": true,
-    "seconds": 145,
+    "seconds": 124,
     "hp": 24,
+    "wave": 5,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 4,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 7041
+    },
+    "remaining": {
+      "gear": 243,
+      "gems": 8
+    }
+  },
+  {
+    "level": 10,
+    "mode": "gems_15000",
+    "seed": 71,
+    "win": true,
+    "seconds": 94,
+    "hp": 24,
+    "wave": 5,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 3,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 15041
+    },
+    "remaining": {
+      "gear": 378,
+      "gems": 4
+    }
+  },
+  {
+    "level": 50,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 207,
+    "hp": 28,
     "wave": 6,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 5,
+      "goldLv": 6,
+      "droneLv": 0,
+      "critLv": 0,
+      "bountyLv": 1,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 217
+    },
+    "remaining": {
+      "gear": 7198,
+      "gems": 0
+    }
   },
   {
     "level": 50,
     "mode": "paid",
     "seed": 71,
     "win": true,
-    "seconds": 136,
+    "seconds": 185,
     "hp": 30,
     "wave": 6,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 6,
+      "goldLv": 6,
+      "droneLv": 8,
+      "critLv": 0,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 1567
+    },
+    "remaining": {
+      "gear": 6993,
+      "gems": 1
+    }
   },
   {
     "level": 50,
-    "mode": "none",
+    "mode": "gems_7000",
     "seed": 71,
     "win": true,
-    "seconds": 173,
-    "hp": 20,
-    "wave": 6,
-    "towers": 12
-  },
-  {
-    "level": 100,
-    "mode": "free",
-    "seed": 71,
-    "win": true,
-    "seconds": 206,
+    "seconds": 166,
     "hp": 30,
+    "wave": 6,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 6,
+      "goldLv": 6,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 7217
+    },
+    "remaining": {
+      "gear": 6993,
+      "gems": 17
+    }
+  },
+  {
+    "level": 50,
+    "mode": "gems_15000",
+    "seed": 71,
+    "win": true,
+    "seconds": 175,
+    "hp": 30,
+    "wave": 6,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 6,
+      "goldLv": 6,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 15217
+    },
+    "remaining": {
+      "gear": 6993,
+      "gems": 0
+    }
+  },
+  {
+    "level": 100,
+    "mode": "free",
+    "seed": 71,
+    "win": true,
+    "seconds": 301,
+    "hp": 11,
     "wave": 7,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 7,
+      "rateLv": 7,
+      "hpLv": 7,
+      "goldLv": 8,
+      "droneLv": 0,
+      "critLv": 1,
+      "bountyLv": 1,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 437
+    },
+    "remaining": {
+      "gear": 25603,
+      "gems": 2
+    }
   },
   {
     "level": 100,
     "mode": "paid",
     "seed": 71,
     "win": true,
-    "seconds": 215,
-    "hp": 36,
+    "seconds": 270,
+    "hp": 34,
     "wave": 7,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 7,
+      "rateLv": 7,
+      "hpLv": 8,
+      "goldLv": 8,
+      "droneLv": 8,
+      "critLv": 0,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 1787
+    },
+    "remaining": {
+      "gear": 25328,
+      "gems": 21
+    }
   },
   {
     "level": 100,
-    "mode": "none",
+    "mode": "gems_7000",
     "seed": 71,
     "win": true,
-    "seconds": 217,
-    "hp": 20,
+    "seconds": 261,
+    "hp": 34,
     "wave": 7,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 8,
+      "rateLv": 7,
+      "hpLv": 8,
+      "goldLv": 8,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 7437
+    },
+    "remaining": {
+      "gear": 25053,
+      "gems": 8
+    }
   },
   {
-    "level": 150,
-    "mode": "free",
+    "level": 100,
+    "mode": "gems_15000",
     "seed": 71,
     "win": true,
-    "seconds": 278,
-    "hp": 36,
-    "wave": 8,
-    "towers": 12
-  },
-  {
-    "level": 150,
-    "mode": "paid",
-    "seed": 71,
-    "win": true,
-    "seconds": 275,
-    "hp": 40,
-    "wave": 8,
-    "towers": 12
-  },
-  {
-    "level": 150,
-    "mode": "none",
-    "seed": 71,
-    "win": true,
-    "seconds": 285,
-    "hp": 20,
-    "wave": 8,
-    "towers": 12
+    "seconds": 242,
+    "hp": 32,
+    "wave": 7,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 7,
+      "rateLv": 7,
+      "hpLv": 7,
+      "goldLv": 9,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 15437
+    },
+    "remaining": {
+      "gear": 25293,
+      "gems": 16
+    }
   },
   {
     "level": 200,
     "mode": "free",
     "seed": 71,
-    "win": true,
-    "seconds": 319,
-    "hp": 40,
-    "wave": 8,
-    "towers": 12
+    "win": false,
+    "seconds": 124,
+    "hp": 0,
+    "wave": 2,
+    "towers": 8,
+    "skills": {
+      "dmgLv": 10,
+      "rateLv": 10,
+      "hpLv": 10,
+      "goldLv": 10,
+      "droneLv": 1,
+      "critLv": 1,
+      "bountyLv": 2,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 877
+    },
+    "remaining": {
+      "gear": 93663,
+      "gems": 9
+    }
   },
   {
     "level": 200,
     "mode": "paid",
     "seed": 71,
-    "win": true,
-    "seconds": 326,
-    "hp": 40,
-    "wave": 8,
-    "towers": 12
+    "win": false,
+    "seconds": 124,
+    "hp": 0,
+    "wave": 2,
+    "towers": 10,
+    "skills": {
+      "dmgLv": 10,
+      "rateLv": 10,
+      "hpLv": 10,
+      "goldLv": 11,
+      "droneLv": 8,
+      "critLv": 2,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 2227
+    },
+    "remaining": {
+      "gear": 93283,
+      "gems": 17
+    }
   },
   {
     "level": 200,
-    "mode": "none",
+    "mode": "gems_7000",
     "seed": 71,
     "win": true,
-    "seconds": 331,
-    "hp": 20,
+    "seconds": 415,
+    "hp": 35,
     "wave": 8,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 11,
+      "rateLv": 10,
+      "hpLv": 11,
+      "goldLv": 11,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 7877
+    },
+    "remaining": {
+      "gear": 92523,
+      "gems": 16
+    }
   },
   {
-    "level": 1,
-    "mode": "free",
-    "seed": 913,
+    "level": 200,
+    "mode": "gems_15000",
+    "seed": 71,
     "win": true,
-    "seconds": 37,
-    "hp": 20,
-    "wave": 3,
-    "towers": 5
-  },
-  {
-    "level": 1,
-    "mode": "paid",
-    "seed": 913,
-    "win": true,
-    "seconds": 36,
-    "hp": 24,
-    "wave": 3,
-    "towers": 6
-  },
-  {
-    "level": 1,
-    "mode": "none",
-    "seed": 913,
-    "win": true,
-    "seconds": 37,
-    "hp": 20,
-    "wave": 3,
-    "towers": 5
-  },
-  {
-    "level": 6,
-    "mode": "free",
-    "seed": 913,
-    "win": true,
-    "seconds": 82,
-    "hp": 20,
-    "wave": 4,
-    "towers": 12
-  },
-  {
-    "level": 6,
-    "mode": "paid",
-    "seed": 913,
-    "win": true,
-    "seconds": 67,
-    "hp": 24,
-    "wave": 4,
-    "towers": 11
-  },
-  {
-    "level": 6,
-    "mode": "none",
-    "seed": 913,
-    "win": true,
-    "seconds": 82,
-    "hp": 20,
-    "wave": 4,
-    "towers": 12
+    "seconds": 386,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 10,
+      "rateLv": 10,
+      "hpLv": 11,
+      "goldLv": 11,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 15877
+    },
+    "remaining": {
+      "gear": 92903,
+      "gems": 40
+    }
   },
   {
     "level": 10,
     "mode": "free",
     "seed": 913,
     "win": true,
-    "seconds": 114,
-    "hp": 20,
-    "wave": 5,
-    "towers": 12
-  },
-  {
-    "level": 10,
-    "mode": "paid",
-    "seed": 913,
-    "win": true,
-    "seconds": 107,
+    "seconds": 127,
     "hp": 24,
     "wave": 5,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 3,
+      "droneLv": 0,
+      "critLv": 0,
+      "bountyLv": 0,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 41
+    },
+    "remaining": {
+      "gear": 378,
+      "gems": 3
+    }
   },
   {
     "level": 10,
-    "mode": "none",
-    "seed": 913,
-    "win": true,
-    "seconds": 115,
-    "hp": 20,
-    "wave": 5,
-    "towers": 12
-  },
-  {
-    "level": 25,
-    "mode": "free",
-    "seed": 913,
-    "win": true,
-    "seconds": 98,
-    "hp": 22,
-    "wave": 4,
-    "towers": 12
-  },
-  {
-    "level": 25,
     "mode": "paid",
     "seed": 913,
     "win": true,
-    "seconds": 86,
-    "hp": 26,
-    "wave": 4,
-    "towers": 12
+    "seconds": 121,
+    "hp": 24,
+    "wave": 5,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 3,
+      "droneLv": 8,
+      "critLv": 0,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 1391
+    },
+    "remaining": {
+      "gear": 378,
+      "gems": 5
+    }
   },
   {
-    "level": 25,
-    "mode": "none",
+    "level": 10,
+    "mode": "gems_7000",
+    "seed": 913,
+    "win": true,
+    "seconds": 117,
+    "hp": 24,
+    "wave": 5,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 4,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 7041
+    },
+    "remaining": {
+      "gear": 243,
+      "gems": 8
+    }
+  },
+  {
+    "level": 10,
+    "mode": "gems_15000",
     "seed": 913,
     "win": true,
     "seconds": 101,
-    "hp": 20,
-    "wave": 4,
-    "towers": 12
-  },
-  {
-    "level": 50,
-    "mode": "free",
-    "seed": 913,
-    "win": true,
-    "seconds": 144,
     "hp": 24,
+    "wave": 5,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 2,
+      "rateLv": 2,
+      "hpLv": 3,
+      "goldLv": 3,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 838,
+      "gems": 15041
+    },
+    "remaining": {
+      "gear": 378,
+      "gems": 4
+    }
+  },
+  {
+    "level": 50,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 189,
+    "hp": 28,
     "wave": 6,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 5,
+      "goldLv": 6,
+      "droneLv": 0,
+      "critLv": 0,
+      "bountyLv": 1,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 217
+    },
+    "remaining": {
+      "gear": 7198,
+      "gems": 0
+    }
   },
   {
     "level": 50,
     "mode": "paid",
     "seed": 913,
     "win": true,
-    "seconds": 138,
+    "seconds": 179,
     "hp": 30,
     "wave": 6,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 6,
+      "goldLv": 6,
+      "droneLv": 8,
+      "critLv": 0,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 1567
+    },
+    "remaining": {
+      "gear": 6993,
+      "gems": 1
+    }
   },
   {
     "level": 50,
-    "mode": "none",
+    "mode": "gems_7000",
     "seed": 913,
     "win": true,
-    "seconds": 152,
-    "hp": 20,
-    "wave": 6,
-    "towers": 12
-  },
-  {
-    "level": 100,
-    "mode": "free",
-    "seed": 913,
-    "win": true,
-    "seconds": 208,
+    "seconds": 159,
     "hp": 30,
+    "wave": 6,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 6,
+      "goldLv": 6,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 7217
+    },
+    "remaining": {
+      "gear": 6993,
+      "gems": 17
+    }
+  },
+  {
+    "level": 50,
+    "mode": "gems_15000",
+    "seed": 913,
+    "win": true,
+    "seconds": 177,
+    "hp": 30,
+    "wave": 6,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 5,
+      "rateLv": 5,
+      "hpLv": 6,
+      "goldLv": 6,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 9283,
+      "gems": 15217
+    },
+    "remaining": {
+      "gear": 6993,
+      "gems": 0
+    }
+  },
+  {
+    "level": 100,
+    "mode": "free",
+    "seed": 913,
+    "win": true,
+    "seconds": 307,
+    "hp": 10,
     "wave": 7,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 7,
+      "rateLv": 7,
+      "hpLv": 7,
+      "goldLv": 8,
+      "droneLv": 0,
+      "critLv": 1,
+      "bountyLv": 1,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 437
+    },
+    "remaining": {
+      "gear": 25603,
+      "gems": 2
+    }
   },
   {
     "level": 100,
     "mode": "paid",
     "seed": 913,
     "win": true,
-    "seconds": 209,
-    "hp": 36,
+    "seconds": 285,
+    "hp": 34,
     "wave": 7,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 7,
+      "rateLv": 7,
+      "hpLv": 8,
+      "goldLv": 8,
+      "droneLv": 8,
+      "critLv": 0,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 1787
+    },
+    "remaining": {
+      "gear": 25328,
+      "gems": 21
+    }
   },
   {
     "level": 100,
-    "mode": "none",
+    "mode": "gems_7000",
     "seed": 913,
     "win": true,
-    "seconds": 214,
-    "hp": 20,
+    "seconds": 230,
+    "hp": 34,
     "wave": 7,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 8,
+      "rateLv": 7,
+      "hpLv": 8,
+      "goldLv": 8,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 7437
+    },
+    "remaining": {
+      "gear": 25053,
+      "gems": 8
+    }
   },
   {
-    "level": 150,
-    "mode": "free",
+    "level": 100,
+    "mode": "gems_15000",
     "seed": 913,
     "win": true,
-    "seconds": 288,
-    "hp": 36,
-    "wave": 8,
-    "towers": 12
+    "seconds": 238,
+    "hp": 32,
+    "wave": 7,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 7,
+      "rateLv": 7,
+      "hpLv": 7,
+      "goldLv": 9,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 29538,
+      "gems": 15437
+    },
+    "remaining": {
+      "gear": 25293,
+      "gems": 16
+    }
   },
   {
-    "level": 150,
+    "level": 200,
+    "mode": "free",
+    "seed": 913,
+    "win": false,
+    "seconds": 66,
+    "hp": 0,
+    "wave": 1,
+    "towers": 5,
+    "skills": {
+      "dmgLv": 10,
+      "rateLv": 10,
+      "hpLv": 10,
+      "goldLv": 10,
+      "droneLv": 1,
+      "critLv": 1,
+      "bountyLv": 2,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 877
+    },
+    "remaining": {
+      "gear": 93663,
+      "gems": 9
+    }
+  },
+  {
+    "level": 200,
     "mode": "paid",
     "seed": 913,
     "win": true,
-    "seconds": 286,
-    "hp": 40,
+    "seconds": 414,
+    "hp": 3,
     "wave": 8,
-    "towers": 12
-  },
-  {
-    "level": 150,
-    "mode": "none",
-    "seed": 913,
-    "win": true,
-    "seconds": 280,
-    "hp": 20,
-    "wave": 8,
-    "towers": 12
-  },
-  {
-    "level": 200,
-    "mode": "free",
-    "seed": 913,
-    "win": true,
-    "seconds": 325,
-    "hp": 40,
-    "wave": 8,
-    "towers": 12
-  },
-  {
-    "level": 200,
-    "mode": "paid",
-    "seed": 913,
-    "win": true,
-    "seconds": 312,
-    "hp": 40,
-    "wave": 8,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 10,
+      "rateLv": 10,
+      "hpLv": 10,
+      "goldLv": 11,
+      "droneLv": 8,
+      "critLv": 2,
+      "bountyLv": 8,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 2227
+    },
+    "remaining": {
+      "gear": 93283,
+      "gems": 17
+    }
   },
   {
     "level": 200,
-    "mode": "none",
+    "mode": "gems_7000",
     "seed": 913,
     "win": true,
-    "seconds": 333,
-    "hp": 20,
+    "seconds": 439,
+    "hp": 40,
     "wave": 8,
-    "towers": 12
+    "towers": 12,
+    "skills": {
+      "dmgLv": 11,
+      "rateLv": 10,
+      "hpLv": 11,
+      "goldLv": 11,
+      "droneLv": 19,
+      "critLv": 2,
+      "bountyLv": 20,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 7877
+    },
+    "remaining": {
+      "gear": 92523,
+      "gems": 16
+    }
+  },
+  {
+    "level": 200,
+    "mode": "gems_15000",
+    "seed": 913,
+    "win": true,
+    "seconds": 437,
+    "hp": 40,
+    "wave": 8,
+    "towers": 12,
+    "skills": {
+      "dmgLv": 10,
+      "rateLv": 10,
+      "hpLv": 11,
+      "goldLv": 11,
+      "droneLv": 28,
+      "critLv": 5,
+      "bountyLv": 30,
+      "orbitalLv": 0
+    },
+    "initial": {
+      "gear": 101043,
+      "gems": 15877
+    },
+    "remaining": {
+      "gear": 92903,
+      "gems": 40
+    }
   }
 ]
