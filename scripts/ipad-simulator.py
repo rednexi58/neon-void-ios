@@ -45,13 +45,23 @@ driver = r'''
     const el = document.getElementById(id);
     if (el && el.getClientRects().length && !el.disabled) el.click();
   };
-  setTimeout(() => { click('btnLobbyStartCampaign'); click('btnTrainerClose'); }, 11000);
-  setTimeout(() => { click('btnOpenMenuQuick'); click('btnOpenLab'); }, 21000);
-  setTimeout(() => { click('btnCloseLab'); click('btnOpenShop'); }, 31000);
-  setTimeout(() => {
-    const el = document.querySelector('[data-gem-pack="gems_10000"]');
-    if (el && el.getClientRects().length) el.scrollIntoView({block:'end'});
-  }, 41000);
+  // Wait for the app's load handler before navigating. Its initial startLevel
+  // would otherwise close a modal opened while fonts/assets were still loading.
+  const begin = () => {
+    const ensureShop = () => {
+      const shop = document.getElementById('modalShop');
+      if (shop && shop.classList.contains('hidden')) click('btnLobbyOpenShop');
+    };
+    setTimeout(ensureShop, 5000);
+    const retry = setInterval(ensureShop, 3000);
+    setTimeout(() => clearInterval(retry), 90000);
+    setTimeout(() => {
+      const el = document.querySelector('[data-gem-pack="gems_10000"]');
+      if (el && el.getClientRects().length) el.scrollIntoView({block:'end'});
+    }, 95000);
+  };
+  if (document.readyState === 'complete') begin();
+  else window.addEventListener('load', begin, {once:true});
 })();
 </script>
 '''
@@ -68,7 +78,7 @@ try:
             run('xcrun', 'simctl', 'status_bar', udid, 'override', '--time', '9:41', '--batteryState', 'charged', '--batteryLevel', '100')
             run('xcrun', 'simctl', 'launch', udid, 'com.neonvoid.cyberdefense')
             start = time.monotonic()
-            for seconds, screen in [(8,'lobby'),(18,'game'),(28,'evolution'),(38,'shop-top'),(48,'shop-bottom')]:
+            for seconds, screen in [(80,'shop-top'),(135,'shop-bottom')]:
                 time.sleep(max(0, start + seconds - time.monotonic()))
                 run('xcrun', 'simctl', 'io', udid, 'screenshot', str(OUT / f'{kind}-{screen}.png'))
         finally:
