@@ -4,6 +4,7 @@
   else root.GameBalance = api;
 })(typeof window === 'object' ? window : globalThis, function() {
   'use strict';
+  const revision = '2026.10.25.3';
   // Original paid upgrade economy. Only critical chance has a mathematical cap.
   const skills = {
     dmgLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
@@ -77,5 +78,5 @@
     socketCache.set(cacheKey,result.map(s=>({...s})));
     return result;
   }
-  return {skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,droneFleet,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
+  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,droneFleet,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
 });

@@ -113,10 +113,10 @@
     }
   });
 
-  // node_modules/@capacitor/core/dist/index.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor/core/dist/index.js
   var createCapacitorPlatforms, initPlatforms, CapacitorPlatforms, addPlatform, setPlatform, ExceptionCode, CapacitorException, getPlatformId, createCapacitor, initCapacitorGlobal, Capacitor, registerPlugin, Plugins, WebPlugin, encode, decode, CapacitorCookiesPluginWeb, CapacitorCookies, readBlobAsBase64, normalizeHttpHeaders, buildUrlParams, buildRequestInit, CapacitorHttpPluginWeb, CapacitorHttp;
   var init_dist = __esm({
-    "node_modules/@capacitor/core/dist/index.js"() {
+    "../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor/core/dist/index.js"() {
       createCapacitorPlatforms = (win) => {
         const defaultPlatformMap = /* @__PURE__ */ new Map();
         defaultPlatformMap.set("web", { name: "web" });
@@ -667,10 +667,10 @@
     }
   });
 
-  // node_modules/@capacitor-community/admob/dist/esm/consent/consent-status.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/consent/consent-status.enum.js
   var AdmobConsentStatus;
   var init_consent_status_enum = __esm({
-    "node_modules/@capacitor-community/admob/dist/esm/consent/consent-status.enum.js"() {
+    "../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/consent/consent-status.enum.js"() {
       (function(AdmobConsentStatus2) {
         AdmobConsentStatus2["NOT_REQUIRED"] = "NOT_REQUIRED";
         AdmobConsentStatus2["OBTAINED"] = "OBTAINED";
@@ -680,14 +680,14 @@
     }
   });
 
-  // node_modules/@capacitor-community/admob/dist/esm/web.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/web.js
   var web_exports = {};
   __export(web_exports, {
     AdMobWeb: () => AdMobWeb
   });
   var AdMobWeb;
   var init_web = __esm({
-    "node_modules/@capacitor-community/admob/dist/esm/web.js"() {
+    "../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/web.js"() {
       init_dist();
       init_consent_status_enum();
       AdMobWeb = class extends WebPlugin {
@@ -782,10 +782,10 @@
   init_dist();
   var import_ad_presentation = __toESM(require_ad_presentation());
 
-  // node_modules/@capacitor-community/admob/dist/esm/index.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/index.js
   init_dist();
 
-  // node_modules/@capacitor-community/admob/dist/esm/definitions.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/definitions.js
   var MaxAdContentRating;
   (function(MaxAdContentRating2) {
     MaxAdContentRating2["General"] = "General";
@@ -794,7 +794,7 @@
     MaxAdContentRating2["MatureAudience"] = "MatureAudience";
   })(MaxAdContentRating || (MaxAdContentRating = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/banner/banner-ad-plugin-events.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/banner/banner-ad-plugin-events.enum.js
   var BannerAdPluginEvents;
   (function(BannerAdPluginEvents2) {
     BannerAdPluginEvents2["SizeChanged"] = "bannerAdSizeChanged";
@@ -805,7 +805,7 @@
     BannerAdPluginEvents2["AdImpression"] = "bannerAdImpression";
   })(BannerAdPluginEvents || (BannerAdPluginEvents = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/banner/banner-ad-position.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/banner/banner-ad-position.enum.js
   var BannerAdPosition;
   (function(BannerAdPosition2) {
     BannerAdPosition2["TOP_CENTER"] = "TOP_CENTER";
@@ -813,7 +813,7 @@
     BannerAdPosition2["BOTTOM_CENTER"] = "BOTTOM_CENTER";
   })(BannerAdPosition || (BannerAdPosition = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/banner/banner-ad-size.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/banner/banner-ad-size.enum.js
   var BannerAdSize;
   (function(BannerAdSize2) {
     BannerAdSize2["BANNER"] = "BANNER";
@@ -825,7 +825,7 @@
     BannerAdSize2["SMART_BANNER"] = "SMART_BANNER";
   })(BannerAdSize || (BannerAdSize = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/interstitial/interstitial-ad-plugin-events.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/interstitial/interstitial-ad-plugin-events.enum.js
   var InterstitialAdPluginEvents;
   (function(InterstitialAdPluginEvents2) {
     InterstitialAdPluginEvents2["Loaded"] = "interstitialAdLoaded";
@@ -835,7 +835,7 @@
     InterstitialAdPluginEvents2["Dismissed"] = "interstitialAdDismissed";
   })(InterstitialAdPluginEvents || (InterstitialAdPluginEvents = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/reward-interstitial/reward-interstitial-ad-plugin-events.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/reward-interstitial/reward-interstitial-ad-plugin-events.enum.js
   var RewardInterstitialAdPluginEvents;
   (function(RewardInterstitialAdPluginEvents2) {
     RewardInterstitialAdPluginEvents2["Loaded"] = "onRewardedInterstitialAdLoaded";
@@ -846,7 +846,7 @@
     RewardInterstitialAdPluginEvents2["Rewarded"] = "onRewardedInterstitialAdReward";
   })(RewardInterstitialAdPluginEvents || (RewardInterstitialAdPluginEvents = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/reward/reward-ad-plugin-events.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/reward/reward-ad-plugin-events.enum.js
   var RewardAdPluginEvents;
   (function(RewardAdPluginEvents2) {
     RewardAdPluginEvents2["Loaded"] = "onRewardedVideoAdLoaded";
@@ -857,10 +857,10 @@
     RewardAdPluginEvents2["Rewarded"] = "onRewardedVideoAdReward";
   })(RewardAdPluginEvents || (RewardAdPluginEvents = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/consent/index.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/consent/index.js
   init_consent_status_enum();
 
-  // node_modules/@capacitor-community/admob/dist/esm/consent/consent-debug-geography.enum.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/consent/consent-debug-geography.enum.js
   var AdmobConsentDebugGeography;
   (function(AdmobConsentDebugGeography2) {
     AdmobConsentDebugGeography2[AdmobConsentDebugGeography2["DISABLED"] = 0] = "DISABLED";
@@ -868,12 +868,12 @@
     AdmobConsentDebugGeography2[AdmobConsentDebugGeography2["NOT_EEA"] = 2] = "NOT_EEA";
   })(AdmobConsentDebugGeography || (AdmobConsentDebugGeography = {}));
 
-  // node_modules/@capacitor-community/admob/dist/esm/index.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/@capacitor-community/admob/dist/esm/index.js
   var AdMob = registerPlugin("AdMob", {
     web: () => Promise.resolve().then(() => (init_web(), web_exports)).then((m) => new m.AdMobWeb())
   });
 
-  // node_modules/capacitor-plugin-cdv-purchase/dist/index.js
+  // ../Gezegeni_Koru_TestFlight_Test_2026-10-24/node_modules/capacitor-plugin-cdv-purchase/dist/index.js
   var dist_exports = {};
   __export(dist_exports, {
     CdvPurchase: () => CdvPurchase,
@@ -9031,7 +9031,7 @@ Enter "E" to fail with an error.Anything else to cancel.`);
 
   // monetization-setup.js
   var IOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
-  var TEST_ADS = false;
+  var TEST_ADS = true;
   var VIP_ID = "vip_lifetime";
   var GEM_PACKS = [
     { id: "gems_50", baseGems: 50, bonusGems: 0, totalGems: 50 },

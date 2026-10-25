@@ -32,15 +32,17 @@ function createGame(root = path.resolve(__dirname, '..'), seed = 1) {
     window:{devicePixelRatio:1,addEventListener:noop,GameMonetization:{onVipChange:noop,onVipPrice:noop,onGemPrices:noop,onGemGranted:noop,onCatalogChange:noop,getDebugInfo:()=>({testAds:false}),configure:noop,onCatalog:noop,onDiagnostics:noop,subscribe:noop,preloadAds:noop,isInterstitialDue:()=>false,getDiagnostics:()=>({testAds:false})}}
   });
   for (const name of ['game-balance.js','game-audio.js']) {
+    if(name==='game-balance.js' && html.includes('<!-- BALANCE START -->')) continue;
     const file=path.join(root,'www',name);if(fs.existsSync(file)) vm.runInContext(fs.readFileSync(file,'utf8'),sandbox);
   }
   let source=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n');
   source=source.replace(/\}\)\(\);\s*$/, `
     for(const k of Object.keys(SoundFX)) if(typeof SoundFX[k]==='function') SoundFX[k]=()=>{};
+    const renderHUD=updateHUD;
     updateHUD=updateSocketInspector=updateWaveBannerUI=updateTrainerUI=updateTowerUnlockBadges=populatePlayerLevelDropdown=updateLobbyUI=renderMissionsAndHeroesModal=()=>{};
     showToast=spawnParticles=()=>{};
     progressHealthy=true;
-    globalThis.game={state,SoundFX,TOWER_TYPES,ENEMY_ARCHETYPES,SECTOR_PRESETS,calculateDifficulty,getHeroInfo,getStartingGold,getMaxBaseHp,syncAutonomousDrones,getCritChance,getDmgMultiplier,getRateMultiplier,getBountyMultiplier,getBaseSkillCost,getEliteSkillCoreCost,tryUpgradeSkill,applyDamageToEnemy,startLevel,buildWaveQueue,beginWaveAfterInterstitial,updateSimulation,saveProgress,loadProgress,handleLevelVictory,refreshDailyMissions,getTodayKey,drawCombatDrone,
+    globalThis.game={state,SoundFX,renderHUD,TOWER_TYPES,ENEMY_ARCHETYPES,SECTOR_PRESETS,calculateDifficulty,getHeroInfo,getStartingGold,getMaxBaseHp,syncAutonomousDrones,getCritChance,getDmgMultiplier,getRateMultiplier,getBountyMultiplier,getBaseSkillCost,getEliteSkillCoreCost,tryUpgradeSkill,applyDamageToEnemy,startLevel,buildWaveQueue,beginWaveAfterInterstitial,updateSimulation,saveProgress,loadProgress,handleLevelVictory,refreshDailyMissions,getTodayKey,drawCombatDrone,
       get sockets(){return SOCKETS;},get paths(){return ACTIVE_PATHS;},get enemies(){return activeEnemies;},get drones(){return autonomousDrones;},get texts(){return floatingTexts;},
       tick(dt){ updateSimulation(dt); floatingTexts=[]; particles=[]; },
       get waveActive(){return waveInProgress;},get queue(){return spawnQueue;}};

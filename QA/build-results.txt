@@ -1,11 +1,12 @@
 npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 
 > gezegeni-savun-ios@1.2.0 build:web
-> node build-assets.cjs && node build-monetization.cjs
+> node build-assets.cjs && node build-monetization.cjs && node scripts/verify-release.cjs
 
 Local styles and Turkish/Latin fonts built.
 
   www/native-monetization.js  417.3kb
 
-⚡ Done in 60ms
-Production AdMob units enabled (App Store only).
+⚡ Done in 41ms
+Google test ad units enabled (TestFlight).
+Verified 2026.10.25.3: 8 gem packs, Gear + gems, no completed-level locks.

@@ -30,6 +30,7 @@ workflows:
           fi
           # The sync hook configures iOS 15 and UMP 2.7.0 before CocoaPods.
           npx cap sync ios
+          npm run verify:native
       - name: Install Official Gezegeni Koru AppIcon into Xcode Assets.xcassets
         script: |
           ICONSET_DIR="ios/App/App/Assets.xcassets/AppIcon.appiconset"
@@ -64,6 +65,7 @@ workflows:
             --scheme "App"
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/release-verification.json
       - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
@@ -101,6 +103,7 @@ workflows:
           fi
           # The sync hook configures iOS 15 and UMP 2.7.0 before CocoaPods.
           npx cap sync ios
+          npm run verify:native
       - name: Install Official Gezegeni Koru AppIcon into Xcode Assets.xcassets
         script: |
           ICONSET_DIR="ios/App/App/Assets.xcassets/AppIcon.appiconset"
@@ -135,8 +138,51 @@ workflows:
             --scheme "App"
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/release-verification.json
       - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
         auth: integration
         submit_to_testflight: false
+
+  ios-ipad-check:
+    name: Gezegeni Koru - iPad Simulator Check
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      node: 20.11.0
+      xcode: latest
+      vars:
+        GK_TEST_ADS: "1"
+    scripts:
+      - name: Prepare current game for iPad simulator
+        script: |
+          set -e
+          npm ci --no-audit --no-fund
+          npm run build:web
+          npm test
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
+          npx cap sync ios
+          npm run verify:native
+          bash ios_config/apply_ios_settings.sh
+          cp -R ios_config/AppIcon.appiconset/. ios/App/App/Assets.xcassets/AppIcon.appiconset/
+      - name: Build unsigned iPad simulator app
+        script: |
+          set -e
+          xcodebuild build \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build/simulator \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+      - name: Launch iPad and capture first screen for review
+        script: |
+          python3 scripts/ipad-simulator.py
+    artifacts:
+      - build/simulator/Build/Products/Debug-iphonesimulator/App.app
+      - build/ipad-review/**
+      - build/release-verification.json

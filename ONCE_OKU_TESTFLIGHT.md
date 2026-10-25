@@ -1,62 +1,26 @@
-# Gezegeni Koru — Codemagic test paketi · 24 Ekim 2026
+# ÖNCE OKU — İçerik 2026.10.25.3
 
-Bu ZIP tam kaynak projedir; derlenmiş veya Apple onaylı IPA değildir. Güncel reklam düzeltmesi ve yayın iş akışı için önce **YAYINA_HAZIRLIK_OKU.md** dosyasını oku.
+1. ZIP'i aç. İçindeki dosya ve klasörleri GitHub projenin ANA DİZİNİNE yükle. ZIP dosyasını veya onu saran klasörü yükleme. package.json ile codemagic.yaml ana dizinde olmalı. www, scripts, tests dahil bütün klasörleri güncelle ve Commit changes ile kaydet.
+2. Codemagic: Start new build → dosyaları yüklediğin branch → ios-testflight-workflow → başlat. Bu seçenekte Google TEST reklamları açık.
+3. Yeni build tamamlanıp Apple'da işlendikten sonra TestFlight'tan yükle. 121'i tekrar yüklemek dosyaları değiştirmez. Yeni numara Apple'daki en yüksek numaradan bir fazla olur.
+4. Komuta Menüsü veya Siber Evrim ekranında İçerik / Content: 2026.10.25.3 yazmalı. Bu yazı yoksa bu paket kurulmamıştır.
 
-## Build alma
+## Beklenen sonuç
+- Foton, atış hızı, can ve başlangıç enerjisi: ilk geliştirme 65 Gear + 5 elmas; ikinci 100 Gear + 9 elmas; üçüncü 135 Gear + 13 elmas.
+- Eski kayıt seviyeleri korunur. Daha önce geliştirdiğin özellik mevcut seviyesinin fiyatını gösterir: örneğin Lv.5 için 205 Gear + 21 elmas. Oyunu silme.
+- Bölüm tamamlama şartı yok. Dron geliştirmesine oyun seviyesi sınırı yok.
+- Mağazada 8 paket: 50, 115, 240, 500, 650, 1350, 7000, 15000. Son ikisi için aşağı kaydır. Apple fiyatları yüklenene kadar satın alma düğmeleri kapalı kalır.
 
-1. Mevcut deponun yedeğini al. ZIP'i açıp **içindeki dosyaları depo köküne** aktar, eskileri güncelle ve Codemagic'in kullandığı dala commit et. ZIP dosyasını tek başına depoya yüklemek yeterli değildir. `codemagic.yaml`, `package.json`, `package-lock.json`, `www/`, `tests/`, `ios_config/` aynı kökte olmalı.
-2. Codemagic'te yeni commit için `ios-testflight-workflow` çalıştır. Önceki imzalama adları korundu: `Apple AppStore`, `neonvoid-appstore-profile`, `ios-distribution`.
-3. Workflow npm ci, web derlemesi ve testleri çalıştırır. iOS 15 ve UMP 2.7.0 ayarları ilk cap add/sync işleminden önce uygulanır. Build numarası son TestFlight numarasından bir artırılır. Numara sorgusu başarısızsa build durur.
-4. Başarılı IPA App Store Connect'e yüklenir. `submit_to_testflight: false` korundu; dış test beta incelemesi otomatik istenmez. Apple işlemesi bittikten sonra iç test grubunda yeni build'i seçip iPhone'a yükle. Gerekirse tester/grup atamasını tamamla.
-5. Uygulamayı silmek yerine TestFlight üzerinden güncelle; mevcut ilerleme ve elmaslar cihazda saklanıyor.
+## iPad olmadan kontrol
+Codemagic: Start new build → ios-ipad-check. Bu ayrı simülatör build'i App Store'a yüklenmez.
+- 13/12.9 inç iPad Pro simülatöründe uygulamayı açar. Artifacts bölümünde ipad-first-screen.png ve device.json oluşur; indirip gönder.
+- Başlangıç resmi izin ekranı olabilir. Bu tek resim tüm oyunun testi veya tam App Store görsel seti değildir.
+- Oynanış, evrim ve mağazayı elle kontrol etmek için build başlatırken Remote access açılarak VNC ile builder Mac'teki simülatör kullanılabilir. iPad satın almak gerekmez.
+- App Preview hesabında açıksa .app yanında Quick Launch kullanılabilir; cihaz listesinde iPad varsa seç. App Preview planına bağlı ve ücretli olabilir; bu paket ücretli bir hizmet etkinleştirmez.
+- Apple satın alma teslimatını iPhone TestFlight üzerinde ayrıca dene.
+- Burada Xcode yok. Simülatör adımı hazırlandı ve sözdizimi kontrol edildi; henüz Mac üzerinde çalıştırılmadı.
 
-Bundle ID: `com.neonvoid.cyberdefense`. Apple uygulama ID: `6825732487`.
-
-## Değişiklikler
-
-- Mağaza paneli çentik ve ana ekran göstergesi için güvenli alan bırakır; başlık ve düğmeler dar ekranlarda satırlara ayrılır.
-- Fiyat yalnızca Apple'ın yerelleştirilmiş ürün bilgisinden gelir. Fiyatı/teklifi hazır olmayan paket satın alınamaz. Durum ve mağazayı yenile düğmesi eklendi.
-- Elmas bakiyesi ve Apple işlem numarası aynı kayıtta saklandıktan sonra işlem bitirilir. Tekrarlanan işlem ikinci kez elmas vermez. Kaydetme hatası bakiyeyi geri alır ve işlemi tamamlamaz.
-- Kayıt yüklenmeden satın alma başlamaz. Bozuk kayıt sessizce sıfırlanıp üzerine yazılmaz.
-- Ödülsüz kapatılan reklam oyunu beklemede bırakmaz. Ödül yalnızca SDK'nın kazanıldı bildirimiyle verilir.
-- `GK_TEST_ADS: "1"` ile Google test reklamları açıktır; gelir üretmez. Bu değişken Apple satın alma ortamını belirlemez.
-- Sahte ATT penceresi kaldırıldı; mevcut izin düğmesi gerçek iOS API'sini çağırır. Reklam yükleme yetkisi UMP `canRequestAds` sonucuyla belirlenir.
-- Tailwind ve Türkçe/Latin fontlar pakete alındı. Arayüz için CDN gerekmez; oyunun mevcut internet gereksinimi korunur.
-- Kilit dosyası, otomatik kontroller ve ilk native senkronizasyon öncesi yapılandırma eklendi. Oyun mekaniği ve ürün kimlikleri korundu.
-
-## iPhone test listesi
-
-1. Güncellemeden önce elmas bakiyeni not et; güncellemeden sonra aynı kaldığını kontrol et.
-2. Mağazada başlık ve Menü/Kapat düğmeleri görünmeli; son pakete kaydırarak ulaşılmalı. Beklenen durum 8/8 pakettir. Eksik varsa mağazayı yenile; Apple ürün durumu ve bağlantıyı kontrol et. SDK kısa aralıklarla yenilemeyi sınırlayabilir.
-3. Oyun fiyatını Apple ödeme ekranıyla karşılaştır. Para birimi Apple hesabının mağaza ülkesine göre değişir.
-4. TestFlight/Sandbox ortamını ödeme ekranında doğrula. Oyun taklit ödeme yapmaz; gerçek StoreKit ürünlerini ister.
-5. gems_50 satın al: tam +50; gems_100 satın al: tam +115. Kapatıp yeniden açınca bakiye korunmalı ve ikinci kez eklenmemeli.
-6. Satın almayı iptal et: bakiye değişmemeli. Aynı paketi tekrar başarılı al: yeni işlem için bir kez daha doğru miktar gelmeli.
-7. VIP satın al/geri yükle: zorunlu reklamlar kalkmalı. Tüketilebilir elmaslar VIP geri yükleme düğmesiyle geri gelmez.
-8. Ödüllü reklamı erken kapat: ödül verilmemeli ve oyun devam etmeli. Tamamla: bir kez ödül gelmeli. Test reklamı işaretini kontrol et.
-9. Bağlantıyı kesip açarak mevcut çevrimdışı uyarısını ve yeniden bağlanmayı kontrol et. Kayıt testi için uygulamayı silme.
-
-| Product ID | Toplam elmas |
-| --- | ---: |
-| gems_50 | 50 |
-| gems_100 | 115 |
-| gems_200 | 240 |
-| gems_400 | 500 |
-| gems_500 | 650 |
-| gems_1000 | 1350 |
-| gems_5000 | 7000 |
-| gems_10000 | 15000 |
-
-Türkiye baz fiyatları App Store Connect'te yönetilir. Önceki yapılandırmada gems_5000 için mevcut fiyat kademesi **7.499,99 TL** seçildi; oyun sabit 7.500 TL göstermez. Diğer ülke fiyatları Apple fiyat programından gelir. Uygulamanın indirme fiyatı ve yayın ülkeleri ayrı ayarlardır.
-
-## Doğrulama ve sınırlar
-
-- **28 otomatik kontrol** kayıt/tekrar teslimat, bonuslar, mock SDK ile StoreKit köprüsü, reklam kapanışı, 3 bölüm sayacı, UMP izin koşulları ve native hazırlık scriptini kapsar.
-- Bu ortamda Xcode/CocoaPods IPA derlemesi, gerçek iPhone görünümü, Apple ödeme ekranı ve AdMob sunucu akışı çalıştırılmadı. TestFlight ile doğrulanacak.
-- İşlem kaydı cihazdadır. Sunucu makbuz doğrulaması, hesaplar arası bakiye senkronizasyonu veya uygulama silindikten sonra tüketilebilir elmas kurtarma servisi eklenmedi. Önceki build'de tamamlanmış ama teslim edilmemiş işlemler geriye dönük otomatik onarılamaz.
-- Bu paket App Store Connect inceleme görsellerini, yaş derecelendirmesini, gizlilik beyanlarını, indirme fiyatını veya yayın ülkelerini değiştirmez. Bunlar canlı yayın öncesinde ayrıca tamamlanmalı; gizlilik beyanları AdMob veri kullanımıyla eşleştirilmeli.
-- Unity_Project_Scripts özgün referans kodudur; Codemagic'in derlediği uygulama www içindeki Capacitor oyunudur.
-
-Teknik kaynaklar: [Apple işlem tamamlama sırası](https://developer.apple.com/documentation/storekit/finishing-a-transaction), [Codemagic build numarası](https://docs.codemagic.io/knowledge-codemagic/build-versioning/).
-
-Build başarısızsa Codemagic'teki ilk kırmızı adımın gerçek hata günlüğünü, hata satırının öncesi ve sonrasıyla paylaş.
+## Yayın ve kontroller
+Test bitince ios-appstore-release gerçek reklamlarla yayın adayı üretir; bu build de TestFlight'ta denenebilir.
+54 otomatik test geçti. Gerçek geliştirme düğmeleri, fiyat metinleri, iki kaynağın düşmesi, yetersiz bakiye ve mevcut kayıt seviyeleri kontrol edildi. Bunlar fiziksel iOS testi değildir.
+Evrim kodu index.html içine gömülü. build:web eski/yeni dosya karışımını reddeder. Capacitor sync sonrası verify:native iOS'a kopyalanan dosyaların kaynakla aynı olduğunu kontrol eder. release-verification.json içerik özetini ve commit bilgisini tutar.

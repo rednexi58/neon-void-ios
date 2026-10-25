@@ -7,10 +7,11 @@
     "ios:init": "npx cap add ios",
     "ios:sync": "npx cap sync ios",
     "ios:open": "npx cap open ios",
-    "build:web": "node build-assets.cjs && node build-monetization.cjs",
+    "build:web": "node build-assets.cjs && node build-monetization.cjs && node scripts/verify-release.cjs",
     "test": "node --test tests/*.test.cjs",
     "capacitor:sync:before": "node ios_config/prepare-native.cjs",
-    "postinstall": "node ios_config/patch-admob.cjs"
+    "postinstall": "node ios_config/patch-admob.cjs",
+    "verify:native": "node scripts/verify-release.cjs ios/App/App/public"
   },
   "dependencies": {
     "@capacitor-community/admob": "6.2.0",
