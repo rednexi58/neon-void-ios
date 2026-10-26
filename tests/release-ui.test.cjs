@@ -24,7 +24,7 @@ test('existing progress uses saved ranks; insufficient gems cannot buy a free up
   g.state.cyberCore=21;handlers['btnUpSkillDmg:click']();assert.equal(g.state.skills.dmgLv,6);assert.equal(g.state.gear,795);assert.equal(g.state.cyberCore,0);
 });
 test('a stale balance file cannot silently ship with a new UI',()=>{
-  assert.equal(verify().revision,'2026.10.25.3');
+  assert.equal(verify().revision,'2026.10.25.4');
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gk-release-'));
   try {
     fs.cpSync('www',dir,{recursive:true});
