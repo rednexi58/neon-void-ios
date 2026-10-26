@@ -42,7 +42,7 @@ function createGame(root = path.resolve(__dirname, '..'), seed = 1) {
     updateHUD=updateSocketInspector=updateWaveBannerUI=updateTrainerUI=updateTowerUnlockBadges=populatePlayerLevelDropdown=updateLobbyUI=renderMissionsAndHeroesModal=()=>{};
     showToast=spawnParticles=()=>{};
     progressHealthy=true;
-    globalThis.game={state,SoundFX,renderHUD,TOWER_TYPES,ENEMY_ARCHETYPES,SECTOR_PRESETS,calculateDifficulty,getHeroInfo,getStartingGold,getMaxBaseHp,syncAutonomousDrones,getCritChance,getDmgMultiplier,getRateMultiplier,getBountyMultiplier,getBaseSkillCost,getEliteSkillCoreCost,tryUpgradeSkill,applyDamageToEnemy,startLevel,buildWaveQueue,beginWaveAfterInterstitial,updateSimulation,saveProgress,loadProgress,handleLevelVictory,refreshDailyMissions,getTodayKey,drawCombatDrone,
+    globalThis.game={state,SoundFX,renderHUD,TOWER_TYPES,ENEMY_ARCHETYPES,SECTOR_PRESETS,calculateDifficulty,getHeroInfo,getStartingGold,getMaxBaseHp,syncAutonomousDrones,getCritChance,getDmgMultiplier,getRateMultiplier,getBountyMultiplier,getBaseSkillCost,getEliteSkillCoreCost,tryUpgradeSkill,applyDamageToEnemy,startLevel,buildWaveQueue,beginWaveAfterInterstitial,updateSimulation,saveProgress,loadProgress,handleLevelVictory,handleGameOver,grantDailyReward,DAILY_MISSIONS,DAILY_REWARDS_TABLE,refreshDailyMissions,getTodayKey,drawCombatDrone,
       get sockets(){return SOCKETS;},get paths(){return ACTIVE_PATHS;},get enemies(){return activeEnemies;},get drones(){return autonomousDrones;},get texts(){return floatingTexts;},
       tick(dt){ updateSimulation(dt); floatingTexts=[]; particles=[]; },
       get waveActive(){return waveInProgress;},get queue(){return spawnQueue;}};

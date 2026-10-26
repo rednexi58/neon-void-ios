@@ -9,7 +9,7 @@ function makeProfile(level,extraGems=0){
   const a=choices[0];if(!a)break;s.skills[a.k]++;s.gear-=a.c.gear;s.cyberCore-=a.c.core;
  }}
  spend();
- for(let lv=1;lv<level;lv++){const d=B.difficulty(lv);s.gear+=d.gearReward;s.cyberCore+=d.coreReward+2;initial.gear+=d.gearReward;initial.gems+=d.coreReward+2;s.completedLevels[lv]=true;spend();}
+ for(let lv=1;lv<level;lv++){const d=B.difficulty(lv);s.gear+=B.gearGain(d.gearReward);s.cyberCore+=d.coreReward+2;initial.gear+=B.gearGain(d.gearReward);initial.gems+=d.coreReward+2;s.completedLevels[lv]=true;spend();}
  return {...s,initial};
 }
 module.exports={makeProfile};

@@ -4,7 +4,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
-const revision = '2026.10.25.3';
+const revision = '2026.10.25.4';
 const basic = ['dmgLv','rateLv','hpLv','goldLv'];
 const packs = ['gems_50','gems_100','gems_200','gems_400','gems_500','gems_1000','gems_5000','gems_10000'];
 function verify(dir = path.join(root, 'www')) {
@@ -29,7 +29,11 @@ function verify(dir = path.join(root, 'www')) {
     assert.equal(B.cost(s,key).gear,100);assert.equal(B.cost(s,key).core,9);
     s.skills[key]=100;assert(B.canUpgrade(s,key));
   }
-  s.skills.droneLv=1000;assert(B.canUpgrade(s,'droneLv'));
+  s.skills.droneLv=0;assert.equal(B.cost(s,'droneLv').core,500);
+  s.skills.droneLv=1;assert.equal(B.cost(s,'droneLv').core,100);
+  s.skills.droneLv=5;assert(!B.canUpgrade(s,'droneLv'));
+  s.skills.droneLv=1000;assert.equal(B.droneFleet(s).count,5);
+  assert.equal(B.gearGain(100),60);
   return {revision, files:Object.fromEntries(['index.html','game-balance.js','game-audio.js','native-monetization.js'].map(name=>[name,crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,name))).digest('hex')]))};
 }
 if(require.main===module) {
