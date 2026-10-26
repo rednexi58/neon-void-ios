@@ -509,7 +509,7 @@
         </div>
       </div>
 
-      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.10.25.3</p>
+      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.10.25.4</p>
       <!-- Kalıcı Meta Paralar & Dil Seçimi -->
       <div class="grid grid-cols-3 gap-2 bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-xs items-center">
         <div class="flex items-center justify-between px-1.5">
@@ -999,7 +999,7 @@
         </div>
       </div>
 
-      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.10.25.3</p>
+      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.10.25.4</p>
       <p id="balanceSummary" class="text-xs text-sky-200">Temel geliştirmeler Gear + elmas ile alınır; bölüm tamamlama şartı yoktur.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
         <div class="bg-slate-900/90 border border-cyan-500/35 rounded-xl p-3 flex flex-col justify-between gap-2">
@@ -1068,7 +1068,7 @@
                 <span class="font-cyber font-bold text-fuchsia-300">🛸 Otonom Siber-Dron Filosu</span>
                 <span id="skillDroneLv" class="px-1.5 py-0.5 rounded bg-fuchsia-500/30 text-fuchsia-100 font-bold">Lv.0</span>
               </div>
-              <p class="text-slate-300 text-[11px] mt-1">Gezegen yörüngesinde devriye gezip otomatik ateş eden <strong class="text-fuchsia-200">Dron filo gücü (+1 Dron/Lv; büyük filolar güçlendirilmiş gruplar halinde görünür)</strong> üretir.</p>
+              <p class="text-slate-300 text-[11px] mt-1">Gezegen yakınında farklı noktalara devriye gezip düşmanları karşılayan <strong class="text-fuchsia-200">Dron filosu (+1 Dron/Lv, en fazla 5)</strong> üretir.</p>
             </div>
             <button id="btnUpSkillDrone" class="w-full py-2 rounded-lg bg-fuchsia-500 hover:bg-fuchsia-400 text-slate-950 font-cyber font-bold transition">
               Aç / Geliştir (33 💎)
@@ -1533,14 +1533,14 @@
   else root.GameBalance = api;
 })(typeof window === 'object' ? window : globalThis, function() {
   'use strict';
-  const revision = '2026.10.25.3';
-  // Original paid upgrade economy. Only critical chance has a mathematical cap.
+  const revision = '2026.10.25.4';
+  // Paid upgrades; drone fleet and critical chance have explicit caps.
   const skills = {
     dmgLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
     rateLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
     hpLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
     goldLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
-    droneLv: {base:0,max:Infinity,core:33,step:20},
+    droneLv: {base:0,max:5,core:500,step:0},
     critLv: {base:0,max:120,core:26,step:13},
     bountyLv: {base:0,max:Infinity,core:20,step:13},
     orbitalLv: {base:0,max:Infinity,core:26,step:13}
@@ -1549,17 +1549,43 @@
   function cleared(state) {return Object.keys(state.completedLevels||{}).filter(k=>+k>=1&&+k<=200&&state.completedLevels[k]).length;}
   function level(state,key) {const s=skills[key];return clamp(state.skills[key],s.base,s.max);}
   function limit(state,key) {return skills[key].max;}
-  function cost(state,key) {const s=skills[key],n=level(state,key)-s.base;return {gear:s.gear?s.gear+n*s.gearStep:0,core:s.core+n*s.step};}
+  function cost(state,key) {const s=skills[key],n=level(state,key)-s.base;return {gear:s.gear?s.gear+n*s.gearStep:0,core:key==='droneLv'?(n===0?500:Math.ceil(100*Math.pow(1.1,n-1)-1e-9)):s.core+n*s.step};}
   function canUpgrade(state,key) {return !!skills[key]&&level(state,key)<limit(state,key)&&Number.isSafeInteger(level(state,key)+1)&&Object.values(cost(state,key)).every(Number.isSafeInteger);}
   function nextUnlock() {return null;}
   function heroLimit() {return 10;}
   function heroCost(lv) {return 350+(clamp(lv,1,10)-1)*100;}
   function heroXp() {return 25;}
-  // Up to 12 visible aircraft represent the fleet; all purchased ranks contribute damage.
-  // There is no purchased fleet-level cap and no unbounded sprite/target-search allocation.
+  function gearGain(amount) {return Math.round(Math.max(0,amount)*0.6);}
+  // Each purchased rank is one aircraft. No hidden damage from excess legacy ranks.
   function droneFleet(state) {
-    const rank=level(state,'droneLv'),count=Math.min(12,rank);
-    return {rank,count,damagePerShot:count?26*rank/count:0};
+    const rank=level(state,'droneLv'),count=rank;
+    return {rank,count,damagePerShot:count?26:0};
+  }
+  function moveDrone(dr,index,nexus,enemies,dt) {
+    const step=Math.max(0,Math.min(dt,0.1));
+    const bound=p=>({x:Math.max(24,Math.min(516,p.x)),y:Math.max(150,Math.min(776,p.y))});
+    dr.navTime=(dr.navTime||0)+step;
+    const threats=enemies.filter(e=>!e.dead&&Math.hypot(e.x-nexus.x,e.y-nexus.y)<210);
+    let goal;
+    if(threats.length) {
+      const target=threats[index%threats.length];
+      // Separate firing positions: intercept nearby threats, then return to patrol.
+      goal=bound({x:target.x+(index%2?36:-36),y:target.y-35-index*9});
+    } else {
+      const route=[[-100,-40],[-145,-110],[-45,-150],[45,-85],[-85,-185]];
+      const leg=Math.floor(dr.navTime/(2.5+index*0.13));
+      const offset=route[(leg+index)%route.length];
+      goal=bound({x:nexus.x+offset[0],y:nexus.y+offset[1]});
+    }
+    const dx=goal.x-dr.x,dy=goal.y-dr.y,d=Math.hypot(dx,dy);
+    const travel=Math.min(d,step*(78+index*4));
+    if(d>1) {
+      dr.x+=dx/d*travel;dr.y+=dy/d*travel;
+      const desired=Math.atan2(dy,dx),heading=dr.heading||0;
+      dr.heading=heading+Math.atan2(Math.sin(desired-heading),Math.cos(desired-heading))*Math.min(1,step*7);
+    }
+    const p=bound(dr);dr.x=p.x;dr.y=p.y;
+    dr.engaging=threats.length>0;
   }
   function difficulty(levelNum,waveIndex=0) {
     const lv=clamp(levelNum,1,200), boss=lv%10===0,mini=lv>5&&lv%5===0&&!boss;
@@ -1578,10 +1604,17 @@
   function campaignReward(state,diff) {const first=!state.completedLevels[state.level];return {core:first?diff.coreReward:1,first};}
   function cumulative(base,step,n) {return n*base+step*n*(n-1)/2;}
   function migrate(state) {
-    // Do not re-run the rejected discount/refund migration, confiscate gems,
-    // or reset previously purchased levels. Version-1 testers keep their balances.
-    state.balanceRevision=2;
-    return 0;
+    const oldRank=Math.max(0,Math.floor(Number(state.skills.droneLv)||0));
+    let refund=0;
+    if((state.balanceRevision||0)<3&&oldRank>5) {
+      // Build 123 charged 33 + 20*n. Refund only the ranks removed by the cap.
+      refund=cumulative(33,20,oldRank)-cumulative(33,20,5);
+      if(!Number.isSafeInteger(refund)||!Number.isSafeInteger(state.cyberCore+refund)) throw new Error('Invalid legacy drone balance');
+      state.cyberCore+=refund;
+    }
+    state.skills.droneLv=level(state,'droneLv');
+    state.balanceRevision=3;
+    return refund;
   }
   function distanceToSegment(p,a,b) {const dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy);}
   function pathDistance(p,paths) {let best=Infinity;for(const path of paths)for(let i=1;i<path.length;i++)best=Math.min(best,distanceToSegment(p,path[i-1],path[i]));return best;}
@@ -1607,7 +1640,7 @@
     socketCache.set(cacheKey,result.map(s=>({...s})));
     return result;
   }
-  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,droneFleet,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
+  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,gearGain,droneFleet,moveDrone,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
 });
 </script>
   <!-- BALANCE END -->
@@ -2040,8 +2073,8 @@
           "Permanently increases starting level energy by <strong class=\"text-white\">+10 ⚡</strong>."
         ],
         [
-          "Gezegen yörüngesinde devriye gezip otomatik ateş eden <strong class=\"text-fuchsia-200\">Dron filo gücü (+1 Dron/Lv; büyük filolar güçlendirilmiş gruplar halinde görünür)</strong> üretir.",
-          "Deploys an orbiting <strong class=\"text-fuchsia-200\">Drone fleet power (+1 Drone/Lv; large fleets appear as reinforced groups)</strong> that fires at aliens."
+          "Gezegen yakınında farklı noktalara devriye gezip düşmanları karşılayan <strong class=\"text-fuchsia-200\">Dron filosu (+1 Dron/Lv, en fazla 5)</strong> üretir.",
+          "Deploys a patrolling <strong class=\"text-fuchsia-200\">Drone fleet (+1 Drone/Lv, maximum 5)</strong> that fires at aliens."
         ],
         [
           "Tüm kulelere <strong class=\"text-amber-200\">+0,5 yüzde puanı kritik şansı / seviye (en fazla +60 puan; 1,65× hasar)</strong> kazandırır.",
@@ -2504,7 +2537,7 @@
         level: 1,
         unlockedLevel: 1,
         completedLevels: {},
-        balanceRevision: 2,
+        balanceRevision: 3,
         levelStars: {},
         missionDay: "",
         missionBaseline: {},
@@ -3304,7 +3337,7 @@
         while (autonomousDrones.length < count) {
           const idx = autonomousDrones.length;
           autonomousDrones.push({
-            orbitAngle: (idx * Math.PI * 2) / Math.max(1, count),
+            heading: -Math.PI / 2, navTime: idx * 0.37,
             x: nexus.x,
             y: nexus.y,
             cooldown: 0
@@ -3795,7 +3828,7 @@
 
         roadFlowOffset = (roadFlowOffset + dt * 36) % 28;
         // Kurtarılan gezegenlerden saniyelik pasif Gear vergisi birikimi
-        state.idleTaxAccumulated = Math.min(2500, (state.idleTaxAccumulated || 0) + dt * (0.35 + state.unlockedLevel * 0.12));
+        state.idleTaxAccumulated = Math.min(2500, (state.idleTaxAccumulated || 0) + dt * (0.35 + state.unlockedLevel * 0.12) * 0.6);
 
         // Bölüm hız rekoru kronometresi (ilk dalga başladığından itibaren çalışır)
         if (!state.waveWaitingForPlayer) {
@@ -3925,7 +3958,7 @@
               waveInProgress = false;
               waveBreakTimer = 3.8;
               const bonusGold = 24 + Math.min(40, state.waveIndex * 2);
-              const bonusGear = 12 + state.waveIndex * 3;
+              const bonusGear = Balance.gearGain(12 + state.waveIndex * 3);
               state.gold += bonusGold;
               state.gear += bonusGear;
               if (state.waveIndex % 3 === 0) state.cyberCore += 1;
@@ -4430,10 +4463,7 @@
 
         syncAutonomousDrones();
         autonomousDrones.forEach((dr, idx) => {
-          dr.orbitAngle += dt * (1.7 + idx * 0.25);
-          const orbitR = 54 + (idx % 2) * 18;
-          dr.x = nexusPt.x + Math.cos(dr.orbitAngle) * orbitR;
-          dr.y = nexusPt.y + Math.sin(dr.orbitAngle) * orbitR;
+          Balance.moveDrone(dr, idx, nexusPt, activeEnemies, dt);
           dr.cooldown -= dt;
           if (dr.cooldown <= 0 && activeEnemies.length > 0) {
             let nearest = null;
@@ -4526,7 +4556,7 @@
         const starBonus = Math.max(0, stars - previousStars);
         state.levelStars[state.level] = Math.max(previousStars, stars);
         const totalCore = reward.core + starBonus;
-        const totalGear = Math.round((diff.gearReward + speedBonusGear) * getBountyMultiplier());
+        const totalGear = Balance.gearGain(Math.round((diff.gearReward + speedBonusGear) * getBountyMultiplier()));
 
         state.lastEarnedGear = totalGear;
         state.gear += totalGear;
@@ -4589,7 +4619,7 @@
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
         const planet = getPlanetForLevel(state.level);
-        const consolationGear = Math.round(calculateDifficulty(state.level, 0).gearReward * 0.25);
+        const consolationGear = Balance.gearGain(Math.round(calculateDifficulty(state.level, 0).gearReward * 0.25));
         state.lastEarnedGear = consolationGear;
         state.gear += consolationGear;
         saveProgress();
@@ -5175,7 +5205,7 @@
       function drawCombatDrone(ctx, dr, time, detailed) {
         ctx.save();
         ctx.translate(dr.x, dr.y);
-        ctx.rotate(dr.orbitAngle + Math.PI / 2);
+        ctx.rotate((dr.heading || 0) + Math.PI / 2);
         // Four ducted rotors, carbon arms, metal fuselage and a forward camera.
         ctx.fillStyle = "rgba(0,0,0,0.28)";
         ctx.beginPath(); ctx.ellipse(2, 4, 17, 12, 0, 0, Math.PI * 2); ctx.fill();
@@ -5192,7 +5222,7 @@
         ctx.fillStyle = "#64748b"; ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.roundRect(-5,-9,10,18,3); ctx.fill(); ctx.stroke();
         ctx.fillStyle = "#0f172a"; ctx.fillRect(-3,-5,6,8);
-        ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(0,-9,2.3,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle = dr.engaging ? "#f472b6" : "#38bdf8"; ctx.beginPath(); ctx.arc(0,-9,2.3,0,Math.PI*2); ctx.fill();
         ctx.fillStyle = "#fb7185"; ctx.fillRect(-2,6,4,2);
         ctx.restore();
       }
@@ -6260,7 +6290,7 @@
         document.getElementById("skillRateLv").textContent = `Lv.${state.skills.rateLv} (+%${rateBonusPct})`;
         document.getElementById("skillHpLv").textContent = "Lv." + state.skills.hpLv;
         document.getElementById("skillGoldLv").textContent = "Lv." + state.skills.goldLv;
-        document.getElementById("skillDroneLv").textContent = "Lv." + (state.skills.droneLv || 0);
+        document.getElementById("skillDroneLv").textContent = `${Balance.droneFleet(state).count}/5 Dron`;
         document.getElementById("skillCritLv").textContent = "Lv." + (state.skills.critLv || 0);
         document.getElementById("skillBountyLv").textContent = "Lv." + (state.skills.bountyLv || 0);
         document.getElementById("skillOrbitalLv").textContent = "Lv." + (state.skills.orbitalLv || 0);
@@ -6298,7 +6328,7 @@
         }
         document.getElementById("skillCritLv").textContent = `Lv.${state.skills.critLv}/120 • %${(getCritChance()*100).toFixed(1)}`;
         const summary = document.getElementById("balanceSummary");
-        if(summary) summary.textContent = L(`Temel geliştirmeler Gear + elmas ister. Bölüm tamamlama şartı yoktur. Dron filosunun geliştirme sınırı yoktur. Toplam kritik: %${(getCritChance()*100).toFixed(1)}.`, `Basic upgrades cost Gear + gems. No completed-level requirements. Drone fleet upgrades have no level cap. Total critical chance: ${(getCritChance()*100).toFixed(1)}%.`);
+        if(summary) summary.textContent = L(`Temel geliştirmeler Gear + elmas ister. Bölüm tamamlama şartı yoktur. Dron filosu en fazla 5 adettir. Açılış 500 elmas; geliştirmeler 100 elmas ile başlar ve %10 artar. Toplam kritik: %${(getCritChance()*100).toFixed(1)}.`, `Basic upgrades cost Gear + gems. No completed-level requirements. Drone fleet is capped at 5. Unlock costs 500 gems; upgrades start at 100 gems and increase by 10%. Total critical chance: ${(getCritChance()*100).toFixed(1)}%.`);
       }
 
       function updateOrbitalButtonUI() {
@@ -7381,25 +7411,25 @@
           id: "m_kills",
           titleTr: "👾 Uzaylı Avcısı", titleEn: "👾 Alien Hunter",
           descTr: "Toplam 40 uzaylı istilacı yok et.", descEn: "Eliminate 40 alien invaders in total.",
-          target: 40, statKey: "killsTotal", rewardGear: 70, rewardCore: 1
+          target: 40, statKey: "killsTotal", rewardGear: Balance.gearGain(70), rewardCore: 1
         },
         {
           id: "m_lv3",
           titleTr: "🏗️ Taktik Mimar", titleEn: "🏗️ Tactical Architect",
           descTr: "3 Kuleyi Seviye 3 uzmanlığa yükselt.", descEn: "Upgrade 3 Towers to Level 3 specialization.",
-          target: 3, statKey: "lv3Upgrades", rewardGear: 60, rewardCore: 2
+          target: 3, statKey: "lv3Upgrades", rewardGear: Balance.gearGain(60), rewardCore: 2
         },
         {
           id: "m_boss",
           titleTr: "👑 Boss Katili", titleEn: "👑 Boss Slayer",
           descTr: "En az 1 Galaktik Boss veya Mini-Boss yok et.", descEn: "Defeat at least 1 Galactic Boss or Mini-Boss.",
-          target: 1, statKey: "bossKills", rewardGear: 90, rewardCore: 3
+          target: 1, statKey: "bossKills", rewardGear: Balance.gearGain(90), rewardCore: 3
         },
         {
           id: "m_speed",
           titleTr: "⚡ Hız Rekortmeni", titleEn: "⚡ Speed Record",
           descTr: "1 Bölümü hedef sürenin altında bitir.", descEn: "Clear 1 Level faster than the target Par Time.",
-          target: 1, statKey: "speedRecords", rewardGear: 100, rewardCore: 2
+          target: 1, statKey: "speedRecords", rewardGear: Balance.gearGain(100), rewardCore: 2
         }
       ];
 
@@ -7745,13 +7775,13 @@
 
       // 7 GÜNLÜK GİRİŞ ÖDÜLÜ SİSTEMİ
       const DAILY_REWARDS_TABLE = [
-        { day: 1, gear: 50, core: 0, icon: "⚙" },
-        { day: 2, gear: 0, core: 2, icon: "💎" },
-        { day: 3, gear: 90, core: 0, icon: "⚙" },
-        { day: 4, gear: 0, core: 3, icon: "💎" },
-        { day: 5, gear: 150, core: 0, icon: "⚙" },
-        { day: 6, gear: 0, core: 5, icon: "💎" },
-        { day: 7, gear: 300, core: 10, icon: "👑" }
+        { day: 1, gear: Balance.gearGain(50), core: 0, icon: "⚙" },
+        { day: 2, gear: Balance.gearGain(0), core: 2, icon: "💎" },
+        { day: 3, gear: Balance.gearGain(90), core: 0, icon: "⚙" },
+        { day: 4, gear: Balance.gearGain(0), core: 3, icon: "💎" },
+        { day: 5, gear: Balance.gearGain(150), core: 0, icon: "⚙" },
+        { day: 6, gear: Balance.gearGain(0), core: 5, icon: "💎" },
+        { day: 7, gear: Balance.gearGain(300), core: 10, icon: "👑" }
       ];
 
       function refreshDailyMissions() {

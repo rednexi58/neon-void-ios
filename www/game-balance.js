@@ -4,14 +4,14 @@
   else root.GameBalance = api;
 })(typeof window === 'object' ? window : globalThis, function() {
   'use strict';
-  const revision = '2026.10.25.3';
-  // Original paid upgrade economy. Only critical chance has a mathematical cap.
+  const revision = '2026.10.25.4';
+  // Paid upgrades; drone fleet and critical chance have explicit caps.
   const skills = {
     dmgLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
     rateLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
     hpLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
     goldLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
-    droneLv: {base:0,max:Infinity,core:33,step:20},
+    droneLv: {base:0,max:5,core:500,step:0},
     critLv: {base:0,max:120,core:26,step:13},
     bountyLv: {base:0,max:Infinity,core:20,step:13},
     orbitalLv: {base:0,max:Infinity,core:26,step:13}
@@ -20,17 +20,43 @@
   function cleared(state) {return Object.keys(state.completedLevels||{}).filter(k=>+k>=1&&+k<=200&&state.completedLevels[k]).length;}
   function level(state,key) {const s=skills[key];return clamp(state.skills[key],s.base,s.max);}
   function limit(state,key) {return skills[key].max;}
-  function cost(state,key) {const s=skills[key],n=level(state,key)-s.base;return {gear:s.gear?s.gear+n*s.gearStep:0,core:s.core+n*s.step};}
+  function cost(state,key) {const s=skills[key],n=level(state,key)-s.base;return {gear:s.gear?s.gear+n*s.gearStep:0,core:key==='droneLv'?(n===0?500:Math.ceil(100*Math.pow(1.1,n-1)-1e-9)):s.core+n*s.step};}
   function canUpgrade(state,key) {return !!skills[key]&&level(state,key)<limit(state,key)&&Number.isSafeInteger(level(state,key)+1)&&Object.values(cost(state,key)).every(Number.isSafeInteger);}
   function nextUnlock() {return null;}
   function heroLimit() {return 10;}
   function heroCost(lv) {return 350+(clamp(lv,1,10)-1)*100;}
   function heroXp() {return 25;}
-  // Up to 12 visible aircraft represent the fleet; all purchased ranks contribute damage.
-  // There is no purchased fleet-level cap and no unbounded sprite/target-search allocation.
+  function gearGain(amount) {return Math.round(Math.max(0,amount)*0.6);}
+  // Each purchased rank is one aircraft. No hidden damage from excess legacy ranks.
   function droneFleet(state) {
-    const rank=level(state,'droneLv'),count=Math.min(12,rank);
-    return {rank,count,damagePerShot:count?26*rank/count:0};
+    const rank=level(state,'droneLv'),count=rank;
+    return {rank,count,damagePerShot:count?26:0};
+  }
+  function moveDrone(dr,index,nexus,enemies,dt) {
+    const step=Math.max(0,Math.min(dt,0.1));
+    const bound=p=>({x:Math.max(24,Math.min(516,p.x)),y:Math.max(150,Math.min(776,p.y))});
+    dr.navTime=(dr.navTime||0)+step;
+    const threats=enemies.filter(e=>!e.dead&&Math.hypot(e.x-nexus.x,e.y-nexus.y)<210);
+    let goal;
+    if(threats.length) {
+      const target=threats[index%threats.length];
+      // Separate firing positions: intercept nearby threats, then return to patrol.
+      goal=bound({x:target.x+(index%2?36:-36),y:target.y-35-index*9});
+    } else {
+      const route=[[-100,-40],[-145,-110],[-45,-150],[45,-85],[-85,-185]];
+      const leg=Math.floor(dr.navTime/(2.5+index*0.13));
+      const offset=route[(leg+index)%route.length];
+      goal=bound({x:nexus.x+offset[0],y:nexus.y+offset[1]});
+    }
+    const dx=goal.x-dr.x,dy=goal.y-dr.y,d=Math.hypot(dx,dy);
+    const travel=Math.min(d,step*(78+index*4));
+    if(d>1) {
+      dr.x+=dx/d*travel;dr.y+=dy/d*travel;
+      const desired=Math.atan2(dy,dx),heading=dr.heading||0;
+      dr.heading=heading+Math.atan2(Math.sin(desired-heading),Math.cos(desired-heading))*Math.min(1,step*7);
+    }
+    const p=bound(dr);dr.x=p.x;dr.y=p.y;
+    dr.engaging=threats.length>0;
   }
   function difficulty(levelNum,waveIndex=0) {
     const lv=clamp(levelNum,1,200), boss=lv%10===0,mini=lv>5&&lv%5===0&&!boss;
@@ -49,10 +75,17 @@
   function campaignReward(state,diff) {const first=!state.completedLevels[state.level];return {core:first?diff.coreReward:1,first};}
   function cumulative(base,step,n) {return n*base+step*n*(n-1)/2;}
   function migrate(state) {
-    // Do not re-run the rejected discount/refund migration, confiscate gems,
-    // or reset previously purchased levels. Version-1 testers keep their balances.
-    state.balanceRevision=2;
-    return 0;
+    const oldRank=Math.max(0,Math.floor(Number(state.skills.droneLv)||0));
+    let refund=0;
+    if((state.balanceRevision||0)<3&&oldRank>5) {
+      // Build 123 charged 33 + 20*n. Refund only the ranks removed by the cap.
+      refund=cumulative(33,20,oldRank)-cumulative(33,20,5);
+      if(!Number.isSafeInteger(refund)||!Number.isSafeInteger(state.cyberCore+refund)) throw new Error('Invalid legacy drone balance');
+      state.cyberCore+=refund;
+    }
+    state.skills.droneLv=level(state,'droneLv');
+    state.balanceRevision=3;
+    return refund;
   }
   function distanceToSegment(p,a,b) {const dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy);}
   function pathDistance(p,paths) {let best=Infinity;for(const path of paths)for(let i=1;i<path.length;i++)best=Math.min(best,distanceToSegment(p,path[i-1],path[i]));return best;}
@@ -78,5 +111,5 @@
     socketCache.set(cacheKey,result.map(s=>({...s})));
     return result;
   }
-  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,droneFleet,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
+  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,gearGain,droneFleet,moveDrone,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
 });
