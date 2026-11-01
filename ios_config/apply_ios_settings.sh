@@ -13,7 +13,7 @@ plset() {
 plset CFBundleDisplayName string 'Gezegeni Koru'
 plset CFBundleName string 'Gezegeni Koru'
 plset GADApplicationIdentifier string 'ca-app-pub-6370997467091906~2944398467'
-plset NSUserTrackingUsageDescription string 'İzniniz varsa, bu tanımlayıcı size kişiselleştirilmiş reklamlar göstermek için kullanılır.'
+plset NSUserTrackingUsageDescription string 'Reklam kimliğiniz yalnızca size daha alakalı reklamlar göstermek ve reklam ölçümü için kullanılır. / Your advertising identifier is used only to show you more relevant ads and to measure ad performance.'
 /usr/libexec/PlistBuddy -c 'Set :ITSAppUsesNonExemptEncryption false' "$PLIST" 2>/dev/null || \
   /usr/libexec/PlistBuddy -c 'Add :ITSAppUsesNonExemptEncryption bool false' "$PLIST"
 /usr/libexec/PlistBuddy -c 'Add :SKAdNetworkItems array' "$PLIST" 2>/dev/null || true

@@ -1,6 +1,6 @@
 <!-- Xcode -> Info.plist içine eklenecek Apple App Store ve TestFlight zorunlu anahtarları -->
 <key>NSUserTrackingUsageDescription</key>
-<string>Verileriniz size kişiselleştirilmiş reklamlar sunmak ve ödüllü reklam performansını iyileştirmek için kullanılır.</string>
+<string>Reklam kimliğiniz yalnızca size daha alakalı reklamlar göstermek ve reklam ölçümü için kullanılır. / Your advertising identifier is used only to show you more relevant ads and to measure ad performance.</string>
 
 <!-- TestFlight'ta her yüklemede Şifreleme (Export Compliance) onayı sormaması için: -->
 <key>ITSAppUsesNonExemptEncryption</key>

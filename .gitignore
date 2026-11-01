@@ -3,3 +3,4 @@ ios/
 .DS_Store
 *.log
 www/tailwind.css
+build/

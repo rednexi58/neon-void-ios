@@ -4,6 +4,7 @@ import { isInterstitialDue } from './interstitial-cadence.cjs';
 import { commitGrant, createDelivery } from './purchase-delivery.cjs';
 import { Capacitor } from '@capacitor/core';
 import { presentAd } from './ad-presentation.cjs';
+import { createTrackingGate } from './tracking-permission.cjs';
 import { AdMob, AdmobConsentStatus, InterstitialAdPluginEvents, RewardAdPluginEvents } from '@capacitor-community/admob';
 import * as CdvPurchasePkg from 'capacitor-plugin-cdv-purchase';
 
@@ -101,6 +102,7 @@ const diagnostics = {
   rewarded: 'Hazırlanıyor',
   canRequestAds: 'Bekleniyor',
   privacyOptionsRequired: false,
+  tracking: 'Bekleniyor',
   vipProduct: 'Bekleniyor',
 };
 
@@ -345,6 +347,14 @@ function prepareRewarded() {
   return rewardedLoading;
 }
 
+// Apple App Tracking Transparency must be answered before the ad SDK starts collecting data.
+const tracking = createTrackingGate({
+  sdk: AdMob,
+  isIOS: IOS,
+  onStatus: status => report('tracking', status),
+  onError: error => log('ATT permission', error)
+});
+
 async function initializeAdsOnce() {
   if (!IOS) return false;
   if (initializedAds) return true;
@@ -352,10 +362,12 @@ async function initializeAdsOnce() {
   report('ads', 'Başlatılıyor');
 
   try {
+    // Order matters: 1) ATT system prompt, 2) SDK start (the plugin's consent form needs it),
+    // 3) Google UMP consent, 4) ad requests only when UMP allows them.
+    await tracking.ensure();
     await AdMob.initialize({
       initializeForTesting: TEST_ADS
     });
-
     report('ads', 'SDK hazır, izin kontrolü');
 
     try {
@@ -479,8 +491,7 @@ window.GameMonetization = {
   },
   async requestTrackingPermission() {
     if (!IOS) throw new Error('Bu izin yalnızca iOS uygulamasında kullanılabilir.');
-    await AdMob.requestTrackingAuthorization();
-    return (await AdMob.trackingAuthorizationStatus()).status;
+    return tracking.ensure();
   },
 
   async restoreVIP() {
@@ -543,5 +554,8 @@ window.GameMonetization = {
 };
 // Start only after the game has loaded its saved balance and installed delivery callbacks.
 document.addEventListener('resume', () => {
-  if (gameReady && IOS) { void window.GameMonetization.refreshStore().catch(error => log('StoreKit refresh', error)); }
+  if (!gameReady || !IOS) return;
+  void window.GameMonetization.refreshStore().catch(error => log('StoreKit refresh', error));
+  // If iOS deferred the ATT prompt (app was not active at launch), ask again on return.
+  if (!tracking.status) void initializeAds();
 });
