@@ -5072,6 +5072,138 @@
         miniCtx.fill();
       }
 
+      // ============================================================================
+      // SCENE FX — battlefield polish layer.
+      // Stateless drawing helpers called from renderScene(). They read positions and
+      // ratios only; no game state is modified here. Gradients that depend solely on
+      // the viewport size are cached in sceneFxCache to keep per-frame cost flat.
+      // ============================================================================
+      const sceneFxCache = { vignette: null, vignetteKey: "" };
+
+      function fxWithAlpha(hex, alpha) {
+        const h = String(hex || "#38bdf8").replace("#", "");
+        const full = h.length === 3 ? h.split("").map(c => c + c).join("") : h.slice(0, 6);
+        const n = parseInt(full, 16);
+        if (!Number.isFinite(n)) return `rgba(56, 189, 248, ${alpha})`;
+        return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+      }
+
+      // Soft key light over the plateau: the board reads as a lit surface instead of a flat grid.
+      function fxPlateauLighting(ctx, x, y, w, h) {
+        const cx = x + w * 0.5, cy = y + h * 0.40;
+        const light = ctx.createRadialGradient(cx, cy, 30, cx, cy, Math.max(w, h) * 0.72);
+        light.addColorStop(0, "rgba(125, 211, 252, 0.11)");
+        light.addColorStop(0.55, "rgba(56, 189, 248, 0.035)");
+        light.addColorStop(1, "rgba(2, 6, 23, 0.32)");
+        ctx.fillStyle = light;
+        ctx.fillRect(x, y, w, h);
+      }
+
+      // Empty build slot: a clean "+" emblem instead of a raw slot number.
+      function fxEmptySlotMarker(ctx, x, y, nowAnim, idx) {
+        const pulse = 0.55 + Math.sin(nowAnim * 2.2 + idx * 0.7) * 0.12;
+        ctx.save();
+        ctx.strokeStyle = `rgba(125, 211, 252, ${pulse})`;
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(x - 5.5, y + 1); ctx.lineTo(x + 5.5, y + 1);
+        ctx.moveTo(x, y - 4.5); ctx.lineTo(x, y + 6.5);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Shared tower foundation: hex plate in the tower's colour, plus an under-glow in high detail.
+      function fxTowerPedestal(ctx, x, y, color, level, highDetail) {
+        ctx.save();
+        if (highDetail) {
+          const glow = ctx.createRadialGradient(x, y + 2, 2, x, y + 2, 28);
+          glow.addColorStop(0, fxWithAlpha(color, 0.38));
+          glow.addColorStop(1, fxWithAlpha(color, 0));
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.ellipse(x, y + 2, 28, 18, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        const plate = ctx.createLinearGradient(x, y - 10, x, y + 14);
+        plate.addColorStop(0, "#334155");
+        plate.addColorStop(1, "#0f172a");
+        ctx.fillStyle = plate;
+        ctx.strokeStyle = fxWithAlpha(color, 0.85);
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const a = Math.PI / 6 + (i * Math.PI) / 3;
+          const px = x + Math.cos(a) * 19;
+          const py = y + 3 + Math.sin(a) * 11.5;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // One inner ring per upgrade level: progress is visible at a glance.
+        for (let r = 0; r < Math.min(level || 1, 3); r++) {
+          ctx.strokeStyle = fxWithAlpha(color, 0.35 + r * 0.2);
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.ellipse(x, y + 3, 12 - r * 3.2, 7 - r * 1.9, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // Rounded health bar, shown only once damaged (bosses always). Colour follows remaining health.
+      function fxHealthBar(ctx, x, y, width, height, ratio, isBoss) {
+        if (!isBoss && ratio >= 0.999) return;
+        const clamped = Math.max(0, Math.min(1, ratio));
+        const fill = isBoss ? "#f43f5e" : (clamped > 0.6 ? "#34d399" : (clamped > 0.3 ? "#fbbf24" : "#f87171"));
+        ctx.save();
+        ctx.fillStyle = "rgba(2, 6, 23, 0.88)";
+        ctx.strokeStyle = "rgba(226, 232, 240, 0.35)";
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.roundRect(x - width / 2 - 1, y - 1, width + 2, height + 2, (height + 2) / 2);
+        ctx.fill();
+        ctx.stroke();
+        if (clamped > 0) {
+          ctx.fillStyle = fill;
+          ctx.beginPath();
+          ctx.roundRect(x - width / 2, y, Math.max(height, width * clamped), height, height / 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // Readable floating combat text: dark outline under the coloured fill.
+      function fxOutlinedText(ctx, text, x, y, color) {
+        ctx.lineJoin = "round";
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "rgba(2, 6, 23, 0.85)";
+        ctx.strokeText(text, x, y);
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, y);
+      }
+
+      // Screen-space vignette: focuses the eye on the board. Drawn in CSS pixels after the world pass.
+      function fxVignette(ctx) {
+        const { cssW, cssH, dpr } = viewTransform;
+        if (!cssW || !cssH) return;
+        const key = cssW + "x" + cssH;
+        if (sceneFxCache.vignetteKey !== key) {
+          const r = Math.hypot(cssW, cssH) * 0.5;
+          const g = ctx.createRadialGradient(cssW / 2, cssH * 0.46, r * 0.5, cssW / 2, cssH * 0.46, r * 1.05);
+          g.addColorStop(0, "rgba(0, 0, 0, 0)");
+          g.addColorStop(1, "rgba(1, 3, 12, 0.5)");
+          sceneFxCache.vignette = g;
+          sceneFxCache.vignetteKey = key;
+        }
+        ctx.save();
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.fillStyle = sceneFxCache.vignette;
+        ctx.fillRect(0, 0, cssW, cssH);
+        ctx.restore();
+      }
+
       function drawCombatDrone(ctx, dr, time, detailed) {
         ctx.save();
         ctx.translate(dr.x, dr.y);
@@ -5189,6 +5321,7 @@
           ctx.lineTo(VIRTUAL_W - 42, gy);
           ctx.stroke();
         }
+        fxPlateauLighting(ctx, 42, 78, VIRTUAL_W - 84, VIRTUAL_H - 160);
         ctx.restore();
         ctx.restore();
 
@@ -5456,11 +5589,13 @@
               ctx.font = "bold 9.5px Orbitron, sans-serif";
               ctx.textAlign = "center";
               ctx.textBaseline = "middle";
-              ctx.fillText(isSelected ? L("+ KUR", "+ BUILD") : "+" + sock.id, sock.x, sock.y + 1);
+              if (isSelected) ctx.fillText(L("+ KUR", "+ BUILD"), sock.x, sock.y + 1);
+              else fxEmptySlotMarker(ctx, sock.x, sock.y, nowAnim, idx);
             }
           } else {
             const t = sock.tower;
             const recoilOffset = -(t.recoil || 0);
+            fxTowerPedestal(ctx, sock.x, sock.y, (TOWER_TYPES[t.typeKey] || {}).color, t.level, useHighDetail);
 
             if (t.typeKey === "rapid") {
               ctx.fillStyle = "#334155";
@@ -5831,11 +5966,7 @@
 
           const bw = e.arch.isBoss ? 54 : 26;
           const bh = e.arch.isBoss ? 5.5 : 3.8;
-          const hpRatio = Math.max(0, e.hp / e.maxHp);
-          ctx.fillStyle = "rgba(15, 23, 42, 0.92)";
-          ctx.fillRect(e.x - bw / 2, e.y - e.arch.radius - 12, bw, bh);
-          ctx.fillStyle = e.arch.isBoss ? "#f43f5e" : "#22d3ee";
-          ctx.fillRect(e.x - bw / 2, e.y - e.arch.radius - 12, bw * hpRatio, bh);
+          fxHealthBar(ctx, e.x, e.y - e.arch.radius - 12, bw, bh, e.hp / e.maxHp, e.arch.isBoss);
           ctx.restore();
         });
 
@@ -5923,24 +6054,25 @@
           ctx.restore();
         });
 
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
         particles.forEach(p => {
-          ctx.save();
+          const life = Math.max(0, Math.min(1, p.life * 2));
           ctx.fillStyle = p.color;
-          ctx.globalAlpha = Math.max(0, p.life * 2);
+          ctx.globalAlpha = life;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, 1.2 + 2.2 * life, 0, Math.PI * 2);
           ctx.fill();
-          ctx.restore();
         });
+        ctx.restore();
 
         floatingTexts.forEach(ft => {
           ctx.save();
-          ctx.fillStyle = ft.color;
           ctx.font = "bold 10.5px Orbitron, sans-serif";
           ctx.textAlign = "center";
           ctx.globalAlpha = Math.max(0, ft.life);
           const safeX = ft.text.length > 10 ? Math.max(115, Math.min(VIRTUAL_W - 115, ft.x)) : Math.max(45, Math.min(VIRTUAL_W - 45, ft.x));
-          ctx.fillText(ft.text, safeX, ft.y);
+          fxOutlinedText(ctx, ft.text, safeX, ft.y, ft.color);
           ctx.restore();
         });
 
@@ -6038,6 +6170,7 @@
         }
 
         ctx.restore();
+        fxVignette(ctx);
         renderMiniMap();
       }
 
