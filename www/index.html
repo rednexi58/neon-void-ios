@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="Gezegeni Koru" />
   <title>Gezegeni Koru (Defend the Planet) — 200 Bölüm Mobil Kule Savunma</title>
   <link rel="stylesheet" href="assets/game.css">
+  <link rel="stylesheet" href="assets/theme.css">
   <link rel="stylesheet" href="assets/fonts.css">
   <style>
     /* Narrow phones (iPhone SE): show only "1/200" so the HUD columns never overlap. */
@@ -497,7 +498,7 @@
     <div class="bg-[#090f22] border border-cyan-400/50 rounded-2xl max-w-lg w-full p-4 shadow-2xl neon-border-cyan flex flex-col gap-3 max-h-[92dvh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
         <div>
-          <h2 class="font-cyber font-bold text-base text-cyan-300" id="i18n_pauseTitle">⏸ GEZEGENİ KORU — KOMUTA MENÜSÜ</h2>
+          <h2 class="font-cyber font-bold text-base text-cyan-300" id="i18n_pauseTitle">⏸ DURAKLATILDI</h2>
           <p class="text-[11px] text-slate-400">
             Bölüm <span id="menuCurrentLvText" class="text-cyan-300 font-bold">1</span>/200 •
             Gezegen: <span id="menuCurrentPlanetText" class="text-emerald-300 font-bold">TERRA-NOVA</span> •
@@ -625,13 +626,12 @@
         <div class="flex items-center gap-2">
           <span class="text-2xl">🏆</span>
           <div>
-            <h2 class="font-cyber font-black text-base sm:text-lg text-amber-300" id="i18n_lbTitle">OYUNCU SIRALAMASI (LEADERBOARD)</h2>
-          <p class="text-[10px] text-slate-400">Yerel skorlar ve bilgisayar rakipleri · Local scores and computer rivals</p>
-            <p class="text-[11px] text-slate-300" id="i18n_lbSubtitle">Gezegenleri en hızlı kurtaran oyuncular, 200 Bölüm ve Sonsuz Mod Liderleri</p>
+            <h2 class="font-cyber font-black text-base sm:text-lg text-amber-300" id="i18n_lbTitle">SKOR TABLOSU</h2>
+            <p class="text-[11px] text-slate-300" id="i18n_lbSubtitle">Rekorların, 🤖 bilgisayar rakiplerine karşı.</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold">🏠 Menü</button>
+          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold" aria-label="Ana menü" title="Ana menü">🏠</button>
           <button id="btnCloseLeaderboard" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold">✕ Kapat</button>
         </div>
       </div>
@@ -746,12 +746,12 @@
         <div class="flex items-center gap-2">
           <span class="text-2xl">🦸</span>
           <div>
-            <h2 class="font-cyber font-black text-base sm:text-lg text-emerald-300">KAHRAMANLAR & GÜNLÜK GÖREVLER</h2>
+            <h2 class="font-cyber font-black text-base sm:text-lg text-emerald-300">KAHRAMANLAR & GÖREVLER</h2>
             <p class="text-[11px] text-slate-300">Oyun içi Kahramanınızı seçin, seviyesini yükseltin ve gezegen vergilerini toplayın!</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold">🏠 Menü</button>
+          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold" aria-label="Ana menü" title="Ana menü">🏠</button>
           <button id="btnCloseMissions" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold">✕ Kapat</button>
         </div>
       </div>
@@ -894,7 +894,7 @@
     <div class="bg-[#091226] border border-sky-400/60 rounded-2xl max-w-lg w-full p-4 shadow-2xl neon-border-cyan flex flex-col gap-3 max-h-[90dvh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-800 pb-2">
         <div>
-          <h2 class="font-cyber font-bold text-base text-sky-300">ℹ️ KULE BİLGİSİ & SİLAH KİLİT REHBERİ</h2>
+          <h2 class="font-cyber font-bold text-base text-sky-300">ℹ️ KULE REHBERİ</h2>
           <p class="text-[11px] text-slate-400">Her kulenin farklı uzaylı türlerine karşı özel üstünlüğü vardır.</p>
         </div>
         <button id="btnCloseTowerInfo" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold">✕ Kapat</button>
@@ -945,13 +945,13 @@
           <div class="flex items-center gap-2">
             <span class="text-xl">🧬</span>
             <h2 class="font-cyber font-black text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-fuchsia-300 to-cyan-300">
-              SİBER EVRİM ÜSSÜ — KOMUTA & TEKNOLOJİ AĞACI
+              SİBER EVRİM
             </h2>
           </div>
           <p class="text-xs text-slate-300 mt-0.5">200 Bölümlük zorlu galaksi seferinde hayatta kalmak için kulelerinizi adım adım (<strong class="text-cyan-300">+%1 hassas dengeyle</strong>) evrimleştirin.</p>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold">🏠 Menü</button>
+          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold" aria-label="Ana menü" title="Ana menü">🏠</button>
           <button id="btnCloseLab" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕ Kapat</button>
         </div>
       </div>
@@ -1089,13 +1089,13 @@
       <div class="shop-header flex items-center justify-between border-b border-slate-800 pb-2.5">
         <div>
           <div class="flex items-center gap-2">
-            <h2 class="font-cyber font-bold text-base sm:text-lg text-fuchsia-300">🛒 GEZEGEN MAĞAZASI</h2>
+            <h2 class="font-cyber font-bold text-base sm:text-lg text-fuchsia-300">🛒 MAĞAZA</h2>
             <span id="storeEnvironmentBadge" class="hidden px-2 py-0.5 text-[10px] font-cyber font-bold rounded bg-amber-500/20 text-amber-300 border border-amber-400/50">TEST SÜRÜMÜ</span>
           </div>
           <p class="text-[11px] text-slate-400">VIP paket ile bölüm arası zorunlu reklamları kalıcı olarak kaldırabilirsiniz.</p>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold">🏠 Menü</button>
+          <button class="btn-return-lobby px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold" aria-label="Ana menü" title="Ana menü">🏠</button>
           <button id="btnCloseShop" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">✕ Kapat</button>
         </div>
       </div>
@@ -1118,7 +1118,7 @@
         <div class="bg-gradient-to-r from-emerald-950/90 to-slate-900 border-2 border-emerald-400/70 rounded-xl p-3 flex items-center justify-between gap-3">
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="px-1.5 py-0.5 text-[9px] font-cyber font-bold bg-emerald-400 text-slate-950 rounded">TEK SEFERLİK VIP</span>
+              <span class="px-1.5 py-0.5 text-[9px] font-cyber font-bold bg-emerald-400 text-slate-950 rounded whitespace-nowrap">TEK SEFERLİK</span>
               <span class="font-cyber font-bold text-xs sm:text-sm text-emerald-300">👑 VIP — REKLAMLARI KALDIR</span>
             </div>
             <p class="text-slate-300 text-[11px] mt-0.5">Bölüm arası zorunlu reklamları kalıcı kaldırır. İsteğe bağlı ödüllü reklamlar devam eder.</p>
@@ -1304,24 +1304,6 @@
     </div>
   </div>
 
-  <!-- MODAL 4: ADMOB / UNITY ADS TEST SİMÜLASYON EKRANI -->
-  <div id="modalAdSimulation" class="hidden fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-amber-400/60 rounded-2xl max-w-sm w-full p-5 text-center flex flex-col gap-3">
-      <div class="text-[11px] font-cyber uppercase tracking-widest text-amber-300" id="adSimTypeBadge">🎬 SPONSORLU VİDEO REKLAM</div>
-      <div class="font-cyber font-bold text-base text-white" id="adSimTitle">Ödüllü Video Reklam Oynatılıyor...</div>
-      <p class="text-xs text-slate-400" id="adSimDesc">Tamamlanan her üç bölümden sonra, yeni bölümün ilk dalgasından önce geçiş reklamı gösterilebilir. VIP ile kalıcı kapatılabilir.</p>
-      <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
-        <div id="adSimProgress" class="bg-amber-400 h-full w-0 transition-all duration-150"></div>
-      </div>
-      <div class="flex items-center justify-between text-xs pt-1">
-        <span class="font-cyber text-amber-200" id="adSimTimerText">Kalan süre: 2.0 sn</span>
-        <button id="btnCancelSimulatedAd" class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 text-[11px] font-semibold">
-          ✕ Reklamı Kapat (Ödülsüz)
-        </button>
-      </div>
-    </div>
-  </div>
-
   <div id="modalPrivacyPolicy" class="hidden fixed inset-0 z-[70] bg-slate-950 flex flex-col p-4" style="padding-top:calc(env(safe-area-inset-top) + 16px);padding-bottom:calc(env(safe-area-inset-bottom) + 16px)">
     <button id="btnClosePrivacyPolicy" class="self-end px-4 py-3 bg-slate-800 rounded-lg">Kapat / Close</button>
     <iframe title="Gizlilik politikası / Privacy policy" src="privacy.html" class="w-full flex-1 border-0"></iframe>
@@ -1409,7 +1391,7 @@
         </button>
         <button id="btnLobbyOpenHeroes" class="py-2.5 px-1 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/60 text-emerald-200 flex flex-col items-center gap-1 transition">
           <span class="text-base">🦸</span>
-          <span>Kahramanlar</span>
+          <span>Kahraman</span>
         </button>
         <button id="btnLobbyOpenLeaderboard" class="py-2.5 px-1 rounded-xl bg-yellow-500/20 hover:bg-yellow-500/35 border border-yellow-400/60 text-yellow-200 flex flex-col items-center gap-1 transition">
           <span class="text-base">🏆</span>
@@ -1438,12 +1420,12 @@
         <div class="flex items-center gap-2 text-left">
           <span class="text-2xl">🎁</span>
           <div>
-            <h2 class="font-cyber font-black text-sm sm:text-base text-amber-300">7 GÜNLÜK KOMUTA İKMAL SANDIĞI</h2>
+            <h2 class="font-cyber font-black text-sm sm:text-base text-amber-300">GÜNLÜK ÖDÜL</h2>
             <p class="text-[11px] text-slate-300">Her gün oyuna girerek artan Gear ve Elmas ödüllerini toplayın!</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button class="btn-return-lobby px-2.5 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold">🏠 Menü</button>
+          <button class="btn-return-lobby px-2.5 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-sky-200 text-xs font-cyber font-bold" aria-label="Ana menü" title="Ana menü">🏠</button>
           <button id="btnCloseDailyLogin" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold">✕ Kapat</button>
         </div>
       </div>
@@ -1604,9 +1586,9 @@
           evoBtnTitle: "EVRİM",
           evoBtnSub: "+%1 Kalıcı Evrim",
           bossAlert: "⚠ DEV ÖRÜMCEK KRALİÇE SAHNEDE (EMP AKTİF!) ⚠",
-          lbTitle: "OYUNCU SIRALAMASI (LEADERBOARD)",
-          lbSubtitle: "Gezegenleri en hızlı kurtaran oyuncular, 200 Bölüm ve Sonsuz Mod Liderleri",
-          pauseTitle: "⏸ GEZEGENİ KORU — KOMUTA MENÜSÜ",
+          lbTitle: "SKOR TABLOSU",
+          lbSubtitle: "Rekorların, 🤖 bilgisayar rakiplerine karşı.",
+          pauseTitle: "⏸ DURAKLATILDI",
           tName_rapid: "Parçacık Lazer",
           tName_plasma: "Ağır Füze",
           tName_emp: "Gelişmiş Tesla",
@@ -1641,9 +1623,9 @@
           evoBtnTitle: "EVOLVE",
           evoBtnSub: "+1% Perma Boost",
           bossAlert: "⚠ GIANT ARACHNID QUEEN ON FIELD (EMP ACTIVE!) ⚠",
-          lbTitle: "PLAYER LEADERBOARD (GALACTIC RANKS)",
-          lbSubtitle: "Fastest Planet Saviors per Level, Top 200 Campaign & Endless Leaders",
-          pauseTitle: "⏸ DEFEND THE PLANET — COMMAND MENU",
+          lbTitle: "SCOREBOARD",
+          lbSubtitle: "Your records against 🤖 computer rivals.",
+          pauseTitle: "⏸ PAUSED",
           tName_rapid: "Particle Laser",
           tName_plasma: "Heavy Missile",
           tName_emp: "Advanced Tesla",
@@ -1747,6 +1729,7 @@
 
       // Tüm Sabit Metinler, Modallar, Tablo Başlıkları ve Açıklamalar İçin Çift Yönlü (TR <-> EN) Tam Çeviri Haritası
       const DOM_TEXT_PAIRS = [
+        ["Kahraman", "Heroes"],
         ["Kapat", "Close"],
         ["🛟 Destek", "🛟 Support"],
         ["Destek", "Support"],
@@ -1762,7 +1745,6 @@
         ["Aktif Komutan", "Active Commander"],
         ["Aktif Kahraman", "Active Hero"],
         ["✕ Savaşa Dön", "✕ Back to Battle"],
-        ["🏠 Menü", "🏠 Menu"],
         ["Günlük", "Daily"],
         ["Kahramanlar", "Heroes"],
         ["Sıralama", "Leaderboard"],
@@ -1770,7 +1752,7 @@
         ["🏆 Sıralama", "🏆 Leaderboard"],
         ["Oyuncu Adı:", "Player Name:"],
         ["Oyuncu", "Player"],
-        ["KAHRAMANLAR & GÜNLÜK GÖREVLER", "HEROES & DAILY MISSIONS"],
+        ["KAHRAMANLAR & GÖREVLER", "HEROES & MISSIONS"],
         ["Oyun içi Kahramanınızı seçin, seviyesini yükseltin ve gezegen vergilerini toplayın!", "Select your in-game Hero, upgrade their level, and collect planet taxes!"],
         ["🦸 AKTİF KAHRAMAN SEÇİMİ (OYUN İÇİ KARAKTERİNİZ)", "🦸 ACTIVE HERO SELECTION (YOUR IN-GAME CHARACTER)"],
         ["🔒 APPLE STOREKİT GÜVENCESİ", "🔒 APPLE STOREKIT SECURED"],
@@ -1789,7 +1771,7 @@
         ["Komutanlar", "Commanders"],
         ["🏠 Ana Ekran", "🏠 Main Lobby"],
         ["İKMAL", "SUPPLY"],
-        ["7 GÜNLÜK KOMUTA İKMAL SANDIĞI", "7-DAY COMMAND SUPPLY CHEST"],
+        ["GÜNLÜK ÖDÜL", "DAILY REWARD"],
         ["Her gün oyuna girerek artan Gear ve Elmas ödüllerini toplayın!", "Log in daily to claim escalating Gear and Gem rewards!"],
         ["📥 Ödülü Al (1x)", "📥 Claim (1x)"],
         ["🎬 2x Al (Reklam İzle)", "🎬 Claim 2x (Watch Ad)"],
@@ -1891,7 +1873,7 @@
         ["🎬 2x Topla", "🎬 2x Claim"],
         ["📋 GÜNLÜK OPERASYON GÖREVLERİ & BAŞARIMLAR", "📋 DAILY OPERATION MISSIONS & ACHIEVEMENTS"],
         // Kule Bilgisi & Silah Rehberi (Modal Tower Info)
-        ["ℹ️ KULE BİLGİSİ & SİLAH KİLİT REHBERİ", "ℹ️ TOWER GUIDE & WEAPON UNLOCKS"],
+        ["ℹ️ KULE REHBERİ", "ℹ️ TOWER GUIDE"],
         ["Her kulenin farklı uzaylı türlerine karşı özel üstünlüğü vardır.", "Each tower has specialized strengths against different alien types."],
         ["1. Parçacık Lazer (85 ⚡ • Bölüm 1)", "1. Particle Laser (85 ⚡ • Level 1)"],
         ["2. Gelişmiş Tesla (110 ⚡ • Bölüm 1)", "2. Advanced Tesla (110 ⚡ • Level 1)"],
@@ -1901,7 +1883,7 @@
         ["6. Makineli Top (175 ⚡ • Bölüm 5'te Açılır)", "6. Autocannon (175 ⚡ • Unlocks Lv.5)"],
         ["👾 YENİ UZAYLI TÜRLERİ & 4 GALAKTİK BOSS", "👾 NEW ALIEN TYPES & 4 GALACTIC BOSSES"],
         // Siber Evrim Üssü (Modal 1 - Lab)
-        ["SİBER EVRİM ÜSSÜ — KOMUTA & TEKNOLOJİ AĞACI", "CYBER EVOLUTION BASE — COMMAND & TECH TREE"],
+        ["SİBER EVRİM", "CYBER EVOLUTION"],
         ["Evrim Kaynaklarınız:", "Your Evolution Resources:"],
         ["⚡ Foton Hasar Evrimi", "⚡ Photon Damage Evolution"],
         ["🔥 Overclock Atış Bobini", "🔥 Overclock Fire Coil"],
@@ -1919,7 +1901,7 @@
         ["Aç / Geliştir (26 💎)", "Unlock / Upgrade (12 💎 CORE)"],
         ["Aç / Geliştir (20 💎)", "Unlock / Upgrade (10 💎 CORE)"],
         // Gezegen Mağazası (Modal 2 - Shop)
-        ["🛒 GEZEGEN MAĞAZASI", "🛒 PLANET STORE"],
+        ["🛒 MAĞAZA", "🛒 STORE"],
         ["SANDBOX TEST MODU", "SANDBOX TEST MODE"],
         ["TEK SEFERLİK", "ONE-TIME"],
         ["KOMUTAN TERFİ", "HERO PROMOTION"],
@@ -1934,7 +1916,6 @@
         ["🏆 Skorlar", "🏆 Scores"],
         ["Sonraki Bölüm ➔", "Next Level ➔"],
         // Reklam & ATT & iOS Rehberi (Modal 4, 5, 6)
-        ["✕ Reklamı Kapat (Ödülsüz)", "✕ Skip Ad (No Reward)"],
         ["Bölüm", "Level"],
         ["/200 •\n            Gezegen:", "/200 •\n            Planet:"],
         ["•\n            Çarpan:", "•\n            Multiplier:"],
@@ -1948,7 +1929,6 @@
         ["ÖDÜLÜ 2'YE KATLA (REKLAM İZLE)", "DOUBLE REWARD (WATCH AD)"],
         ["🎬 ÖDÜLLÜ REKLAM", "🎬 REWARDED AD"],
         ["Ödüllü Video Reklam Oynatılıyor...", "Playing Rewarded Video Ad..."],
-        ["Tamamlanan her üç bölümden sonra, yeni bölümün ilk dalgasından önce geçiş reklamı gösterilebilir. VIP ile kalıcı kapatılabilir.", "An interstitial may show before the first wave after every three completed levels. VIP removes it permanently."],
         ["✔ Korunan Codemagic & Bundle Yapısı", "✔ Preserved Codemagic & Bundle Setup"],
         ["Görünen Ad:", "Display Name:"],
         ["✔ 200 Dinamik Gezegen & Skor Tablosu", "✔ 200 Dynamic Planets & Scoreboard"],
@@ -4576,6 +4556,14 @@
         return "TEĞMEN";
       }
 
+      // Player names are user input and table rows are built with innerHTML: always escape.
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);
+      }
+      function leaderboardName(row) {
+        return row.isPlayer ? escapeHtml(row.name) : `🤖 ${escapeHtml(row.name)}`;
+      }
+
       function renderLeaderboards() {
         const chosenLv = parseInt(document.getElementById("selectLbLevel").value, 10) || state.level;
         const planet = getPlanetForLevel(chosenLv);
@@ -4624,7 +4612,7 @@
           const medal = idx === 0 ? "🥇 1" : (idx === 1 ? "🥈 2" : (idx === 2 ? "🥉 3" : `#${idx + 1}`));
           tr.innerHTML = `
             <td class="py-2 px-3 font-cyber font-bold">${medal}</td>
-            <td class="py-2 px-3">${row.name}</td>
+            <td class="py-2 px-3">${leaderboardName(row)}</td>
             <td class="py-2 px-3 text-cyan-300 font-cyber text-[11px]">${row.planetName}</td>
             <td class="py-2 px-3 text-right font-cyber font-bold text-emerald-300">${row.time.toFixed(1)}${state.lang === "en" ? "s" : " sn"}</td>
           `;
@@ -4656,7 +4644,7 @@
           const pInfo = getPlanetForLevel(row.lv);
           tr.innerHTML = `
             <td class="py-2 px-3 font-cyber font-bold">${medal}</td>
-            <td class="py-2 px-3">${row.name}</td>
+            <td class="py-2 px-3">${leaderboardName(row)}</td>
             <td class="py-2 px-3 text-[11px] text-fuchsia-300 font-semibold">${getCommanderRankTitle(row.lv)} • ${pInfo.shortName}</td>
             <td class="py-2 px-3 text-right font-cyber font-bold text-amber-300">${L("Bölüm", "Level")} ${row.lv}/200</td>
           `;
@@ -4686,7 +4674,7 @@
             const medal = idx === 0 ? "🥇 1" : (idx === 1 ? "🥈 2" : (idx === 2 ? "🥉 3" : `#${idx + 1}`));
             tr.innerHTML = `
               <td class="py-2 px-3 font-cyber font-bold">${medal}</td>
-              <td class="py-2 px-3">${row.name}</td>
+              <td class="py-2 px-3">${leaderboardName(row)}</td>
               <td class="py-2 px-3 text-[11px] text-cyan-300">${row.hero}</td>
               <td class="py-2 px-3 text-right font-cyber font-bold text-amber-300">${L("Dalga", "Wave")} ${row.wave}</td>
             `;
@@ -7091,7 +7079,7 @@
       }
       document.getElementById("btnOpenShop").addEventListener("click", () => openShop());
       function hasBlockingModalOpen() {
-        const blockingIds = ["modalStartLobby", "modalPauseMenu", "modalMissions", "modalLeaderboard", "modalLab", "modalShop", "modalDailyLogin", "modalIosGuide", "modalTowerInfo", "modalPrivacyPolicy", "modalLevelEnd", "modalAdSimulation"];
+        const blockingIds = ["modalStartLobby", "modalPauseMenu", "modalMissions", "modalLeaderboard", "modalLab", "modalShop", "modalDailyLogin", "modalIosGuide", "modalTowerInfo", "modalPrivacyPolicy", "modalLevelEnd"];
         return blockingIds.some(id => {
           const el = document.getElementById(id);
           return el && !el.classList.contains("hidden");
