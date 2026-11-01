@@ -23,7 +23,6 @@ Bu paket Gemini'den gelen **2026-10-22 yeni oyun kodunu** icerir. Oyun kodunu `w
 
 ## Notlar
 - Bu paket **IPA degildir**. iOS derlemesini Codemagic Mac isletim ortaminda uretir.
-- `Unity_Project_Scripts` bu Capacitor iOS derlemesinde kullanilmiyor; Gemini'nin orijinal ZIP'inde kalir.
 - Oyun ici render halen HTML Canvas 2D'dir, gercek Unity/WebGL 3D degildir.
 - Kaynak kodunu ve YAML sozdizimini kontrol ettik; Mac uzerinde gercek IPA/TestFlight build calistirmadik. Build hatasi olursa Codemagic logu incelenmeli.
 - Oyundaki reklam veya odeme benzetimlerini gercek App Store odemesi olarak kabul etme; yayina gecmeden dogrula.
