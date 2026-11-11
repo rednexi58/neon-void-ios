@@ -46,11 +46,12 @@ test('world transform stays identical through repeated shop/pause/reward transit
   const render = fn('renderScene');
   const prefix = render.slice(0, render.indexOf('        const preset')) + '\nctx.restore(); return nowAnim;\n}';
   const g = run(prefix, {
+    window: { SpaceTheme: require('../www/space-theme.js') },
     applyCanvasResize() {}, performance: { now: () => 1000 }, sceneAnimationTime: 2,
     canvas: { parentElement: { getBoundingClientRect: () => ({width: 390, height: 600}) } },
     state: { paused: false, screenShake: 7.5 },
     viewTransform: { dpr: 3, cssW: 390, cssH: 600, offsetX: 2.25, offsetY: 19.5, scale: .8 },
-    ctx: { save(){}, restore(){}, setTransform(){}, fillRect(){}, translate: (...v) => calls.push(v), scale(){} }
+    ctx: { save(){}, restore(){}, setTransform(){}, fillRect(){}, createLinearGradient: () => ({ addColorStop(){} }), translate: (...v) => calls.push(v), scale(){} }
   });
   for (let i = 0; i < 120; i++) { g.state.paused = i % 2 === 0; g.renderScene(); }
   for (const call of calls) assert.deepEqual(call, [2.25, 19.5]);
