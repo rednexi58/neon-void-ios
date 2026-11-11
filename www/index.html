@@ -3266,6 +3266,7 @@
             state.sectorIndex = cycle[(state.level - 3) % cycle.length];
           }
         }
+        SoundFX.setMusicTheme(state.endlessMode ? 5 : window.SpaceTheme.paletteIndexForLevel(state.level));
         const preset = SECTOR_PRESETS[state.sectorIndex] || SECTOR_PRESETS[0];
         const rawPaths = (preset.paths && preset.paths.length > 0) ? preset.paths : [preset.waypoints];
         // Bölüm 1-2: 1 kapı, Bölüm 3-5: 2 kapı, Bölüm 6+ veya Sonsuz: haritadaki tüm (2-3) kapılar aktif!
@@ -3412,7 +3413,7 @@
           if (alertEl) alertEl.textContent = `⚠ ${state.lang === "en" ? bossVar.nameEn : bossVar.nameTr} ⚠`;
           document.getElementById("bossAlertBanner").classList.remove("hidden");
           SoundFX.isBossAtmosphere = true;
-          SoundFX.bossPulse();
+          SoundFX.bossAlert();
           triggerHaptic("heavy");
         } else {
           document.getElementById("bossAlertBanner").classList.add("hidden");
@@ -3469,6 +3470,7 @@
       function beginWaveAfterInterstitial() {
         const waveIdx = waveFlow.launch();
         if (waveIdx === null) return;
+        SoundFX.waveStart();
         state.waveIndex = waveIdx;
         state.waveWaitingForPlayer = false;
         if (spawnQueue.length === 0) spawnTimer = 0.15;
@@ -4431,6 +4433,7 @@
         if (state.levelEnded) return;
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
+        SoundFX.victory();
         const diff = calculateDifficulty(state.level, 0);
         const planet = getPlanetForLevel(state.level);
         const clearSec = Number(Math.max(8.5, state.levelElapsedSeconds).toFixed(1));
@@ -4515,6 +4518,7 @@
       function handleGameOver() {
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
+        SoundFX.defeat();
         const planet = getPlanetForLevel(state.level);
         const consolationGear = Balance.gearGain(Math.round(calculateDifficulty(state.level, 0).gearReward * 0.25));
         state.lastEarnedGear = consolationGear;
@@ -6715,6 +6719,7 @@
             angle: Math.PI / 2
           };
           spawnParticles(sock.x, sock.y, tDef.color, 12);
+          SoundFX.build();
 
           if (state.trainerActive && state.trainerStep <= 1) {
             state.trainerStep = 2;
@@ -6759,6 +6764,7 @@
           saveProgress();
         }
         spawnParticles(sock.x, sock.y, "#22d3ee", 14);
+        SoundFX.upgrade(t.level);
         showToast(`${tDef.name} Seviye ${t.level}'e yükseltildi!${t.level === 3 ? " (Evrim Dalı A/B Seçebilirsiniz!)" : ""}`);
         updateHUD();
         updateSocketInspector();
@@ -7905,6 +7911,7 @@
         hideAllSubModals();
         updateLobbyUI();
         document.getElementById("modalStartLobby").classList.remove("hidden");
+        SoundFX.setMusicTheme(-1);
       }
 
       function closeStartLobbyToGame() {
