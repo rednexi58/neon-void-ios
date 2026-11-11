@@ -83,7 +83,7 @@
       armorBonus:lv<=5?0:Math.min(.18,.012*Math.sqrt(t)),
       threatBudget:Math.round(baseBudget*early.threat*(.84+.58*progress)),
       gearReward:Math.round(45+lv*4+Math.log2(lv+1)*10),coreReward:boss?5:mini?3:2,
-      parTimeSeconds:Math.round(waves*(36+Math.min(10,lv*.05))+(boss?20:0))};
+      parTimeSeconds:Math.round(waves*(39+Math.min(10,lv*.05))+(boss?20:0))}; // +3 s per wave: the auto break is 7 s (was 4.5 s)
   }
   function campaignReward(state,diff) {const first=!state.completedLevels[state.level];return {core:first?diff.coreReward:1,first};}
   function cumulative(base,step,n) {return n*base+step*n*(n-1)/2;}

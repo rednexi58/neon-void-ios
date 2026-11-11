@@ -1534,7 +1534,7 @@
       armorBonus:lv<=5?0:Math.min(.18,.012*Math.sqrt(t)),
       threatBudget:Math.round(baseBudget*early.threat*(.84+.58*progress)),
       gearReward:Math.round(45+lv*4+Math.log2(lv+1)*10),coreReward:boss?5:mini?3:2,
-      parTimeSeconds:Math.round(waves*(36+Math.min(10,lv*.05))+(boss?20:0))};
+      parTimeSeconds:Math.round(waves*(39+Math.min(10,lv*.05))+(boss?20:0))}; // +3 s per wave: the auto break is 7 s (was 4.5 s)
   }
   function campaignReward(state,diff) {const first=!state.completedLevels[state.level];return {core:first?diff.coreReward:1,first};}
   function cumulative(base,step,n) {return n*base+step*n*(n-1)/2;}
@@ -1579,6 +1579,7 @@
 });
 </script>
   <!-- BALANCE END -->
+  <script src="wave-flow.js"></script>
   <script src="game-audio.js"></script>
   <script>
     (function () {
@@ -3152,7 +3153,8 @@
       let repairBeams = [];
       let spawnQueue = [];
       let spawnTimer = 0;
-      let waveBreakTimer = 3.5;
+      // Dalga zamanlaması kuralları www/wave-flow.js içinde (erken çağırma, otomatik başlatma, bölüm sonu).
+      const waveFlow = window.WaveFlow.createWaveFlow();
       let waveInProgress = false;
       let laserBeams = [];
       let muzzleFlashes = [];
@@ -3354,7 +3356,6 @@
 
         state.waveWaitingForPlayer = true;
         waveInProgress = false;
-        waveBreakTimer = 4.0;
         SoundFX.isBossAtmosphere = false;
 
         activeEnemies = [];
@@ -3379,6 +3380,7 @@
         } else {
           state.trainerActive = false;
         }
+        waveFlow.reset({ totalWaves: state.totalWaves, endless: state.endlessMode, holdFirstWave: state.trainerActive });
 
         document.getElementById("bossAlertBanner").classList.add("hidden");
         document.getElementById("modalLevelEnd").classList.add("hidden");
@@ -3444,8 +3446,9 @@
       }
 
       async function spawnNextWave() {
-        if (state.waveStartPending || waveInProgress || state.levelEnded) return;
-        if (window.GameMonetization?.isInterstitialDue(state)) {
+        if (state.waveStartPending || state.levelEnded || !waveFlow.hasMoreWaves()) return;
+        // Interstitials are only considered before the first wave, never in the middle of a fight.
+        if (waveFlow.launched === 0 && window.GameMonetization?.isInterstitialDue(state)) {
           const runId = state.levelRunId;
           const clears = state.adClears;
           state.waveStartPending = true;
@@ -3462,11 +3465,14 @@
       }
 
       function beginWaveAfterInterstitial() {
-        if (!state.endlessMode && state.waveIndex >= state.totalWaves) return;
+        const waveIdx = waveFlow.launch();
+        if (waveIdx === null) return;
+        state.waveIndex = waveIdx;
         state.waveWaitingForPlayer = false;
-        spawnQueue = buildWaveQueue(state.level, state.waveIndex);
-        spawnTimer = 0.15;
+        if (spawnQueue.length === 0) spawnTimer = 0.15;
+        for (const key of buildWaveQueue(state.level, waveIdx)) spawnQueue.push({ key, wave: waveIdx });
         waveInProgress = true;
+        if (state.endlessMode && waveIdx + 1 > (state.bestEndlessWave || 0)) state.bestEndlessWave = waveIdx + 1;
         if (state.trainerActive && state.trainerStep >= 1) {
           state.trainerStep = 3;
           state.trainerCompletedOnce = true;
@@ -3484,17 +3490,36 @@
         updateWaveBannerUI();
       }
 
+      function rewardClearedField() {
+        if (state.endlessMode) {
+          const cleared = waveFlow.launched;
+          const bonusGold = 24 + Math.min(40, cleared * 2);
+          const bonusGear = Balance.gearGain(12 + cleared * 3);
+          state.gold += bonusGold;
+          state.gear += bonusGear;
+          if (cleared % 3 === 0) state.cyberCore += 1;
+          if (cleared % 5 === 0) addActiveHeroExperience(1);
+          saveProgress();
+          showToast(L(`♾️ Sonsuz Dalga ${cleared} Geçildi! +${bonusGold}⚡ & +${bonusGear}⚙`, `♾️ Endless wave ${cleared} cleared! +${bonusGold}⚡ & +${bonusGear}⚙`));
+        } else {
+          state.gold += 18;
+          showToast(L(`✔ Dalga ${waveFlow.launched} temizlendi! +18 ⚡ Enerji`, `✔ Wave ${waveFlow.launched} cleared! +18 ⚡ Energy`));
+        }
+        updateHUD();
+        updateSocketInspector();
+      }
+
       let swarmVariantToggle = false;
-      function spawnEnemyFromArchetype(key, customPos = null) {
+      function spawnEnemyFromArchetype(key, customPos = null, waveIdx = state.waveIndex) {
         const arch = ENEMY_ARCHETYPES[key] || ENEMY_ARCHETYPES.swarm;
-        const effLv = state.endlessMode ? Math.max(state.level, 4 + Math.floor(state.waveIndex * 1.35)) : state.level;
-        const diff = calculateDifficulty(effLv, state.waveIndex);
+        const effLv = state.endlessMode ? Math.max(state.level, 4 + Math.floor(waveIdx * 1.35)) : state.level;
+        const diff = calculateDifficulty(effLv, waveIdx);
         const miniBossScale = (key === "boss" && diff.isMiniBossLevel && !state.endlessMode) ? 0.62 : 1.0;
         const maxHp = Math.round(arch.baseHp * diff.hpMult * miniBossScale);
         const armor = Math.min(0.86, arch.baseArmor + diff.armorBonus);
         swarmVariantToggle = !swarmVariantToggle;
         const bossVariant = arch.isBoss
-          ? BOSS_VARIANTS[Math.floor((effLv + state.waveIndex) / 5) % BOSS_VARIANTS.length]
+          ? BOSS_VARIANTS[Math.floor((effLv + waveIdx) / 5) % BOSS_VARIANTS.length]
           : null;
 
         const pathIndex = (customPos && typeof customPos.pathIndex === "number")
@@ -3650,25 +3675,40 @@
         const gateTagTr = (gateCount > 1 ? `⚠️ ${gateCount} Kapı` : `1 Giriş`) + wxTr;
         const gateTagEn = (gateCount > 1 ? `⚠️ ${gateCount} Gates` : `1 Gate`) + wxEn;
         const pillBox = document.getElementById("waveStatusPillBox");
-        if (state.waveWaitingForPlayer) {
-          if (pillBox) pillBox.className = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-100 transition-opacity duration-300";
+        const calmPill = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-100 transition-opacity duration-300";
+        const combatPill = "bg-slate-950/60 border border-sky-500/25 px-2 py-0.5 rounded-lg text-[9.5px] text-cyan-200/90 font-medium truncate flex items-center gap-1 opacity-90 transition-opacity duration-300";
+        const nextWave = Math.min(waveFlow.launched + 1, state.endlessMode ? Infinity : state.totalWaves);
+        const secondsLeft = waveFlow.secondsLeft;
+        const bonus = waveFlow.earlyBonus();
+        const bonusTag = bonus > 0 ? ` +${bonus}⚡` : "";
+        let label = "";
+
+        if (waveFlow.launched === 0) {
+          if (pillBox) pillBox.className = calmPill;
           banner.textContent = state.endlessMode
-            ? L(`♾️ SONSUZ (${gateCount} Kapı) — Kule kurup başlatın!`, `♾️ ENDLESS (${gateCount} Gates) — Build & start!`)
-            : (state.lang === "en"
-              ? `${planet.shortName} • ${gateTagEn}`
-              : `🌍 ${planet.shortName} • ${gateTagTr}`);
-          startBtn.classList.remove("hidden");
-        } else if (!waveInProgress) {
-          if (pillBox) pillBox.className = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-95 transition-opacity duration-300";
-          banner.textContent = state.lang === "en"
-            ? `Next Wave (${state.waveIndex + 1}/${waveTotalStr}) [${gateTagEn}]: ${Math.max(0, waveBreakTimer).toFixed(1)}s`
-            : `Sonraki Dalga (${state.waveIndex + 1}/${waveTotalStr}) [${gateTagTr}]: ${Math.max(0, waveBreakTimer).toFixed(1)} sn`;
+            ? L(`♾️ SONSUZ (${gateCount} Kapı) — Kule kur ve başlat!`, `♾️ ENDLESS (${gateCount} Gates) — Build & start!`)
+            : L(`🌍 ${planet.shortName} • ${gateTagTr}`, `${planet.shortName} • ${gateTagEn}`);
+          label = secondsLeft === null
+            ? L("Dalgayı Başlat ▶", "Start Wave ▶")
+            : L(`▶ Başlat ${Math.ceil(secondsLeft)} sn${bonusTag}`, `▶ Start ${Math.ceil(secondsLeft)}s${bonusTag}`);
+        } else if (!waveFlow.hasMoreWaves()) {
+          if (pillBox) pillBox.className = combatPill;
+          banner.textContent = L(`🔥 Son Dalga ${state.totalWaves}/${waveTotalStr} • ${gateTagTr}`, `🔥 Final Wave ${state.totalWaves}/${waveTotalStr} • ${gateTagEn}`);
+        } else if (secondsLeft !== null) {
+          if (pillBox) pillBox.className = calmPill;
+          banner.textContent = L(`Sonraki Dalga (${nextWave}/${waveTotalStr}) [${gateTagTr}]: ${secondsLeft.toFixed(1)} sn`,
+                                 `Next Wave (${nextWave}/${waveTotalStr}) [${gateTagEn}]: ${secondsLeft.toFixed(1)}s`);
+          label = L(`⏩ Şimdi Başlat${bonusTag}`, `⏩ Start Now${bonusTag}`);
+        } else {
+          if (pillBox) pillBox.className = combatPill;
+          banner.textContent = L(`🔥 Dalga ${waveFlow.launched}/${waveTotalStr} • ${gateTagTr}`, `🔥 Wave ${waveFlow.launched}/${waveTotalStr} • ${gateTagEn}`);
+          label = L(`⏩ ${nextWave}. Dalgayı Çağır${bonusTag}`, `⏩ Call Wave ${nextWave}${bonusTag}`);
+        }
+
+        if (label) {
+          if (startBtn.textContent !== label) startBtn.textContent = label;
           startBtn.classList.remove("hidden");
         } else {
-          if (pillBox) pillBox.className = "bg-slate-950/60 border border-sky-500/25 px-2 py-0.5 rounded-lg text-[9.5px] text-cyan-200/90 font-medium truncate flex items-center gap-1 opacity-75 transition-opacity duration-300";
-          banner.textContent = state.lang === "en"
-            ? `🔥 Wave ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagEn}`
-            : `🔥 Dalga ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagTr}`;
           startBtn.classList.add("hidden");
         }
       }
@@ -3807,56 +3847,26 @@
           }
         }
 
-        if (state.waveWaitingForPlayer) {
-          updateWaveBannerUI();
-        } else if (!waveInProgress) {
-          waveBreakTimer -= dt;
-          if (waveBreakTimer > 0) {
-            updateWaveBannerUI();
-          } else {
-            spawnNextWave();
-          }
-        } else {
-          updateWaveBannerUI();
-          if (spawnQueue.length > 0) {
-            spawnTimer -= dt;
-            if (spawnTimer <= 0) {
-              const nextKey = spawnQueue.shift();
-              spawnEnemyFromArchetype(nextKey);
-              spawnTimer = nextKey === "swarm" ? 0.45 : 0.85;
-            }
-          } else if (activeEnemies.length === 0) {
-            if (state.endlessMode) {
-              state.waveIndex++;
-              if (state.waveIndex > (state.bestEndlessWave || 0)) {
-                state.bestEndlessWave = state.waveIndex;
-              }
-              waveInProgress = false;
-              waveBreakTimer = 3.8;
-              const bonusGold = 24 + Math.min(40, state.waveIndex * 2);
-              const bonusGear = Balance.gearGain(12 + state.waveIndex * 3);
-              state.gold += bonusGold;
-              state.gear += bonusGear;
-              if (state.waveIndex % 3 === 0) state.cyberCore += 1;
-              if (state.waveIndex % 5 === 0) addActiveHeroExperience(1);
-              saveProgress();
-              showToast(`♾️ Sonsuz Dalga ${state.waveIndex} Geçildi! +${bonusGold}⚡ & +${bonusGear}⚙`);
-              updateHUD();
-              updateSocketInspector();
-            } else if (state.waveIndex + 1 < state.totalWaves) {
-              state.waveIndex++;
-              waveInProgress = false;
-              waveBreakTimer = 4.5;
-              state.gold += 18;
-              showToast(`✔ Dalga ${state.waveIndex} temizlendi! +18 ⚡ Enerji`);
-              updateHUD();
-              updateSocketInspector();
-            } else {
-              handleLevelVictory();
-              return;
-            }
+        // Dalga akışı: kuyruktan doğur, saha temizlenince ödül ver, sayaç bitince/çağrılınca yeni dalga.
+        if (spawnQueue.length > 0) {
+          spawnTimer -= dt;
+          if (spawnTimer <= 0) {
+            const next = spawnQueue.shift();
+            spawnEnemyFromArchetype(next.key, null, next.wave);
+            spawnTimer = next.key === "swarm" ? 0.45 : 0.85;
           }
         }
+        const fieldClear = spawnQueue.length === 0 && activeEnemies.length === 0;
+        if (waveInProgress && fieldClear) {
+          waveInProgress = false;
+          if (waveFlow.isComplete(true)) {
+            handleLevelVictory();
+            return;
+          }
+          rewardClearedField();
+        }
+        if (waveFlow.tick(dt, fieldClear)) spawnNextWave();
+        updateWaveBannerUI();
 
         // Düşman hareketi
         for (let i = activeEnemies.length - 1; i >= 0; i--) {
@@ -6965,10 +6975,14 @@
       document.getElementById("btnNextWaveEarly").addEventListener("click", () => {
         SoundFX.init();
         SoundFX.uiClick();
-        if (state.waveWaitingForPlayer || !waveInProgress) {
-          waveBreakTimer = 0;
-          spawnNextWave();
+        if (state.waveStartPending || state.levelEnded || !waveFlow.hasMoreWaves()) return;
+        const bonus = waveFlow.earlyBonus();
+        if (bonus > 0) {
+          state.gold += bonus;
+          showToast(L(`⏩ Erken çağrı bonusu: +${bonus} ⚡`, `⏩ Early call bonus: +${bonus} ⚡`));
+          updateHUD();
         }
+        spawnNextWave();
       });
 
       document.getElementById("btnMuteAudio").addEventListener("click", (e) => {

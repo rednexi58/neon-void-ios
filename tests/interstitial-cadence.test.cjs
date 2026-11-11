@@ -18,7 +18,7 @@ function waveFixture() {
   const source=html.slice(html.indexOf('      async function spawnNextWave()'),html.indexOf('      function beginWaveAfterInterstitial()'));
   let resolveAd;const calls=[];
   const s=state({adClears:3,waveStartPending:false,levelRunId:1,levelEnded:false});
-  const ctx=vm.createContext({state:s,waveInProgress:false,window:{GameMonetization:{isInterstitialDue,showInterstitial:()=>{calls.push('ad');return new Promise(resolve=>resolveAd=resolve);}}},saveProgress:()=>calls.push('save'),beginWaveAfterInterstitial:()=>calls.push('wave'),performance:{now:()=>123},lastTime:0,console});
+  const ctx=vm.createContext({state:s,waveInProgress:false,waveFlow:{launched:0,hasMoreWaves:()=>true},window:{GameMonetization:{isInterstitialDue,showInterstitial:()=>{calls.push('ad');return new Promise(resolve=>resolveAd=resolve);}}},saveProgress:()=>calls.push('save'),beginWaveAfterInterstitial:()=>calls.push('wave'),performance:{now:()=>123},lastTime:0,console});
   vm.runInContext(source,ctx);
   return {s,calls,start:()=>vm.runInContext('spawnNextWave()',ctx),finish:value=>resolveAd(value)};
 }
