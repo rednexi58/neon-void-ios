@@ -10,6 +10,12 @@ plset() {
   /usr/libexec/PlistBuddy -c "Set :${key} ${value}" "$PLIST" 2>/dev/null || \
     /usr/libexec/PlistBuddy -c "Add :${key} ${type} ${value}" "$PLIST"
 }
+# Store version (CFBundleShortVersionString) comes from ios_config/APP_VERSION — the single source of truth.
+APP_VERSION="$(tr -d '[:space:]' < ios_config/APP_VERSION)"
+[[ "$APP_VERSION" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] || { echo "Invalid APP_VERSION: $APP_VERSION"; exit 1; }
+sed -i '' -E "s/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = ${APP_VERSION};/g" "$PROJECT"
+plset CFBundleShortVersionString string "$APP_VERSION"
+echo "App version: $APP_VERSION"
 plset CFBundleDisplayName string 'Gezegeni Koru'
 plset CFBundleName string 'Gezegeni Koru'
 plset GADApplicationIdentifier string 'ca-app-pub-6370997467091906~2944398467'

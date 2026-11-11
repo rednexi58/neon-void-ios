@@ -255,7 +255,7 @@
 
         <!-- Harita Altı Kompakt Özel Yetenekler Şeridi (Ortalanmış, Kesilme Yok) -->
         <div class="absolute bottom-1.5 left-2 right-2 flex items-center justify-center gap-1.5 pointer-events-none z-10">
-          <div class="pointer-events-auto flex items-center gap-1 bg-slate-950/85 border border-sky-500/35 backdrop-blur-md px-1.5 py-1 rounded-xl shadow-lg">
+          <div id="abilityStrip" class="pointer-events-auto flex items-center gap-1 bg-slate-950/85 border border-sky-500/35 backdrop-blur-md px-1.5 py-1 rounded-xl shadow-lg">
             <button id="btnOrbitalLaser" class="flex items-center gap-1 px-1.5 py-1 rounded-lg bg-rose-950/90 hover:bg-rose-900 active:scale-95 border border-rose-400/50 transition" title="Orbital Lazer Uydusu">
               <span class="text-xs">🛰️</span>
               <div class="text-left leading-none">
@@ -515,7 +515,7 @@
         </div>
       </div>
 
-      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.10.25.4</p>
+      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.11.11.1</p>
       <!-- Kalıcı Meta Paralar & Dil Seçimi -->
       <div class="grid grid-cols-3 gap-2 bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-xs items-center">
         <div class="flex items-center justify-between px-1.5">
@@ -964,7 +964,7 @@
         </div>
       </div>
 
-      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.10.25.4</p>
+      <p class="text-[10px] text-slate-400">İçerik / Content: 2026.11.11.1</p>
       <p id="balanceSummary" class="text-xs text-sky-200">Temel geliştirmeler Gear + elmas ile alınır; bölüm tamamlama şartı yoktur.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
         <div class="bg-slate-900/90 border border-cyan-500/35 rounded-xl p-3 flex flex-col justify-between gap-2">
@@ -1342,21 +1342,21 @@
         <div class="w-24 h-24 rounded-3xl overflow-hidden shadow-[0_0_35px_rgba(34,211,238,0.65)] border-2 border-cyan-300 flex items-center justify-center relative bg-slate-950">
           <img src="data:image/jpeg;base64,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" alt="Gezegeni Koru App Icon" class="w-full h-full object-cover select-none" />
         </div>
-        <h1 class="font-cyber font-black text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-amber-300 tracking-wide mt-2.5">
+        <h1 class="font-cyber font-black text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-amber-300 tracking-wide mt-2.5" id="lobbyGameTitle">
           GEZEGENİ KORU
         </h1>
-        <p class="text-[11px] font-cyber font-bold text-sky-300 tracking-widest uppercase">
-          DEFEND THE PLANET • 200 BÖLÜM TD
+        <p class="text-[11px] font-cyber font-bold text-sky-300 tracking-widest uppercase" id="lobbyGameTagline">
+          KULE SAVUNMA • 200 BÖLÜM
         </p>
       </div>
 
       <!-- Oyuncu Özet Kartı (Açık Bölüm, Aktif Kahraman ve Kaynaklar) -->
-      <div class="w-full bg-slate-900/90 border border-sky-500/35 rounded-2xl p-3 grid grid-cols-3 gap-2 text-xs">
+      <div class="w-full bg-slate-900/90 border border-sky-500/35 rounded-2xl p-2.5 grid grid-cols-2 gap-2 text-xs">
         <div class="flex flex-col items-center">
           <span class="text-[10px] text-slate-400">Sefer İlerlemesi</span>
           <strong id="lobbyProgressText" class="font-cyber text-cyan-300 text-xs mt-0.5">Bölüm 1/200</strong>
         </div>
-        <div class="flex flex-col items-center border-x border-slate-800 px-1">
+        <div class="hidden">
           <span class="text-[10px] text-slate-400">Aktif Kahraman</span>
           <strong id="lobbyHeroText" class="font-cyber text-amber-300 text-xs mt-0.5 truncate max-w-[110px]">⚡ Vega (Lv.1)</strong>
         </div>
@@ -1365,6 +1365,17 @@
           <strong id="lobbyResourcesText" class="font-cyber text-fuchsia-300 text-xs mt-0.5">35⚙ • 5💎</strong>
         </div>
       </div>
+
+      <!-- AKTİF KAHRAMAN KARTI (dokununca Kahramanlar menüsü açılır) -->
+      <button id="btnLobbyHeroCard" class="w-full flex items-center gap-3 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-amber-950/60 border border-amber-400/45 rounded-2xl px-3 py-2.5 text-left active:scale-[0.98] transition">
+        <div id="lobbyHeroPortrait" class="gk-hero-portrait">⚡</div>
+        <div class="min-w-0 flex-1">
+          <div class="text-[9.5px] font-cyber font-bold tracking-wider text-amber-300/90" id="lobbyHeroKicker">KOMUTANIN</div>
+          <div id="lobbyHeroName" class="font-cyber font-black text-sm text-white truncate">Amiral Vega ★1</div>
+          <div id="lobbyHeroBonus" class="text-[10.5px] text-slate-300 leading-snug">Lazer & Tesla +%12 hasar</div>
+        </div>
+        <span id="lobbyHeroCta" class="shrink-0 px-2 py-1 rounded-lg bg-amber-400 text-slate-950 font-cyber font-extrabold text-[10px]">Değiştir ›</span>
+      </button>
 
       <!-- ANA OYUN MODU BUTONLARI -->
       <div class="w-full flex flex-col gap-2.5">
@@ -1455,7 +1466,7 @@
   else root.GameBalance = api;
 })(typeof window === 'object' ? window : globalThis, function() {
   'use strict';
-  const revision = '2026.10.25.4';
+  const revision = '2026.11.11.1';
   // Paid upgrades; drone fleet and critical chance have explicit caps.
   const skills = {
     dmgLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
@@ -1509,19 +1520,32 @@
     const p=bound(dr);dr.x=p.x;dr.y=p.y;
     dr.engaging=threats.length>0;
   }
+  // Early-campaign pressure (2026.11.11): players cleared levels 1-12 without the base taking a hit.
+  // Levels 1-2 stay gentle (onboarding), 3-12 get the full boost, 13-24 fade back to the tuned
+  // mid-game curve, and level 25+ is unchanged. hp = enemy health, threat = enemies per wave.
+  function earlyPressure(lv) {
+    const peak={hp:1.40,threat:1.35};
+    if(lv<=1)return {hp:1.10,threat:1.10};
+    if(lv<=2)return {hp:1.20,threat:1.20};
+    if(lv<=12)return peak;
+    if(lv>=25)return {hp:1,threat:1};
+    const fade=(lv-12)/13;
+    return {hp:+(peak.hp-(peak.hp-1)*fade).toFixed(3),threat:+(peak.threat-(peak.threat-1)*fade).toFixed(3)};
+  }
   function difficulty(levelNum,waveIndex=0) {
     const lv=clamp(levelNum,1,200), boss=lv%10===0,mini=lv>5&&lv%5===0&&!boss;
     const waves=lv<=3?3:Math.min(8,4+Math.floor((lv-4)/35)+(boss?1:0));
     const t=Math.max(0,lv-5);
     const curve=lv<=5?.65+.11*(lv-1):1.09+.026*t+.000065*t*t;
-    const hpMult=+(curve*(1+Math.min(30,waveIndex)*(lv<=5?.035:.04))).toFixed(2);
+    const early=earlyPressure(lv);
+    const hpMult=+(curve*early.hp*(1+Math.min(30,waveIndex)*(lv<=5?.035:.04))).toFixed(2);
     const baseBudget=lv<=5?5.5+lv*1.35:12.25+Math.sqrt(t)*2.5+t*.16;
     const progress=Math.min(1,waveIndex/Math.max(1,waves-1));
     return {level:lv,totalWaves:waves,isBossLevel:boss,isMiniBossLevel:mini,hpMult,
       armorBonus:lv<=5?0:Math.min(.18,.012*Math.sqrt(t)),
-      threatBudget:Math.round(baseBudget*(.84+.58*progress)),
+      threatBudget:Math.round(baseBudget*early.threat*(.84+.58*progress)),
       gearReward:Math.round(45+lv*4+Math.log2(lv+1)*10),coreReward:boss?5:mini?3:2,
-      parTimeSeconds:Math.round(waves*(36+Math.min(10,lv*.05))+(boss?20:0))};
+      parTimeSeconds:Math.round(waves*(39+Math.min(10,lv*.05))+(boss?20:0))}; // +3 s per wave: the auto break is 7 s (was 4.5 s)
   }
   function campaignReward(state,diff) {const first=!state.completedLevels[state.level];return {core:first?diff.coreReward:1,first};}
   function cumulative(base,step,n) {return n*base+step*n*(n-1)/2;}
@@ -1562,10 +1586,12 @@
     socketCache.set(cacheKey,result.map(s=>({...s})));
     return result;
   }
-  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,gearGain,droneFleet,moveDrone,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
+  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,gearGain,droneFleet,moveDrone,difficulty,earlyPressure,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
 });
 </script>
   <!-- BALANCE END -->
+  <script src="wave-flow.js"></script>
+    <script src="space-theme.js"></script>
   <script src="game-audio.js"></script>
   <script>
     (function () {
@@ -1594,22 +1620,14 @@
           tName_emp: "Gelişmiş Tesla",
           tName_railgun: "Makineli Top",
           trainerSteps: [
-            {
-              title: "🎓 EĞİTİM MODU (1/4): TAKTİK CEP SEÇİMİ",
-              desc: "Haritada altın halkayla işaretlenen CEP #1 taktik yuvasına dokunun. Kuleler yalnızca yolun dışındaki bu güvenli ceplere kurulur!"
-            },
-            {
-              title: "🎓 EĞİTİM MODU (2/4): İLK KULENİZİ KURUN",
-              desc: "Alttaki panelden Parçacık Lazer (85⚡) veya Gelişmiş Tesla (110⚡) kulesine dokunun. (Tesla saf zincir yıldırım vurur, Donma Birimi yavaşlatır!)"
-            },
-            {
-              title: "🎓 EĞİTİM MODU (3/4): GEZEGENİ KORUYUN!",
-              desc: "Yolun sonundaki gezegeni inceleyin — 200 bölümün her birinde farklı bir gezegeni koruyorsunuz! Hazır olduğunuzda 'Dalgayı Başlat ▶' butonuna basın."
-            },
-            {
-              title: "🎓 EĞİTİM MODU (4/4): SİBER EVRİM & SKOR TABLOSU",
-              desc: "Harika! Kazandığınız Gear ve Core ile alttaki '🧬 SİBER EVRİM ÜSSÜ'nden +%1 kalıcı güçlendirmeler açabilir, 🏆 Skor Tablosunda hız rekoru kırabilirsiniz!"
-            }
+            { title: "🎓 EĞİTİM 1/8 • KULE CEBİ SEÇ", desc: "Haritada altın halkayla parlayan CEP #1'e dokun. Kuleler sadece yol kenarındaki bu ceplere kurulur." },
+            { title: "🎓 EĞİTİM 2/8 • İLK KULENİ KUR", desc: "Alttaki panelden Parçacık Lazer'e (85⚡) dokun. Lazer hem kara hem hava düşmanını vurur; diğer kuleler bölüm ilerledikçe açılır.", focus: "buildTowerList" },
+            { title: "🎓 EĞİTİM 3/8 • GÜÇLENDİR (★→★★★)", desc: "Kurduğun kuleye dokunup ⬆ Geliştir ile Lv.2 ve Lv.3'e yükselt. Lv.3'te A veya B uzmanlık dalını seçersin; köşelerdeki ışıklar kulenin seviyesini gösterir." },
+            { title: "🎓 EĞİTİM 4/8 • ÖZEL YETENEKLER", desc: "🛰️ Orbital lazer tüm düşmanları vurur, 🛡 Kalkan gezegeni korur, ❄ Buzul herkesi yavaşlatır, 🔧 Onarım can yeniler. Zor anlar için sakla!", focus: "abilityStrip" },
+            { title: "🎓 EĞİTİM 5/8 • KAHRAMANIN", desc: "Gezegenin etrafında dönen gemi senin komutanın! ⚡ Vega lazer/tesla hasarını, 🛠 Kaan kule indirimini, ☄️ Nova kritik vuruşu artırır. Kahramanlar menüsünden değiştir ve seviye atlat." },
+            { title: "🎓 EĞİTİM 6/8 • OTONOM DRONLAR", desc: "Evrim Üssü'nden 🛸 Siber-Dron filosunu açınca dronlar gezegene yaklaşan düşmanları kendiliğinden avlar. Her seviye bir dron daha ekler." },
+            { title: "🎓 EĞİTİM 7/8 • SİBER EVRİM", desc: "Bölüm sonunda kazandığın ⚙ Gear ve 💎 Core ile 🧬 EVRİM'den kalıcı hasar, hız, kritik ve başlangıç enerjisi güçlendirmeleri al. Takıldığın bölümde buraya uğra!", focus: "btnOpenMenuQuick" },
+            { title: "🎓 EĞİTİM 8/8 • DALGAYI BAŞLAT!", desc: "Hazırsan sağ üstteki butonla dalgayı başlat. Sonraki dalgaları erken çağırırsan bonus ⚡ kazanırsın; çağırmazsan 7 sn sonra kendiliğinden gelir. Gezegeni koru Komutan!", focus: "btnNextWaveEarly" }
           ]
         },
         en: {
@@ -1631,22 +1649,14 @@
           tName_emp: "Advanced Tesla",
           tName_railgun: "Autocannon",
           trainerSteps: [
-            {
-              title: "🎓 TRAINER MODE (1/4): SELECT TACTICAL BAY",
-              desc: "Tap the golden highlighted BAY #1 on the map. Towers are placed inside these safe rock bays alongside the canyon road!"
-            },
-            {
-              title: "🎓 TRAINER MODE (2/4): BUILD YOUR FIRST TOWER",
-              desc: "Tap Particle Laser (85⚡) or Advanced Tesla (110⚡) in the bottom dock to deploy immediately. (Tesla deals chain lightning damage; Cryo slows!)"
-            },
-            {
-              title: "🎓 TRAINER MODE (3/4): DEFEND THE PLANET!",
-              desc: "Look at the destination planet at the end of the road — every level (1-200) features a new planet to protect! Tap 'Start Wave ▶' when ready."
-            },
-            {
-              title: "🎓 TRAINER MODE (4/4): CYBER EVOLUTION & SCOREBOARD",
-              desc: "Awesome! Spend Gear & Core in '🧬 CYBER EVOLUTION' for +1% permanent upgrades, and compete for fastest clear times on the 🏆 Scoreboard!"
-            }
+            { title: "🎓 TUTORIAL 1/8 • PICK A TOWER BAY", desc: "Tap the glowing gold BAY #1 on the map. Towers can only be built in these bays beside the road." },
+            { title: "🎓 TUTORIAL 2/8 • BUILD YOUR FIRST TOWER", desc: "Tap Particle Laser (85⚡) in the bottom dock. It hits both ground and air enemies; more towers unlock as you progress.", focus: "buildTowerList" },
+            { title: "🎓 TUTORIAL 3/8 • UPGRADE (★→★★★)", desc: "Tap your tower and use ⬆ Upgrade to reach Lv.2 and Lv.3. At Lv.3 you pick specialisation A or B; the corner lights show a tower's level." },
+            { title: "🎓 TUTORIAL 4/8 • SPECIAL ABILITIES", desc: "🛰️ Orbital strikes every enemy, 🛡 Shield protects the planet, ❄ Cryo slows everyone, 🔧 Repair restores health. Save them for tough moments!", focus: "abilityStrip" },
+            { title: "🎓 TUTORIAL 5/8 • YOUR HERO", desc: "The ship circling the planet is your commander! ⚡ Vega boosts laser/tesla damage, 🛠 Kaan discounts towers, ☄️ Nova raises crits. Switch and level them in the Heroes menu." },
+            { title: "🎓 TUTORIAL 6/8 • AUTONOMOUS DRONES", desc: "Unlock the 🛸 Cyber-Drone fleet in Evolution and drones hunt enemies near the planet on their own. Each rank adds another drone." },
+            { title: "🎓 TUTORIAL 7/8 • CYBER EVOLUTION", desc: "Spend ⚙ Gear and 💎 Core from each level in 🧬 EVOLVE for permanent damage, speed, crit and starting-energy boosts. Stuck on a level? Come here!", focus: "btnOpenMenuQuick" },
+            { title: "🎓 TUTORIAL 8/8 • START THE WAVE!", desc: "When ready, start the wave with the top-right button. Calling later waves early earns bonus ⚡; otherwise they arrive after 7 s. Protect the planet, Commander!", focus: "btnNextWaveEarly" }
           ]
         }
       };
@@ -2090,8 +2100,7 @@
           const menuOpen = !document.getElementById("modalPauseMenu").classList.contains("hidden");
           pauseBtn.textContent = menuOpen ? (isEn ? "Resume ▶" : "Devam Et ▶") : (isEn ? "Pause" : "Duraklat");
         }
-        const trNextBtn = document.getElementById("btnTrainerNext");
-        if (trNextBtn) trNextBtn.textContent = isEn ? "Next ➔" : "İleri ➔";
+        if (state.trainerActive) updateTrainerUI();
       }
 
       function getPlanetForLevel(level) {
@@ -2442,6 +2451,7 @@
         waveWaitingForPlayer: true,
         orbitalCooldown: 0,
         orbitalFlashTimer: 0,
+        baseHitFlash: 0,
         selectedSocketIndex: 0,
         sectorIndex: 0,
         manualSectorOverride: false,
@@ -2510,6 +2520,21 @@
           novaCritPct: 8 + (lv - 1) * 2.5,
           novaOrbitalCdRed: 6 + (lv - 1) * 1.5
         };
+      }
+
+      // Single source for how each hero is presented (lobby card, flagship, toasts).
+      function getHeroMeta(heroKey) {
+        const key = ["vega", "kaan", "nova"].includes(heroKey) ? heroKey : "vega";
+        const info = getHeroInfo(key);
+        const meta = {
+          vega: { emoji: "⚡", color: "#facc15", glow: "rgba(250,204,21,0.55)", nameTr: "Amiral Vega", nameEn: "Admiral Vega",
+            bonusTr: `Lazer & Tesla +%${info.vegaDmgBonusPct} hasar, +${info.vegaRangeBonus} menzil`, bonusEn: `Laser & Tesla +${info.vegaDmgBonusPct}% damage, +${info.vegaRangeBonus} range` },
+          kaan: { emoji: "🛠️", color: "#34d399", glow: "rgba(52,211,153,0.55)", nameTr: "Mühendis Kaan", nameEn: "Engineer Kaan",
+            bonusTr: `Kuleler %${info.kaanDiscountPct} ucuz, onarım +%${info.kaanRepairPct}`, bonusEn: `Towers ${info.kaanDiscountPct}% cheaper, repair +${info.kaanRepairPct}%` },
+          nova: { emoji: "☄️", color: "#fb923c", glow: "rgba(251,146,60,0.55)", nameTr: "Kaptan Nova", nameEn: "Captain Nova",
+            bonusTr: `Kritik +%${info.novaCritPct}, Orbital bekleme -%${info.novaOrbitalCdRed}`, bonusEn: `Crit +${info.novaCritPct}%, Orbital cooldown -${info.novaOrbitalCdRed}%` }
+        }[key];
+        return { key, lv: info.lv, ...meta, name: L(meta.nameTr, meta.nameEn), bonus: L(meta.bonusTr, meta.bonusEn) };
       }
 
       function addActiveHeroExperience(amount = 1) {
@@ -2664,7 +2689,8 @@
       }
       function getMaxBaseHp() { return 20 + (Balance.level(state, "hpLv") - 1) * 2; }
       function getStartingGold() {
-        const earlyHelp = state.level <= 3 ? 45 : (state.level <= 5 ? 30 : 0);
+        // Small head start only on the first three levels; levels 4+ start from the base amount.
+        const earlyHelp = state.level <= 3 ? 15 : 0;
         const endlessBonus = state.endlessMode ? 65 : 0;
         return 175 + earlyHelp + endlessBonus + (Balance.level(state, "goldLv") - 1) * 10;
       }
@@ -3138,7 +3164,8 @@
       let repairBeams = [];
       let spawnQueue = [];
       let spawnTimer = 0;
-      let waveBreakTimer = 3.5;
+      // Dalga zamanlaması kuralları www/wave-flow.js içinde (erken çağırma, otomatik başlatma, bölüm sonu).
+      const waveFlow = window.WaveFlow.createWaveFlow();
       let waveInProgress = false;
       let laserBeams = [];
       let muzzleFlashes = [];
@@ -3158,10 +3185,32 @@
         }
         banner.classList.remove("hidden");
         const dict = I18N[state.lang] || I18N.tr;
+        const total = dict.trainerSteps.length;
         const stepObj = dict.trainerSteps[state.trainerStep] || dict.trainerSteps[0];
-        document.getElementById("trainerStepBadge").textContent = `${state.trainerStep + 1}/4`;
+        document.getElementById("trainerStepBadge").textContent = `${state.trainerStep + 1}/${total}`;
         document.getElementById("trainerTitle").textContent = stepObj.title;
         document.getElementById("trainerDesc").textContent = stepObj.desc;
+        const nextBtn = document.getElementById("btnTrainerNext");
+        if (nextBtn) nextBtn.textContent = state.trainerStep >= total - 1 ? L("Başlat ▶", "Start ▶") : L("İleri ➔", "Next ➔");
+        setTrainerFocus(stepObj.focus);
+      }
+
+      // Pulsing outline on the UI element the current tutorial step talks about.
+      function setTrainerFocus(id) {
+        document.querySelectorAll(".gk-trainer-focus").forEach(el => el.classList.remove("gk-trainer-focus"));
+        if (!id || !state.trainerActive) return;
+        const el = document.getElementById(id);
+        if (el) el.classList.add("gk-trainer-focus");
+      }
+
+      function finishTrainer(showDoneToast) {
+        state.trainerActive = false;
+        state.trainerCompletedOnce = true;
+        try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
+        saveProgress();
+        updateTrainerUI();
+        setTrainerFocus(null);
+        if (showDoneToast) showToast(L("🎓 Eğitim tamamlandı! Gezegeni koru, Komutan!", "🎓 Tutorial complete! Protect the planet, Commander!"));
       }
 
       function applyLanguage() {
@@ -3248,6 +3297,7 @@
             state.sectorIndex = cycle[(state.level - 3) % cycle.length];
           }
         }
+        SoundFX.setMusicTheme(state.endlessMode ? 5 : window.SpaceTheme.paletteIndexForLevel(state.level));
         const preset = SECTOR_PRESETS[state.sectorIndex] || SECTOR_PRESETS[0];
         const rawPaths = (preset.paths && preset.paths.length > 0) ? preset.paths : [preset.waypoints];
         // Bölüm 1-2: 1 kapı, Bölüm 3-5: 2 kapı, Bölüm 6+ veya Sonsuz: haritadaki tüm (2-3) kapılar aktif!
@@ -3340,7 +3390,6 @@
 
         state.waveWaitingForPlayer = true;
         waveInProgress = false;
-        waveBreakTimer = 4.0;
         SoundFX.isBossAtmosphere = false;
 
         activeEnemies = [];
@@ -3357,13 +3406,17 @@
 
         // Eğitim (Trainer) sekmesi yalnızca oyuna İLK KEZ girildiğinde (Bölüm 1) bir defa açılır, bir daha otomatik gelmez!
         if (state.level === 1 && state.unlockedLevel === 1 && !state.trainerCompletedOnce && localStorage.getItem("gk_tutorial_shown_once") !== "1") {
+          // Marked as seen only in finishTrainer(): startLevel also runs once behind the
+          // lobby at boot, and persisting here used to consume the tutorial unseen.
           state.trainerActive = true;
           state.trainerStep = 0;
-          state.trainerCompletedOnce = true;
-          try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
-          saveProgress();
         } else {
           state.trainerActive = false;
+        }
+        waveFlow.reset({ totalWaves: state.totalWaves, endless: state.endlessMode, holdFirstWave: state.trainerActive });
+        if (!state.trainerActive) {
+          const hm = getHeroMeta(state.activeHero);
+          floatingTexts.push({ x: VIRTUAL_W / 2, y: VIRTUAL_H - 150, text: `${hm.emoji} ${hm.name} ★${hm.lv}`, color: hm.color, life: 2.2 });
         }
 
         document.getElementById("bossAlertBanner").classList.add("hidden");
@@ -3394,7 +3447,7 @@
           if (alertEl) alertEl.textContent = `⚠ ${state.lang === "en" ? bossVar.nameEn : bossVar.nameTr} ⚠`;
           document.getElementById("bossAlertBanner").classList.remove("hidden");
           SoundFX.isBossAtmosphere = true;
-          SoundFX.bossPulse();
+          SoundFX.bossAlert();
           triggerHaptic("heavy");
         } else {
           document.getElementById("bossAlertBanner").classList.add("hidden");
@@ -3430,8 +3483,9 @@
       }
 
       async function spawnNextWave() {
-        if (state.waveStartPending || waveInProgress || state.levelEnded) return;
-        if (window.GameMonetization?.isInterstitialDue(state)) {
+        if (state.waveStartPending || state.levelEnded || !waveFlow.hasMoreWaves()) return;
+        // Interstitials are only considered before the first wave, never in the middle of a fight.
+        if (waveFlow.launched === 0 && window.GameMonetization?.isInterstitialDue(state)) {
           const runId = state.levelRunId;
           const clears = state.adClears;
           state.waveStartPending = true;
@@ -3448,39 +3502,50 @@
       }
 
       function beginWaveAfterInterstitial() {
-        if (!state.endlessMode && state.waveIndex >= state.totalWaves) return;
+        const waveIdx = waveFlow.launch();
+        if (waveIdx === null) return;
+        SoundFX.waveStart();
+        state.waveIndex = waveIdx;
         state.waveWaitingForPlayer = false;
-        spawnQueue = buildWaveQueue(state.level, state.waveIndex);
-        spawnTimer = 0.15;
+        if (spawnQueue.length === 0) spawnTimer = 0.15;
+        for (const key of buildWaveQueue(state.level, waveIdx)) spawnQueue.push({ key, wave: waveIdx });
         waveInProgress = true;
-        if (state.trainerActive && state.trainerStep >= 1) {
-          state.trainerStep = 3;
-          state.trainerCompletedOnce = true;
-          try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
-          saveProgress();
-          updateTrainerUI();
-          setTimeout(() => {
-            if (state.trainerActive) {
-              state.trainerActive = false;
-              updateTrainerUI();
-            }
-          }, 4000);
-        }
+        if (state.endlessMode && waveIdx + 1 > (state.bestEndlessWave || 0)) state.bestEndlessWave = waveIdx + 1;
+        if (state.trainerActive) finishTrainer(true);
         updateHUD();
         updateWaveBannerUI();
       }
 
+      function rewardClearedField() {
+        if (state.endlessMode) {
+          const cleared = waveFlow.launched;
+          const bonusGold = 24 + Math.min(40, cleared * 2);
+          const bonusGear = Balance.gearGain(12 + cleared * 3);
+          state.gold += bonusGold;
+          state.gear += bonusGear;
+          if (cleared % 3 === 0) state.cyberCore += 1;
+          if (cleared % 5 === 0) addActiveHeroExperience(1);
+          saveProgress();
+          showToast(L(`♾️ Sonsuz Dalga ${cleared} Geçildi! +${bonusGold}⚡ & +${bonusGear}⚙`, `♾️ Endless wave ${cleared} cleared! +${bonusGold}⚡ & +${bonusGear}⚙`));
+        } else {
+          state.gold += 18;
+          showToast(L(`✔ Dalga ${waveFlow.launched} temizlendi! +18 ⚡ Enerji`, `✔ Wave ${waveFlow.launched} cleared! +18 ⚡ Energy`));
+        }
+        updateHUD();
+        updateSocketInspector();
+      }
+
       let swarmVariantToggle = false;
-      function spawnEnemyFromArchetype(key, customPos = null) {
+      function spawnEnemyFromArchetype(key, customPos = null, waveIdx = state.waveIndex) {
         const arch = ENEMY_ARCHETYPES[key] || ENEMY_ARCHETYPES.swarm;
-        const effLv = state.endlessMode ? Math.max(state.level, 4 + Math.floor(state.waveIndex * 1.35)) : state.level;
-        const diff = calculateDifficulty(effLv, state.waveIndex);
+        const effLv = state.endlessMode ? Math.max(state.level, 4 + Math.floor(waveIdx * 1.35)) : state.level;
+        const diff = calculateDifficulty(effLv, waveIdx);
         const miniBossScale = (key === "boss" && diff.isMiniBossLevel && !state.endlessMode) ? 0.62 : 1.0;
         const maxHp = Math.round(arch.baseHp * diff.hpMult * miniBossScale);
         const armor = Math.min(0.86, arch.baseArmor + diff.armorBonus);
         swarmVariantToggle = !swarmVariantToggle;
         const bossVariant = arch.isBoss
-          ? BOSS_VARIANTS[Math.floor((effLv + state.waveIndex) / 5) % BOSS_VARIANTS.length]
+          ? BOSS_VARIANTS[Math.floor((effLv + waveIdx) / 5) % BOSS_VARIANTS.length]
           : null;
 
         const pathIndex = (customPos && typeof customPos.pathIndex === "number")
@@ -3546,6 +3611,7 @@
         }
 
         enemy.hp -= finalDmg;
+        enemy.hitFlashUntil = sceneAnimationTime + (isCrit ? 0.12 : 0.08);
 
         if (state.qualityMode !== "performance" || isCrit || isTrueDamage) {
           floatingTexts.push({
@@ -3582,7 +3648,11 @@
           }
           const goldEarned = Math.round(enemy.arch.goldReward * getBountyMultiplier());
           state.gold += goldEarned;
-          const pCount = state.qualityMode === "performance" ? 6 : (enemy.arch.isBoss ? 24 : 10);
+          const deathColor = enemy.variantPurple ? "#c084fc" : enemy.arch.color;
+          const deathR = enemy.arch.radius || 10;
+          shockwaves.push({ x: enemy.x, y: enemy.y, maxR: deathR * (enemy.arch.isBoss ? 4.2 : 2.6), r: deathR * 0.6, color: deathColor, life: enemy.arch.isBoss ? 0.55 : 0.28 });
+          if (enemy.arch.isBoss) shockwaves.push({ x: enemy.x, y: enemy.y, maxR: deathR * 7, r: deathR, color: "#fde047", life: 0.75 });
+          const pCount = state.qualityMode === "performance" ? 6 : (enemy.arch.isBoss ? 30 : 12);
           spawnParticles(enemy.x, enemy.y, enemy.variantPurple ? "#c084fc" : enemy.arch.color, pCount);
           floatingTexts.push({
             x: enemy.x,
@@ -3636,25 +3706,40 @@
         const gateTagTr = (gateCount > 1 ? `⚠️ ${gateCount} Kapı` : `1 Giriş`) + wxTr;
         const gateTagEn = (gateCount > 1 ? `⚠️ ${gateCount} Gates` : `1 Gate`) + wxEn;
         const pillBox = document.getElementById("waveStatusPillBox");
-        if (state.waveWaitingForPlayer) {
-          if (pillBox) pillBox.className = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-100 transition-opacity duration-300";
+        const calmPill = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-100 transition-opacity duration-300";
+        const combatPill = "bg-slate-950/60 border border-sky-500/25 px-2 py-0.5 rounded-lg text-[9.5px] text-cyan-200/90 font-medium truncate flex items-center gap-1 opacity-90 transition-opacity duration-300";
+        const nextWave = Math.min(waveFlow.launched + 1, state.endlessMode ? Infinity : state.totalWaves);
+        const secondsLeft = waveFlow.secondsLeft;
+        const bonus = waveFlow.earlyBonus();
+        const bonusTag = bonus > 0 ? ` +${bonus}⚡` : "";
+        let label = "";
+
+        if (waveFlow.launched === 0) {
+          if (pillBox) pillBox.className = calmPill;
           banner.textContent = state.endlessMode
-            ? L(`♾️ SONSUZ (${gateCount} Kapı) — Kule kurup başlatın!`, `♾️ ENDLESS (${gateCount} Gates) — Build & start!`)
-            : (state.lang === "en"
-              ? `${planet.shortName} • ${gateTagEn}`
-              : `🌍 ${planet.shortName} • ${gateTagTr}`);
-          startBtn.classList.remove("hidden");
-        } else if (!waveInProgress) {
-          if (pillBox) pillBox.className = "tactical-glass px-2.5 py-1 rounded-xl text-[10px] text-cyan-100 font-medium truncate flex items-center gap-1.5 opacity-95 transition-opacity duration-300";
-          banner.textContent = state.lang === "en"
-            ? `Next Wave (${state.waveIndex + 1}/${waveTotalStr}) [${gateTagEn}]: ${Math.max(0, waveBreakTimer).toFixed(1)}s`
-            : `Sonraki Dalga (${state.waveIndex + 1}/${waveTotalStr}) [${gateTagTr}]: ${Math.max(0, waveBreakTimer).toFixed(1)} sn`;
+            ? L(`♾️ SONSUZ (${gateCount} Kapı) — Kule kur ve başlat!`, `♾️ ENDLESS (${gateCount} Gates) — Build & start!`)
+            : L(`🌍 ${planet.shortName} • ${gateTagTr}`, `${planet.shortName} • ${gateTagEn}`);
+          label = secondsLeft === null
+            ? L("Dalgayı Başlat ▶", "Start Wave ▶")
+            : L(`▶ Başlat ${Math.ceil(secondsLeft)} sn${bonusTag}`, `▶ Start ${Math.ceil(secondsLeft)}s${bonusTag}`);
+        } else if (!waveFlow.hasMoreWaves()) {
+          if (pillBox) pillBox.className = combatPill;
+          banner.textContent = L(`🔥 Son Dalga ${state.totalWaves}/${waveTotalStr} • ${gateTagTr}`, `🔥 Final Wave ${state.totalWaves}/${waveTotalStr} • ${gateTagEn}`);
+        } else if (secondsLeft !== null) {
+          if (pillBox) pillBox.className = calmPill;
+          banner.textContent = L(`Sonraki Dalga (${nextWave}/${waveTotalStr}) [${gateTagTr}]: ${secondsLeft.toFixed(1)} sn`,
+                                 `Next Wave (${nextWave}/${waveTotalStr}) [${gateTagEn}]: ${secondsLeft.toFixed(1)}s`);
+          label = L(`⏩ Şimdi Başlat${bonusTag}`, `⏩ Start Now${bonusTag}`);
+        } else {
+          if (pillBox) pillBox.className = combatPill;
+          banner.textContent = L(`🔥 Dalga ${waveFlow.launched}/${waveTotalStr} • ${gateTagTr}`, `🔥 Wave ${waveFlow.launched}/${waveTotalStr} • ${gateTagEn}`);
+          label = L(`⏩ ${nextWave}. Dalgayı Çağır${bonusTag}`, `⏩ Call Wave ${nextWave}${bonusTag}`);
+        }
+
+        if (label) {
+          if (startBtn.textContent !== label) startBtn.textContent = label;
           startBtn.classList.remove("hidden");
         } else {
-          if (pillBox) pillBox.className = "bg-slate-950/60 border border-sky-500/25 px-2 py-0.5 rounded-lg text-[9.5px] text-cyan-200/90 font-medium truncate flex items-center gap-1 opacity-75 transition-opacity duration-300";
-          banner.textContent = state.lang === "en"
-            ? `🔥 Wave ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagEn}`
-            : `🔥 Dalga ${state.waveIndex + 1}/${waveTotalStr} • ${gateTagTr}`;
           startBtn.classList.add("hidden");
         }
       }
@@ -3681,6 +3766,9 @@
           state.baseHp = Math.max(0, state.baseHp - dmg);
         }
         spawnParticles(x, y, "#f43f5e", 14);
+        state.baseHitFlash = Math.min(0.9, (state.baseHitFlash || 0) + 0.45 + dmg * 0.1);
+        triggerHaptic(dmg >= 3 ? "heavy" : "medium");
+        SoundFX.baseHit?.();
         updateHUD();
       }
 
@@ -3703,6 +3791,7 @@
           state.orbitalCooldown = Math.max(0, state.orbitalCooldown - dt);
           updateOrbitalButtonUI();
         }
+        if (state.baseHitFlash > 0) state.baseHitFlash = Math.max(0, state.baseHitFlash - dt * 1.6);
         if (state.orbitalFlashTimer > 0) {
           state.orbitalFlashTimer = Math.max(0, state.orbitalFlashTimer - dt);
         }
@@ -3793,56 +3882,26 @@
           }
         }
 
-        if (state.waveWaitingForPlayer) {
-          updateWaveBannerUI();
-        } else if (!waveInProgress) {
-          waveBreakTimer -= dt;
-          if (waveBreakTimer > 0) {
-            updateWaveBannerUI();
-          } else {
-            spawnNextWave();
-          }
-        } else {
-          updateWaveBannerUI();
-          if (spawnQueue.length > 0) {
-            spawnTimer -= dt;
-            if (spawnTimer <= 0) {
-              const nextKey = spawnQueue.shift();
-              spawnEnemyFromArchetype(nextKey);
-              spawnTimer = nextKey === "swarm" ? 0.45 : 0.85;
-            }
-          } else if (activeEnemies.length === 0) {
-            if (state.endlessMode) {
-              state.waveIndex++;
-              if (state.waveIndex > (state.bestEndlessWave || 0)) {
-                state.bestEndlessWave = state.waveIndex;
-              }
-              waveInProgress = false;
-              waveBreakTimer = 3.8;
-              const bonusGold = 24 + Math.min(40, state.waveIndex * 2);
-              const bonusGear = Balance.gearGain(12 + state.waveIndex * 3);
-              state.gold += bonusGold;
-              state.gear += bonusGear;
-              if (state.waveIndex % 3 === 0) state.cyberCore += 1;
-              if (state.waveIndex % 5 === 0) addActiveHeroExperience(1);
-              saveProgress();
-              showToast(`♾️ Sonsuz Dalga ${state.waveIndex} Geçildi! +${bonusGold}⚡ & +${bonusGear}⚙`);
-              updateHUD();
-              updateSocketInspector();
-            } else if (state.waveIndex + 1 < state.totalWaves) {
-              state.waveIndex++;
-              waveInProgress = false;
-              waveBreakTimer = 4.5;
-              state.gold += 18;
-              showToast(`✔ Dalga ${state.waveIndex} temizlendi! +18 ⚡ Enerji`);
-              updateHUD();
-              updateSocketInspector();
-            } else {
-              handleLevelVictory();
-              return;
-            }
+        // Dalga akışı: kuyruktan doğur, saha temizlenince ödül ver, sayaç bitince/çağrılınca yeni dalga.
+        if (spawnQueue.length > 0) {
+          spawnTimer -= dt;
+          if (spawnTimer <= 0) {
+            const next = spawnQueue.shift();
+            spawnEnemyFromArchetype(next.key, null, next.wave);
+            spawnTimer = next.key === "swarm" ? 0.45 : 0.85;
           }
         }
+        const fieldClear = spawnQueue.length === 0 && activeEnemies.length === 0;
+        if (waveInProgress && fieldClear) {
+          waveInProgress = false;
+          if (waveFlow.isComplete(true)) {
+            handleLevelVictory();
+            return;
+          }
+          rewardClearedField();
+        }
+        if (waveFlow.tick(dt, fieldClear)) spawnNextWave();
+        updateWaveBannerUI();
 
         // Düşman hareketi
         for (let i = activeEnemies.length - 1; i >= 0; i--) {
@@ -4396,6 +4455,7 @@
         if (state.levelEnded) return;
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
+        SoundFX.victory();
         const diff = calculateDifficulty(state.level, 0);
         const planet = getPlanetForLevel(state.level);
         const clearSec = Number(Math.max(8.5, state.levelElapsedSeconds).toFixed(1));
@@ -4480,6 +4540,7 @@
       function handleGameOver() {
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
+        SoundFX.defeat();
         const planet = getPlanetForLevel(state.level);
         const consolationGear = Balance.gearGain(Math.round(calculateDifficulty(state.level, 0).gearReward * 0.25));
         state.lastEarnedGear = consolationGear;
@@ -4926,6 +4987,91 @@
         ctx.restore();
       }
 
+      // UZAY ARKA PLANI: gezegene özel gökyüzü, iki katmanlı nebula, parıldayan
+      // yıldızlar ve ufukta yükselen uzak bir dev gezegen (her bölümde farklı ton).
+      function drawSpaceBackdrop(ctx, pal, nowAnim, useHighDetail) {
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, 125);
+        skyGrad.addColorStop(0, pal.sky[0]);
+        skyGrad.addColorStop(0.6, pal.sky[1]);
+        skyGrad.addColorStop(1, pal.sky[2]);
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, VIRTUAL_W, 125);
+
+        const clouds = [[120, 30, 170, pal.nebula[1]], [360, 50, 190, pal.nebula[0]]];
+        clouds.forEach(([cx, cy, cr, col], i) => {
+          const drift = Math.sin(nowAnim * 0.15 + i * 2) * 12;
+          const g = ctx.createRadialGradient(cx + drift, cy, 8, cx + drift, cy, cr);
+          g.addColorStop(0, col);
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, VIRTUAL_W, 125);
+        });
+
+        STARFIELD.forEach((st, i) => {
+          const tw = useHighDetail ? 0.55 + 0.45 * Math.sin(nowAnim * (1.2 + (i % 5) * 0.4) + i) : 1;
+          ctx.fillStyle = `rgba(${pal.star}, ${st.alpha * tw})`;
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Ufukta yükselen uzak dev gezegen
+        const bx = 400, by = 78, br = 46;
+        ctx.save();
+        if (useHighDetail) { ctx.shadowColor = pal.backdrop[0]; ctx.shadowBlur = 22; }
+        const bg = ctx.createRadialGradient(bx - br * 0.4, by - br * 0.45, 4, bx, by, br);
+        bg.addColorStop(0, pal.backdrop[0]);
+        bg.addColorStop(0.7, pal.backdrop[1]);
+        bg.addColorStop(1, "#020617");
+        ctx.fillStyle = bg;
+        ctx.beginPath(); ctx.arc(bx, by, br, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = pal.backdrop[0];
+        ctx.globalAlpha = 0.45; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.ellipse(bx, by, br * 1.55, br * 0.28, -0.25, Math.PI * 0.95, Math.PI * 2.05); ctx.stroke();
+        ctx.restore();
+      }
+
+      // Aktif kahramanın amiral gemisi gezegenin yörüngesinde döner (kahraman sahada görünür olsun).
+      function drawHeroFlagship(ctx, PR, t, hi) {
+        const hm = getHeroMeta(state.activeHero);
+        const ang = -t * 0.9 + 1.2;
+        const ox = Math.cos(ang) * (PR + 19);
+        const oy = Math.sin(ang) * (PR * 0.5) - 6;
+        const heading = Math.atan2(Math.cos(ang) * (PR * 0.5), -Math.sin(ang) * (PR + 19));
+        ctx.save();
+        // Engine trail
+        for (let i = 1; i <= 5; i++) {
+          const a2 = ang + i * 0.07;
+          ctx.globalAlpha = 0.28 - i * 0.045;
+          ctx.fillStyle = hm.color;
+          ctx.beginPath();
+          ctx.arc(Math.cos(a2) * (PR + 19), Math.sin(a2) * (PR * 0.5) - 6, 3.2 - i * 0.45, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        ctx.translate(ox, oy);
+        ctx.rotate(heading);
+        if (hi) { ctx.shadowColor = hm.color; ctx.shadowBlur = 10; }
+        ctx.fillStyle = "#0f172a";
+        ctx.strokeStyle = hm.color;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        if (hm.key === "kaan") {
+          ctx.roundRect(-6, -5, 12, 10, 2.5);
+        } else if (hm.key === "nova") {
+          ctx.moveTo(9, 0); ctx.lineTo(-6, -5); ctx.lineTo(-3, 0); ctx.lineTo(-6, 5); ctx.closePath();
+        } else {
+          ctx.moveTo(9, 0); ctx.lineTo(-5, -6.5); ctx.lineTo(-2, 0); ctx.lineTo(-5, 6.5); ctx.closePath();
+        }
+        ctx.fill();
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = hm.color;
+        ctx.beginPath(); ctx.arc(1.5, 0, 1.9, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+
       // HER BÖLÜMDE (1..200) DEĞİŞEN CANLI VARIŞ GEZEGENİ VE KORUMA KALKANI
       function drawProtectedPlanet(ctx, nx, ny, nowAnim, useHighDetail) {
         const planet = getPlanetForLevel(state.level);
@@ -4937,63 +5083,75 @@
         ctx.strokeStyle = planet.midColor;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.ellipse(0, 14, 46, 18, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 16, 50, 15, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        // Dönen 3D Gezegen Küresi
-        const pGrad = ctx.createRadialGradient(-10, -10, 4, 0, 0, 32);
-        pGrad.addColorStop(0, planet.glowColor);
-        pGrad.addColorStop(0.45, planet.midColor);
-        pGrad.addColorStop(0.85, planet.coreColor);
-        pGrad.addColorStop(1, "#020617");
-
-        ctx.fillStyle = pGrad;
+        // Dönen 3D Gezegen Küresi (büyük, türüne özgü yüzeyli)
+        const PR = 37;
+        const pal = window.SpaceTheme.paletteForLevel(state.level);
         if (useHighDetail) {
-          ctx.shadowColor = planet.midColor;
-          ctx.shadowBlur = 18;
+          const atmo = ctx.createRadialGradient(0, -2, PR * 0.8, 0, -2, PR * 1.45);
+          atmo.addColorStop(0, planet.glowColor);
+          atmo.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.globalAlpha = 0.35 + Math.sin(nowAnim * 2) * 0.08;
+          ctx.fillStyle = atmo;
+          ctx.beginPath(); ctx.arc(0, -2, PR * 1.45, 0, Math.PI * 2); ctx.fill();
+          ctx.globalAlpha = 1;
         }
-        ctx.beginPath();
-        ctx.arc(0, -2, 29, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
 
-        // Gezegen Yüzey Kıtaları / Atmosfer Kuşakları (Dönen Efekt)
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(0, -2, 28.5, 0, Math.PI * 2);
-        ctx.clip();
-        const drift = (nowAnim * 12) % 40;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
-        ctx.beginPath();
-        ctx.ellipse(-18 + drift, -10, 16, 5, 0.15, 0, Math.PI * 2);
-        ctx.ellipse(14 - drift * 0.7, 6, 18, 6, -0.1, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        // Gezegen Halkası (Bölüme göre eğimli)
+        // Halkanın arka yarısı (gezegenin arkasında kalır)
+        const ringTilt = planet.ringTilt + Math.sin(nowAnim * 0.8) * 0.04;
         if (planet.hasRing) {
           ctx.save();
-          ctx.rotate(planet.ringTilt + Math.sin(nowAnim * 0.8) * 0.04);
-          ctx.strokeStyle = planet.ringColor;
-          ctx.globalAlpha = 0.70;
-          ctx.lineWidth = 3.5;
-          ctx.beginPath();
-          ctx.ellipse(0, -2, 46, 11, 0, 0, Math.PI * 2);
-          ctx.stroke();
+          ctx.rotate(ringTilt);
+          ctx.strokeStyle = planet.ringColor; ctx.globalAlpha = 0.45; ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.ellipse(0, -2, PR * 1.6, PR * 0.36, 0, Math.PI, Math.PI * 2); ctx.stroke();
           ctx.restore();
         }
 
-        // Yörüngede Dönen Uydu Ay (Moonlet)
+        const pGrad = ctx.createRadialGradient(-PR * 0.35, -PR * 0.4, 4, 0, -2, PR);
+        pGrad.addColorStop(0, planet.glowColor);
+        pGrad.addColorStop(0.45, planet.midColor);
+        pGrad.addColorStop(1, planet.coreColor);
+        ctx.fillStyle = pGrad;
+        if (useHighDetail) { ctx.shadowColor = planet.midColor; ctx.shadowBlur = 20; }
+        ctx.beginPath();
+        ctx.arc(0, -2, PR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.save();
+        ctx.translate(0, -2);
+        ctx.beginPath();
+        ctx.arc(0, 0, PR - 0.5, 0, Math.PI * 2);
+        ctx.clip();
+        window.SpaceTheme.drawPlanetSurface(ctx, pal.kind, PR, nowAnim, state.level, { glow: planet.glowColor });
+        ctx.restore();
+
+        // Halkanın ön yarısı
+        if (planet.hasRing) {
+          ctx.save();
+          ctx.rotate(ringTilt);
+          ctx.strokeStyle = planet.ringColor; ctx.globalAlpha = 0.85; ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.ellipse(0, -2, PR * 1.6, PR * 0.36, 0, 0, Math.PI); ctx.stroke();
+          ctx.restore();
+        }
+
+        // Yörüngede Dönen Uydu Ay (önden-arkadan geçer)
         if (planet.hasMoon) {
           const mAng = nowAnim * 1.6;
-          const mx = Math.cos(mAng) * 39;
-          const my = Math.sin(mAng) * 14 - 4;
-          ctx.fillStyle = "#e2e8f0";
-          ctx.beginPath();
-          ctx.arc(mx, my, 4.2, 0, Math.PI * 2);
-          ctx.fill();
+          const mx = Math.cos(mAng) * PR * 1.35;
+          const my = Math.sin(mAng) * PR * 0.42 - 4;
+          if (Math.sin(mAng) > 0 || Math.abs(mx) > PR) {
+            ctx.fillStyle = "#e2e8f0";
+            ctx.beginPath(); ctx.arc(mx, my, 4.6, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "rgba(2,6,23,0.45)";
+            ctx.beginPath(); ctx.arc(mx + 1.5, my + 1.2, 3.6, 0, Math.PI * 2); ctx.fill();
+          }
         }
+
+        drawHeroFlagship(ctx, PR, nowAnim, useHighDetail);
 
         // Altıgen Koruyucu Gezegen Kalkan Kubbesi
         if (state.hqShieldHp > 0 || state.hqInvulnerableTimer > 0) {
@@ -5002,7 +5160,7 @@
           ctx.fillStyle = `rgba(56, 189, 248, ${domePulse * 0.5})`;
           ctx.lineWidth = state.hqInvulnerableTimer > 0 ? 2.6 : 1.6;
           ctx.beginPath();
-          ctx.arc(0, -2, 36, 0, Math.PI * 2);
+          ctx.arc(0, -2, PR + 8, 0, Math.PI * 2);
           ctx.fill();
           ctx.stroke();
         }
@@ -5012,14 +5170,15 @@
         ctx.strokeStyle = planet.midColor;
         ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.roundRect(-48, 22, 96, 15, 5);
+        ctx.roundRect(-24, 3, 48, 15, 7);
         ctx.fill();
         ctx.stroke();
 
         ctx.fillStyle = "#f8fafc";
-        ctx.font = "bold 8.5px Orbitron, sans-serif";
+        ctx.font = "bold 9.5px Orbitron, sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(`🌍 ${planet.shortName} (${state.baseHp}♥)`, 0, 32.5);
+        ctx.fillStyle = state.baseHp <= 5 ? "#fda4af" : "#f8fafc";
+        ctx.fillText(`♥ ${state.baseHp}`, 0, 13.5);
 
         ctx.restore();
       }
@@ -5149,6 +5308,19 @@
           ctx.ellipse(x, y + 3, 12 - r * 3.2, 7 - r * 1.9, 0, 0, Math.PI * 2);
           ctx.stroke();
         }
+        // Tier pylons on the hex corners: Lv2 lights three, Lv3 lights all six with a glow.
+        if ((level || 1) >= 2) {
+          const lit = level >= 3 ? 6 : 3;
+          ctx.fillStyle = level >= 3 ? "#fde047" : fxWithAlpha(color, 1);
+          if (highDetail) { ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = level >= 3 ? 8 : 4; }
+          for (let i = 0; i < 6; i += 6 / lit) {
+            const a = Math.PI / 6 + (i * Math.PI) / 3;
+            ctx.beginPath();
+            ctx.arc(x + Math.cos(a) * 19, y + 3 + Math.sin(a) * 11.5, level >= 3 ? 2.6 : 2.1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.shadowBlur = 0;
+        }
         ctx.restore();
       }
 
@@ -5204,6 +5376,22 @@
         ctx.restore();
       }
 
+      // Planet took damage: red pulse from the screen edges, strength = flash level.
+      function fxDamageVignette(ctx, amount) {
+        if (amount <= 0.01) return;
+        const { cssW, cssH, dpr } = viewTransform;
+        if (!cssW || !cssH) return;
+        const r = Math.hypot(cssW, cssH) * 0.5;
+        const g = ctx.createRadialGradient(cssW / 2, cssH / 2, r * 0.45, cssW / 2, cssH / 2, r);
+        g.addColorStop(0, "rgba(244, 63, 94, 0)");
+        g.addColorStop(1, `rgba(244, 63, 94, ${Math.min(0.6, amount * 0.7)})`);
+        ctx.save();
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, cssW, cssH);
+        ctx.restore();
+      }
+
       function drawCombatDrone(ctx, dr, time, detailed) {
         ctx.save();
         ctx.translate(dr.x, dr.y);
@@ -5234,8 +5422,18 @@
         const dpr = viewTransform.dpr;
         ctx.save();
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.fillStyle = "#030611";
+        // Harita dışındaki boşluk da gezegenin uzay tonunu taşır (siyah bant yok).
+        const outerPal = window.SpaceTheme.paletteForLevel(state.level);
+        const outerGrad = ctx.createLinearGradient(0, 0, 0, viewTransform.cssH);
+        outerGrad.addColorStop(0, outerPal.sky[0]);
+        outerGrad.addColorStop(0.5, outerPal.sky[1]);
+        outerGrad.addColorStop(1, outerPal.ground[1]);
+        ctx.fillStyle = outerGrad;
         ctx.fillRect(0, 0, viewTransform.cssW, viewTransform.cssH);
+        ctx.globalAlpha = 0.55;
+        ctx.fillStyle = "#020617";
+        ctx.fillRect(0, 0, viewTransform.cssW, viewTransform.cssH);
+        ctx.globalAlpha = 1;
 
         ctx.translate(viewTransform.offsetX, viewTransform.offsetY);
         ctx.scale(viewTransform.scale, viewTransform.scale);
@@ -5245,60 +5443,24 @@
         const useHighDetail = state.qualityMode !== "performance";
 
         // 1. ÜST UZAY GÖKYÜZÜ, NEBULA, AY VE UFUK DAĞLARI
-        const skyGrad = ctx.createLinearGradient(0, 0, 0, 125);
-        skyGrad.addColorStop(0, "#040b1c");
-        skyGrad.addColorStop(0.65, "#0d2238");
-        skyGrad.addColorStop(1, "#1e293b");
-        ctx.fillStyle = skyGrad;
-        ctx.fillRect(0, 0, VIRTUAL_W, 125);
-
-        const nebGrad = ctx.createRadialGradient(340, 44, 10, 340, 44, 150);
-        nebGrad.addColorStop(0, preset.nebulaColor);
-        nebGrad.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = nebGrad;
-        ctx.fillRect(0, 0, VIRTUAL_W, 125);
-
-        STARFIELD.forEach(st => {
-          ctx.fillStyle = `rgba(241, 245, 249, ${st.alpha})`;
-          ctx.beginPath();
-          ctx.arc(st.x, st.y, st.size, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        ctx.save();
-        const moonX = 365;
-        const moonY = 42;
-        ctx.fillStyle = "#e2e8f0";
-        if (useHighDetail) {
-          ctx.shadowColor = "#bae6fd";
-          ctx.shadowBlur = 16;
-        }
-        ctx.beginPath();
-        ctx.arc(moonX, moonY, 21, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#cbd5e1";
-        ctx.beginPath();
-        ctx.arc(moonX - 6, moonY - 4, 4, 0, Math.PI * 2);
-        ctx.arc(moonX + 7, moonY + 5, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        const pal = window.SpaceTheme.paletteForLevel(state.level);
+        drawSpaceBackdrop(ctx, pal, nowAnim, useHighDetail);
 
         const groundGrad = ctx.createLinearGradient(0, 88, 0, VIRTUAL_H);
-        groundGrad.addColorStop(0, preset.outerGroundTop);
-        groundGrad.addColorStop(1, preset.outerGroundBottom);
+        groundGrad.addColorStop(0, pal.ground[0]);
+        groundGrad.addColorStop(1, pal.ground[1]);
         ctx.fillStyle = groundGrad;
         ctx.fillRect(0, 88, VIRTUAL_W, VIRTUAL_H - 88);
 
         // 2. TAM GENİŞLİKLİ YÜKSELTİLMİŞ KAYALIK PLATO
         ctx.save();
-        ctx.fillStyle = preset.plateauEdge;
+        ctx.fillStyle = pal.plateau[1];
         ctx.beginPath();
         ctx.roundRect(42, 92, VIRTUAL_W - 84, VIRTUAL_H - 156, 24);
         ctx.fill();
 
-        ctx.fillStyle = preset.plateauFill;
-        ctx.strokeStyle = "#475569";
+        ctx.fillStyle = pal.plateau[0];
+        ctx.strokeStyle = pal.plateau[2];
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.roundRect(42, 78, VIRTUAL_W - 84, VIRTUAL_H - 160, 22);
@@ -5307,7 +5469,7 @@
 
         ctx.save();
         ctx.clip();
-        ctx.strokeStyle = preset.gridColor;
+        ctx.strokeStyle = pal.grid;
         ctx.lineWidth = 1.1;
         for (let gx = 60; gx < VIRTUAL_W - 42; gx += 32) {
           ctx.beginPath();
@@ -5331,13 +5493,13 @@
         CRYSTAL_CLUSTERS.forEach((cr, idx) => drawCrystalCluster(ctx, cr.x, cr.y, cr.scale, nowAnim * 3 + idx));
 
         // 4. ÇOKLU GİRİŞLİ (MULTI-PATH) 90° ORTOGONAL SAVUNMA YOLLARI
-        const laneNeonColors = [preset.pathColor, "#e879f9", "#facc15"];
+        const laneNeonColors = [pal.accent, "#e879f9", "#facc15"];
         ACTIVE_PATHS.forEach((pathArr, pathIdx) => {
           ctx.save();
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
 
-          ctx.strokeStyle = "#080e1c";
+          ctx.strokeStyle = pal.road[0];
           ctx.lineWidth = 40;
           ctx.beginPath();
           pathArr.forEach((pt, idx) => {
@@ -5346,7 +5508,7 @@
           });
           ctx.stroke();
 
-          ctx.strokeStyle = "#152c4a";
+          ctx.strokeStyle = pal.road[1];
           ctx.lineWidth = 30;
           ctx.stroke();
 
@@ -5955,6 +6117,18 @@
           }
           ctx.restore();
 
+          if (e.hitFlashUntil > sceneAnimationTime) {
+            const k = Math.min(1, (e.hitFlashUntil - sceneAnimationTime) / 0.08);
+            ctx.save();
+            ctx.globalCompositeOperation = "lighter";
+            ctx.globalAlpha = 0.55 * k;
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(e.x, e.y, (e.arch.radius || 10) * 1.05, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
           ctx.save();
           if (e.slowTimer > 0) {
             ctx.strokeStyle = "#67e8f9";
@@ -6171,6 +6345,7 @@
 
         ctx.restore();
         fxVignette(ctx);
+        fxDamageVignette(ctx, state.baseHitFlash || 0);
         renderMiniMap();
       }
 
@@ -6608,6 +6783,7 @@
             angle: Math.PI / 2
           };
           spawnParticles(sock.x, sock.y, tDef.color, 12);
+          SoundFX.build();
 
           if (state.trainerActive && state.trainerStep <= 1) {
             state.trainerStep = 2;
@@ -6652,6 +6828,7 @@
           saveProgress();
         }
         spawnParticles(sock.x, sock.y, "#22d3ee", 14);
+        SoundFX.upgrade(t.level);
         showToast(`${tDef.name} Seviye ${t.level}'e yükseltildi!${t.level === 3 ? " (Evrim Dalı A/B Seçebilirsiniz!)" : ""}`);
         updateHUD();
         updateSocketInspector();
@@ -6683,23 +6860,19 @@
       });
       document.getElementById("btnTrainerNext").addEventListener("click", () => {
         SoundFX.uiClick();
-        if (state.trainerStep < 3) {
+        const total = (I18N[state.lang] || I18N.tr).trainerSteps.length;
+        if (state.trainerStep < total - 1) {
           state.trainerStep++;
           updateTrainerUI();
+        } else if (waveFlow.launched === 0) {
+          spawnNextWave(); // final step's button starts the first wave (and closes the tutorial)
         } else {
-          state.trainerActive = false;
-          state.trainerCompletedOnce = true;
-          saveProgress();
-          updateTrainerUI();
-          showToast("🎓 Eğitim tamamlandı! Gezegeni Koru seferinde başarılar Komutan!");
+          finishTrainer(true);
         }
       });
       document.getElementById("btnTrainerClose").addEventListener("click", () => {
         SoundFX.uiClick();
-        state.trainerActive = false;
-        state.trainerCompletedOnce = true;
-        saveProgress();
-        updateTrainerUI();
+        finishTrainer(false);
       });
 
       // DİL DEĞİŞTİRME (TR / EN)
@@ -6951,10 +7124,14 @@
       document.getElementById("btnNextWaveEarly").addEventListener("click", () => {
         SoundFX.init();
         SoundFX.uiClick();
-        if (state.waveWaitingForPlayer || !waveInProgress) {
-          waveBreakTimer = 0;
-          spawnNextWave();
+        if (state.waveStartPending || state.levelEnded || !waveFlow.hasMoreWaves()) return;
+        const bonus = waveFlow.earlyBonus();
+        if (bonus > 0) {
+          state.gold += bonus;
+          showToast(L(`⏩ Erken çağrı bonusu: +${bonus} ⚡`, `⏩ Early call bonus: +${bonus} ⚡`));
+          updateHUD();
         }
+        spawnNextWave();
       });
 
       document.getElementById("btnMuteAudio").addEventListener("click", (e) => {
@@ -7514,6 +7691,11 @@
         });
       }
 
+      document.getElementById("btnLobbyHeroCard").addEventListener("click", () => {
+        SoundFX.uiClick();
+        renderMissionsAndHeroesModal();
+        document.getElementById("modalMissions").classList.remove("hidden");
+      });
       document.getElementById("btnOpenMissionsTop").addEventListener("click", () => {
         SoundFX.uiClick();
         state.paused = true;
@@ -7765,10 +7947,25 @@
         const heroNamesEn = { vega: "⚡ Vega", kaan: "🛠️ Kaan", nova: "☄️ Nova" };
         const hMap = state.lang === "en" ? heroNamesEn : heroNamesTr;
 
+        const titleEl = document.getElementById("lobbyGameTitle");
+        if (titleEl) titleEl.textContent = L("GEZEGENİ KORU", "PROTECT THE PLANET");
+        const taglineEl = document.getElementById("lobbyGameTagline");
+        if (taglineEl) taglineEl.textContent = L("KULE SAVUNMA • 200 BÖLÜM", "TOWER DEFENSE • 200 LEVELS");
         const progEl = document.getElementById("lobbyProgressText");
         if (progEl) { const stars = Object.values(state.levelStars).reduce((a,b)=>a+b,0); progEl.textContent = L(`Bölüm ${lv}/200 • ${stars}/600 ★`, `Level ${lv}/200 • ${stars}/600 ★`); }
         const heroEl = document.getElementById("lobbyHeroText");
         if (heroEl) heroEl.textContent = `${hMap[state.activeHero] || "⚡ Vega"} (★Lv.${hInfo.lv})`;
+        const hm = getHeroMeta(state.activeHero);
+        const heroCard = document.getElementById("btnLobbyHeroCard");
+        if (heroCard) {
+          heroCard.style.setProperty("--hero-color", hm.color);
+          heroCard.style.setProperty("--hero-glow", hm.glow);
+          document.getElementById("lobbyHeroPortrait").textContent = hm.emoji;
+          document.getElementById("lobbyHeroKicker").textContent = L("KOMUTANIN", "YOUR COMMANDER");
+          document.getElementById("lobbyHeroName").textContent = `${hm.name} ★${hm.lv}`;
+          document.getElementById("lobbyHeroBonus").textContent = hm.bonus;
+          document.getElementById("lobbyHeroCta").textContent = L("Değiştir ›", "Change ›");
+        }
         const resEl = document.getElementById("lobbyResourcesText");
         if (resEl) resEl.textContent = `${state.gear}⚙ • ${state.cyberCore}💎`;
         const startBtnTxt = document.getElementById("lobbyStartCampaignBtnText");
@@ -7794,6 +7991,7 @@
         hideAllSubModals();
         updateLobbyUI();
         document.getElementById("modalStartLobby").classList.remove("hidden");
+        SoundFX.setMusicTheme(-1);
       }
 
       function closeStartLobbyToGame() {

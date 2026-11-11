@@ -31,7 +31,7 @@ function createGame(root = path.resolve(__dirname, '..'), seed = 1) {
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},
     window:{devicePixelRatio:1,addEventListener:noop,GameMonetization:{onVipChange:noop,onVipPrice:noop,onGemPrices:noop,onGemGranted:noop,onCatalogChange:noop,getDebugInfo:()=>({testAds:false}),configure:noop,onCatalog:noop,onDiagnostics:noop,subscribe:noop,preloadAds:noop,isInterstitialDue:()=>false,getDiagnostics:()=>({testAds:false})}}
   });
-  for (const name of ['game-balance.js','game-audio.js']) {
+  for (const name of ['game-balance.js','wave-flow.js', 'space-theme.js','game-audio.js']) {
     if(name==='game-balance.js' && html.includes('<!-- BALANCE START -->')) continue;
     const file=path.join(root,'www',name);if(fs.existsSync(file)) vm.runInContext(fs.readFileSync(file,'utf8'),sandbox);
   }
@@ -45,7 +45,7 @@ function createGame(root = path.resolve(__dirname, '..'), seed = 1) {
     globalThis.game={state,SoundFX,renderHUD,TOWER_TYPES,ENEMY_ARCHETYPES,SECTOR_PRESETS,calculateDifficulty,getHeroInfo,getStartingGold,getMaxBaseHp,syncAutonomousDrones,getCritChance,getDmgMultiplier,getRateMultiplier,getBountyMultiplier,getBaseSkillCost,getEliteSkillCoreCost,tryUpgradeSkill,applyDamageToEnemy,startLevel,buildWaveQueue,beginWaveAfterInterstitial,updateSimulation,saveProgress,loadProgress,handleLevelVictory,handleGameOver,grantDailyReward,DAILY_MISSIONS,DAILY_REWARDS_TABLE,refreshDailyMissions,getTodayKey,drawCombatDrone,
       get sockets(){return SOCKETS;},get paths(){return ACTIVE_PATHS;},get enemies(){return activeEnemies;},get drones(){return autonomousDrones;},get texts(){return floatingTexts;},
       tick(dt){ updateSimulation(dt); floatingTexts=[]; particles=[]; },
-      get waveActive(){return waveInProgress;},get queue(){return spawnQueue;}};
+      get waveActive(){return waveInProgress;},get queue(){return spawnQueue;},get waveFlow(){return waveFlow;},get shockwaves(){return shockwaves;}};
   })();`);
   vm.runInContext(source,sandbox);
   return { ...sandbox.game, api:sandbox.game, sandbox, elements, handlers };
