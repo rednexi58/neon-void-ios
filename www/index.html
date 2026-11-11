@@ -255,7 +255,7 @@
 
         <!-- Harita Altı Kompakt Özel Yetenekler Şeridi (Ortalanmış, Kesilme Yok) -->
         <div class="absolute bottom-1.5 left-2 right-2 flex items-center justify-center gap-1.5 pointer-events-none z-10">
-          <div class="pointer-events-auto flex items-center gap-1 bg-slate-950/85 border border-sky-500/35 backdrop-blur-md px-1.5 py-1 rounded-xl shadow-lg">
+          <div id="abilityStrip" class="pointer-events-auto flex items-center gap-1 bg-slate-950/85 border border-sky-500/35 backdrop-blur-md px-1.5 py-1 rounded-xl shadow-lg">
             <button id="btnOrbitalLaser" class="flex items-center gap-1 px-1.5 py-1 rounded-lg bg-rose-950/90 hover:bg-rose-900 active:scale-95 border border-rose-400/50 transition" title="Orbital Lazer Uydusu">
               <span class="text-xs">🛰️</span>
               <div class="text-left leading-none">
@@ -1351,12 +1351,12 @@
       </div>
 
       <!-- Oyuncu Özet Kartı (Açık Bölüm, Aktif Kahraman ve Kaynaklar) -->
-      <div class="w-full bg-slate-900/90 border border-sky-500/35 rounded-2xl p-3 grid grid-cols-3 gap-2 text-xs">
+      <div class="w-full bg-slate-900/90 border border-sky-500/35 rounded-2xl p-2.5 grid grid-cols-2 gap-2 text-xs">
         <div class="flex flex-col items-center">
           <span class="text-[10px] text-slate-400">Sefer İlerlemesi</span>
           <strong id="lobbyProgressText" class="font-cyber text-cyan-300 text-xs mt-0.5">Bölüm 1/200</strong>
         </div>
-        <div class="flex flex-col items-center border-x border-slate-800 px-1">
+        <div class="hidden">
           <span class="text-[10px] text-slate-400">Aktif Kahraman</span>
           <strong id="lobbyHeroText" class="font-cyber text-amber-300 text-xs mt-0.5 truncate max-w-[110px]">⚡ Vega (Lv.1)</strong>
         </div>
@@ -1365,6 +1365,17 @@
           <strong id="lobbyResourcesText" class="font-cyber text-fuchsia-300 text-xs mt-0.5">35⚙ • 5💎</strong>
         </div>
       </div>
+
+      <!-- AKTİF KAHRAMAN KARTI (dokununca Kahramanlar menüsü açılır) -->
+      <button id="btnLobbyHeroCard" class="w-full flex items-center gap-3 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-amber-950/60 border border-amber-400/45 rounded-2xl px-3 py-2.5 text-left active:scale-[0.98] transition">
+        <div id="lobbyHeroPortrait" class="gk-hero-portrait">⚡</div>
+        <div class="min-w-0 flex-1">
+          <div class="text-[9.5px] font-cyber font-bold tracking-wider text-amber-300/90" id="lobbyHeroKicker">KOMUTANIN</div>
+          <div id="lobbyHeroName" class="font-cyber font-black text-sm text-white truncate">Amiral Vega ★1</div>
+          <div id="lobbyHeroBonus" class="text-[10.5px] text-slate-300 leading-snug">Lazer & Tesla +%12 hasar</div>
+        </div>
+        <span id="lobbyHeroCta" class="shrink-0 px-2 py-1 rounded-lg bg-amber-400 text-slate-950 font-cyber font-extrabold text-[10px]">Değiştir ›</span>
+      </button>
 
       <!-- ANA OYUN MODU BUTONLARI -->
       <div class="w-full flex flex-col gap-2.5">
@@ -1609,22 +1620,14 @@
           tName_emp: "Gelişmiş Tesla",
           tName_railgun: "Makineli Top",
           trainerSteps: [
-            {
-              title: "🎓 EĞİTİM MODU (1/4): TAKTİK CEP SEÇİMİ",
-              desc: "Haritada altın halkayla işaretlenen CEP #1 taktik yuvasına dokunun. Kuleler yalnızca yolun dışındaki bu güvenli ceplere kurulur!"
-            },
-            {
-              title: "🎓 EĞİTİM MODU (2/4): İLK KULENİZİ KURUN",
-              desc: "Alttaki panelden Parçacık Lazer (85⚡) veya Gelişmiş Tesla (110⚡) kulesine dokunun. (Tesla saf zincir yıldırım vurur, Donma Birimi yavaşlatır!)"
-            },
-            {
-              title: "🎓 EĞİTİM MODU (3/4): GEZEGENİ KORUYUN!",
-              desc: "Yolun sonundaki gezegeni inceleyin — 200 bölümün her birinde farklı bir gezegeni koruyorsunuz! Hazır olduğunuzda 'Dalgayı Başlat ▶' butonuna basın."
-            },
-            {
-              title: "🎓 EĞİTİM MODU (4/4): SİBER EVRİM & SKOR TABLOSU",
-              desc: "Harika! Kazandığınız Gear ve Core ile alttaki '🧬 SİBER EVRİM ÜSSÜ'nden +%1 kalıcı güçlendirmeler açabilir, 🏆 Skor Tablosunda hız rekoru kırabilirsiniz!"
-            }
+            { title: "🎓 EĞİTİM 1/8 • KULE CEBİ SEÇ", desc: "Haritada altın halkayla parlayan CEP #1'e dokun. Kuleler sadece yol kenarındaki bu ceplere kurulur." },
+            { title: "🎓 EĞİTİM 2/8 • İLK KULENİ KUR", desc: "Alttaki panelden Parçacık Lazer'e (85⚡) dokun. Lazer hem kara hem hava düşmanını vurur; diğer kuleler bölüm ilerledikçe açılır.", focus: "buildTowerList" },
+            { title: "🎓 EĞİTİM 3/8 • GÜÇLENDİR (★→★★★)", desc: "Kurduğun kuleye dokunup ⬆ Geliştir ile Lv.2 ve Lv.3'e yükselt. Lv.3'te A veya B uzmanlık dalını seçersin; köşelerdeki ışıklar kulenin seviyesini gösterir." },
+            { title: "🎓 EĞİTİM 4/8 • ÖZEL YETENEKLER", desc: "🛰️ Orbital lazer tüm düşmanları vurur, 🛡 Kalkan gezegeni korur, ❄ Buzul herkesi yavaşlatır, 🔧 Onarım can yeniler. Zor anlar için sakla!", focus: "abilityStrip" },
+            { title: "🎓 EĞİTİM 5/8 • KAHRAMANIN", desc: "Gezegenin etrafında dönen gemi senin komutanın! ⚡ Vega lazer/tesla hasarını, 🛠 Kaan kule indirimini, ☄️ Nova kritik vuruşu artırır. Kahramanlar menüsünden değiştir ve seviye atlat." },
+            { title: "🎓 EĞİTİM 6/8 • OTONOM DRONLAR", desc: "Evrim Üssü'nden 🛸 Siber-Dron filosunu açınca dronlar gezegene yaklaşan düşmanları kendiliğinden avlar. Her seviye bir dron daha ekler." },
+            { title: "🎓 EĞİTİM 7/8 • SİBER EVRİM", desc: "Bölüm sonunda kazandığın ⚙ Gear ve 💎 Core ile 🧬 EVRİM'den kalıcı hasar, hız, kritik ve başlangıç enerjisi güçlendirmeleri al. Takıldığın bölümde buraya uğra!", focus: "btnOpenMenuQuick" },
+            { title: "🎓 EĞİTİM 8/8 • DALGAYI BAŞLAT!", desc: "Hazırsan sağ üstteki butonla dalgayı başlat. Sonraki dalgaları erken çağırırsan bonus ⚡ kazanırsın; çağırmazsan 7 sn sonra kendiliğinden gelir. Gezegeni koru Komutan!", focus: "btnNextWaveEarly" }
           ]
         },
         en: {
@@ -1646,22 +1649,14 @@
           tName_emp: "Advanced Tesla",
           tName_railgun: "Autocannon",
           trainerSteps: [
-            {
-              title: "🎓 TRAINER MODE (1/4): SELECT TACTICAL BAY",
-              desc: "Tap the golden highlighted BAY #1 on the map. Towers are placed inside these safe rock bays alongside the canyon road!"
-            },
-            {
-              title: "🎓 TRAINER MODE (2/4): BUILD YOUR FIRST TOWER",
-              desc: "Tap Particle Laser (85⚡) or Advanced Tesla (110⚡) in the bottom dock to deploy immediately. (Tesla deals chain lightning damage; Cryo slows!)"
-            },
-            {
-              title: "🎓 TRAINER MODE (3/4): DEFEND THE PLANET!",
-              desc: "Look at the destination planet at the end of the road — every level (1-200) features a new planet to protect! Tap 'Start Wave ▶' when ready."
-            },
-            {
-              title: "🎓 TRAINER MODE (4/4): CYBER EVOLUTION & SCOREBOARD",
-              desc: "Awesome! Spend Gear & Core in '🧬 CYBER EVOLUTION' for +1% permanent upgrades, and compete for fastest clear times on the 🏆 Scoreboard!"
-            }
+            { title: "🎓 TUTORIAL 1/8 • PICK A TOWER BAY", desc: "Tap the glowing gold BAY #1 on the map. Towers can only be built in these bays beside the road." },
+            { title: "🎓 TUTORIAL 2/8 • BUILD YOUR FIRST TOWER", desc: "Tap Particle Laser (85⚡) in the bottom dock. It hits both ground and air enemies; more towers unlock as you progress.", focus: "buildTowerList" },
+            { title: "🎓 TUTORIAL 3/8 • UPGRADE (★→★★★)", desc: "Tap your tower and use ⬆ Upgrade to reach Lv.2 and Lv.3. At Lv.3 you pick specialisation A or B; the corner lights show a tower's level." },
+            { title: "🎓 TUTORIAL 4/8 • SPECIAL ABILITIES", desc: "🛰️ Orbital strikes every enemy, 🛡 Shield protects the planet, ❄ Cryo slows everyone, 🔧 Repair restores health. Save them for tough moments!", focus: "abilityStrip" },
+            { title: "🎓 TUTORIAL 5/8 • YOUR HERO", desc: "The ship circling the planet is your commander! ⚡ Vega boosts laser/tesla damage, 🛠 Kaan discounts towers, ☄️ Nova raises crits. Switch and level them in the Heroes menu." },
+            { title: "🎓 TUTORIAL 6/8 • AUTONOMOUS DRONES", desc: "Unlock the 🛸 Cyber-Drone fleet in Evolution and drones hunt enemies near the planet on their own. Each rank adds another drone." },
+            { title: "🎓 TUTORIAL 7/8 • CYBER EVOLUTION", desc: "Spend ⚙ Gear and 💎 Core from each level in 🧬 EVOLVE for permanent damage, speed, crit and starting-energy boosts. Stuck on a level? Come here!", focus: "btnOpenMenuQuick" },
+            { title: "🎓 TUTORIAL 8/8 • START THE WAVE!", desc: "When ready, start the wave with the top-right button. Calling later waves early earns bonus ⚡; otherwise they arrive after 7 s. Protect the planet, Commander!", focus: "btnNextWaveEarly" }
           ]
         }
       };
@@ -2105,8 +2100,7 @@
           const menuOpen = !document.getElementById("modalPauseMenu").classList.contains("hidden");
           pauseBtn.textContent = menuOpen ? (isEn ? "Resume ▶" : "Devam Et ▶") : (isEn ? "Pause" : "Duraklat");
         }
-        const trNextBtn = document.getElementById("btnTrainerNext");
-        if (trNextBtn) trNextBtn.textContent = isEn ? "Next ➔" : "İleri ➔";
+        if (state.trainerActive) updateTrainerUI();
       }
 
       function getPlanetForLevel(level) {
@@ -2526,6 +2520,21 @@
           novaCritPct: 8 + (lv - 1) * 2.5,
           novaOrbitalCdRed: 6 + (lv - 1) * 1.5
         };
+      }
+
+      // Single source for how each hero is presented (lobby card, flagship, toasts).
+      function getHeroMeta(heroKey) {
+        const key = ["vega", "kaan", "nova"].includes(heroKey) ? heroKey : "vega";
+        const info = getHeroInfo(key);
+        const meta = {
+          vega: { emoji: "⚡", color: "#facc15", glow: "rgba(250,204,21,0.55)", nameTr: "Amiral Vega", nameEn: "Admiral Vega",
+            bonusTr: `Lazer & Tesla +%${info.vegaDmgBonusPct} hasar, +${info.vegaRangeBonus} menzil`, bonusEn: `Laser & Tesla +${info.vegaDmgBonusPct}% damage, +${info.vegaRangeBonus} range` },
+          kaan: { emoji: "🛠️", color: "#34d399", glow: "rgba(52,211,153,0.55)", nameTr: "Mühendis Kaan", nameEn: "Engineer Kaan",
+            bonusTr: `Kuleler %${info.kaanDiscountPct} ucuz, onarım +%${info.kaanRepairPct}`, bonusEn: `Towers ${info.kaanDiscountPct}% cheaper, repair +${info.kaanRepairPct}%` },
+          nova: { emoji: "☄️", color: "#fb923c", glow: "rgba(251,146,60,0.55)", nameTr: "Kaptan Nova", nameEn: "Captain Nova",
+            bonusTr: `Kritik +%${info.novaCritPct}, Orbital bekleme -%${info.novaOrbitalCdRed}`, bonusEn: `Crit +${info.novaCritPct}%, Orbital cooldown -${info.novaOrbitalCdRed}%` }
+        }[key];
+        return { key, lv: info.lv, ...meta, name: L(meta.nameTr, meta.nameEn), bonus: L(meta.bonusTr, meta.bonusEn) };
       }
 
       function addActiveHeroExperience(amount = 1) {
@@ -3176,10 +3185,32 @@
         }
         banner.classList.remove("hidden");
         const dict = I18N[state.lang] || I18N.tr;
+        const total = dict.trainerSteps.length;
         const stepObj = dict.trainerSteps[state.trainerStep] || dict.trainerSteps[0];
-        document.getElementById("trainerStepBadge").textContent = `${state.trainerStep + 1}/4`;
+        document.getElementById("trainerStepBadge").textContent = `${state.trainerStep + 1}/${total}`;
         document.getElementById("trainerTitle").textContent = stepObj.title;
         document.getElementById("trainerDesc").textContent = stepObj.desc;
+        const nextBtn = document.getElementById("btnTrainerNext");
+        if (nextBtn) nextBtn.textContent = state.trainerStep >= total - 1 ? L("Başlat ▶", "Start ▶") : L("İleri ➔", "Next ➔");
+        setTrainerFocus(stepObj.focus);
+      }
+
+      // Pulsing outline on the UI element the current tutorial step talks about.
+      function setTrainerFocus(id) {
+        document.querySelectorAll(".gk-trainer-focus").forEach(el => el.classList.remove("gk-trainer-focus"));
+        if (!id || !state.trainerActive) return;
+        const el = document.getElementById(id);
+        if (el) el.classList.add("gk-trainer-focus");
+      }
+
+      function finishTrainer(showDoneToast) {
+        state.trainerActive = false;
+        state.trainerCompletedOnce = true;
+        try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
+        saveProgress();
+        updateTrainerUI();
+        setTrainerFocus(null);
+        if (showDoneToast) showToast(L("🎓 Eğitim tamamlandı! Gezegeni koru, Komutan!", "🎓 Tutorial complete! Protect the planet, Commander!"));
       }
 
       function applyLanguage() {
@@ -3375,15 +3406,18 @@
 
         // Eğitim (Trainer) sekmesi yalnızca oyuna İLK KEZ girildiğinde (Bölüm 1) bir defa açılır, bir daha otomatik gelmez!
         if (state.level === 1 && state.unlockedLevel === 1 && !state.trainerCompletedOnce && localStorage.getItem("gk_tutorial_shown_once") !== "1") {
+          // Marked as seen only in finishTrainer(): startLevel also runs once behind the
+          // lobby at boot, and persisting here used to consume the tutorial unseen.
           state.trainerActive = true;
           state.trainerStep = 0;
-          state.trainerCompletedOnce = true;
-          try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
-          saveProgress();
         } else {
           state.trainerActive = false;
         }
         waveFlow.reset({ totalWaves: state.totalWaves, endless: state.endlessMode, holdFirstWave: state.trainerActive });
+        if (!state.trainerActive) {
+          const hm = getHeroMeta(state.activeHero);
+          floatingTexts.push({ x: VIRTUAL_W / 2, y: VIRTUAL_H - 150, text: `${hm.emoji} ${hm.name} ★${hm.lv}`, color: hm.color, life: 2.2 });
+        }
 
         document.getElementById("bossAlertBanner").classList.add("hidden");
         document.getElementById("modalLevelEnd").classList.add("hidden");
@@ -3477,19 +3511,7 @@
         for (const key of buildWaveQueue(state.level, waveIdx)) spawnQueue.push({ key, wave: waveIdx });
         waveInProgress = true;
         if (state.endlessMode && waveIdx + 1 > (state.bestEndlessWave || 0)) state.bestEndlessWave = waveIdx + 1;
-        if (state.trainerActive && state.trainerStep >= 1) {
-          state.trainerStep = 3;
-          state.trainerCompletedOnce = true;
-          try { localStorage.setItem("gk_tutorial_shown_once", "1"); } catch (_) {}
-          saveProgress();
-          updateTrainerUI();
-          setTimeout(() => {
-            if (state.trainerActive) {
-              state.trainerActive = false;
-              updateTrainerUI();
-            }
-          }, 4000);
-        }
+        if (state.trainerActive) finishTrainer(true);
         updateHUD();
         updateWaveBannerUI();
       }
@@ -5010,6 +5032,46 @@
         ctx.restore();
       }
 
+      // Aktif kahramanın amiral gemisi gezegenin yörüngesinde döner (kahraman sahada görünür olsun).
+      function drawHeroFlagship(ctx, PR, t, hi) {
+        const hm = getHeroMeta(state.activeHero);
+        const ang = -t * 0.9 + 1.2;
+        const ox = Math.cos(ang) * (PR + 19);
+        const oy = Math.sin(ang) * (PR * 0.5) - 6;
+        const heading = Math.atan2(Math.cos(ang) * (PR * 0.5), -Math.sin(ang) * (PR + 19));
+        ctx.save();
+        // Engine trail
+        for (let i = 1; i <= 5; i++) {
+          const a2 = ang + i * 0.07;
+          ctx.globalAlpha = 0.28 - i * 0.045;
+          ctx.fillStyle = hm.color;
+          ctx.beginPath();
+          ctx.arc(Math.cos(a2) * (PR + 19), Math.sin(a2) * (PR * 0.5) - 6, 3.2 - i * 0.45, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        ctx.translate(ox, oy);
+        ctx.rotate(heading);
+        if (hi) { ctx.shadowColor = hm.color; ctx.shadowBlur = 10; }
+        ctx.fillStyle = "#0f172a";
+        ctx.strokeStyle = hm.color;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        if (hm.key === "kaan") {
+          ctx.roundRect(-6, -5, 12, 10, 2.5);
+        } else if (hm.key === "nova") {
+          ctx.moveTo(9, 0); ctx.lineTo(-6, -5); ctx.lineTo(-3, 0); ctx.lineTo(-6, 5); ctx.closePath();
+        } else {
+          ctx.moveTo(9, 0); ctx.lineTo(-5, -6.5); ctx.lineTo(-2, 0); ctx.lineTo(-5, 6.5); ctx.closePath();
+        }
+        ctx.fill();
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = hm.color;
+        ctx.beginPath(); ctx.arc(1.5, 0, 1.9, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+
       // HER BÖLÜMDE (1..200) DEĞİŞEN CANLI VARIŞ GEZEGENİ VE KORUMA KALKANI
       function drawProtectedPlanet(ctx, nx, ny, nowAnim, useHighDetail) {
         const planet = getPlanetForLevel(state.level);
@@ -5088,6 +5150,8 @@
             ctx.beginPath(); ctx.arc(mx + 1.5, my + 1.2, 3.6, 0, Math.PI * 2); ctx.fill();
           }
         }
+
+        drawHeroFlagship(ctx, PR, nowAnim, useHighDetail);
 
         // Altıgen Koruyucu Gezegen Kalkan Kubbesi
         if (state.hqShieldHp > 0 || state.hqInvulnerableTimer > 0) {
@@ -6796,23 +6860,19 @@
       });
       document.getElementById("btnTrainerNext").addEventListener("click", () => {
         SoundFX.uiClick();
-        if (state.trainerStep < 3) {
+        const total = (I18N[state.lang] || I18N.tr).trainerSteps.length;
+        if (state.trainerStep < total - 1) {
           state.trainerStep++;
           updateTrainerUI();
+        } else if (waveFlow.launched === 0) {
+          spawnNextWave(); // final step's button starts the first wave (and closes the tutorial)
         } else {
-          state.trainerActive = false;
-          state.trainerCompletedOnce = true;
-          saveProgress();
-          updateTrainerUI();
-          showToast("🎓 Eğitim tamamlandı! Gezegeni Koru seferinde başarılar Komutan!");
+          finishTrainer(true);
         }
       });
       document.getElementById("btnTrainerClose").addEventListener("click", () => {
         SoundFX.uiClick();
-        state.trainerActive = false;
-        state.trainerCompletedOnce = true;
-        saveProgress();
-        updateTrainerUI();
+        finishTrainer(false);
       });
 
       // DİL DEĞİŞTİRME (TR / EN)
@@ -7631,6 +7691,11 @@
         });
       }
 
+      document.getElementById("btnLobbyHeroCard").addEventListener("click", () => {
+        SoundFX.uiClick();
+        renderMissionsAndHeroesModal();
+        document.getElementById("modalMissions").classList.remove("hidden");
+      });
       document.getElementById("btnOpenMissionsTop").addEventListener("click", () => {
         SoundFX.uiClick();
         state.paused = true;
@@ -7886,6 +7951,17 @@
         if (progEl) { const stars = Object.values(state.levelStars).reduce((a,b)=>a+b,0); progEl.textContent = L(`Bölüm ${lv}/200 • ${stars}/600 ★`, `Level ${lv}/200 • ${stars}/600 ★`); }
         const heroEl = document.getElementById("lobbyHeroText");
         if (heroEl) heroEl.textContent = `${hMap[state.activeHero] || "⚡ Vega"} (★Lv.${hInfo.lv})`;
+        const hm = getHeroMeta(state.activeHero);
+        const heroCard = document.getElementById("btnLobbyHeroCard");
+        if (heroCard) {
+          heroCard.style.setProperty("--hero-color", hm.color);
+          heroCard.style.setProperty("--hero-glow", hm.glow);
+          document.getElementById("lobbyHeroPortrait").textContent = hm.emoji;
+          document.getElementById("lobbyHeroKicker").textContent = L("KOMUTANIN", "YOUR COMMANDER");
+          document.getElementById("lobbyHeroName").textContent = `${hm.name} ★${hm.lv}`;
+          document.getElementById("lobbyHeroBonus").textContent = hm.bonus;
+          document.getElementById("lobbyHeroCta").textContent = L("Değiştir ›", "Change ›");
+        }
         const resEl = document.getElementById("lobbyResourcesText");
         if (resEl) resEl.textContent = `${state.gear}⚙ • ${state.cyberCore}💎`;
         const startBtnTxt = document.getElementById("lobbyStartCampaignBtnText");
