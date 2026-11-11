@@ -2457,6 +2457,7 @@
         waveWaitingForPlayer: true,
         orbitalCooldown: 0,
         orbitalFlashTimer: 0,
+        baseHitFlash: 0,
         selectedSocketIndex: 0,
         sectorIndex: 0,
         manualSectorOverride: false,
@@ -3586,6 +3587,7 @@
         }
 
         enemy.hp -= finalDmg;
+        enemy.hitFlashUntil = sceneAnimationTime + (isCrit ? 0.12 : 0.08);
 
         if (state.qualityMode !== "performance" || isCrit || isTrueDamage) {
           floatingTexts.push({
@@ -3622,7 +3624,11 @@
           }
           const goldEarned = Math.round(enemy.arch.goldReward * getBountyMultiplier());
           state.gold += goldEarned;
-          const pCount = state.qualityMode === "performance" ? 6 : (enemy.arch.isBoss ? 24 : 10);
+          const deathColor = enemy.variantPurple ? "#c084fc" : enemy.arch.color;
+          const deathR = enemy.arch.radius || 10;
+          shockwaves.push({ x: enemy.x, y: enemy.y, maxR: deathR * (enemy.arch.isBoss ? 4.2 : 2.6), r: deathR * 0.6, color: deathColor, life: enemy.arch.isBoss ? 0.55 : 0.28 });
+          if (enemy.arch.isBoss) shockwaves.push({ x: enemy.x, y: enemy.y, maxR: deathR * 7, r: deathR, color: "#fde047", life: 0.75 });
+          const pCount = state.qualityMode === "performance" ? 6 : (enemy.arch.isBoss ? 30 : 12);
           spawnParticles(enemy.x, enemy.y, enemy.variantPurple ? "#c084fc" : enemy.arch.color, pCount);
           floatingTexts.push({
             x: enemy.x,
@@ -3736,6 +3742,9 @@
           state.baseHp = Math.max(0, state.baseHp - dmg);
         }
         spawnParticles(x, y, "#f43f5e", 14);
+        state.baseHitFlash = Math.min(0.9, (state.baseHitFlash || 0) + 0.45 + dmg * 0.1);
+        triggerHaptic(dmg >= 3 ? "heavy" : "medium");
+        SoundFX.baseHit?.();
         updateHUD();
       }
 
@@ -3758,6 +3767,7 @@
           state.orbitalCooldown = Math.max(0, state.orbitalCooldown - dt);
           updateOrbitalButtonUI();
         }
+        if (state.baseHitFlash > 0) state.baseHitFlash = Math.max(0, state.baseHitFlash - dt * 1.6);
         if (state.orbitalFlashTimer > 0) {
           state.orbitalFlashTimer = Math.max(0, state.orbitalFlashTimer - dt);
         }
@@ -5230,6 +5240,19 @@
           ctx.ellipse(x, y + 3, 12 - r * 3.2, 7 - r * 1.9, 0, 0, Math.PI * 2);
           ctx.stroke();
         }
+        // Tier pylons on the hex corners: Lv2 lights three, Lv3 lights all six with a glow.
+        if ((level || 1) >= 2) {
+          const lit = level >= 3 ? 6 : 3;
+          ctx.fillStyle = level >= 3 ? "#fde047" : fxWithAlpha(color, 1);
+          if (highDetail) { ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = level >= 3 ? 8 : 4; }
+          for (let i = 0; i < 6; i += 6 / lit) {
+            const a = Math.PI / 6 + (i * Math.PI) / 3;
+            ctx.beginPath();
+            ctx.arc(x + Math.cos(a) * 19, y + 3 + Math.sin(a) * 11.5, level >= 3 ? 2.6 : 2.1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.shadowBlur = 0;
+        }
         ctx.restore();
       }
 
@@ -5281,6 +5304,22 @@
         ctx.save();
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.fillStyle = sceneFxCache.vignette;
+        ctx.fillRect(0, 0, cssW, cssH);
+        ctx.restore();
+      }
+
+      // Planet took damage: red pulse from the screen edges, strength = flash level.
+      function fxDamageVignette(ctx, amount) {
+        if (amount <= 0.01) return;
+        const { cssW, cssH, dpr } = viewTransform;
+        if (!cssW || !cssH) return;
+        const r = Math.hypot(cssW, cssH) * 0.5;
+        const g = ctx.createRadialGradient(cssW / 2, cssH / 2, r * 0.45, cssW / 2, cssH / 2, r);
+        g.addColorStop(0, "rgba(244, 63, 94, 0)");
+        g.addColorStop(1, `rgba(244, 63, 94, ${Math.min(0.6, amount * 0.7)})`);
+        ctx.save();
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.fillStyle = g;
         ctx.fillRect(0, 0, cssW, cssH);
         ctx.restore();
       }
@@ -6010,6 +6049,18 @@
           }
           ctx.restore();
 
+          if (e.hitFlashUntil > sceneAnimationTime) {
+            const k = Math.min(1, (e.hitFlashUntil - sceneAnimationTime) / 0.08);
+            ctx.save();
+            ctx.globalCompositeOperation = "lighter";
+            ctx.globalAlpha = 0.55 * k;
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(e.x, e.y, (e.arch.radius || 10) * 1.05, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
           ctx.save();
           if (e.slowTimer > 0) {
             ctx.strokeStyle = "#67e8f9";
@@ -6226,6 +6277,7 @@
 
         ctx.restore();
         fxVignette(ctx);
+        fxDamageVignette(ctx, state.baseHitFlash || 0);
         renderMiniMap();
       }
 
