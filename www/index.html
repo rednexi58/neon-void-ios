@@ -1580,6 +1580,7 @@
 </script>
   <!-- BALANCE END -->
   <script src="wave-flow.js"></script>
+    <script src="space-theme.js"></script>
   <script src="game-audio.js"></script>
   <script>
     (function () {
@@ -4950,6 +4951,51 @@
         ctx.restore();
       }
 
+      // UZAY ARKA PLANI: gezegene özel gökyüzü, iki katmanlı nebula, parıldayan
+      // yıldızlar ve ufukta yükselen uzak bir dev gezegen (her bölümde farklı ton).
+      function drawSpaceBackdrop(ctx, pal, nowAnim, useHighDetail) {
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, 125);
+        skyGrad.addColorStop(0, pal.sky[0]);
+        skyGrad.addColorStop(0.6, pal.sky[1]);
+        skyGrad.addColorStop(1, pal.sky[2]);
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, VIRTUAL_W, 125);
+
+        const clouds = [[120, 30, 170, pal.nebula[1]], [360, 50, 190, pal.nebula[0]]];
+        clouds.forEach(([cx, cy, cr, col], i) => {
+          const drift = Math.sin(nowAnim * 0.15 + i * 2) * 12;
+          const g = ctx.createRadialGradient(cx + drift, cy, 8, cx + drift, cy, cr);
+          g.addColorStop(0, col);
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, VIRTUAL_W, 125);
+        });
+
+        STARFIELD.forEach((st, i) => {
+          const tw = useHighDetail ? 0.55 + 0.45 * Math.sin(nowAnim * (1.2 + (i % 5) * 0.4) + i) : 1;
+          ctx.fillStyle = `rgba(${pal.star}, ${st.alpha * tw})`;
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Ufukta yükselen uzak dev gezegen
+        const bx = 400, by = 78, br = 46;
+        ctx.save();
+        if (useHighDetail) { ctx.shadowColor = pal.backdrop[0]; ctx.shadowBlur = 22; }
+        const bg = ctx.createRadialGradient(bx - br * 0.4, by - br * 0.45, 4, bx, by, br);
+        bg.addColorStop(0, pal.backdrop[0]);
+        bg.addColorStop(0.7, pal.backdrop[1]);
+        bg.addColorStop(1, "#020617");
+        ctx.fillStyle = bg;
+        ctx.beginPath(); ctx.arc(bx, by, br, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = pal.backdrop[0];
+        ctx.globalAlpha = 0.45; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.ellipse(bx, by, br * 1.55, br * 0.28, -0.25, Math.PI * 0.95, Math.PI * 2.05); ctx.stroke();
+        ctx.restore();
+      }
+
       // HER BÖLÜMDE (1..200) DEĞİŞEN CANLI VARIŞ GEZEGENİ VE KORUMA KALKANI
       function drawProtectedPlanet(ctx, nx, ny, nowAnim, useHighDetail) {
         const planet = getPlanetForLevel(state.level);
@@ -4961,62 +5007,72 @@
         ctx.strokeStyle = planet.midColor;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.ellipse(0, 14, 46, 18, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 16, 50, 15, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        // Dönen 3D Gezegen Küresi
-        const pGrad = ctx.createRadialGradient(-10, -10, 4, 0, 0, 32);
-        pGrad.addColorStop(0, planet.glowColor);
-        pGrad.addColorStop(0.45, planet.midColor);
-        pGrad.addColorStop(0.85, planet.coreColor);
-        pGrad.addColorStop(1, "#020617");
-
-        ctx.fillStyle = pGrad;
+        // Dönen 3D Gezegen Küresi (büyük, türüne özgü yüzeyli)
+        const PR = 37;
+        const pal = window.SpaceTheme.paletteForLevel(state.level);
         if (useHighDetail) {
-          ctx.shadowColor = planet.midColor;
-          ctx.shadowBlur = 18;
+          const atmo = ctx.createRadialGradient(0, -2, PR * 0.8, 0, -2, PR * 1.45);
+          atmo.addColorStop(0, planet.glowColor);
+          atmo.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.globalAlpha = 0.35 + Math.sin(nowAnim * 2) * 0.08;
+          ctx.fillStyle = atmo;
+          ctx.beginPath(); ctx.arc(0, -2, PR * 1.45, 0, Math.PI * 2); ctx.fill();
+          ctx.globalAlpha = 1;
         }
-        ctx.beginPath();
-        ctx.arc(0, -2, 29, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
 
-        // Gezegen Yüzey Kıtaları / Atmosfer Kuşakları (Dönen Efekt)
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(0, -2, 28.5, 0, Math.PI * 2);
-        ctx.clip();
-        const drift = (nowAnim * 12) % 40;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
-        ctx.beginPath();
-        ctx.ellipse(-18 + drift, -10, 16, 5, 0.15, 0, Math.PI * 2);
-        ctx.ellipse(14 - drift * 0.7, 6, 18, 6, -0.1, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        // Gezegen Halkası (Bölüme göre eğimli)
+        // Halkanın arka yarısı (gezegenin arkasında kalır)
+        const ringTilt = planet.ringTilt + Math.sin(nowAnim * 0.8) * 0.04;
         if (planet.hasRing) {
           ctx.save();
-          ctx.rotate(planet.ringTilt + Math.sin(nowAnim * 0.8) * 0.04);
-          ctx.strokeStyle = planet.ringColor;
-          ctx.globalAlpha = 0.70;
-          ctx.lineWidth = 3.5;
-          ctx.beginPath();
-          ctx.ellipse(0, -2, 46, 11, 0, 0, Math.PI * 2);
-          ctx.stroke();
+          ctx.rotate(ringTilt);
+          ctx.strokeStyle = planet.ringColor; ctx.globalAlpha = 0.45; ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.ellipse(0, -2, PR * 1.6, PR * 0.36, 0, Math.PI, Math.PI * 2); ctx.stroke();
           ctx.restore();
         }
 
-        // Yörüngede Dönen Uydu Ay (Moonlet)
+        const pGrad = ctx.createRadialGradient(-PR * 0.35, -PR * 0.4, 4, 0, -2, PR);
+        pGrad.addColorStop(0, planet.glowColor);
+        pGrad.addColorStop(0.45, planet.midColor);
+        pGrad.addColorStop(1, planet.coreColor);
+        ctx.fillStyle = pGrad;
+        if (useHighDetail) { ctx.shadowColor = planet.midColor; ctx.shadowBlur = 20; }
+        ctx.beginPath();
+        ctx.arc(0, -2, PR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.save();
+        ctx.translate(0, -2);
+        ctx.beginPath();
+        ctx.arc(0, 0, PR - 0.5, 0, Math.PI * 2);
+        ctx.clip();
+        window.SpaceTheme.drawPlanetSurface(ctx, pal.kind, PR, nowAnim, state.level, { glow: planet.glowColor });
+        ctx.restore();
+
+        // Halkanın ön yarısı
+        if (planet.hasRing) {
+          ctx.save();
+          ctx.rotate(ringTilt);
+          ctx.strokeStyle = planet.ringColor; ctx.globalAlpha = 0.85; ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.ellipse(0, -2, PR * 1.6, PR * 0.36, 0, 0, Math.PI); ctx.stroke();
+          ctx.restore();
+        }
+
+        // Yörüngede Dönen Uydu Ay (önden-arkadan geçer)
         if (planet.hasMoon) {
           const mAng = nowAnim * 1.6;
-          const mx = Math.cos(mAng) * 39;
-          const my = Math.sin(mAng) * 14 - 4;
-          ctx.fillStyle = "#e2e8f0";
-          ctx.beginPath();
-          ctx.arc(mx, my, 4.2, 0, Math.PI * 2);
-          ctx.fill();
+          const mx = Math.cos(mAng) * PR * 1.35;
+          const my = Math.sin(mAng) * PR * 0.42 - 4;
+          if (Math.sin(mAng) > 0 || Math.abs(mx) > PR) {
+            ctx.fillStyle = "#e2e8f0";
+            ctx.beginPath(); ctx.arc(mx, my, 4.6, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "rgba(2,6,23,0.45)";
+            ctx.beginPath(); ctx.arc(mx + 1.5, my + 1.2, 3.6, 0, Math.PI * 2); ctx.fill();
+          }
         }
 
         // Altıgen Koruyucu Gezegen Kalkan Kubbesi
@@ -5026,7 +5082,7 @@
           ctx.fillStyle = `rgba(56, 189, 248, ${domePulse * 0.5})`;
           ctx.lineWidth = state.hqInvulnerableTimer > 0 ? 2.6 : 1.6;
           ctx.beginPath();
-          ctx.arc(0, -2, 36, 0, Math.PI * 2);
+          ctx.arc(0, -2, PR + 8, 0, Math.PI * 2);
           ctx.fill();
           ctx.stroke();
         }
@@ -5036,14 +5092,15 @@
         ctx.strokeStyle = planet.midColor;
         ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.roundRect(-48, 22, 96, 15, 5);
+        ctx.roundRect(-24, 3, 48, 15, 7);
         ctx.fill();
         ctx.stroke();
 
         ctx.fillStyle = "#f8fafc";
-        ctx.font = "bold 8.5px Orbitron, sans-serif";
+        ctx.font = "bold 9.5px Orbitron, sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(`🌍 ${planet.shortName} (${state.baseHp}♥)`, 0, 32.5);
+        ctx.fillStyle = state.baseHp <= 5 ? "#fda4af" : "#f8fafc";
+        ctx.fillText(`♥ ${state.baseHp}`, 0, 13.5);
 
         ctx.restore();
       }
@@ -5258,8 +5315,18 @@
         const dpr = viewTransform.dpr;
         ctx.save();
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.fillStyle = "#030611";
+        // Harita dışındaki boşluk da gezegenin uzay tonunu taşır (siyah bant yok).
+        const outerPal = window.SpaceTheme.paletteForLevel(state.level);
+        const outerGrad = ctx.createLinearGradient(0, 0, 0, viewTransform.cssH);
+        outerGrad.addColorStop(0, outerPal.sky[0]);
+        outerGrad.addColorStop(0.5, outerPal.sky[1]);
+        outerGrad.addColorStop(1, outerPal.ground[1]);
+        ctx.fillStyle = outerGrad;
         ctx.fillRect(0, 0, viewTransform.cssW, viewTransform.cssH);
+        ctx.globalAlpha = 0.55;
+        ctx.fillStyle = "#020617";
+        ctx.fillRect(0, 0, viewTransform.cssW, viewTransform.cssH);
+        ctx.globalAlpha = 1;
 
         ctx.translate(viewTransform.offsetX, viewTransform.offsetY);
         ctx.scale(viewTransform.scale, viewTransform.scale);
@@ -5269,60 +5336,24 @@
         const useHighDetail = state.qualityMode !== "performance";
 
         // 1. ÜST UZAY GÖKYÜZÜ, NEBULA, AY VE UFUK DAĞLARI
-        const skyGrad = ctx.createLinearGradient(0, 0, 0, 125);
-        skyGrad.addColorStop(0, "#040b1c");
-        skyGrad.addColorStop(0.65, "#0d2238");
-        skyGrad.addColorStop(1, "#1e293b");
-        ctx.fillStyle = skyGrad;
-        ctx.fillRect(0, 0, VIRTUAL_W, 125);
-
-        const nebGrad = ctx.createRadialGradient(340, 44, 10, 340, 44, 150);
-        nebGrad.addColorStop(0, preset.nebulaColor);
-        nebGrad.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = nebGrad;
-        ctx.fillRect(0, 0, VIRTUAL_W, 125);
-
-        STARFIELD.forEach(st => {
-          ctx.fillStyle = `rgba(241, 245, 249, ${st.alpha})`;
-          ctx.beginPath();
-          ctx.arc(st.x, st.y, st.size, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        ctx.save();
-        const moonX = 365;
-        const moonY = 42;
-        ctx.fillStyle = "#e2e8f0";
-        if (useHighDetail) {
-          ctx.shadowColor = "#bae6fd";
-          ctx.shadowBlur = 16;
-        }
-        ctx.beginPath();
-        ctx.arc(moonX, moonY, 21, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#cbd5e1";
-        ctx.beginPath();
-        ctx.arc(moonX - 6, moonY - 4, 4, 0, Math.PI * 2);
-        ctx.arc(moonX + 7, moonY + 5, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        const pal = window.SpaceTheme.paletteForLevel(state.level);
+        drawSpaceBackdrop(ctx, pal, nowAnim, useHighDetail);
 
         const groundGrad = ctx.createLinearGradient(0, 88, 0, VIRTUAL_H);
-        groundGrad.addColorStop(0, preset.outerGroundTop);
-        groundGrad.addColorStop(1, preset.outerGroundBottom);
+        groundGrad.addColorStop(0, pal.ground[0]);
+        groundGrad.addColorStop(1, pal.ground[1]);
         ctx.fillStyle = groundGrad;
         ctx.fillRect(0, 88, VIRTUAL_W, VIRTUAL_H - 88);
 
         // 2. TAM GENİŞLİKLİ YÜKSELTİLMİŞ KAYALIK PLATO
         ctx.save();
-        ctx.fillStyle = preset.plateauEdge;
+        ctx.fillStyle = pal.plateau[1];
         ctx.beginPath();
         ctx.roundRect(42, 92, VIRTUAL_W - 84, VIRTUAL_H - 156, 24);
         ctx.fill();
 
-        ctx.fillStyle = preset.plateauFill;
-        ctx.strokeStyle = "#475569";
+        ctx.fillStyle = pal.plateau[0];
+        ctx.strokeStyle = pal.plateau[2];
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.roundRect(42, 78, VIRTUAL_W - 84, VIRTUAL_H - 160, 22);
@@ -5331,7 +5362,7 @@
 
         ctx.save();
         ctx.clip();
-        ctx.strokeStyle = preset.gridColor;
+        ctx.strokeStyle = pal.grid;
         ctx.lineWidth = 1.1;
         for (let gx = 60; gx < VIRTUAL_W - 42; gx += 32) {
           ctx.beginPath();
@@ -5355,13 +5386,13 @@
         CRYSTAL_CLUSTERS.forEach((cr, idx) => drawCrystalCluster(ctx, cr.x, cr.y, cr.scale, nowAnim * 3 + idx));
 
         // 4. ÇOKLU GİRİŞLİ (MULTI-PATH) 90° ORTOGONAL SAVUNMA YOLLARI
-        const laneNeonColors = [preset.pathColor, "#e879f9", "#facc15"];
+        const laneNeonColors = [pal.accent, "#e879f9", "#facc15"];
         ACTIVE_PATHS.forEach((pathArr, pathIdx) => {
           ctx.save();
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
 
-          ctx.strokeStyle = "#080e1c";
+          ctx.strokeStyle = pal.road[0];
           ctx.lineWidth = 40;
           ctx.beginPath();
           pathArr.forEach((pt, idx) => {
@@ -5370,7 +5401,7 @@
           });
           ctx.stroke();
 
-          ctx.strokeStyle = "#152c4a";
+          ctx.strokeStyle = pal.road[1];
           ctx.lineWidth = 30;
           ctx.stroke();
 
