@@ -144,3 +144,18 @@ button:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
   .animate-ping, .animate-pulse, .animate-bounce { animation: none !important; }
   button:not(:disabled):active { transform: none; }
 }
+
+/* 9. Tower build cards ------------------------------------------------------- */
+/* Two-word tower names ("Parçacık Lazer", "Gelişmiş Tesla") were cut to "Parçacık…".
+   Allow a balanced two-line name instead of a single truncated line. */
+.tower-build-btn > .truncate {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-wrap: balance;
+  line-height: 1.05;
+  min-height: 2.1em;
+}

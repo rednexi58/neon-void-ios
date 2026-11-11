@@ -14,3 +14,16 @@ test('victory rewards cannot duplicate and old stars cannot be paid again',()=>{
 test('daily reset preserves lifetime stats and same-day progress',()=>{const g=createGame().api;g.state.missionDay='2000-1-1';g.state.stats.killsTotal=500;g.state.claimedMissions={kill:true};g.refreshDailyMissions();assert.equal(g.state.missionBaseline.killsTotal,500);assert.equal(Object.keys(g.state.claimedMissions).length,0);g.state.stats.killsTotal+=20;g.state.claimedMissions.kill=true;g.refreshDailyMissions();assert.equal(g.state.missionBaseline.killsTotal,500);assert(g.state.claimedMissions.kill);});
 test('all 200 maps have reachable sockets and cached layouts cannot keep towers',()=>{const g=createGame().api;for(let lv=1;lv<=200;lv++){g.startLevel(lv);for(const [i,s]of g.sockets.entries()){const d=B.pathDistance(s,g.paths);assert(d>=42&&d<=86);for(const p of g.sockets.slice(0,i))assert(Math.hypot(p.x-s.x,p.y-s.y)>=60);}}g.sockets[0].tower={};g.startLevel(1);assert(g.sockets.every(s=>!s.tower));});
 test('combat profiles conserve real earned/purchased budgets and never lose bought ranks',()=>{for(const extra of [0,50,1350,15000]){let prev=state();for(let lv=1;lv<=200;lv++){const s=makeProfile(lv,extra);let spentGear=0,spentGems=0;for(const[k,d]of Object.entries(B.skills)){const n=s.skills[k]-d.base;assert(s.skills[k]>=prev.skills[k]);spentGear+=d.gear?n*d.gear+d.gearStep*n*(n-1)/2:0;for(let rank=d.base;rank<s.skills[k];rank++)spentGems+=B.cost({skills:{[k]:rank}},k).core;}assert.equal(s.gear+spentGear,s.initial.gear);assert.equal(s.cyberCore+spentGems,s.initial.gems);assert(s.gear>=0&&s.cyberCore>=0);prev=s;}}});
+
+test('early campaign pressure: gentle onboarding, boosted 3-12, smooth fade, untouched from 25',()=>{
+  const p=B.earlyPressure;
+  assert.deepEqual(p(1),{hp:1.10,threat:1.10});
+  assert.deepEqual(p(2),{hp:1.20,threat:1.20});
+  for(let lv=3;lv<=12;lv++)assert.deepEqual(p(lv),{hp:1.40,threat:1.35});
+  let prev=p(12);
+  for(let lv=13;lv<=25;lv++){const cur=p(lv);assert.ok(cur.hp<=prev.hp&&cur.threat<=prev.threat,`fade must not rise at ${lv}`);assert.ok(cur.hp>=1&&cur.threat>=1);prev=cur;}
+  for(const lv of [25,50,100,200])assert.deepEqual(p(lv),{hp:1,threat:1});
+  // Level 25+ difficulty equals the original tuned curve exactly.
+  const original=(lv,w)=>{const t=Math.max(0,lv-5);const curve=1.09+.026*t+.000065*t*t;return +(curve*(1+Math.min(30,w)*.04)).toFixed(2);};
+  for(const lv of [25,60,150,200])for(const w of [0,3,7])assert.equal(B.difficulty(lv,w).hpMult,original(lv,w));
+});

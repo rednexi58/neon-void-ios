@@ -4,7 +4,7 @@
   else root.GameBalance = api;
 })(typeof window === 'object' ? window : globalThis, function() {
   'use strict';
-  const revision = '2026.10.25.4';
+  const revision = '2026.11.11.1';
   // Paid upgrades; drone fleet and critical chance have explicit caps.
   const skills = {
     dmgLv: {base:1,max:Infinity,gear:65,gearStep:35,core:5,step:4},
@@ -58,17 +58,30 @@
     const p=bound(dr);dr.x=p.x;dr.y=p.y;
     dr.engaging=threats.length>0;
   }
+  // Early-campaign pressure (2026.11.11): players cleared levels 1-12 without the base taking a hit.
+  // Levels 1-2 stay gentle (onboarding), 3-12 get the full boost, 13-24 fade back to the tuned
+  // mid-game curve, and level 25+ is unchanged. hp = enemy health, threat = enemies per wave.
+  function earlyPressure(lv) {
+    const peak={hp:1.40,threat:1.35};
+    if(lv<=1)return {hp:1.10,threat:1.10};
+    if(lv<=2)return {hp:1.20,threat:1.20};
+    if(lv<=12)return peak;
+    if(lv>=25)return {hp:1,threat:1};
+    const fade=(lv-12)/13;
+    return {hp:+(peak.hp-(peak.hp-1)*fade).toFixed(3),threat:+(peak.threat-(peak.threat-1)*fade).toFixed(3)};
+  }
   function difficulty(levelNum,waveIndex=0) {
     const lv=clamp(levelNum,1,200), boss=lv%10===0,mini=lv>5&&lv%5===0&&!boss;
     const waves=lv<=3?3:Math.min(8,4+Math.floor((lv-4)/35)+(boss?1:0));
     const t=Math.max(0,lv-5);
     const curve=lv<=5?.65+.11*(lv-1):1.09+.026*t+.000065*t*t;
-    const hpMult=+(curve*(1+Math.min(30,waveIndex)*(lv<=5?.035:.04))).toFixed(2);
+    const early=earlyPressure(lv);
+    const hpMult=+(curve*early.hp*(1+Math.min(30,waveIndex)*(lv<=5?.035:.04))).toFixed(2);
     const baseBudget=lv<=5?5.5+lv*1.35:12.25+Math.sqrt(t)*2.5+t*.16;
     const progress=Math.min(1,waveIndex/Math.max(1,waves-1));
     return {level:lv,totalWaves:waves,isBossLevel:boss,isMiniBossLevel:mini,hpMult,
       armorBonus:lv<=5?0:Math.min(.18,.012*Math.sqrt(t)),
-      threatBudget:Math.round(baseBudget*(.84+.58*progress)),
+      threatBudget:Math.round(baseBudget*early.threat*(.84+.58*progress)),
       gearReward:Math.round(45+lv*4+Math.log2(lv+1)*10),coreReward:boss?5:mini?3:2,
       parTimeSeconds:Math.round(waves*(36+Math.min(10,lv*.05))+(boss?20:0))};
   }
@@ -111,5 +124,5 @@
     socketCache.set(cacheKey,result.map(s=>({...s})));
     return result;
   }
-  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,gearGain,droneFleet,moveDrone,difficulty,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
+  return {revision,skills,cleared,level,limit,cost,canUpgrade,nextUnlock,heroLimit,heroCost,heroXp,gearGain,droneFleet,moveDrone,difficulty,earlyPressure,campaignReward,migrate,distanceToSegment,pathDistance,placeSockets};
 });
