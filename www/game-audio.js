@@ -33,6 +33,8 @@
     init(){
       try{
         if(!this.ctx){const C=win.AudioContext||win.webkitAudioContext;if(!C)return;this.ctx=new C();
+          // iOS moves the context to "interrupted" when a native ad/call takes the audio session.
+          this.ctx.onstatechange=()=>{if(this.ctx&&this.ctx.state!=='running'&&this.ctx.state!=='closed')this.recover();};
           this.master=this.ctx.createGain();this.musicBus=this.ctx.createGain();this.sfxBus=this.ctx.createGain();
           const comp=this.ctx.createDynamicsCompressor();comp.threshold.value=-18;comp.knee.value=18;comp.ratio.value=4;comp.attack.value=.005;comp.release.value=.22;
           this.musicBus.connect(this.master);this.sfxBus.connect(this.master);this.master.connect(comp);comp.connect(this.ctx.destination);
@@ -41,7 +43,7 @@
           this.setupSpace();
           this.updateMix();
         }
-        if(this.ctx.state==='suspended')this.ctx.resume().catch(()=>{});
+        if(this.ctx.state!=='running'&&this.ctx.state!=='closed')this.ctx.resume().catch(()=>{});
         if(!this.ambientTimer){this.scheduleMusic();this.ambientTimer=setInterval(()=>this.scheduleMusic(),500);}
       }catch(e){/* Audio failure must not interrupt gameplay. */}
     },
@@ -57,7 +59,38 @@
       }catch(e){this.reverb=null;}
     },
     updateMix(){if(!this.ctx||!this.master)return;const t=this.ctx.currentTime;const set=(p,v)=>{p.cancelScheduledValues(t);p.setTargetAtTime(v,t,.035);};set(this.master.gain,this.muted||this.adMuted||doc.hidden?0:1);set(this.musicBus.gain,Math.max(0,Math.min(1,this.musicVol)));set(this.sfxBus.gain,Math.max(0,Math.min(1,this.sfxVol)));},
-    setAdMuted(value){this.adMuted=!!value;this.updateMix();},
+    setAdMuted(value){
+      const wasMuted=this.adMuted;this.adMuted=!!value;this.updateMix();
+      if(!this.adMuted){
+        // WebKit can report "running" yet stay silent after a native ad took the audio session,
+        // so the first tap after an ad always rebuilds the graph inside that user gesture.
+        if(wasMuted)this.rebuildOnNextGesture=true;
+        this.recover();
+      }
+    },
+    rebuildOnNextGesture:false,
+    // Brings audio back after an ad, a phone call or app switch. resume() is tried first;
+    // if WebKit leaves the context stuck (a known iOS issue after native fullscreen ads),
+    // the whole graph is rebuilt on a fresh AudioContext.
+    recover(){
+      if(this.adMuted||doc.hidden)return;
+      if(!this.ctx){this.init();return;}
+      if(this.ctx.state==='running'){this.updateMix();return;}
+      const ctx=this.ctx;
+      ctx.resume?.().catch(()=>{});
+      clearTimeout(this.recoverTimer);
+      this.recoverTimer=setTimeout(()=>{
+        if(this.ctx===ctx&&ctx.state!=='running'&&!this.adMuted&&!doc.hidden)this.rebuild();
+      },this.recoverDelayMs);
+    },
+    recoverDelayMs:700,
+    rebuild(){
+      const old=this.ctx;
+      this.ctx=null;this.master=null;this.musicBus=null;this.sfxBus=null;this.reverb=null;
+      this.activeSoundCount=0;this.nextChord=0;
+      if(old){old.onstatechange=null;try{old.close?.();}catch(e){}}
+      this.init();
+    },
     setMusicTheme(index){
       const i=Math.max(-1,Math.min(THEMES.length-1,Math.floor(Number(index))));
       if(Number.isNaN(i)||i===this.themeIndex)return;
@@ -127,6 +160,10 @@
       {freq:110,end:30,start:.35,duration:.8,volume:.09}
     ]);},
     bossPulse(){this.effect('boss',.8,[{freq:100,end:65,duration:.45,volume:.04},{freq:150,end:98,duration:.45,volume:.025}]);},
+    energy(){this.effect('energy',.35,[
+      {freq:1046.5,end:1046.5,duration:.09,volume:.018,type:'triangle',cutoff:4000},
+      {freq:1568,end:1568,start:.06,duration:.16,volume:.016,type:'triangle',cutoff:4000,wet:.2}
+    ]);},
     uiClick(){this.effect('ui',.05,[{freq:540,end:460,duration:.045,volume:.018}]);},
 
     // ---- Game events ----
@@ -201,6 +238,16 @@
       return bar;
     }
   };
-  doc.addEventListener('visibilitychange',()=>audio.updateMix());
+  doc.addEventListener('visibilitychange',()=>{audio.updateMix();if(!doc.hidden)audio.recover();});
+  // A user gesture is what iOS needs to let a context resume, so every tap retries when silent.
+  const onGesture=()=>{
+    if(audio.adMuted||doc.hidden)return;
+    if(audio.rebuildOnNextGesture){audio.rebuildOnNextGesture=false;audio.rebuild();return;}
+    if(audio.ctx&&audio.ctx.state!=='running')audio.recover();
+  };
+  doc.addEventListener('pointerdown',onGesture,true);
+  doc.addEventListener('touchend',onGesture,true);
+  win.addEventListener?.('focus',()=>audio.recover());
+  win.addEventListener?.('pageshow',()=>audio.recover());
   return audio;
 });

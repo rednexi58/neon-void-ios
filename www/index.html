@@ -407,7 +407,7 @@
 
           <!-- 5. Donma Birimi (Tek Yavaşlatma / Dondurma Kulesi) -->
           <button data-tower="cryo" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-cyan-200 active:scale-95 transition flex flex-col items-center text-center justify-between">
-            <span class="text-[8px] text-cyan-200 font-semibold leading-none">Buzul Alan</span>
+            <span class="text-[8px] text-cyan-200 font-semibold leading-none">Tekli Dondurma</span>
             <svg class="w-6 h-6 my-0.5" viewBox="0 0 40 40">
               <ellipse cx="20" cy="33" rx="13" ry="5" fill="#0f172a" stroke="#67e8f9" stroke-width="1.5"/>
               <polygon points="20,6 27,20 24,32 16,32 13,20" fill="#06b6d4" stroke="#ecfeff" stroke-width="1.5"/>
@@ -419,16 +419,16 @@
             </div>
           </button>
 
-          <!-- 6. Onarım Kulesi -->
-          <button data-tower="repair" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-emerald-300 active:scale-95 transition flex flex-col items-center text-center justify-between">
-            <span class="text-[8px] text-emerald-300 font-semibold leading-none">Üs Onarım</span>
+          <!-- 6. Enerji Santrali -->
+          <button data-tower="power" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-amber-300 active:scale-95 transition flex flex-col items-center text-center justify-between">
+            <span class="text-[8px] text-amber-300 font-semibold leading-none">Enerji Üretir</span>
             <svg class="w-6 h-6 my-0.5" viewBox="0 0 40 40">
-              <ellipse cx="20" cy="33" rx="13" ry="5" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
-              <rect x="14" y="16" width="12" height="16" rx="3" fill="#065f46" stroke="#6ee7b7" stroke-width="1.5"/>
-              <path d="M20 9 L20 19 M15 14 L25 14" stroke="#4ade80" stroke-width="3.2" stroke-linecap="round"/>
+              <ellipse cx="20" cy="33" rx="13" ry="5" fill="#422006" stroke="#fbbf24" stroke-width="1.5"/>
+              <rect x="12" y="13" width="16" height="19" rx="4" fill="#78350f" stroke="#fcd34d" stroke-width="1.5"/>
+              <path d="M22 9 L15 21 L20 21 L17 30 L25 17 L20 17 Z" fill="#fde047" stroke="#facc15" stroke-width="1" stroke-linejoin="round"/>
             </svg>
-            <div class="font-cyber font-bold text-[8.5px] text-emerald-100 leading-tight truncate w-full">Onarım Kulesi</div>
-            <div id="costTag_repair" class="w-full mt-0.5 py-0.5 rounded bg-sky-950/90 border border-emerald-400/40 font-cyber font-bold text-[9px] text-amber-300">
+            <div class="font-cyber font-bold text-[8.5px] text-amber-100 leading-tight truncate w-full">Enerji Santrali</div>
+            <div id="costTag_power" class="w-full mt-0.5 py-0.5 rounded bg-sky-950/90 border border-emerald-400/40 font-cyber font-bold text-[9px] text-amber-300">
               155 ⚡
             </div>
           </button>
@@ -803,7 +803,7 @@
               <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-emerald-500/30">
                 <div id="heroXpBar_kaan" class="bg-gradient-to-r from-emerald-400 to-amber-300 h-full transition-all duration-300" style="width:0%"></div>
               </div>
-              <p id="heroDesc_kaan" class="text-[10.5px] text-slate-300 mt-0.5 leading-snug">Tüm kule kurulum ve yükseltmeleri <strong>-%10 daha ucuzdur</strong>; Onarım Kulesi <strong>+%25</strong> güçlenir.</p>
+              <p id="heroDesc_kaan" class="text-[10.5px] text-slate-300 mt-0.5 leading-snug">Tüm kule kurulum ve yükseltmeleri <strong>-%10 daha ucuzdur</strong>; Enerji Santralleri <strong>+%10 enerji</strong> üretir.</p>
             </button>
             <div class="flex flex-col gap-1 pt-1 border-t border-slate-800/80">
               <button data-hero-gem="kaan" class="hero-gem-up-btn w-full py-1.5 px-2 rounded-lg bg-fuchsia-500/25 hover:bg-fuchsia-500/40 border border-fuchsia-400/60 text-fuchsia-200 font-cyber font-bold text-[10px] transition">
@@ -914,11 +914,11 @@
         </div>
         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-cyan-300/30">
           <div class="font-cyber font-bold text-cyan-200">4. Donma Birimi (130 ⚡ • Bölüm 3'te Açılır)</div>
-          <p class="text-[11px] text-slate-300 mt-0.5">Oyundaki <strong>tek yavaşlatıcı kule!</strong> Kriyo-buz yayarak uzaylıları <strong>%58–%76 yavaşlatır</strong> ve <strong>+%20 ek hasar</strong> almalarını sağlar.</p>
+          <p class="text-[11px] text-slate-300 mt-0.5">Oyundaki <strong>tek dondurucu kule!</strong> Her atışta <strong>tek bir uzaylıyı</strong> %58–%76 yavaşlatır, +%20 ek hasar almasını sağlar ve önceliği henüz donmamış düşmana verir.</p>
         </div>
-        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-emerald-500/30">
-          <div class="font-cyber font-bold text-emerald-300">5. Onarım Kulesi (155 ⚡ • Bölüm 4'te Açılır)</div>
-          <p class="text-[11px] text-slate-300 mt-0.5">Dalga sırasında korunan <strong>Gezegenin</strong> kalkan/canını periyodik tamir eder ve komşu kuleleri hızlandırır.</p>
+        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-amber-500/30">
+          <div class="font-cyber font-bold text-amber-300">5. Enerji Santrali (155 ⚡ • Bölüm 4'te Açılır)</div>
+          <p class="text-[11px] text-slate-300 mt-0.5">Saldırmaz; dalga sırasında her 6 saniyede <strong>⚡ enerji üretir</strong>. Erken kurarsan daha çok kule alırsın. Dal A üretimi artırır, Dal B yakın kuleleri hızlandırır.</p>
         </div>
         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-amber-500/30">
           <div class="font-cyber font-bold text-amber-300">6. Makineli Top (175 ⚡ • Bölüm 5'te Açılır)</div>
@@ -1709,15 +1709,15 @@
         },
         cryo: {
           nameTr: "Donma Birimi", nameEn: "Cryo Unit",
-          tagTr: "Buzul Alan", tagEn: "Cryo Field",
+          tagTr: "Tekli Dondurma", tagEn: "Single Freeze",
           targetTr: "Kara + Hava", targetEn: "Ground + Air",
           specTr: "%76 Yavaşlatma (Blm.3)", specEn: "76% Slow (Lv.3)"
         },
-        repair: {
-          nameTr: "Onarım Kulesi", nameEn: "Repair Tower",
-          tagTr: "Üs Onarım", tagEn: "Base Repair",
-          targetTr: "Üs Tamir + Destek", targetEn: "Planet Heal + Boost",
-          specTr: "Gezegen Tamiri (Blm.4)", specEn: "Planet Repair (Lv.4)"
+        power: {
+          nameTr: "Enerji Santrali", nameEn: "Power Plant",
+          tagTr: "Enerji Üretir", tagEn: "Makes Energy",
+          targetTr: "Ekonomi + Destek", targetEn: "Economy + Support",
+          specTr: "Dalgada ⚡ Üretim (Blm.4)", specEn: "⚡ Income in Waves (Lv.4)"
         }
       };
 
@@ -1800,10 +1800,10 @@
         ["AoE Kara", "AoE Ground"],
         ["Yıldırım", "Lightning"],
         ["Zırh Delici", "Armor Pierce"],
-        ["Buzul Alan", "Cryo Field"],
+        ["Tekli Dondurma", "Single Freeze"],
         ["Donma Birimi", "Cryo Unit"],
-        ["Üs Onarım", "Base Repair"],
-        ["Onarım Kulesi", "Repair Tower"],
+        ["Enerji Üretir", "Makes Energy"],
+        ["Enerji Santrali", "Power Plant"],
         ["Boş Platform Seç", "Select Empty Bay"],
         ["Hasar/Etki", "Damage"],
         ["Atış Hızı", "Fire Rate"],
@@ -1889,7 +1889,7 @@
         ["2. Gelişmiş Tesla (110 ⚡ • Bölüm 1)", "2. Advanced Tesla (110 ⚡ • Level 1)"],
         ["3. Ağır Füze (145 ⚡ • Bölüm 2'de Açılır)", "3. Heavy Missile (145 ⚡ • Unlocks Lv.2)"],
         ["4. Donma Birimi (130 ⚡ • Bölüm 3'te Açılır)", "4. Cryo Unit (130 ⚡ • Unlocks Lv.3)"],
-        ["5. Onarım Kulesi (155 ⚡ • Bölüm 4'te Açılır)", "5. Repair Tower (155 ⚡ • Unlocks Lv.4)"],
+        ["5. Enerji Santrali (155 ⚡ • Bölüm 4'te Açılır)", "5. Power Plant (155 ⚡ • Unlocks Lv.4)"],
         ["6. Makineli Top (175 ⚡ • Bölüm 5'te Açılır)", "6. Autocannon (175 ⚡ • Unlocks Lv.5)"],
         ["👾 YENİ UZAYLI TÜRLERİ & 4 GALAKTİK BOSS", "👾 NEW ALIEN TYPES & 4 GALACTIC BOSSES"],
         // Siber Evrim Üssü (Modal 1 - Lab)
@@ -1955,8 +1955,8 @@
           "Grants <strong>+12% Damage & Range</strong> to Particle Laser and Advanced Tesla towers."
         ],
         [
-          "Tüm kule kurulum ve yükseltmeleri <strong>-%10 daha ucuzdur</strong>; Onarım Kulesi <strong>+%25</strong> güçlenir.",
-          "All tower builds & upgrades are <strong>10% cheaper</strong>; Repair Tower is <strong>+25%</strong> stronger."
+          "Tüm kule kurulum ve yükseltmeleri <strong>-%10 daha ucuzdur</strong>; Enerji Santralleri <strong>+%10 enerji</strong> üretir.",
+          "All tower builds & upgrades are <strong>10% cheaper</strong>; Power Plants make <strong>+10% energy</strong>."
         ],
         [
           "Tüm kulelere <strong>+%8 Kritik Şansı</strong> verir ve Orbital Lazer süresini <strong>-6 sn</strong> kısaltır.",
@@ -2020,12 +2020,12 @@
           "Launches guided AoE missiles at Ground targets. Wipes out dense ground swarms."
         ],
         [
-          "Oyundaki <strong>tek yavaşlatıcı kule!</strong> Kriyo-buz yayarak uzaylıları <strong>%58–%76 yavaşlatır</strong> ve <strong>+%20 ek hasar</strong> almalarını sağlar.",
-          "The <strong>only slowing tower!</strong> Emits cryo-frost that <strong>slows aliens by 58%–76%</strong> and makes them take <strong>+20% extra damage</strong>."
+          "Oyundaki <strong>tek dondurucu kule!</strong> Her atışta <strong>tek bir uzaylıyı</strong> %58–%76 yavaşlatır, +%20 ek hasar almasını sağlar ve önceliği henüz donmamış düşmana verir.",
+          "The <strong>only freezing tower!</strong> Each shot slows <strong>a single alien</strong> by 58%–76%, makes it take +20% extra damage and prefers enemies not yet frozen."
         ],
         [
-          "Dalga sırasında korunan <strong>Gezegenin</strong> kalkan/canını periyodik tamir eder ve komşu kuleleri hızlandırır.",
-          "Periodically repairs the protected <strong>Planet's</strong> shield/HP during waves and boosts nearby towers."
+          "Saldırmaz; dalga sırasında her 6 saniyede <strong>⚡ enerji üretir</strong>. Erken kurarsan daha çok kule alırsın. Dal A üretimi artırır, Dal B yakın kuleleri hızlandırır.",
+          "Doesn't attack; generates <strong>⚡ energy every 6 seconds</strong> during waves. Build it early to afford more towers. Branch A boosts output, Branch B speeds up nearby towers."
         ],
         [
           "Uzun menzilli çift namlulu zırh delici. <strong>Zırhlı Yengeç Kruvazör</strong> ve <strong>4 Büyük Boss</strong> katilidir.",
@@ -2220,27 +2220,33 @@
           branchB: { nameTr: "💎 Dal B: Kırılgan Buz (+%35 Ek Hasar)", nameEn: "💎 Branch B: Brittle Ice (+35% Vuln)" },
           vsMultiplier: { swarm: 1.10, flying: 1.20, tank: 1.20, boss: 1.05, healer: 1.15, stealth: 1.25, splitter: 1.25, mini_crystal: 1.20 },
           levels: [
-            { cost: 130, refund: 85, damage: 15, fireRate: 1.35, range: 138, splash: 54, armorPen: 0.45, slow: 0.58, slowDur: 2.6 },
-            { cost: 175, refund: 200, damage: 26, fireRate: 1.60, range: 154, splash: 66, armorPen: 0.60, slow: 0.68, slowDur: 3.1 },
-            { cost: 240, refund: 350, damage: 45, fireRate: 1.85, range: 170, splash: 78, armorPen: 0.75, slow: 0.76, slowDur: 3.6 }
+            // Single-target since 1.1: faster fire + longer freeze so one unit still controls a lane.
+            { cost: 130, refund: 85, damage: 17, fireRate: 1.85, range: 142, splash: 0, armorPen: 0.45, slow: 0.58, slowDur: 3.0 },
+            { cost: 175, refund: 200, damage: 30, fireRate: 2.20, range: 157, splash: 0, armorPen: 0.60, slow: 0.68, slowDur: 3.5 },
+            { cost: 240, refund: 350, damage: 50, fireRate: 2.55, range: 173, splash: 0, armorPen: 0.75, slow: 0.76, slowDur: 4.0 }
           ]
         },
-        repair: {
-          id: "repair",
-          name: "Onarım Kulesi",
-          codeName: "Repair & Boost",
+        // Economy tower: never attacks. Generates energy every pulseSeconds while a wave is running
+        // (no idle farming between waves). Branch A: +50% output. Branch B: +18% fire rate aura.
+        power: {
+          id: "power",
+          name: "Enerji Santrali",
+          codeName: "Power Plant",
           unlockLevel: 4,
-          color: "#34d399",
-          canHitFlying: true,
-          targetLabel: "Üs Tamir + Destek",
-          specialLabel: "Gezegen Tamiri (Blm.4)",
-          branchA: { nameTr: "🛡️ Dal A: Çift Gezegen Tamiri (+2 Can)", nameEn: "🛡️ Branch A: Double Planet Heal" },
-          branchB: { nameTr: "⚡ Dal B: Komuta Overclock (+%28 Hız)", nameEn: "⚡ Branch B: Command Overclock (+28%)" },
-          vsMultiplier: { swarm: 0.95, flying: 0.95, tank: 0.95, boss: 0.95, healer: 1.0, stealth: 1.0, splitter: 1.0, mini_crystal: 1.0 },
+          color: "#fbbf24",
+          canHitFlying: false,
+          isEconomy: true,
+          pulseSeconds: 6,
+          auraRange: 165,
+          targetLabel: "Ekonomi + Destek",
+          specialLabel: "Dalgada ⚡ Üretim (Blm.4)",
+          branchA: { nameTr: "☢️ Dal A: Füzyon Çekirdeği (+%50 Enerji)", nameEn: "☢️ Branch A: Fusion Core (+50% Energy)" },
+          branchB: { nameTr: "🔌 Dal B: Şebeke Ağı (Yakın kulelere +%18 Hız)", nameEn: "🔌 Branch B: Power Grid (+18% Rate nearby)" },
+          vsMultiplier: { swarm: 0, flying: 0, tank: 0, boss: 0, healer: 0, stealth: 0, splitter: 0, mini_crystal: 0 },
           levels: [
-            { cost: 155, refund: 105, damage: 14, fireRate: 1.00, range: 148, splash: 0, armorPen: 0.35, slow: 0, slowDur: 0, healAmount: 1 },
-            { cost: 200, refund: 235, damage: 24, fireRate: 1.20, range: 165, splash: 0, armorPen: 0.50, slow: 0, slowDur: 0, healAmount: 2 },
-            { cost: 270, refund: 410, damage: 40, fireRate: 1.42, range: 182, splash: 0, armorPen: 0.65, slow: 0, slowDur: 0, healAmount: 3 }
+            { cost: 155, refund: 105, damage: 0, fireRate: 0, range: 0, splash: 0, armorPen: 0, slow: 0, slowDur: 0, energyPerPulse: 9 },
+            { cost: 200, refund: 235, damage: 0, fireRate: 0, range: 0, splash: 0, armorPen: 0, slow: 0, slowDur: 0, energyPerPulse: 14 },
+            { cost: 270, refund: 410, damage: 0, fireRate: 0, range: 0, splash: 0, armorPen: 0, slow: 0, slowDur: 0, energyPerPulse: 21 }
           ]
         }
       };
@@ -2515,6 +2521,7 @@
           vegaRangeBonus: 14 + (lv - 1) * 3,
           kaanDiscountPct: Math.min(28, 10 + (lv - 1) * 2),
           kaanRepairPct: 25 + (lv - 1) * 6,
+          kaanPowerPct: 10 + (lv - 1) * 4,
           kaanHealBonus: lv,
           // Nova: original hero bonuses; matrix adds 0.5 percentage points per rank separately.
           novaCritPct: 8 + (lv - 1) * 2.5,
@@ -2530,7 +2537,7 @@
           vega: { emoji: "⚡", color: "#facc15", glow: "rgba(250,204,21,0.55)", nameTr: "Amiral Vega", nameEn: "Admiral Vega",
             bonusTr: `Lazer & Tesla +%${info.vegaDmgBonusPct} hasar, +${info.vegaRangeBonus} menzil`, bonusEn: `Laser & Tesla +${info.vegaDmgBonusPct}% damage, +${info.vegaRangeBonus} range` },
           kaan: { emoji: "🛠️", color: "#34d399", glow: "rgba(52,211,153,0.55)", nameTr: "Mühendis Kaan", nameEn: "Engineer Kaan",
-            bonusTr: `Kuleler %${info.kaanDiscountPct} ucuz, onarım +%${info.kaanRepairPct}`, bonusEn: `Towers ${info.kaanDiscountPct}% cheaper, repair +${info.kaanRepairPct}%` },
+            bonusTr: `Kuleler %${info.kaanDiscountPct} ucuz, santral +%${info.kaanPowerPct} enerji`, bonusEn: `Towers ${info.kaanDiscountPct}% cheaper, power plant +${info.kaanPowerPct}% energy` },
           nova: { emoji: "☄️", color: "#fb923c", glow: "rgba(251,146,60,0.55)", nameTr: "Kaptan Nova", nameEn: "Captain Nova",
             bonusTr: `Kritik +%${info.novaCritPct}, Orbital bekleme -%${info.novaOrbitalCdRed}`, bonusEn: `Crit +${info.novaCritPct}%, Orbital cooldown -${info.novaOrbitalCdRed}%` }
         }[key];
@@ -3482,23 +3489,26 @@
         return queue;
       }
 
-      async function spawnNextWave() {
+      // Waves always start immediately; forced ads live only at the level end (see showLevelEndInterstitial).
+      function spawnNextWave() {
         if (state.waveStartPending || state.levelEnded || !waveFlow.hasMoreWaves()) return;
-        // Interstitials are only considered before the first wave, never in the middle of a fight.
-        if (waveFlow.launched === 0 && window.GameMonetization?.isInterstitialDue(state)) {
-          const runId = state.levelRunId;
-          const clears = state.adClears;
-          state.waveStartPending = true;
-          try {
-            if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(true);
-            const shown = await window.GameMonetization.showInterstitial();
-            if (shown) { state.lastInterstitialClear = clears; saveProgress(); }
-          } catch (error) { console.warn("AdMob geçiş reklamı", error); }
-          finally { if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(false); if (state.levelRunId === runId) state.waveStartPending = false; }
-          if (state.levelRunId !== runId) return;
-          lastTime = performance.now();
-        }
         beginWaveAfterInterstitial();
+      }
+
+      // Natural break after a won level: every 2nd victory (interstitial-cadence.cjs), after a short
+      // celebration so the win registers first. Resolves when the ad is closed or unavailable.
+      async function showLevelEndInterstitial(celebrateMs = 1100) {
+        if (!window.GameMonetization?.isInterstitialDue(state)) return false;
+        const clears = state.adClears;
+        await new Promise(resolve => setTimeout(resolve, celebrateMs));
+        let shown = false;
+        try {
+          if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(true);
+          shown = Boolean(await window.GameMonetization.showInterstitial());
+          if (shown) { state.lastInterstitialClear = clears; saveProgress(); }
+        } catch (error) { console.warn("AdMob geçiş reklamı", error); }
+        finally { if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(false); lastTime = performance.now(); }
+        return shown;
       }
 
       function beginWaveAfterInterstitial() {
@@ -4097,15 +4107,7 @@
           const tDef = TOWER_TYPES[t.typeKey];
           const lvStats = tDef.levels[t.level - 1];
 
-          let repairAuraBoost = 1.0;
-          SOCKETS.forEach(otherSock => {
-            if (otherSock !== sock && otherSock.tower && otherSock.tower.typeKey === "repair") {
-              if (Math.hypot(otherSock.x - sock.x, otherSock.y - sock.y) <= 165) {
-                const isOverclockBranch = otherSock.tower.level >= 3 && otherSock.tower.branch === "B";
-                repairAuraBoost = Math.max(repairAuraBoost, isOverclockBranch ? 1.28 : 1.15);
-              }
-            }
-          });
+          const gridAuraBoost = powerGridBoostFor(sock);
 
           const isLv3 = t.level >= 3;
           const branch = t.branch || "A";
@@ -4122,7 +4124,7 @@
           }
 
           const effDamage = lvStats.damage * getDmgMultiplier() * branchDmgMult;
-          const effRate = lvStats.fireRate * getRateMultiplier() * repairAuraBoost * branchRateMult;
+          const effRate = lvStats.fireRate * getRateMultiplier() * gridAuraBoost * branchRateMult;
           const vegaRangeBonus = (state.activeHero === "vega" && (t.typeKey === "rapid" || t.typeKey === "emp")) ? getHeroInfo("vega").vegaRangeBonus : 0;
           const blizzardMult = (activeWeather && activeWeather.type === "blizzard" && activeWeather.activeTimer > 0) ? 0.82 : 1.0;
           const effRange = (lvStats.range + vegaRangeBonus) * blizzardMult;
@@ -4131,33 +4133,9 @@
           t.recoil = Math.max(0, (t.recoil || 0) - dt * 28);
           t.spinPhase = (t.spinPhase || 0) + dt * 4.5;
 
-          if (t.typeKey === "repair") {
-            t.healTimer = (t.healTimer || 5.0) - dt;
-            if (t.healTimer <= 0 && waveInProgress) {
-              t.healTimer = 5.0;
-              if (state.baseHp < state.maxBaseHp || state.hqShieldHp < state.maxHqShieldHp) {
-                SoundFX.repair();
-                const kaanBonus = state.activeHero === "kaan" ? getHeroInfo("kaan").kaanHealBonus : 0;
-                const branchHealBonus = (isLv3 && branch === "A") ? 2 : 0;
-                const totalHeal = (lvStats.healAmount || 1) + kaanBonus + branchHealBonus;
-                if (state.baseHp < state.maxBaseHp) {
-                  state.baseHp = Math.min(state.maxBaseHp, state.baseHp + totalHeal);
-                } else {
-                  state.hqShieldHp = Math.min(state.maxHqShieldHp, state.hqShieldHp + totalHeal);
-                }
-                repairBeams.push({
-                  x1: sock.x, y1: sock.y - 12,
-                  x2: nexusPt.x, y2: nexusPt.y,
-                  life: 0.35
-                });
-                floatingTexts.push({
-                  x: nexusPt.x, y: nexusPt.y - 30,
-                  text: L(`🔧 +${totalHeal} GEZEGEN ONARIMI`, `🔧 +${totalHeal} PLANET REPAIR`),
-                  color: "#4ade80", life: 0.85
-                });
-                updateHUD();
-              }
-            }
+          if (tDef.isEconomy) {
+            runPowerPlant(sock, t, tDef, lvStats, dt);
+            return; // economy towers never target or shoot
           }
 
           // HEDEF ÖNCELİĞİ SİSTEMİ (first | strong | weak | flying)
@@ -4189,7 +4167,7 @@
           }
 
           // Menzilde düşman yoksa veya oyuncu kule kurduysa: 1) Uzaylı Warp Jeneratörünü veya 2) Kırılabilir Kristal Kayaları ateşle!
-          if (!targetEnemy && t.typeKey !== "repair") {
+          if (!targetEnemy) {
             let obstacleTarget = null;
             if (warpGenerator && !warpGenerator.dead && Math.hypot(warpGenerator.x - sock.x, warpGenerator.y - sock.y) <= effRange + 25) {
               obstacleTarget = { isGenerator: true, obj: warpGenerator, x: warpGenerator.x, y: warpGenerator.y };
@@ -4345,38 +4323,28 @@
                 applyDamageToEnemy(targetEnemy, effDamage, lvStats.armorPen, false, "railgun");
 
               } else if (t.typeKey === "cryo") {
-                // Tek yavaşlatıcı/dondurucu kule: Donma Birimi!
+                // Donma Birimi tek hedefi dondurur. Zaten donmuş düşmana ateş israf olmasın diye
+                // menzildeki donmamış en öndeki düşmanı tercih eder (yoksa normal hedefte kalır).
+                const freezeTarget = pickCryoTarget(sock, effRange, tDef, targetEnemy);
                 SoundFX.cryo();
                 laserBeams.push({
                   x1: sock.x, y1: sock.y - 10,
-                  x2: targetEnemy.x, y2: targetEnemy.y,
+                  x2: freezeTarget.x, y2: freezeTarget.y,
                   color: "#67e8f9", width: 3.8, life: 0.16
                 });
                 shockwaves.push({
-                  x: targetEnemy.x, y: targetEnemy.y,
-                  maxR: lvStats.splash, r: 8,
-                  color: "#a5f3fc", life: 0.25
+                  x: freezeTarget.x, y: freezeTarget.y,
+                  maxR: (freezeTarget.arch.radius || 10) * 1.8, r: 4,
+                  color: "#a5f3fc", life: 0.22
                 });
                 const effSlow = (isLv3 && branch === "A") ? 0.84 : lvStats.slow;
                 const effBrittleMult = (isLv3 && branch === "B") ? 1.35 : 1.20;
-                activeEnemies.forEach(other => {
-                  if (!other.dead && Math.hypot(other.x - targetEnemy.x, other.y - targetEnemy.y) <= lvStats.splash) {
-                    other.slowRatio = Math.max(other.slowRatio, effSlow);
-                    other.slowTimer = Math.max(other.slowTimer, lvStats.slowDur);
-                    other.brittleTimer = Math.max(other.brittleTimer || 0, lvStats.slowDur);
-                    other.extraBrittleMult = effBrittleMult;
-                    applyDamageToEnemy(other, effDamage, lvStats.armorPen, false, "cryo");
-                  }
-                });
+                freezeTarget.slowRatio = Math.max(freezeTarget.slowRatio, effSlow);
+                freezeTarget.slowTimer = Math.max(freezeTarget.slowTimer, lvStats.slowDur);
+                freezeTarget.brittleTimer = Math.max(freezeTarget.brittleTimer || 0, lvStats.slowDur);
+                freezeTarget.extraBrittleMult = effBrittleMult;
+                applyDamageToEnemy(freezeTarget, effDamage, lvStats.armorPen, false, "cryo");
 
-              } else if (t.typeKey === "repair") {
-                SoundFX.laser();
-                laserBeams.push({
-                  x1: sock.x, y1: sock.y - 8,
-                  x2: targetEnemy.x, y2: targetEnemy.y,
-                  color: "#34d399", width: 2.4, life: 0.12
-                });
-                applyDamageToEnemy(targetEnemy, effDamage, lvStats.armorPen, false, "repair");
               }
             }
           }
@@ -4534,7 +4502,8 @@
 
         state.adClears++;
         saveProgress();
-        showVictoryModal();
+        const runId = state.levelRunId;
+        showLevelEndInterstitial().finally(() => { if (state.levelRunId === runId) showVictoryModal(); });
       }
 
       function handleGameOver() {
@@ -5392,6 +5361,52 @@
         ctx.restore();
       }
 
+      // Power Plant helpers -------------------------------------------------------
+      function powerPlantOutput(t, lvStats) {
+        const fusion = t.level >= 3 && (t.branch || "A") === "A" ? 1.5 : 1.0;
+        const kaan = state.activeHero === "kaan" ? 1 + getHeroInfo("kaan").kaanPowerPct / 100 : 1.0;
+        return Math.round(lvStats.energyPerPulse * fusion * kaan);
+      }
+
+      // Pulses only while a wave is running, so waiting between waves never farms energy.
+      function runPowerPlant(sock, t, tDef, lvStats, dt) {
+        if (!waveInProgress) return;
+        t.pulseTimer = (t.pulseTimer ?? tDef.pulseSeconds) - dt;
+        t.spinPhase = (t.spinPhase || 0) + dt * 2.2;
+        if (t.pulseTimer > 0) return;
+        t.pulseTimer += tDef.pulseSeconds;
+        const gain = powerPlantOutput(t, lvStats);
+        state.gold += gain;
+        t.pulseFlash = 0.45;
+        SoundFX.energy?.();
+        floatingTexts.push({ x: sock.x, y: sock.y - 26, text: `+${gain}⚡`, color: "#fde047", life: 0.9 });
+        spawnParticles(sock.x, sock.y - 10, "#facc15", state.qualityMode === "performance" ? 3 : 7);
+        updateHUD();
+      }
+
+      // Branch B "Power Grid" plants speed up towers within auraRange (strongest single aura applies).
+      function powerGridBoostFor(sock) {
+        let boost = 1.0;
+        for (const other of SOCKETS) {
+          const ot = other.tower;
+          if (other === sock || !ot || ot.typeKey !== "power" || ot.level < 3 || ot.branch !== "B") continue;
+          if (Math.hypot(other.x - sock.x, other.y - sock.y) <= TOWER_TYPES.power.auraRange) boost = Math.max(boost, 1.18);
+        }
+        return boost;
+      }
+
+      // Cryo picks the front-most enemy in range that is not already frozen; falls back to the default target.
+      function pickCryoTarget(sock, range, tDef, fallback) {
+        let best = null, bestProgress = -Infinity;
+        for (const e of activeEnemies) {
+          if (e.dead || (e.arch.isFlying && !tDef.canHitFlying) || e.slowTimer > 0.4) continue;
+          if (Math.hypot(e.x - sock.x, e.y - sock.y) > range) continue;
+          const progress = e.wpIndex * 1000 - Math.hypot(e.x - sock.x, e.y - sock.y);
+          if (progress > bestProgress) { bestProgress = progress; best = e; }
+        }
+        return best || fallback;
+      }
+
       function drawCombatDrone(ctx, dr, time, detailed) {
         ctx.save();
         ctx.translate(dr.x, dr.y);
@@ -5876,23 +5891,48 @@
               ctx.closePath();
               ctx.fill();
 
-            } else if (t.typeKey === "repair") {
-              ctx.fillStyle = "#065f46";
-              ctx.strokeStyle = "#34d399";
+            } else if (t.typeKey === "power") {
+              // Reactor housing with a spinning energy ring and a lightning core that flashes on each pulse.
+              const flash = Math.max(0, t.pulseFlash || 0);
+              ctx.fillStyle = "#78350f";
+              ctx.strokeStyle = "#fbbf24";
               ctx.lineWidth = 1.6;
               ctx.beginPath();
-              ctx.roundRect(sock.x - 11, sock.y - 11, 22, 15, 4);
+              ctx.roundRect(sock.x - 11, sock.y - 14, 22, 18, 5);
               ctx.fill();
               ctx.stroke();
-
-              ctx.strokeStyle = "#4ade80";
-              ctx.lineWidth = 2.6;
+              ctx.save();
+              ctx.translate(sock.x, sock.y - 5);
+              ctx.rotate(t.spinPhase || 0);
+              ctx.strokeStyle = `rgba(253, 224, 71, ${0.55 + flash})`;
+              ctx.lineWidth = 1.4;
+              ctx.setLineDash([4, 3]);
               ctx.beginPath();
-              ctx.moveTo(sock.x, sock.y - 18);
-              ctx.lineTo(sock.x, sock.y - 6);
-              ctx.moveTo(sock.x - 6, sock.y - 12);
-              ctx.lineTo(sock.x + 6, sock.y - 12);
+              ctx.arc(0, 0, 13 + flash * 6, 0, Math.PI * 2);
               ctx.stroke();
+              ctx.restore();
+              if (useHighDetail) { ctx.shadowColor = "#facc15"; ctx.shadowBlur = 8 + flash * 18; }
+              ctx.fillStyle = flash > 0 ? "#fffbeb" : "#fde047";
+              ctx.beginPath();
+              ctx.moveTo(sock.x + 2, sock.y - 13);
+              ctx.lineTo(sock.x - 4, sock.y - 4);
+              ctx.lineTo(sock.x, sock.y - 4);
+              ctx.lineTo(sock.x - 2, sock.y + 2);
+              ctx.lineTo(sock.x + 4, sock.y - 7);
+              ctx.lineTo(sock.x, sock.y - 7);
+              ctx.closePath();
+              ctx.fill();
+              ctx.shadowBlur = 0;
+              if (t.level >= 3 && t.branch === "B") {
+                ctx.strokeStyle = "rgba(232, 121, 249, 0.18)";
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 6]);
+                ctx.beginPath();
+                ctx.arc(sock.x, sock.y, TOWER_TYPES.power.auraRange, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+              }
+              t.pulseFlash = Math.max(0, flash - 0.03);
             }
 
             if (t.level >= 3) {
@@ -6545,9 +6585,15 @@
 
           document.getElementById("instTowerName").textContent = locName;
           document.getElementById("instTowerTargetTag").textContent = getTowerTargetLabel(t.typeKey);
-          document.getElementById("instTowerDmg").textContent = effDmg;
-          document.getElementById("instTowerRate").textContent = effRate + L("/s", "/s");
-          document.getElementById("instTowerRange").textContent = lvStats.range + "m";
+          if (tDef.isEconomy) {
+            document.getElementById("instTowerDmg").textContent = `+${powerPlantOutput(t, lvStats)}⚡`;
+            document.getElementById("instTowerRate").textContent = L(`${tDef.pulseSeconds} sn`, `${tDef.pulseSeconds}s`);
+            document.getElementById("instTowerRange").textContent = t.level >= 3 && t.branch === "B" ? tDef.auraRange + "m" : "—";
+          } else {
+            document.getElementById("instTowerDmg").textContent = effDmg;
+            document.getElementById("instTowerRate").textContent = effRate + L("/s", "/s");
+            document.getElementById("instTowerRange").textContent = lvStats.range + "m";
+          }
           document.getElementById("instTowerSpecial").textContent = getTowerSpecialLabel(t.typeKey);
 
           document.getElementById("instTowerLevel").textContent = `${"★".repeat(t.level)} Lv.${t.level}/3`;
@@ -6558,7 +6604,10 @@
             flying: state.lang === "en" ? "🛸 Flying" : "🛸 Uçan Öncelik"
           };
           const prioBtn = document.getElementById("btnCycleTargetPriority");
-          if (prioBtn) prioBtn.textContent = targetLabels[t.targetMode || "first"];
+          if (prioBtn) {
+            prioBtn.textContent = targetLabels[t.targetMode || "first"];
+            prioBtn.classList.toggle("hidden", Boolean(tDef.isEconomy)); // nothing to target
+          }
 
           const bA = document.getElementById("btnSelectBranchA");
           const bB = document.getElementById("btnSelectBranchB");
@@ -7571,8 +7620,8 @@
                 : `Parçacık Lazer ve Tesla kulelerine <strong>+%${info.vegaDmgBonusPct} Hasar</strong> ve <strong>+${info.vegaRangeBonus}m Menzil</strong> verir <span class="text-cyan-300 text-[9.5px]">(Sonraki Sv: +%${info.vegaDmgBonusPct + 2})</span>.`;
             } else if (hKey === "kaan") {
               descEl.innerHTML = state.lang === "en"
-                ? `Tower builds & upgrades are <strong>-${info.kaanDiscountPct}% cheaper</strong>; Repair Tower is <strong>+${info.kaanHealBonus} HP</strong> stronger.`
-                : `Tüm kule kurulum ve yükseltmeleri <strong>-%${info.kaanDiscountPct} ucuzdur</strong>; Onarım Kulesi <strong>+${info.kaanHealBonus} Can</strong> güçlenir.`;
+                ? `Tower builds & upgrades are <strong>-${info.kaanDiscountPct}% cheaper</strong>; Power Plants make <strong>+${info.kaanPowerPct}% energy</strong>.`
+                : `Tüm kule kurulum ve yükseltmeleri <strong>-%${info.kaanDiscountPct} ucuzdur</strong>; Enerji Santralleri <strong>+%${info.kaanPowerPct} enerji</strong> üretir.`;
             } else if (hKey === "nova") {
               descEl.innerHTML = state.lang === "en"
                 ? `Grants <strong>+${info.novaCritPct}% Crit Chance</strong> to all towers and reduces Orbital Laser cooldown by <strong>-${info.novaOrbitalCdRed}s</strong>.`

@@ -3,7 +3,7 @@ const path=require('node:path');
 const coverageCache=new WeakMap();
 function coverage(g,s,range){let cache=coverageCache.get(g);if(!cache){cache=new Map();coverageCache.set(g,cache);}const key=s.x+','+s.y+','+range;if(cache.has(key))return cache.get(key);let value=0;for(const p of g.paths){for(let i=1;i<p.length;i++){const a=p[i-1],b=p[i],len=Math.hypot(b.x-a.x,b.y-a.y);for(let d=0;d<len;d+=25){const t=d/len,x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t;if(Math.hypot(x-s.x,y-s.y)<=range)value+=25;}}}cache.set(key,value);return value;}
 function shop(g) {
-  const choices=[];const types=['emp','rapid','cryo','railgun','repair','plasma'];
+  const choices=[];const types=['emp','rapid','cryo','railgun','plasma']; // economy towers (power) are scored separately: the bot is DPS-only
   const count={};for(const s of g.sockets)if(s.tower)count[s.tower.typeKey]=(count[s.tower.typeKey]||0)+1;
   for(const s of g.sockets){
     if(s.crystalHp>0)continue;
@@ -11,7 +11,7 @@ function shop(g) {
       const lv=s.tower?s.tower.level:0;if(lv>=3)continue;
       const next=def.levels[lv],prev=lv?def.levels[lv-1]:null,cost=next.cost;
       if(cost>g.state.gold)continue;
-      const factor=key==='emp'?2.5:key==='cryo'?(count.cryo?1:6):key==='repair'?(count.repair?.6:4):key==='plasma'?1.9:1;
+      const factor=key==='emp'?2.5:key==='cryo'?(count.cryo?1:6):key==='plasma'?1.9:1;
       const dps=next.damage*next.fireRate-(prev?prev.damage*prev.fireRate:0);
       const cov=coverage(g,s,next.range);
       const nearby=g.sockets.filter(other=>other.tower&&Math.hypot(other.x-s.x,other.y-s.y)<130).length;
