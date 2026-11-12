@@ -138,7 +138,7 @@
     @media (max-width: 380px) { #modalShop > .shop-panel { padding: 12px; } #modalShop h2 { font-size: 13px; } }
   </style>
 </head>
-<body>
+<body class="kr-battle">
   <div class="app-shell">
     <!-- DİKEY 9:16 MOBİL OYUN ÇERÇEVESİ -->
     <div class="mobile-viewport">
@@ -254,6 +254,17 @@
           <p class="font-cyber font-bold text-[10px] text-rose-200 tracking-wide animate-pulse" id="i18n_bossAlert">⚠ DEV ÖRÜMCEK KRALİÇE SAHNEDE (EMP AKTİF!) ⚠</p>
         </div>
 
+        <!-- Kahraman paneli: portreye dokun → haritada hedefe dokun; sağdaki tuş yeteneği kullanır -->
+        <div id="heroDock" class="gk-hero-dock">
+          <button id="btnHeroSelect" class="gk-hero-dock__portrait" aria-label="Kahraman">
+            <span id="heroDockPortrait" class="gk-hero-dock__icon"></span>
+            <span id="heroDockState" class="gk-hero-dock__state"></span>
+          </button>
+          <button id="btnHeroSkill" class="gk-hero-dock__skill" aria-label="Kahraman yeteneği">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9H22l-6 4.4 2.3 7L12 16l-6.3 4.3 2.3-7-6-4.4h7.6z"/></svg>
+            <span id="heroSkillTime" class="gk-hero-dock__time"></span>
+          </button>
+        </div>
         <!-- Harita Altı Kompakt Özel Yetenekler Şeridi (Ortalanmış, Kesilme Yok) -->
         <div class="absolute bottom-1.5 left-2 right-2 flex items-center justify-center gap-1.5 pointer-events-none z-10">
           <div id="abilityStrip" class="pointer-events-auto flex items-center gap-1 bg-slate-950/85 border border-sky-500/35 backdrop-blur-md px-1.5 py-1 rounded-xl shadow-lg">
@@ -431,6 +442,20 @@
             <div class="font-cyber font-bold text-[8.5px] text-amber-100 leading-tight truncate w-full">Enerji Santrali</div>
             <div id="costTag_power" class="w-full mt-0.5 py-0.5 rounded bg-sky-950/90 border border-emerald-400/40 font-cyber font-bold text-[9px] text-amber-300">
               155 ⚡
+            </div>
+          </button>
+          <!-- 7. Dron Hangarı (halka menüden kurulur; bu kart ikon ve kurulum kaynağıdır) -->
+          <button data-tower="hangar" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-emerald-300 active:scale-95 transition flex flex-col items-center text-center justify-between">
+            <span class="text-[8px] text-emerald-300 font-semibold leading-none">Yolu Tıkar</span>
+            <svg class="w-6 h-6 my-0.5" viewBox="0 0 40 40">
+              <ellipse cx="20" cy="33" rx="13" ry="5" fill="#052e16" stroke="#4ade80" stroke-width="1.5"/>
+              <path d="M8 31 V17 Q20 7 32 17 V31 Z" fill="#14532d" stroke="#86efac" stroke-width="1.5" stroke-linejoin="round"/>
+              <rect x="15" y="21" width="10" height="10" rx="1.5" fill="#052e16" stroke="#4ade80" stroke-width="1.2"/>
+              <circle cx="20" cy="16" r="2.4" fill="#bbf7d0"/>
+            </svg>
+            <div class="font-cyber font-bold text-[8.5px] text-emerald-100 leading-tight truncate w-full">Dron Hangarı</div>
+            <div id="costTag_hangar" class="w-full mt-0.5 py-0.5 rounded bg-sky-950/90 border border-emerald-400/40 font-cyber font-bold text-[9px] text-emerald-300">
+              95 ⚡
             </div>
           </button>
         </div>
@@ -920,6 +945,14 @@
         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-amber-500/30">
           <div class="font-cyber font-bold text-amber-300">5. Enerji Santrali (155 ⚡ • Bölüm 4'te Açılır)</div>
           <p class="text-[11px] text-slate-300 mt-0.5">Saldırmaz; dalga sırasında her 6 saniyede <strong>⚡ enerji üretir</strong>. Erken kurarsan daha çok kule alırsın. Dal A üretimi artırır, Dal B yakın kuleleri hızlandırır.</p>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-emerald-500/30">
+          <div class="font-cyber font-bold text-emerald-300">7. Dron Hangarı (95 ⚡ • Bölüm 2'de Açılır)</div>
+          <p class="text-[11px] text-slate-300 mt-0.5">Yola 2-3 robot asker indirir; <strong>yerdeki düşmanları durdurup</strong> yakın dövüşte tutar. Uçanları durduramaz. Hangara dokunup 🚩 Toplanma ile askerlerin yerini seçersin. Dal A can, Dal B hasar verir.</p>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-yellow-500/30">
+          <div class="font-cyber font-bold text-yellow-300">⭐ Kahraman</div>
+          <p class="text-[11px] text-slate-300 mt-0.5">Sol alttaki portreye dokun, sonra haritada bir yere dokun: kahraman oraya uçar, bir düşmanı çekici ışınla tutar ve ateş eder. ★ tuşu özel yeteneğidir. Düşerse bir süre sonra gezegenin yanında yeniden doğar.</p>
         </div>
         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-amber-500/30">
           <div class="font-cyber font-bold text-amber-300">6. Makineli Top (175 ⚡ • Bölüm 5'te Açılır)</div>
@@ -1600,6 +1633,9 @@
     <script src="space-theme.js"></script>
     <script src="world-map.js"></script>
     <script src="guided-tour.js"></script>
+    <script src="battle-terrain.js"></script>
+    <script src="ring-menu.js"></script>
+    <script src="battle-units.js"></script>
     <script src="review-prompt.js"></script>
   <script src="game-audio.js"></script>
   <script>
@@ -1629,14 +1665,14 @@
           tName_emp: "Gelişmiş Tesla",
           tName_railgun: "Makineli Top",
           trainerSteps: [
-            { title: "🎓 EĞİTİM 1/8 • KULE CEBİ SEÇ", desc: "Haritada altın halkayla parlayan CEP #1'e dokun. Kuleler sadece yol kenarındaki bu ceplere kurulur." },
-            { title: "🎓 EĞİTİM 2/8 • İLK KULENİ KUR", desc: "Alttaki panelden Parçacık Lazer'e (85⚡) dokun. Lazer hem kara hem hava düşmanını vurur; diğer kuleler bölüm ilerledikçe açılır.", focus: "buildTowerList" },
-            { title: "🎓 EĞİTİM 3/8 • GÜÇLENDİR (★→★★★)", desc: "Kurduğun kuleye dokunup ⬆ Geliştir ile Lv.2 ve Lv.3'e yükselt. Lv.3'te A veya B uzmanlık dalını seçersin; köşelerdeki ışıklar kulenin seviyesini gösterir." },
-            { title: "🎓 EĞİTİM 4/8 • ÖZEL YETENEKLER", desc: "🛰️ Orbital lazer tüm düşmanları vurur, 🛡 Kalkan gezegeni korur, ❄ Buzul herkesi yavaşlatır, 🔧 Onarım can yeniler. Zor anlar için sakla!", focus: "abilityStrip" },
-            { title: "🎓 EĞİTİM 5/8 • KAHRAMANIN", desc: "Gezegenin etrafında dönen gemi senin komutanın! ⚡ Vega lazer/tesla hasarını, 🛠 Kaan kule indirimini, ☄️ Nova kritik vuruşu artırır. Ana ekrandaki alt menüde KAHRAMAN sekmesinden seçilir ve seviye atlatılır — bölümü geçince sana içini adım adım göstereceğiz." },
-            { title: "🎓 EĞİTİM 6/8 • OTONOM DRONLAR", desc: "Ana ekrandaki EVRİM sekmesinden 🛸 Siber-Dron filosunu açınca dronlar gezegene yaklaşan düşmanları kendiliğinden avlar. Her seviye bir dron daha ekler." },
-            { title: "🎓 EĞİTİM 7/8 • SİBER EVRİM", desc: "Bölüm sonunda kazandığın ⚙ parça ve 💎 elmas ile ana ekrandaki 🧬 EVRİM sekmesinden kalıcı hasar, hız, kritik ve başlangıç enerjisi güçlendirmeleri alırsın. Savaş sırasında da bu butondan ulaşabilirsin.", focus: "btnOpenMenuQuick" },
-            { title: "🎓 EĞİTİM 8/8 • DALGAYI BAŞLAT!", desc: "Hazırsan sağ üstteki butonla dalgayı başlat. Sonraki dalgaları erken çağırırsan bonus ⚡ kazanırsın; çağırmazsan 7 sn sonra kendiliğinden gelir. Gezegeni koru Komutan!", focus: "btnNextWaveEarly" }
+            { title: "🎓 EĞİTİM 1/8 • PLATFORMA DOKUN", desc: "Haritada altın halkayla parlayan taş platforma dokun. Kuleler sadece yol kenarındaki bu platformlara kurulur." },
+            { title: "🎓 EĞİTİM 2/8 • İLK KULENİ KUR", desc: "Platformun etrafında açılan halkadan Parçacık Lazer'i (85⚡) seç. Lazer hem kara hem hava düşmanını vurur; diğer kuleler bölüm ilerledikçe açılır." },
+            { title: "🎓 EĞİTİM 3/8 • GÜÇLENDİR (★→★★★)", desc: "Kurduğun kuleye tekrar dokun: halkada ⬆ Yükselt, 🎯 Hedef ve 💲 Sat çıkar. Lv.3'te A veya B uzmanlık dalını seçersin." },
+            { title: "🎓 EĞİTİM 4/8 • KAHRAMANINI YÖNET", desc: "Sol alttaki portre senin kahramanın. Portreye dokun, sonra haritada bir yere dokun: kahraman oraya uçar, düşmanı durdurup savaşır. Yanındaki ★ tuşu özel yeteneğidir.", focus: "heroDock" },
+            { title: "🎓 EĞİTİM 5/8 • DRON HANGARI", desc: "Bölüm 2'de açılan Dron Hangarı yola robot askerler indirir; yerdeki düşmanları durdurup tutar. Hangara dokunup 🚩 Toplanma ile askerlerin bekleyeceği yeri seçebilirsin." },
+            { title: "🎓 EĞİTİM 6/8 • ÖZEL YETENEKLER", desc: "🛰️ Orbital lazer tüm düşmanları vurur, 🛡 Kalkan gezegeni korur, ❄ Buzul herkesi yavaşlatır, 🔧 Onarım can yeniler. Zor anlar için sakla!", focus: "abilityStrip" },
+            { title: "🎓 EĞİTİM 7/8 • HARİTA SÜRPRİZLERİ", desc: "Haritadaki 📡 röleye dokunursan enerji verir, ☄️ meteor kayasına dokunursan gezegene en yakın düşmana fırlar. Arada bir dolmalarını bekle." },
+            { title: "🎓 EĞİTİM 8/8 • DALGAYI BAŞLAT!", desc: "Kapının yanındaki kırmızı ▶ bayrağa ya da sağ üstteki butona dokunarak dalgayı başlat. Bayrağın altında gelecek düşmanlar görünür; erken çağırırsan bonus ⚡ kazanırsın." }
           ]
         },
         en: {
@@ -1658,14 +1694,14 @@
           tName_emp: "Advanced Tesla",
           tName_railgun: "Autocannon",
           trainerSteps: [
-            { title: "🎓 TUTORIAL 1/8 • PICK A TOWER BAY", desc: "Tap the glowing gold BAY #1 on the map. Towers can only be built in these bays beside the road." },
-            { title: "🎓 TUTORIAL 2/8 • BUILD YOUR FIRST TOWER", desc: "Tap Particle Laser (85⚡) in the bottom dock. It hits both ground and air enemies; more towers unlock as you progress.", focus: "buildTowerList" },
-            { title: "🎓 TUTORIAL 3/8 • UPGRADE (★→★★★)", desc: "Tap your tower and use ⬆ Upgrade to reach Lv.2 and Lv.3. At Lv.3 you pick specialisation A or B; the corner lights show a tower's level." },
-            { title: "🎓 TUTORIAL 4/8 • SPECIAL ABILITIES", desc: "🛰️ Orbital strikes every enemy, 🛡 Shield protects the planet, ❄ Cryo slows everyone, 🔧 Repair restores health. Save them for tough moments!", focus: "abilityStrip" },
-            { title: "🎓 TUTORIAL 5/8 • YOUR HERO", desc: "The ship circling the planet is your commander! ⚡ Vega boosts laser/tesla damage, 🛠 Kaan discounts towers, ☄️ Nova raises crits. Pick and level them from the HEROES tab on the home screen — after this level we will walk you through it." },
-            { title: "🎓 TUTORIAL 6/8 • AUTONOMOUS DRONES", desc: "Unlock the 🛸 Cyber-Drone fleet from the EVOLVE tab on the home screen and drones hunt enemies near the planet on their own. Each rank adds another drone." },
-            { title: "🎓 TUTORIAL 7/8 • CYBER EVOLUTION", desc: "Spend the ⚙ parts and 💎 gems from each level in the 🧬 EVOLVE tab on the home screen for permanent damage, speed, crit and starting-energy boosts. This button opens it during battle too.", focus: "btnOpenMenuQuick" },
-            { title: "🎓 TUTORIAL 8/8 • START THE WAVE!", desc: "When ready, start the wave with the top-right button. Calling later waves early earns bonus ⚡; otherwise they arrive after 7 s. Protect the planet, Commander!", focus: "btnNextWaveEarly" }
+            { title: "🎓 TUTORIAL 1/8 • TAP A PLOT", desc: "Tap the stone plot glowing with a gold ring. Towers can only be built on these plots beside the road." },
+            { title: "🎓 TUTORIAL 2/8 • BUILD YOUR FIRST TOWER", desc: "Pick Particle Laser (85⚡) from the ring that opens around the plot. It hits both ground and air enemies; more towers unlock as you progress." },
+            { title: "🎓 TUTORIAL 3/8 • UPGRADE (★→★★★)", desc: "Tap your tower again: the ring offers ⬆ Upgrade, 🎯 Target and 💲 Sell. At Lv.3 you pick specialisation A or B." },
+            { title: "🎓 TUTORIAL 4/8 • COMMAND YOUR HERO", desc: "The portrait at the bottom left is your hero. Tap it, then tap anywhere on the map: your hero flies there, holds enemies and fights. The ★ button next to it is the special skill.", focus: "heroDock" },
+            { title: "🎓 TUTORIAL 5/8 • DRONE HANGAR", desc: "Unlocked at level 2, the Drone Hangar drops robot troops on the road that stop and hold ground enemies. Tap the hangar and use 🚩 Rally to choose where they wait." },
+            { title: "🎓 TUTORIAL 6/8 • SPECIAL ABILITIES", desc: "🛰️ Orbital strikes every enemy, 🛡 Shield protects the planet, ❄ Cryo slows everyone, 🔧 Repair restores health. Save them for tough moments!", focus: "abilityStrip" },
+            { title: "🎓 TUTORIAL 7/8 • MAP SURPRISES", desc: "Tap the 📡 relay on the map for energy, or the ☄️ meteor rock to hurl it at the enemy closest to your planet. Give them time to recharge." },
+            { title: "🎓 TUTORIAL 8/8 • START THE WAVE!", desc: "Tap the red ▶ flag by the gate or the top-right button to start the wave. The flag shows which enemies are coming; calling early earns bonus ⚡." }
           ]
         }
       };
@@ -1727,6 +1763,12 @@
           tagTr: "Enerji Üretir", tagEn: "Makes Energy",
           targetTr: "Ekonomi + Destek", targetEn: "Economy + Support",
           specTr: "Dalgada ⚡ Üretim (Blm.4)", specEn: "⚡ Income in Waves (Lv.4)"
+        },
+        hangar: {
+          nameTr: "Dron Hangarı", nameEn: "Drone Hangar",
+          tagTr: "Yolu Tıkar", tagEn: "Blocks Road",
+          targetTr: "Sadece Kara", targetEn: "Ground Only",
+          specTr: "Robot Asker (Blm.2)", specEn: "Robot Troops (Lv.2)"
         }
       };
 
@@ -1900,6 +1942,9 @@
         ["4. Donma Birimi (130 ⚡ • Bölüm 3'te Açılır)", "4. Cryo Unit (130 ⚡ • Unlocks Lv.3)"],
         ["5. Enerji Santrali (155 ⚡ • Bölüm 4'te Açılır)", "5. Power Plant (155 ⚡ • Unlocks Lv.4)"],
         ["6. Makineli Top (175 ⚡ • Bölüm 5'te Açılır)", "6. Autocannon (175 ⚡ • Unlocks Lv.5)"],
+        ["7. Dron Hangarı (95 ⚡ • Bölüm 2'de Açılır)", "7. Drone Hangar (95 ⚡ • Unlocks Lv.2)"],
+        ["Dron Hangarı", "Drone Hangar"],
+        ["⭐ Kahraman", "⭐ Hero"],
         ["👾 YENİ UZAYLI TÜRLERİ & 4 GALAKTİK BOSS", "👾 NEW ALIEN TYPES & 4 GALACTIC BOSSES"],
         // Siber Evrim Üssü (Modal 1 - Lab)
         ["SİBER EVRİM", "CYBER EVOLUTION"],
@@ -2035,6 +2080,14 @@
         [
           "Saldırmaz; dalga sırasında her 6 saniyede <strong>⚡ enerji üretir</strong>. Erken kurarsan daha çok kule alırsın. Dal A üretimi artırır, Dal B yakın kuleleri hızlandırır.",
           "Doesn't attack; generates <strong>⚡ energy every 6 seconds</strong> during waves. Build it early to afford more towers. Branch A boosts output, Branch B speeds up nearby towers."
+        ],
+        [
+          "Yola 2-3 robot asker indirir; <strong>yerdeki düşmanları durdurup</strong> yakın dövüşte tutar. Uçanları durduramaz. Hangara dokunup 🚩 Toplanma ile askerlerin yerini seçersin. Dal A can, Dal B hasar verir.",
+          "Drops 2-3 robot troops on the road that <strong>stop ground enemies</strong> and hold them in melee. They cannot stop flyers. Tap the hangar and use 🚩 Rally to choose where they stand. Branch A adds health, Branch B damage."
+        ],
+        [
+          "Sol alttaki portreye dokun, sonra haritada bir yere dokun: kahraman oraya uçar, bir düşmanı çekici ışınla tutar ve ateş eder. ★ tuşu özel yeteneğidir. Düşerse bir süre sonra gezegenin yanında yeniden doğar.",
+          "Tap the portrait at the bottom left, then a spot on the map: your hero flies there, holds one enemy with a tractor beam and opens fire. The ★ button is the special skill. If the hero falls, they respawn by the planet after a while."
         ],
         [
           "Uzun menzilli çift namlulu zırh delici. <strong>Zırhlı Yengeç Kruvazör</strong> ve <strong>4 Büyük Boss</strong> katilidir.",
@@ -2256,6 +2309,28 @@
             { cost: 155, refund: 105, damage: 0, fireRate: 0, range: 0, splash: 0, armorPen: 0, slow: 0, slowDur: 0, energyPerPulse: 9 },
             { cost: 200, refund: 235, damage: 0, fireRate: 0, range: 0, splash: 0, armorPen: 0, slow: 0, slowDur: 0, energyPerPulse: 14 },
             { cost: 270, refund: 410, damage: 0, fireRate: 0, range: 0, splash: 0, armorPen: 0, slow: 0, slowDur: 0, energyPerPulse: 21 }
+          ]
+        },
+        // Kingdom Rush kışlasının karşılığı: yola robot askerler indirir, yerdeki düşmanları
+        // durdurup yakın dövüşte tutar. Uçanları durduramaz; asker ölürse hangar yenisini yollar.
+        hangar: {
+          id: "hangar",
+          name: "Dron Hangarı",
+          codeName: "Drone Hangar",
+          unlockLevel: 2,
+          color: "#4ade80",
+          canHitFlying: false,
+          isBarracks: true,
+          respawnSeconds: 9,
+          targetLabel: "Yolu Tıkar",
+          specialLabel: "Robot Asker",
+          branchA: { nameTr: "🛡 Dal A: Ağır Zırh (+%60 Can)", nameEn: "🛡 Branch A: Heavy Plating (+60% HP)" },
+          branchB: { nameTr: "⚔ Dal B: Plazma Bıçak (+%50 Hasar)", nameEn: "⚔ Branch B: Plasma Blades (+50% Dmg)" },
+          vsMultiplier: { swarm: 1.1, flying: 0, tank: 0.9, boss: 0.85, healer: 1.2, stealth: 1.0, splitter: 1.0, mini_crystal: 1.0 },
+          levels: [
+            { cost: 95, refund: 60, damage: 9, fireRate: 1.1, range: 78, splash: 0, armorPen: 0.1, slow: 0, slowDur: 0, soldiers: 2, soldierHp: 95 },
+            { cost: 150, refund: 150, damage: 14, fireRate: 1.2, range: 86, splash: 0, armorPen: 0.15, slow: 0, slowDur: 0, soldiers: 3, soldierHp: 150 },
+            { cost: 220, refund: 280, damage: 21, fireRate: 1.3, range: 94, splash: 0, armorPen: 0.2, slow: 0, slowDur: 0, soldiers: 3, soldierHp: 240 }
           ]
         }
       };
@@ -3133,6 +3208,69 @@
         }
       ];
 
+
+      // ============================================================================
+      // YENİ HARİTA DÜZENLERİ (Kingdom Rush tarzı): çapraz yollar, kavşaklar, yan portallar.
+      // Kule platformları yaklaşık verilir; Balance.placeSockets her birini yoldan
+      // güvenli uzaklıktaki en yakın noktaya taşır (tests: tüm haritalar erişilebilir).
+      // ============================================================================
+      // Kısa yollu haritalarda düşman kulelerin önünde daha az, uzunlarda daha çok kalır; düşman canı
+      // yol uzunluğuyla dengelenir ki her harita aynı bölümde benzer zorlukta olsun.
+      const LAYOUT_REFERENCE_LENGTH = 1350;
+      function layoutHpScaleFor(paths) {
+        if (!paths.length) return 1;
+        const lens = paths.map(path => path.reduce((sum, p, i) => i ? sum + Math.hypot(p.x - path[i - 1].x, p.y - path[i - 1].y) : 0, 0));
+        // En kısa kapı sızıntıyı belirler: ortalama ile en kısa yolun ortası esas alınır.
+        const mean = lens.reduce((a, b) => a + b, 0) / lens.length;
+        const effective = (mean + Math.min(...lens)) / 2;
+        // Uzun yollar da (sefer, Bölüm 3+) en fazla %20 güçlendirir; öğretici ve sonsuz mod etkilenmez.
+        const maxScale = !state.endlessMode && state.level >= 3 ? 1.2 : 1;
+        return Math.min(maxScale, Math.max(0.72, Math.pow(effective / LAYOUT_REFERENCE_LENGTH, 0.75)));
+      }
+
+      function makeSector(id, name, shortName, paths, sockets) {
+        return {
+          id, name, shortName,
+          paths,
+          waypoints: paths[0].map(p => ({ x: p.x, y: p.y })),
+          sockets: sockets.map((s, i) => ({ id: i + 1, x: s[0], y: s[1] }))
+        };
+      }
+      const P = (pts) => pts.map(([x, y]) => ({ x, y }));
+      const SHARED_TAIL_A = [[270, 300], [270, 360], [440, 420], [440, 500], [100, 560], [100, 640], [420, 690], [270, 760]];
+      const KRATER_TAIL = [[260, 380], [100, 440], [100, 520], [440, 580], [440, 650], [110, 700], [110, 750], [270, 765]];
+      const WEB_TAIL = [[380, 440], [140, 520], [140, 620], [380, 680], [270, 760]];
+      SECTOR_PRESETS.push(
+        makeSector(6, "🐍 Yılan Vadisi (1 Giriş)", "Yılan Vadisi",
+          [P([[270, 118], [270, 170], [440, 230], [440, 300], [100, 370], [100, 440], [440, 510], [440, 580], [100, 650], [100, 710], [270, 760]])],
+          [[180, 160], [360, 150], [340, 290], [270, 230], [200, 320], [270, 410], [200, 470], [480, 440], [340, 470], [270, 610], [60, 560], [480, 650], [200, 700]]),
+        makeSector(7, "☄️ Kuyruklu Yıldız (2 Giriş)", "Kuyruklu Yıldız",
+          [P([[110, 118], [110, 190], ...SHARED_TAIL_A]), P([[430, 118], [430, 190], ...SHARED_TAIL_A])],
+          [[190, 160], [350, 160], [190, 260], [350, 260], [270, 220], [180, 380], [360, 340], [270, 470], [480, 560], [60, 470], [250, 620], [180, 700], [470, 740]]),
+        makeSector(8, "✖️ Çift Sarmal Kavşağı (2 Giriş)", "Çift Sarmal",
+          [P([[120, 118], [120, 260], [420, 400], [420, 560], [270, 640], [270, 760]]),
+           P([[420, 118], [420, 260], [120, 400], [120, 560], [270, 640], [270, 760]])],
+          [[200, 170], [340, 170], [270, 250], [40, 330], [500, 330], [270, 420], [200, 480], [340, 480], [50, 620], [490, 620], [180, 700], [360, 700]]),
+        makeSector(9, "🌋 Krater Kavşağı (2 Giriş)", "Krater Kavşağı",
+          [P([[130, 118], [130, 250], ...KRATER_TAIL]), P([[410, 118], [410, 250], ...KRATER_TAIL])],
+          [[210, 170], [330, 170], [50, 250], [270, 270], [190, 330], [330, 300], [40, 400], [200, 480], [300, 520], [480, 500], [180, 600], [340, 640], [480, 740], [60, 640]]),
+        makeSector(10, "🛤️ Uzun Hat (1 Giriş)", "Uzun Hat",
+          [P([[90, 118], [90, 190], [300, 240], [450, 200], [450, 320], [260, 380], [90, 340], [90, 480], [300, 520], [450, 480], [450, 620], [260, 660], [90, 640], [90, 720], [270, 760]])],
+          [[180, 150], [360, 140], [190, 280], [350, 290], [180, 410], [360, 430], [500, 400], [190, 540], [370, 560], [500, 540], [200, 700], [360, 720]]),
+        makeSector(11, "🌊 Üç Nehir (3 Giriş)", "Üç Nehir",
+          [P([[100, 118], [100, 280], [200, 360], [200, 520], [270, 600], [270, 760]]),
+           P([[270, 118], [270, 250], [340, 330], [340, 520], [270, 600], [270, 760]]),
+           P([[440, 118], [440, 280], [340, 330], [340, 520], [270, 600], [270, 760]])],
+          [[185, 180], [355, 180], [185, 290], [40, 360], [270, 380], [440, 400], [120, 470], [420, 480], [270, 500], [170, 640], [370, 640], [270, 690]]),
+        makeSector(12, "🕸️ Örümcek Ağı (2 Giriş)", "Örümcek Ağı",
+          [P([[150, 118], [150, 240], [380, 320], ...WEB_TAIL]), P([[480, 250], [480, 400], ...WEB_TAIL])],
+          [[230, 170], [70, 200], [300, 230], [240, 320], [420, 230], [290, 410], [60, 420], [250, 470], [60, 580], [260, 600], [420, 560], [190, 700], [400, 760]]),
+        makeSector(13, "🌀 Girdap (2 Giriş)", "Girdap",
+          [P([[270, 118], [270, 200], [450, 260], [450, 520], [300, 560], [160, 500], [160, 380], [270, 330]].concat([[330, 420], [330, 640], [270, 760]])),
+           P([[90, 118], [90, 620], [270, 700], [270, 760]])],
+          [[350, 170], [190, 180], [370, 330], [240, 260], [230, 440], [400, 420], [20, 300], [170, 600], [400, 640], [500, 620], [180, 280], [380, 720]])
+      );
+
       let ACTIVE_PATHS = [SECTOR_PRESETS[0].waypoints.slice()];
       let WAYPOINTS = ACTIVE_PATHS[0];
       let SOCKETS = SECTOR_PRESETS[0].sockets.map(s => ({ id: s.id, x: s.x, y: s.y, tower: null }));
@@ -3159,28 +3297,6 @@
         size: 0.7 + Math.random() * 1.8,
         alpha: 0.35 + Math.random() * 0.65
       }));
-
-      const CRYSTAL_CLUSTERS = [
-        { x: 28, y: 165, scale: 1.05 },
-        { x: 512, y: 145, scale: 1.00 },
-        { x: 24, y: 420, scale: 0.90 },
-        { x: 515, y: 390, scale: 0.95 },
-        { x: 28, y: 720, scale: 1.10 },
-        { x: 512, y: 695, scale: 0.90 }
-      ];
-
-      const ALIEN_PLANTS = [
-        { x: 26, y: 285, scale: 0.95 },
-        { x: 514, y: 265, scale: 0.95 },
-        { x: 26, y: 575, scale: 0.90 },
-        { x: 514, y: 545, scale: 0.95 }
-      ];
-
-      const LAVA_FISSURES = [
-        { x: 36, y: 815, r: 22 },
-        { x: 265, y: 825, r: 24 },
-        { x: 502, y: 815, r: 20 }
-      ];
 
       let autonomousDrones = [];
       let activeEnemies = [];
@@ -3318,7 +3434,8 @@
           if (state.level <= 2) {
             state.sectorIndex = 0; // İlk 2 bölüm tek girişli öğretici kanyon
           } else {
-            const cycle = [1, 2, 3, 5, 4]; // 2 ve 3 girişli taktik haritalar döngüsü
+            // 14 haritalık döngü: tek, çift ve üç girişli düzenler sırayla gelir (kapı sayısı bölüme göre açılır).
+            const cycle = [6, 1, 7, 10, 2, 8, 3, 12, 5, 9, 13, 11, 4];
             state.sectorIndex = cycle[(state.level - 3) % cycle.length];
           }
         }
@@ -3331,6 +3448,8 @@
           : (state.level <= 3 ? 1 : (state.level <= 6 ? Math.min(2, rawPaths.length) : rawPaths.length));
         ACTIVE_PATHS = rawPaths.slice(0, maxGates).map(path => path.map(p => ({ x: p.x, y: p.y })));
         WAYPOINTS = ACTIVE_PATHS[0];
+        terrainPaths = ACTIVE_PATHS.map(path => path.map(p => ({ x: p.x, y: p.y })));
+        state.layoutHpScale = layoutHpScaleFor(ACTIVE_PATHS);
         spawnRouteCounter = 0;
         const planet = getPlanetForLevel(state.level);
         const effLvForFeatures = state.endlessMode ? Math.max(state.level, 8) : state.level;
@@ -3391,6 +3510,10 @@
 
         supplyPods = [];
         supplyPodTimer = 11;
+        closeSocketRing();
+        rallyEditSocketIdx = -1;
+        resetBattleUnits();
+        createMapProps();
         document.getElementById("socketHintText").textContent = planet.shortName;
         document.getElementById("hudPlanetShortName").textContent = planet.shortName;
         document.getElementById("menuCurrentPlanetText").textContent = state.lang === "en" ? planet.fullNameEn : planet.fullNameTr;
@@ -3536,7 +3659,7 @@
         state.waveIndex = waveIdx;
         state.waveWaitingForPlayer = false;
         if (spawnQueue.length === 0) spawnTimer = 0.15;
-        for (const key of buildWaveQueue(state.level, waveIdx)) spawnQueue.push({ key, wave: waveIdx });
+        for (const key of takePreviewedWave(waveIdx)) spawnQueue.push({ key, wave: waveIdx });
         waveInProgress = true;
         if (state.endlessMode && waveIdx + 1 > (state.bestEndlessWave || 0)) state.bestEndlessWave = waveIdx + 1;
         if (state.trainerActive) finishTrainer(true);
@@ -3569,7 +3692,7 @@
         const effLv = state.endlessMode ? Math.max(state.level, 4 + Math.floor(waveIdx * 1.35)) : state.level;
         const diff = calculateDifficulty(effLv, waveIdx);
         const miniBossScale = (key === "boss" && diff.isMiniBossLevel && !state.endlessMode) ? 0.62 : 1.0;
-        const maxHp = Math.round(arch.baseHp * diff.hpMult * miniBossScale);
+        const maxHp = Math.round(arch.baseHp * diff.hpMult * miniBossScale * (state.layoutHpScale || 1));
         const armor = Math.min(0.86, arch.baseArmor + diff.armorBonus);
         swarmVariantToggle = !swarmVariantToggle;
         const bossVariant = arch.isBoss
@@ -3602,7 +3725,9 @@
           revealedByRadar: false,
           warpBoostTimer: 0,
           bossFreezeTimer: arch.isBoss ? arch.freezeInterval : 999,
-          bossShieldTimer: arch.isBoss ? 8.0 : 999
+          bossShieldTimer: arch.isBoss ? 8.0 : 999,
+          flying: Boolean(arch.isFlying), // kara birlikleri uçanları durduramaz
+          blockedBy: null
         });
       }
 
@@ -3931,6 +4056,8 @@
         if (waveFlow.tick(dt, fieldClear)) spawnNextWave();
         updateWaveBannerUI();
 
+        stepBattleUnits(dt);
+
         // Düşman hareketi
         for (let i = activeEnemies.length - 1; i >= 0; i--) {
           const e = activeEnemies[i];
@@ -4030,6 +4157,12 @@
                 color: "#fb923c", life: 0.8
               });
             }
+          }
+
+          // Asker ya da kahraman tarafından tutulan düşman yürüyemez (yakın dövüşte kalır).
+          if (window.BattleUnits.isBlocked(e)) {
+            e.animPhase = (e.animPhase || 0) + dt * 5;
+            continue;
           }
 
           const ePath = ACTIVE_PATHS[e.pathIndex || 0] || WAYPOINTS;
@@ -4154,6 +4287,10 @@
           if (tDef.isEconomy) {
             runPowerPlant(sock, t, tDef, lvStats, dt);
             return; // economy towers never target or shoot
+          }
+          if (tDef.isBarracks) {
+            syncHangarSquad(sock, t, tDef, lvStats);
+            return; // hangar fights through its troops
           }
 
           // HEDEF ÖNCELİĞİ SİSTEMİ (first | strong | weak | flying)
@@ -4438,6 +4575,8 @@
       // 9. BÖLÜM SONU, HIZ REKORU KAYDI VE REKLAM KURALI (İLK 3 BÖLÜM REKLAMSIZ!)
       // ============================================================================
       function handleLevelVictory() {
+        closeSocketRing();
+        heroSelected = false;
         if (state.levelEnded) return;
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
@@ -4544,6 +4683,8 @@
       }
 
       function handleGameOver() {
+        closeSocketRing();
+        heroSelected = false;
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
         SoundFX.defeat();
@@ -4814,7 +4955,7 @@
         canvasResizePending = false;
         canvasSizeInitialized = true;
       }
-      window.addEventListener("resize", resizeCanvas);
+      window.addEventListener("resize", () => { resizeCanvas(); if (typeof closeSocketRing === "function") closeSocketRing(); });
       if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
         const ro = new ResizeObserver(() => resizeCanvas());
         ro.observe(canvas.parentElement);
@@ -4889,35 +5030,6 @@
           ctx.lineTo(sh.w * 0.6, -sh.h * 0.7);
           ctx.lineTo(sh.w * 0.5, 0);
           ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-          ctx.restore();
-        });
-        ctx.restore();
-      }
-
-      function drawAlienPlant(ctx, px, py, scale) {
-        ctx.save();
-        ctx.translate(px, py);
-        ctx.scale(scale, scale);
-        ctx.fillStyle = "rgba(0,0,0,0.45)";
-        ctx.beginPath();
-        ctx.ellipse(0, 3, 12, 4, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        const fronds = [
-          { ang: -0.60, rx: 4.5, ry: 12, c: "#22c55e" },
-          { ang: 0.60, rx: 4.5, ry: 12, c: "#16a34a" },
-          { ang: 0, rx: 5.5, ry: 15, c: "#86efac" }
-        ];
-        fronds.forEach(f => {
-          ctx.save();
-          ctx.rotate(f.ang);
-          ctx.fillStyle = f.c;
-          ctx.strokeStyle = "#064e3b";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.ellipse(0, -f.ry * 0.6, f.rx, f.ry * 0.65, 0, 0, Math.PI * 2);
           ctx.fill();
           ctx.stroke();
           ctx.restore();
@@ -5038,46 +5150,6 @@
         ctx.restore();
       }
 
-      // Aktif kahramanın amiral gemisi gezegenin yörüngesinde döner (kahraman sahada görünür olsun).
-      function drawHeroFlagship(ctx, PR, t, hi) {
-        const hm = getHeroMeta(state.activeHero);
-        const ang = -t * 0.9 + 1.2;
-        const ox = Math.cos(ang) * (PR + 19);
-        const oy = Math.sin(ang) * (PR * 0.5) - 6;
-        const heading = Math.atan2(Math.cos(ang) * (PR * 0.5), -Math.sin(ang) * (PR + 19));
-        ctx.save();
-        // Engine trail
-        for (let i = 1; i <= 5; i++) {
-          const a2 = ang + i * 0.07;
-          ctx.globalAlpha = 0.28 - i * 0.045;
-          ctx.fillStyle = hm.color;
-          ctx.beginPath();
-          ctx.arc(Math.cos(a2) * (PR + 19), Math.sin(a2) * (PR * 0.5) - 6, 3.2 - i * 0.45, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.globalAlpha = 1;
-        ctx.translate(ox, oy);
-        ctx.rotate(heading);
-        if (hi) { ctx.shadowColor = hm.color; ctx.shadowBlur = 10; }
-        ctx.fillStyle = "#0f172a";
-        ctx.strokeStyle = hm.color;
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        if (hm.key === "kaan") {
-          ctx.roundRect(-6, -5, 12, 10, 2.5);
-        } else if (hm.key === "nova") {
-          ctx.moveTo(9, 0); ctx.lineTo(-6, -5); ctx.lineTo(-3, 0); ctx.lineTo(-6, 5); ctx.closePath();
-        } else {
-          ctx.moveTo(9, 0); ctx.lineTo(-5, -6.5); ctx.lineTo(-2, 0); ctx.lineTo(-5, 6.5); ctx.closePath();
-        }
-        ctx.fill();
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = hm.color;
-        ctx.beginPath(); ctx.arc(1.5, 0, 1.9, 0, Math.PI * 2); ctx.fill();
-        ctx.restore();
-      }
-
       // HER BÖLÜMDE (1..200) DEĞİŞEN CANLI VARIŞ GEZEGENİ VE KORUMA KALKANI
       function drawProtectedPlanet(ctx, nx, ny, nowAnim, useHighDetail) {
         const planet = getPlanetForLevel(state.level);
@@ -5157,7 +5229,6 @@
           }
         }
 
-        drawHeroFlagship(ctx, PR, nowAnim, useHighDetail);
 
         // Altıgen Koruyucu Gezegen Kalkan Kubbesi
         if (state.hqShieldHp > 0 || state.hqInvulnerableTimer > 0) {
@@ -5469,6 +5540,23 @@
         ctx.restore();
       }
 
+      // Savaş alanı zemini için girdi: yollar bölüm başında dondurulur ki
+      // portal jeneratörü yok edilip bir kapı kapansa da yol haritada kalsın.
+      let terrainPaths = [];
+      function battleTerrainOptions(pal) {
+        const nexus = WAYPOINTS[WAYPOINTS.length - 1] || { x: 270, y: 760 };
+        const avoid = [{ x: nexus.x, y: nexus.y, r: 86 }];
+        terrainPaths.forEach(p => { if (p[0]) avoid.push({ x: p[0].x, y: p[0].y, r: 48 }); });
+        mapProps.forEach(p => avoid.push({ x: p.x, y: p.y, r: 34 }));
+        return {
+          kind: pal.kind,
+          seed: state.level * 7 + state.sectorIndex * 131 + (state.endlessMode ? 977 : 0),
+          paths: terrainPaths.length ? terrainPaths : ACTIVE_PATHS,
+          sockets: SOCKETS,
+          avoid
+        };
+      }
+
       function renderScene() {
         applyCanvasResize();
         const dpr = viewTransform.dpr;
@@ -5494,105 +5582,29 @@
         const preset = SECTOR_PRESETS[state.sectorIndex] || SECTOR_PRESETS[0];
         const useHighDetail = state.qualityMode !== "performance";
 
-        // 1. ÜST UZAY GÖKYÜZÜ, NEBULA, AY VE UFUK DAĞLARI
+        // 1. GÖKYÜZÜ + BOYANMIŞ SAVAŞ ALANI (zemin, yol, kule platformları, dekor).
+        // Statik katman bölüm başına bir kez offscreen'e boyanır; her karede sadece kopyalanır.
         const pal = window.SpaceTheme.paletteForLevel(state.level);
         drawSpaceBackdrop(ctx, pal, nowAnim, useHighDetail);
+        const terrain = window.BattleTerrain.bake(battleTerrainOptions(pal), viewTransform.scale * dpr);
+        if (terrain) ctx.drawImage(terrain, 0, 0, VIRTUAL_W, VIRTUAL_H);
 
-        const groundGrad = ctx.createLinearGradient(0, 88, 0, VIRTUAL_H);
-        groundGrad.addColorStop(0, pal.ground[0]);
-        groundGrad.addColorStop(1, pal.ground[1]);
-        ctx.fillStyle = groundGrad;
-        ctx.fillRect(0, 88, VIRTUAL_W, VIRTUAL_H - 88);
-
-        // 2. TAM GENİŞLİKLİ YÜKSELTİLMİŞ KAYALIK PLATO
+        // Hazırlık sırasında yolun akış yönünü gösteren hafif oklar (savaşta sönük).
         ctx.save();
-        ctx.fillStyle = pal.plateau[1];
-        ctx.beginPath();
-        ctx.roundRect(42, 92, VIRTUAL_W - 84, VIRTUAL_H - 156, 24);
-        ctx.fill();
-
-        ctx.fillStyle = pal.plateau[0];
-        ctx.strokeStyle = pal.plateau[2];
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.roundRect(42, 78, VIRTUAL_W - 84, VIRTUAL_H - 160, 22);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.save();
-        ctx.clip();
-        ctx.strokeStyle = pal.grid;
-        ctx.lineWidth = 1.1;
-        for (let gx = 60; gx < VIRTUAL_W - 42; gx += 32) {
-          ctx.beginPath();
-          ctx.moveTo(gx, 78);
-          ctx.lineTo(gx, VIRTUAL_H - 82);
-          ctx.stroke();
-        }
-        for (let gy = 96; gy < VIRTUAL_H - 82; gy += 32) {
-          ctx.beginPath();
-          ctx.moveTo(42, gy);
-          ctx.lineTo(VIRTUAL_W - 42, gy);
-          ctx.stroke();
-        }
-        fxPlateauLighting(ctx, 42, 78, VIRTUAL_W - 84, VIRTUAL_H - 160);
-        ctx.restore();
-        ctx.restore();
-
-        // 3. DIŞ ÇEVRE KRİSTALLERİ, UZAY BİTKİLERİ VE LAV ÇATLAKLARI
-        LAVA_FISSURES.forEach(lf => drawLavaFissure(ctx, lf.x, lf.y, lf.r, nowAnim));
-        ALIEN_PLANTS.forEach(pl => drawAlienPlant(ctx, pl.x, pl.y, pl.scale));
-        CRYSTAL_CLUSTERS.forEach((cr, idx) => drawCrystalCluster(ctx, cr.x, cr.y, cr.scale, nowAnim * 3 + idx));
-
-        // 4. ÇOKLU GİRİŞLİ (MULTI-PATH) 90° ORTOGONAL SAVUNMA YOLLARI
-        const laneNeonColors = [pal.accent, "#e879f9", "#facc15"];
-        ACTIVE_PATHS.forEach((pathArr, pathIdx) => {
-          ctx.save();
-          ctx.lineCap = "round";
-          ctx.lineJoin = "round";
-
-          ctx.strokeStyle = pal.road[0];
-          ctx.lineWidth = 40;
-          ctx.beginPath();
-          pathArr.forEach((pt, idx) => {
-            if (idx === 0) ctx.moveTo(pt.x, pt.y);
-            else ctx.lineTo(pt.x, pt.y);
-          });
-          ctx.stroke();
-
-          ctx.strokeStyle = pal.road[1];
-          ctx.lineWidth = 30;
-          ctx.stroke();
-
-          ctx.strokeStyle = "rgba(148, 163, 184, 0.25)";
-          ctx.lineWidth = 24;
-          ctx.setLineDash([4, 14]);
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          ctx.strokeStyle = laneNeonColors[pathIdx % laneNeonColors.length];
-          ctx.globalAlpha = 0.35;
-          ctx.lineWidth = 18;
-          ctx.stroke();
-
-          ctx.globalAlpha = 0.90;
-          ctx.lineWidth = 2.2;
-          ctx.stroke();
-
-          // Yürüyüş Yönünü Gösteren Animasyonlu Neon Oklar (>>>)
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = pathIdx === 0 ? "#fde047" : (pathIdx === 1 ? "#f472b6" : "#38bdf8");
-          ctx.globalAlpha = state.waveWaitingForPlayer ? 0.78 : 0.32;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = state.waveWaitingForPlayer ? 0.55 : 0.12;
+        ACTIVE_PATHS.forEach((pathArr) => {
           for (let w = 0; w < pathArr.length - 1; w++) {
             const p1 = pathArr[w];
             const p2 = pathArr[w + 1];
             const segLen = Math.hypot(p2.x - p1.x, p2.y - p1.y);
             const ang = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-            for (let dist = (roadFlowOffset % 44); dist < segLen - 16; dist += 44) {
-              const cx = p1.x + Math.cos(ang) * dist;
-              const cy = p1.y + Math.sin(ang) * dist;
+            for (let dist = (roadFlowOffset % 44) + 10; dist < segLen - 12; dist += 44) {
               ctx.save();
-              ctx.translate(cx, cy);
+              ctx.translate(p1.x + Math.cos(ang) * dist, p1.y + Math.sin(ang) * dist);
               ctx.rotate(ang);
               ctx.beginPath();
               ctx.moveTo(-4, -4.5);
@@ -5602,8 +5614,8 @@
               ctx.restore();
             }
           }
-          ctx.restore();
         });
+        ctx.restore();
 
         // 4.5 VOLKANİK YOL ÜSTÜ LAV ÇATLAKLARI VE UZAYLI WARP JENERATÖRÜ
         levelLavaPools.forEach(lp => {
@@ -5713,6 +5725,7 @@
 
         const nexus = WAYPOINTS[WAYPOINTS.length - 1];
         drawProtectedPlanet(ctx, nexus.x, nexus.y, nowAnim, useHighDetail);
+        drawMapProps(ctx, nowAnim);
 
         // Komşu Gelişmiş Tesla Kuleleri Arasında Enerji Arkı
         if (useHighDetail) {
@@ -5733,7 +5746,7 @@
         SOCKETS.forEach((sock, idx) => {
           const isSelected = (idx === state.selectedSocketIndex);
 
-          if (isSelected && sock.tower) {
+          if (isSelected && sock.tower && !TOWER_TYPES[sock.tower.typeKey].isBarracks && !TOWER_TYPES[sock.tower.typeKey].isEconomy) {
             const tDef = TOWER_TYPES[sock.tower.typeKey];
             const range = tDef.levels[sock.tower.level - 1].range;
             ctx.save();
@@ -5749,33 +5762,16 @@
           }
 
           ctx.save();
-          ctx.fillStyle = isSelected ? "rgba(12, 32, 58, 0.94)" : "rgba(7, 15, 32, 0.92)";
-          ctx.strokeStyle = isSelected ? "#38bdf8" : (sock.tower ? "rgba(56, 189, 248, 0.65)" : "rgba(56, 189, 248, 0.48)");
-          ctx.lineWidth = isSelected ? 2.6 : 1.5;
-          ctx.beginPath();
-          ctx.roundRect(sock.x - 27, sock.y - 19, 54, 38, 9);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.strokeStyle = isSelected ? "#facc15" : "rgba(125, 211, 252, 0.72)";
-          ctx.lineWidth = 1.8;
-          const cw = 6;
-          ctx.beginPath();
-          ctx.moveTo(sock.x - 27, sock.y - 19 + cw);
-          ctx.lineTo(sock.x - 27, sock.y - 19);
-          ctx.lineTo(sock.x - 27 + cw, sock.y - 19);
-          ctx.moveTo(sock.x + 27 - cw, sock.y + 19);
-          ctx.lineTo(sock.x + 27, sock.y + 19);
-          ctx.lineTo(sock.x + 27, sock.y + 19 - cw);
-          ctx.stroke();
-
-          ctx.fillStyle = isSelected ? "#164e63" : "#1e293b";
-          ctx.strokeStyle = isSelected ? "#38bdf8" : "rgba(148, 163, 184, 0.68)";
-          ctx.lineWidth = 1.6;
-          ctx.beginPath();
-          ctx.ellipse(sock.x, sock.y + 1, 22, 13, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
+          // Platformun kendisi zemine boyalı; burada sadece seçim halkası çizilir.
+          if (isSelected) {
+            ctx.strokeStyle = "#f6b93b";
+            ctx.lineWidth = 2.4;
+            ctx.globalAlpha = 0.75 + Math.sin(nowAnim * 5) * 0.25;
+            ctx.beginPath();
+            ctx.ellipse(sock.x, sock.y, 28, 16, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
 
           // Trainer Modu Adım 0/1'de CEP #1 üzerinde parlayan eğitim halkası
           if (state.trainerActive && idx === 0 && !sock.tower) {
@@ -5799,12 +5795,7 @@
               ctx.textAlign = "center";
               ctx.fillText(`💎 +${sock.crystalReward}⚡`, sock.x, sock.y + 14);
             } else {
-              ctx.fillStyle = isSelected ? "#38bdf8" : "rgba(226, 232, 240, 0.90)";
-              ctx.font = "bold 9.5px Orbitron, sans-serif";
-              ctx.textAlign = "center";
-              ctx.textBaseline = "middle";
-              if (isSelected) ctx.fillText(L("+ KUR", "+ BUILD"), sock.x, sock.y + 1);
-              else fxEmptySlotMarker(ctx, sock.x, sock.y, nowAnim, idx);
+              fxEmptySlotMarker(ctx, sock.x, sock.y, nowAnim, idx);
             }
           } else {
             const t = sock.tower;
@@ -5970,6 +5961,56 @@
                 ctx.setLineDash([]);
               }
               t.pulseFlash = Math.max(0, flash - 0.03);
+            } else if (t.typeKey === "hangar") {
+              // Kubbe hangar: kapı askerler dışarıdayken açık, seviye arttıkça çatıda ışık ve anten.
+              const out = (t.squad || []).some(u => !u.dead && Math.hypot(u.x - sock.x, u.y - sock.y) > 10);
+              const body = ctx.createLinearGradient(sock.x, sock.y - 24, sock.x, sock.y + 4);
+              body.addColorStop(0, "#22c55e");
+              body.addColorStop(1, "#14532d");
+              ctx.fillStyle = body;
+              ctx.strokeStyle = "#bbf7d0";
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(sock.x - 15, sock.y + 2);
+              ctx.lineTo(sock.x - 15, sock.y - 9);
+              ctx.quadraticCurveTo(sock.x, sock.y - 27, sock.x + 15, sock.y - 9);
+              ctx.lineTo(sock.x + 15, sock.y + 2);
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+              ctx.strokeStyle = "rgba(5,46,22,0.6)";
+              ctx.lineWidth = 1;
+              for (let r = 0; r < 2; r++) {
+                ctx.beginPath();
+                ctx.arc(sock.x, sock.y + 2, 9 + r * 5, Math.PI * 1.1, Math.PI * 1.9);
+                ctx.stroke();
+              }
+              ctx.fillStyle = out ? "#020617" : "#166534";
+              ctx.strokeStyle = "#4ade80";
+              ctx.beginPath();
+              ctx.roundRect(sock.x - 6, sock.y - 7, 12, 9, 2);
+              ctx.fill();
+              ctx.stroke();
+              if (out) {
+                ctx.fillStyle = "rgba(134,239,172,0.55)";
+                ctx.fillRect(sock.x - 5, sock.y - 2, 10, 1.5);
+              }
+              ctx.fillStyle = t.level >= 2 ? "#fde047" : "#86efac";
+              ctx.beginPath();
+              ctx.arc(sock.x, sock.y - 19, 2.2 + Math.sin(nowAnim * 4) * 0.4, 0, Math.PI * 2);
+              ctx.fill();
+              if (t.level >= 3) {
+                ctx.strokeStyle = "#bbf7d0";
+                ctx.lineWidth = 1.3;
+                ctx.beginPath();
+                ctx.moveTo(sock.x + 8, sock.y - 13);
+                ctx.lineTo(sock.x + 12, sock.y - 25);
+                ctx.stroke();
+                ctx.fillStyle = "#f87171";
+                ctx.beginPath();
+                ctx.arc(sock.x + 12, sock.y - 26, 1.8, 0, Math.PI * 2);
+                ctx.fill();
+              }
             }
 
             if (t.level >= 3) {
@@ -5984,27 +6025,6 @@
             ctx.font = "bold 8.5px Orbitron, sans-serif";
             ctx.textAlign = "center";
             ctx.fillText(stars + (t.level >= 3 ? (t.branch === "B" ? " B" : " A") : ""), sock.x, sock.y + 14);
-
-            // Seçili Kule Üzerinde Tek Parmakla Hızlı Eylem Etiketi (On-Canvas Floating Pill)
-            if (isSelected) {
-              const tDef = TOWER_TYPES[t.typeKey];
-              const pillY = sock.y - 34;
-              ctx.fillStyle = "rgba(6, 12, 26, 0.96)";
-              ctx.strokeStyle = t.level < 3 ? "#22d3ee" : "#facc15";
-              ctx.lineWidth = 1.8;
-              ctx.beginPath();
-              ctx.roundRect(sock.x - 42, pillY - 11, 84, 20, 7);
-              ctx.fill();
-              ctx.stroke();
-              ctx.fillStyle = "#f8fafc";
-              ctx.font = "bold 8px Orbitron, sans-serif";
-              if (t.level < 3) {
-                const upCost = getTowerCostWithHero(tDef.levels[t.level].cost);
-                ctx.fillText(L(`⬆ ${upCost}⚡ DOKUN`, `⬆ ${upCost}⚡ TAP`), sock.x, pillY + 1);
-              } else {
-                ctx.fillText(L(`🔀 DAL ${t.branch || "A"} (DEĞİŞ)`, `🔀 BRANCH ${t.branch || "A"} (TAP)`), sock.x, pillY + 1);
-              }
-            }
 
             if (t.frozenTimer > 0) {
               ctx.strokeStyle = "#38bdf8";
@@ -6220,6 +6240,11 @@
           fxHealthBar(ctx, e.x, e.y - e.arch.radius - 12, bw, bh, e.hp / e.maxHp, e.arch.isBoss);
           ctx.restore();
         });
+
+        // 7.5 KARA BİRLİKLERİ, KAHRAMAN VE KAPIDAKİ DALGA İŞARETLERİ
+        drawBattleUnits(ctx, nowAnim);
+        drawWaveFlags(ctx, nowAnim);
+        updateHeroDock();
 
         // 8. FÜZELER, YILDIRIM ARKLARI, ONARIM IŞINLARI VE PATLAMALAR
         activeMissiles.forEach(m => {
@@ -6497,6 +6522,7 @@
       }
 
       function updateHUD() {
+        refreshSocketRing(false);
         const diff = calculateDifficulty(state.level, state.waveIndex);
         document.getElementById("hudLevelNum").textContent = state.level;
         document.getElementById("hudWaveNum").textContent = `${Math.min(state.waveIndex + 1, state.totalWaves)}/${state.totalWaves}`;
@@ -6691,6 +6717,7 @@
       canvas.addEventListener("pointerdown", (ev) => {
         SoundFX.init();
         const { vx, vy } = clientToVirtualCoords(ev.clientX, ev.clientY);
+        if (handleBattleMapTap(vx, vy)) return;
 
         // 1. Önce Yörünge İkmal Kapsülüne dokunuldu mu kontrol et (Geniş 68px dokunma alanı)
         for (let i = supplyPods.length - 1; i >= 0; i--) {
@@ -6739,9 +6766,6 @@
             const dTurretBody = Math.hypot(s.x - vx, (s.y - 12) - vy);
             const dTurretTop = Math.hypot(s.x - vx, (s.y - 26) - vy);
             d = Math.min(d, dTurretBody, dTurretTop);
-            if (idx === state.selectedSocketIndex && Math.abs(vx - s.x) <= 46 && Math.abs(vy - (s.y - 34)) <= 20) {
-              d = 0; // Doğrudan ⬆ DOKUN etiketine basıldı
-            }
           } else {
             // Dikdörtgen cep kutusu (54x38) içine dokunulduysa mesafeyi merkeze çek
             if (Math.abs(vx - s.x) <= 32 && Math.abs(vy - s.y) <= 24) {
@@ -6778,18 +6802,12 @@
             }
             return;
           }
-          // Eğer zaten seçili olan kurulu bir kuleye tekrar dokunulduysa: doğrudan Yükselt veya Lv.3 Dal Değiştir!
-          if (closestIdx === state.selectedSocketIndex && SOCKETS[closestIdx].tower) {
-            const tw = SOCKETS[closestIdx].tower;
-            if (tw.level < 3) {
-              upgradeSelectedTowerOrOpenLab();
-              return;
-            } else {
-              tw.branch = tw.branch === "B" ? "A" : "B";
-              showToast(`🔀 Seviye 3 Evrim Dalı: Mod ${tw.branch} aktif!`);
-              updateSocketInspector();
-              return;
-            }
+          // Aynı platforma tekrar dokunmak menüyü kapatır; başka platform menüyü oraya taşır.
+          if (ringMenu.isOpen() && ringSocketIdx === closestIdx) {
+            closeSocketRing();
+            state.selectedSocketIndex = -1;
+            updateSocketInspector();
+            return;
           }
           state.selectedSocketIndex = closestIdx;
           if (state.trainerActive && state.trainerStep === 0) {
@@ -6797,23 +6815,12 @@
             updateTrainerUI();
           }
           updateSocketInspector();
+          openSocketRing(closestIdx);
         } else {
-          // Haritada boş bir yere dokunulduğunda: kurulu kule seçiliyse seçimi kapat ve 6 kule kurulum listesine dön!
-          const curSock = SOCKETS[state.selectedSocketIndex];
-          if (curSock && curSock.tower) {
-            SoundFX.uiClick();
-            let nearestEmptyIdx = -1;
-            let bestEmptyDist = Infinity;
-            SOCKETS.forEach((s, idx) => {
-              if (!s.tower && !(s.crystalHp > 0)) {
-                const dEmpty = Math.hypot(s.x - vx, s.y - vy);
-                if (dEmpty < bestEmptyDist) {
-                  bestEmptyDist = dEmpty;
-                  nearestEmptyIdx = idx;
-                }
-              }
-            });
-            state.selectedSocketIndex = nearestEmptyIdx; // Boş cep yoksa -1 olur ve yine Kuleler listesi açılır
+          // Boş zemine dokunmak açık menüyü ve seçimi kapatır.
+          if (ringMenu.isOpen() || state.selectedSocketIndex >= 0) {
+            closeSocketRing();
+            state.selectedSocketIndex = -1;
             updateSocketInspector();
           }
         }
@@ -6934,6 +6941,700 @@
         updateHUD();
         updateSocketInspector();
       });
+
+      // ============================================================================
+      // HALKA MENÜ (Kingdom Rush): platforma dokununca kule seçenekleri etrafında açılır.
+      // Menü sadece görünüm/seçim katmanıdır; asıl işlemler mevcut kur / yükselt / sat
+      // fonksiyonlarına gider, böylece kurallar tek yerde kalır.
+      // ============================================================================
+      const RING_TOWER_ORDER = ["rapid", "plasma", "emp", "railgun", "cryo", "power", "hangar"];
+      const RING_ICONS = {
+        upgrade: '<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 12l6-6 6 6"/></svg>',
+        sell: '<svg viewBox="0 0 24 24" fill="none" stroke="#fda4af" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M14.5 9.2c-.6-.8-1.5-1.2-2.6-1.2-1.6 0-2.7.8-2.7 2s1.1 1.7 2.7 2 2.8.8 2.8 2.1-1.2 2-2.8 2c-1.2 0-2.2-.5-2.8-1.3M12 6.5V8M12 16v1.5"/></svg>',
+        target: '<svg viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>',
+        rally: '<svg viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4M6 4h11l-2 4 2 4H6"/></svg>',
+        lock: '<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>'
+      };
+      const ringMenu = window.RingMenu.create(document.getElementById("canvasContainer"));
+      let ringSocketIdx = -1;
+      let rallyEditSocketIdx = -1;
+
+      function socketScreenPos(sock) {
+        applyCanvasResize();
+        return { x: viewTransform.offsetX + sock.x * viewTransform.scale, y: viewTransform.offsetY + sock.y * viewTransform.scale };
+      }
+
+      function towerIconSvg(typeKey) {
+        const svg = document.querySelector(`.tower-build-btn[data-tower="${typeKey}"] svg`);
+        return svg ? svg.outerHTML : "";
+      }
+
+      function ringItemsForSocket(idx) {
+        const sock = SOCKETS[idx];
+        if (!sock) return { items: [], title: "" };
+        if (!sock.tower) {
+          // Açık kuleler + sıradaki kilitli kule (merak uyandırır, halkayı kalabalıklaştırmaz).
+          const locked = RING_TOWER_ORDER.filter(k => TOWER_TYPES[k] && !isTowerUnlocked(k));
+          const nextLockLv = Math.min(...locked.map(k => TOWER_TYPES[k].unlockLevel));
+          const shown = RING_TOWER_ORDER.filter(k => TOWER_TYPES[k] && (isTowerUnlocked(k) || (TOWER_TYPES[k].unlockLevel === nextLockLv && k === locked.find(l => TOWER_TYPES[l].unlockLevel === nextLockLv))));
+          const items = shown.map(k => {
+            const tDef = TOWER_TYPES[k];
+            const unlocked = isTowerUnlocked(k);
+            const cost = getTowerCostWithHero(tDef.levels[0].cost);
+            return {
+              id: k,
+              icon: unlocked ? towerIconSvg(k) : RING_ICONS.lock,
+              aria: getTowerName(k),
+              cost: unlocked ? `${cost}⚡` : L(`Blm ${tDef.unlockLevel}`, `Lv ${tDef.unlockLevel}`),
+              disabled: !unlocked,
+              dim: unlocked && state.gold < cost,
+              accent: tDef.color,
+              onSelect: () => ringBuild(idx, k)
+            };
+          });
+          return { items, title: L("KULE KUR", "BUILD") };
+        }
+        const t = sock.tower;
+        const tDef = TOWER_TYPES[t.typeKey];
+        const lvStats = tDef.levels[t.level - 1];
+        const items = [];
+        if (t.level < 3) {
+          const nextCost = getTowerCostWithHero(tDef.levels[t.level].cost);
+          items.push({ id: "upgrade", icon: RING_ICONS.upgrade, label: L("Yükselt", "Upgrade"), cost: `${nextCost}⚡`, dim: state.gold < nextCost, accent: "#22d3ee",
+            onSelect: () => { document.getElementById("btnUpgradeTower").click(); refreshSocketRing(true); } });
+        } else if (tDef.branchA && tDef.branchB) {
+          ["A", "B"].forEach(key => {
+            const info = key === "A" ? tDef.branchA : tDef.branchB;
+            const name = (state.lang === "en" ? info.nameEn : info.nameTr).split(":").pop().split("(")[0].trim();
+            const on = (t.branch || "A") === key;
+            items.push({ id: "branch" + key, icon: `<b style="font:900 18px Orbitron,sans-serif;color:${on ? "#fde047" : "#94a3b8"}">${key}</b>`, label: name, cost: on ? L("AKTİF", "ON") : L("SEÇ", "PICK"),
+              accent: on ? "#facc15" : "#475569", onSelect: () => { selectTowerBranch(key); refreshSocketRing(true); } });
+          });
+        }
+        if (tDef.isBarracks) {
+          items.push({ id: "rally", icon: RING_ICONS.rally, label: L("Toplanma", "Rally"), accent: "#4ade80",
+            onSelect: () => { beginRallyEdit(idx); } });
+        } else if (!tDef.isEconomy) {
+          const modeShort = { first: L("İlk", "First"), strong: L("Güçlü", "Strong"), weak: L("Zayıf", "Weak"), flying: L("Uçan", "Flying") };
+          items.push({ id: "target", icon: RING_ICONS.target, label: L("Hedef", "Target"), cost: modeShort[t.targetMode || "first"], accent: "#fbbf24",
+            onSelect: () => { document.getElementById("btnCycleTargetPriority").click(); refreshSocketRing(true); } });
+        }
+        items.push({ id: "sell", icon: RING_ICONS.sell, label: L("Sat", "Sell"), cost: `+${lvStats.refund}⚡`, accent: "#fb7185",
+          onSelect: () => { document.getElementById("btnSellTower").click(); closeSocketRing(); } });
+        return { items, title: `${getTowerName(t.typeKey)} ${"★".repeat(t.level)}` };
+      }
+
+      function openSocketRing(idx) {
+        const sock = SOCKETS[idx];
+        if (!sock) return;
+        ringSocketIdx = idx;
+        const { items, title } = ringItemsForSocket(idx);
+        const pos = socketScreenPos(sock);
+        ringMenu.open(pos.x, pos.y, items, { title, key: `${idx}:${sock.tower ? sock.tower.typeKey + sock.tower.level : "empty"}` });
+        document.getElementById("canvasContainer").classList.add("ring-open");
+      }
+
+      function closeSocketRing() {
+        ringSocketIdx = -1;
+        ringMenu.close();
+        document.getElementById("canvasContainer").classList.remove("ring-open");
+      }
+
+      // Enerji değişince maliyet renklerini günceller; kule seviyesi değiştiyse menüyü yeniden kurar.
+      function refreshSocketRing(force) {
+        if (!ringMenu.isOpen() || ringSocketIdx < 0) return;
+        const sock = SOCKETS[ringSocketIdx];
+        if (!sock) { closeSocketRing(); return; }
+        const key = `${ringSocketIdx}:${sock.tower ? sock.tower.typeKey + sock.tower.level : "empty"}`;
+        if (force || key !== ringMenu.key()) { openSocketRing(ringSocketIdx); return; }
+        ringMenu.update(ringItemsForSocket(ringSocketIdx).items);
+      }
+
+      function ringBuild(idx, typeKey) {
+        const tDef = TOWER_TYPES[typeKey];
+        if (!isTowerUnlocked(typeKey)) {
+          showToast(L(`🔒 ${getTowerName(typeKey)} Bölüm ${tDef.unlockLevel}'de açılır!`, `🔒 ${getTowerName(typeKey)} unlocks at Level ${tDef.unlockLevel}!`));
+          return;
+        }
+        const cost = getTowerCostWithHero(tDef.levels[0].cost);
+        if (state.gold < cost) {
+          showToast(L(`Yetersiz enerji: ${getTowerName(typeKey)} için ${cost}⚡ gerekli.`, `Not enough energy: ${getTowerName(typeKey)} needs ${cost}⚡.`));
+          return;
+        }
+        state.selectedSocketIndex = idx;
+        const btn = document.querySelector(`.tower-build-btn[data-tower="${typeKey}"]`);
+        if (btn) btn.click();
+        state.selectedSocketIndex = -1;
+        closeSocketRing();
+        updateSocketInspector();
+      }
+
+      function beginRallyEdit(idx) {
+        rallyEditSocketIdx = idx;
+        closeSocketRing();
+        showToast(L("🚩 Askerlerin toplanacağı yere, yolun üstüne dokun.", "🚩 Tap a spot on the road for the troops to gather."));
+      }
+
+      // ============================================================================
+      // KARA BİRLİKLERİ (Kingdom Rush): Dron Hangarı askerleri + sahada yönetilen kahraman,
+      // kapılardaki dalga işaretleri ve haritadaki dokunulabilir sürprizler.
+      // Çatışma kuralları www/battle-units.js içinde; burası oyunla bağlantı katmanı.
+      // ============================================================================
+      let battleUnits = [];
+      let heroUnit = null;
+      let heroSelected = false;
+      let heroMoveMarker = null;
+      let unitScale = 1;
+      let mapProps = [];
+      let wavePreview = { idx: -1, keys: [] };
+
+      const HERO_COMBAT = {
+        vega: { hp: 200, melee: 9, ranged: { range: 120, dmg: 6, rate: 1.5 }, skillCd: 24, skillTr: "Yıldırım Fırtınası", skillEn: "Lightning Storm" },
+        kaan: { hp: 290, melee: 11, ranged: { range: 95, dmg: 4, rate: 1.2 }, skillCd: 28, skillTr: "EMP Şoku", skillEn: "EMP Shock" },
+        nova: { hp: 180, melee: 8, ranged: { range: 135, dmg: 8, rate: 1.2 }, skillCd: 32, skillTr: "Meteor Yağmuru", skillEn: "Meteor Shower" }
+      };
+      const ENEMY_GLYPH = { swarm: "🐜", tank: "🦀", flying: "🦇", healer: "✚", stealth: "👻", splitter: "🔷", mini_crystal: "💠", boss: "👑" };
+
+      function heroCombatFor(key) { return HERO_COMBAT[key] || HERO_COMBAT.vega; }
+      function heroLevelMult() { return 1 + 0.1 * (getHeroInfo(state.activeHero).lv - 1); }
+
+      // Yakın dövüşte düşmanın saniyelik hasarı: bölüm zorluğuyla birlikte büyür ki
+      // askerlerin dayanma süresi her bölümde benzer kalsın.
+      function enemyMeleeDps(e) {
+        const id = e.arch.id;
+        const kind = e.arch.isBoss ? 5.5 : id === "tank" ? 2.2 : id === "splitter" ? 1.4 : id === "healer" ? 0.6 : 1;
+        return 11 * unitScale * kind;
+      }
+
+      const unitEnv = {
+        damageEnemy: (e, dmg, u) => {
+          const enemyRef = e;
+          if (enemyRef.dead) return;
+          applyDamageToEnemy(enemyRef, dmg, u.kind === "hero" ? 0.25 : 0.15, false, u.kind === "hero" ? null : "hangar");
+          if (u.kind !== "hero" && state.qualityMode !== "performance" && Math.random() < 0.35) spawnParticles(enemyRef.x, enemyRef.y, "#86efac", 2);
+        },
+        enemyDps: enemyMeleeDps,
+        onShot: (u, e) => {
+          const hm = getHeroMeta(state.activeHero);
+          laserBeams.push({ x1: u.x, y1: u.y - 10, x2: e.x, y2: e.y, color: hm.color, life: 0.12, width: 2.2 });
+        },
+        onDeath: (u) => {
+          spawnParticles(u.x, u.y, u.kind === "hero" ? "#facc15" : "#4ade80", 10);
+          if (u.kind === "hero") {
+            heroSelected = false;
+            showToast(L(`💥 ${getHeroMeta(state.activeHero).name} düştü! ${Math.round(u.respawnTime)} sn sonra geri dönecek.`, `💥 ${getHeroMeta(state.activeHero).name} is down! Back in ${Math.round(u.respawnTime)}s.`));
+          }
+        },
+        onRespawn: (u) => { if (u.kind === "hero") floatingTexts.push({ x: u.x, y: u.y - 26, text: L("⚡ KAHRAMAN DÖNDÜ", "⚡ HERO IS BACK"), color: "#fde047", life: 1.2 }); }
+      };
+
+      function pointBackAlongPath(path, distBack) {
+        let remaining = distBack;
+        for (let i = path.length - 1; i > 0; i--) {
+          const a = path[i], b = path[i - 1];
+          const seg = Math.hypot(b.x - a.x, b.y - a.y);
+          if (seg >= remaining) {
+            const t = remaining / seg;
+            return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+          }
+          remaining -= seg;
+        }
+        return { x: path[0].x, y: path[0].y };
+      }
+
+      function createHeroUnit() {
+        const combat = heroCombatFor(state.activeHero);
+        const mult = heroLevelMult();
+        const dmgScale = getDmgMultiplier() * mult * Math.sqrt(unitScale);
+        const home = pointBackAlongPath(WAYPOINTS, 92);
+        heroUnit = window.BattleUnits.create({
+          kind: "hero",
+          x: home.x, y: home.y,
+          hp: Math.round(combat.hp * unitScale * mult),
+          dmg: combat.melee * dmgScale,
+          rate: 1.4,
+          reach: 50,
+          contact: 16,
+          speed: 165,
+          regen: 0.04,
+          respawnTime: 20,
+          ranged: { range: combat.ranged.range, dmg: combat.ranged.dmg * dmgScale, rate: combat.ranged.rate }
+        });
+        heroUnit.skillCd = 4;
+        battleUnits.push(heroUnit);
+      }
+
+      // Kahraman değişince ya da terfi edince sahadaki gemi yeni istatistiklerle aynı yerde yenilenir.
+      function refreshFieldHero() {
+        if (!heroUnit) return;
+        const at = { x: heroUnit.homeX, y: heroUnit.homeY, dead: heroUnit.dead, respawnT: heroUnit.respawnT };
+        window.BattleUnits.release(heroUnit);
+        battleUnits = battleUnits.filter(u => u !== heroUnit);
+        createHeroUnit();
+        heroUnit.homeX = at.x; heroUnit.homeY = at.y;
+        heroUnit.x = at.x; heroUnit.y = at.y;
+        if (at.dead) { heroUnit.dead = true; heroUnit.respawnT = at.respawnT; heroUnit.hp = 0; }
+      }
+
+      function resetBattleUnits() {
+        window.BattleUnits.releaseAll(battleUnits);
+        battleUnits = [];
+        heroSelected = false;
+        heroMoveMarker = null;
+        unitScale = 0.6 + 0.4 * calculateDifficulty(state.level, 0).hpMult;
+        wavePreview = { idx: -1, keys: [] };
+        createHeroUnit();
+      }
+
+      // Hangar kulesi: asker sayısını, canını ve toplanma noktasını kule seviyesine göre tutar.
+      function syncHangarSquad(sock, t, tDef, lvStats) {
+        if (!t.rally) {
+          const p = window.BattleUnits.nearestOnPaths(sock.x, sock.y, ACTIVE_PATHS);
+          t.rally = { x: p.x, y: p.y };
+        }
+        const isLv3 = t.level >= 3;
+        const hpMult = isLv3 && (t.branch || "A") === "A" ? 1.6 : 1;
+        const dmgMult = isLv3 && t.branch === "B" ? 1.5 : 1;
+        const maxHp = Math.round(lvStats.soldierHp * unitScale * hpMult);
+        const dmg = lvStats.damage * getDmgMultiplier() * dmgMult;
+        const formation = [[-11, -5], [11, -5], [0, 9]];
+        t.squad = (t.squad || []).filter(u => battleUnits.includes(u));
+        while (t.squad.length < lvStats.soldiers) {
+          const f = formation[t.squad.length % formation.length];
+          const u = window.BattleUnits.create({ kind: "soldier", owner: t, x: t.rally.x, y: t.rally.y, offsetX: f[0], offsetY: f[1], hp: maxHp, dmg, rate: lvStats.fireRate, reach: lvStats.range, respawnTime: tDef.respawnSeconds, speed: 62 });
+          u.x = sock.x; u.y = sock.y; // askerler hangardan çıkıp yola yürür
+          t.squad.push(u);
+          battleUnits.push(u);
+        }
+        t.squad.forEach(u => {
+          if (u.maxHp !== maxHp) { u.hp = Math.round(u.hp * maxHp / u.maxHp); u.maxHp = maxHp; }
+          u.dmg = dmg;
+          u.rate = lvStats.fireRate;
+          u.reach = lvStats.range;
+          u.homeX = t.rally.x;
+          u.homeY = t.rally.y;
+        });
+      }
+
+      function stepBattleUnits(dt) {
+        // Satılan / değişen hangarların askerlerini sahadan kaldır.
+        const liveTowers = new Set(SOCKETS.filter(s => s.tower).map(s => s.tower));
+        const kept = [];
+        battleUnits.forEach(u => {
+          if (u.kind === "hero" || liveTowers.has(u.owner)) kept.push(u);
+          else window.BattleUnits.release(u);
+        });
+        battleUnits = kept;
+        window.BattleUnits.step(battleUnits, activeEnemies, dt, unitEnv);
+        if (heroUnit) heroUnit.skillCd = Math.max(0, (heroUnit.skillCd || 0) - dt);
+        if (heroMoveMarker) { heroMoveMarker.life -= dt; if (heroMoveMarker.life <= 0) heroMoveMarker = null; }
+        mapProps.forEach(p => { if (p.cd > 0) p.cd = Math.max(0, p.cd - dt); p.phase = (p.phase || 0) + dt; });
+      }
+
+      function moveHeroTo(vx, vy) {
+        if (!heroUnit || heroUnit.dead) return;
+        const x = Math.max(20, Math.min(VIRTUAL_W - 20, vx));
+        const y = Math.max(132, Math.min(VIRTUAL_H - 20, vy));
+        window.BattleUnits.release(heroUnit);
+        heroUnit.homeX = x;
+        heroUnit.homeY = y;
+        heroMoveMarker = { x, y, life: 0.9 };
+        SoundFX.uiClick();
+        triggerHaptic("light");
+      }
+
+      function castHeroSkill() {
+        if (!heroUnit || heroUnit.dead || heroUnit.skillCd > 0 || state.levelEnded) return;
+        const key = state.activeHero;
+        const combat = heroCombatFor(key);
+        const power = unitScale * heroLevelMult() * getDmgMultiplier();
+        const near = (r) => activeEnemies.filter(e => !e.dead && Math.hypot(e.x - heroUnit.x, e.y - heroUnit.y) <= r);
+        if (key === "kaan") {
+          const hit = near(125);
+          hit.forEach(e => { e.slowRatio = Math.max(e.slowRatio, 0.84); e.slowTimer = Math.max(e.slowTimer, 3); applyDamageToEnemy(e, 30 * power, 0.5, true); });
+          const bonus = Math.round(20 + state.level * 0.5);
+          state.gold += bonus;
+          heroUnit.hp = Math.min(heroUnit.maxHp, heroUnit.hp + heroUnit.maxHp * 0.3);
+          shockwaves.push({ x: heroUnit.x, y: heroUnit.y, maxR: 125, r: 10, color: "#38bdf8", life: 0.5 });
+          floatingTexts.push({ x: heroUnit.x, y: heroUnit.y - 30, text: `EMP! +${bonus}⚡`, color: "#7dd3fc", life: 1 });
+        } else if (key === "nova") {
+          const targets = near(170).sort((a, b) => b.maxHp - a.maxHp).slice(0, 3);
+          if (!targets.length) targets.push({ x: heroUnit.homeX, y: heroUnit.homeY - 40, dead: true });
+          targets.forEach((t, i) => setTimeout(() => {
+            if (state.levelEnded) return;
+            const tx = t.x, ty = t.y;
+            shockwaves.push({ x: tx, y: ty, maxR: 72, r: 6, color: "#fb923c", life: 0.45 });
+            spawnParticles(tx, ty, "#f97316", 16);
+            SoundFX.explosion(true);
+            activeEnemies.forEach(e => { if (!e.dead && Math.hypot(e.x - tx, e.y - ty) <= 72) applyDamageToEnemy(e, 115 * power, 0.6, false); });
+          }, i * 220));
+        } else {
+          const targets = near(175).sort((a, b) => Math.hypot(a.x - heroUnit.x, a.y - heroUnit.y) - Math.hypot(b.x - heroUnit.x, b.y - heroUnit.y)).slice(0, 6);
+          let from = { x: heroUnit.x, y: heroUnit.y - 10 };
+          targets.forEach(e => {
+            lightningArcs.push({ x1: from.x, y1: from.y, x2: e.x, y2: e.y, color: "#fde047", life: 0.35 });
+            applyDamageToEnemy(e, 95 * power, 0.7, true);
+            from = { x: e.x, y: e.y };
+          });
+          shockwaves.push({ x: heroUnit.x, y: heroUnit.y, maxR: 60, r: 6, color: "#facc15", life: 0.35 });
+        }
+        SoundFX.bossAlert ? SoundFX.upgrade(3) : null;
+        triggerHaptic("medium");
+        heroUnit.skillCd = combat.skillCd;
+        updateHUD();
+      }
+
+      // ---- Dalga işareti: kapıda sıradaki dalganın düşmanlarını gösterir, dokununca erken çağırır.
+      function upcomingWaveKeys() {
+        const idx = waveFlow.launched;
+        if (!waveFlow.hasMoreWaves()) return [];
+        if (wavePreview.idx !== idx) wavePreview = { idx, keys: buildWaveQueue(state.level, idx) };
+        return wavePreview.keys;
+      }
+
+      function takePreviewedWave(waveIdx) {
+        if (wavePreview.idx === waveIdx && wavePreview.keys.length) {
+          const keys = wavePreview.keys;
+          wavePreview = { idx: -1, keys: [] };
+          return keys;
+        }
+        return buildWaveQueue(state.level, waveIdx);
+      }
+
+      function waveFlagsVisible() {
+        return !state.levelEnded && !state.waveStartPending && waveFlow.hasMoreWaves() &&
+          !document.getElementById("btnNextWaveEarly").classList.contains("hidden");
+      }
+
+      function waveFlagPositions() {
+        return ACTIVE_PATHS.map(path => {
+          const a = path[0], b = path[1] || path[0];
+          const len = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+          const along = Math.min(54, len * 0.5);
+          return { x: a.x + (b.x - a.x) / len * along + 30, y: a.y + (b.y - a.y) / len * along };
+        });
+      }
+
+      // ---- Haritadaki sürprizler
+      function createMapProps() {
+        const nexus = WAYPOINTS[WAYPOINTS.length - 1];
+        const avoid = [{ x: nexus.x, y: nexus.y, r: 96 }];
+        ACTIVE_PATHS.forEach(p => avoid.push({ x: p[0].x, y: p[0].y, r: 70 }));
+        if (warpGenerator) avoid.push({ x: warpGenerator.x, y: warpGenerator.y, r: 60 });
+        const spots = window.BattleTerrain.freeSpots({ paths: ACTIVE_PATHS, sockets: SOCKETS, seed: state.level * 13 + 5, count: 3, clearRoad: 44, clearPad: 52, minGap: 120, top: 170, bottom: VIRTUAL_H - 120, margin: 34, avoid });
+        const kinds = ["relay", "meteor", "critter"];
+        mapProps = spots.slice(0, state.level >= 2 ? 3 : 2).map((sp, i) => ({ kind: kinds[i], x: sp.x, y: sp.y, cd: 0, used: false, phase: i * 1.7 }));
+      }
+
+      function tapMapProp(p) {
+        if (p.kind === "relay") {
+          if (p.cd > 0) { showToast(L(`📡 Röle şarj oluyor: ${Math.ceil(p.cd)} sn`, `📡 Relay recharging: ${Math.ceil(p.cd)}s`)); return; }
+          const gain = Math.round(22 + state.level * 0.6);
+          state.gold += gain;
+          p.cd = 32;
+          spawnParticles(p.x, p.y, "#facc15", 12);
+          floatingTexts.push({ x: p.x, y: p.y - 26, text: L(`📡 +${gain}⚡ RÖLE`, `📡 +${gain}⚡ RELAY`), color: "#fde047", life: 1 });
+          SoundFX.repair();
+        } else if (p.kind === "meteor") {
+          if (p.cd > 0) { showToast(L(`☄️ Meteor yeniden doluyor: ${Math.ceil(p.cd)} sn`, `☄️ Meteor recharging: ${Math.ceil(p.cd)}s`)); return; }
+          const nexus = WAYPOINTS[WAYPOINTS.length - 1];
+          const target = activeEnemies.filter(e => !e.dead).sort((a, b) => Math.hypot(a.x - nexus.x, a.y - nexus.y) - Math.hypot(b.x - nexus.x, b.y - nexus.y))[0];
+          if (!target) { showToast(L("☄️ Hedef yok — dalga gelince fırlat!", "☄️ No target — launch it when a wave comes!")); return; }
+          p.cd = 38;
+          const tx = target.x, ty = target.y;
+          lightningArcs.push({ x1: p.x, y1: p.y, x2: tx, y2: ty, color: "#fb923c", life: 0.3 });
+          shockwaves.push({ x: tx, y: ty, maxR: 80, r: 8, color: "#f97316", life: 0.5 });
+          spawnParticles(tx, ty, "#fb923c", 18);
+          SoundFX.explosion(true);
+          activeEnemies.forEach(e => { if (!e.dead && Math.hypot(e.x - tx, e.y - ty) <= 80) applyDamageToEnemy(e, 85 * unitScale * getDmgMultiplier(), 0.6, false); });
+        } else if (p.kind === "critter") {
+          p.hop = 0.6;
+          if (!p.used) {
+            p.used = true;
+            const gain = 10;
+            state.gold += gain;
+            floatingTexts.push({ x: p.x, y: p.y - 22, text: L(`Bıcır! +${gain}⚡`, `Squee! +${gain}⚡`), color: "#f0abfc", life: 1.1 });
+          } else {
+            floatingTexts.push({ x: p.x, y: p.y - 22, text: L("Bıcır?", "Squee?"), color: "#f0abfc", life: 0.8 });
+          }
+          SoundFX.uiClick();
+        }
+        triggerHaptic("light");
+        updateHUD();
+      }
+
+      // Haritaya dokunuş sırası: toplanma noktası → dalga işareti → sürpriz → kahraman.
+      // true dönerse dokunuş tüketilmiştir (kule platformu mantığı çalışmaz).
+      function handleBattleMapTap(vx, vy) {
+        if (state.levelEnded) return false;
+        if (rallyEditSocketIdx >= 0) {
+          const sock = SOCKETS[rallyEditSocketIdx];
+          const p = window.BattleUnits.nearestOnPaths(vx, vy, ACTIVE_PATHS);
+          if (sock && sock.tower && TOWER_TYPES[sock.tower.typeKey].isBarracks) {
+            const lv = TOWER_TYPES.hangar.levels[sock.tower.level - 1];
+            if (p.d <= 60 && Math.hypot(p.x - sock.x, p.y - sock.y) <= lv.range + 70) {
+              sock.tower.rally = { x: p.x, y: p.y };
+              (sock.tower.squad || []).forEach(u => window.BattleUnits.release(u));
+              heroMoveMarker = { x: p.x, y: p.y, life: 0.9, rally: true };
+              SoundFX.uiClick();
+            } else {
+              showToast(L("🚩 Toplanma noktası hangara yakın ve yolun üstünde olmalı.", "🚩 The rally point must be on the road, near the hangar."));
+            }
+          }
+          rallyEditSocketIdx = -1;
+          return true;
+        }
+        if (waveFlagsVisible()) {
+          const hit = waveFlagPositions().some(f => Math.hypot(f.x - vx, f.y - vy) <= 30);
+          if (hit) { document.getElementById("btnNextWaveEarly").click(); return true; }
+        }
+        for (const p of mapProps) {
+          if (Math.hypot(p.x - vx, p.y - vy) <= 30) { tapMapProp(p); return true; }
+        }
+        if (heroUnit && !heroUnit.dead && Math.hypot(heroUnit.x - vx, (heroUnit.y - 8) - vy) <= 30) {
+          heroSelected = !heroSelected;
+          closeSocketRing();
+          SoundFX.uiClick();
+          updateHeroDock();
+          return true;
+        }
+        if (heroSelected) {
+          const onSocket = SOCKETS.some(s => Math.hypot(s.x - vx, s.y - vy) <= 28);
+          heroSelected = false;
+          updateHeroDock();
+          if (onSocket) return false;
+          moveHeroTo(vx, vy);
+          return true;
+        }
+        return false;
+      }
+
+      // ---- Kahraman paneli (sol alt): portre + can halkası ve yetenek + bekleme süresi.
+      function updateHeroDock() {
+        const dock = document.getElementById("heroDock");
+        if (!dock || !heroUnit) return;
+        const hm = getHeroMeta(state.activeHero);
+        const combat = heroCombatFor(state.activeHero);
+        dock.style.setProperty("--hero-color", hm.color);
+        const ratio = heroUnit.dead ? 0 : heroUnit.hp / heroUnit.maxHp;
+        dock.style.setProperty("--hero-hp", (ratio * 100).toFixed(1));
+        dock.classList.toggle("is-selected", heroSelected);
+        dock.classList.toggle("is-dead", heroUnit.dead);
+        const portrait = document.getElementById("heroDockPortrait");
+        if (portrait.dataset.hero !== hm.key) { portrait.dataset.hero = hm.key; portrait.innerHTML = HERO_ICONS[hm.key] || HERO_ICONS.vega; }
+        document.getElementById("heroDockState").textContent = heroUnit.dead ? `${Math.ceil(heroUnit.respawnT)}s` : (heroSelected ? L("NEREYE?", "WHERE?") : "");
+        const cdRatio = heroUnit.skillCd > 0 ? heroUnit.skillCd / combat.skillCd : 0;
+        dock.style.setProperty("--skill-cd", (cdRatio * 100).toFixed(1));
+        const skillBtn = document.getElementById("btnHeroSkill");
+        skillBtn.classList.toggle("is-ready", cdRatio === 0 && !heroUnit.dead);
+        skillBtn.title = state.lang === "en" ? combat.skillEn : combat.skillTr;
+        document.getElementById("heroSkillTime").textContent = heroUnit.skillCd > 0 ? String(Math.ceil(heroUnit.skillCd)) : "";
+      }
+
+      document.getElementById("btnHeroSelect").addEventListener("click", (e) => {
+        e.stopPropagation();
+        SoundFX.init();
+        if (!heroUnit || heroUnit.dead) { showToast(L("Kahraman yeniden doğuyor…", "Hero is respawning…")); return; }
+        heroSelected = !heroSelected;
+        closeSocketRing();
+        SoundFX.uiClick();
+        if (heroSelected) showToast(L("🎯 Kahramanı göndermek için haritada bir yere dokun.", "🎯 Tap anywhere on the map to send your hero."));
+        updateHeroDock();
+      });
+      document.getElementById("btnHeroSkill").addEventListener("click", (e) => {
+        e.stopPropagation();
+        SoundFX.init();
+        if (!heroUnit || heroUnit.dead) return;
+        if (heroUnit.skillCd > 0) { showToast(L(`Yetenek ${Math.ceil(heroUnit.skillCd)} sn sonra hazır.`, `Skill ready in ${Math.ceil(heroUnit.skillCd)}s.`)); return; }
+        castHeroSkill();
+      });
+
+      // ---- Çizim: askerler, kahraman, hedef işareti, dalga bayrakları ve sürprizler.
+      function drawBattleUnits(ctx, nowAnim) {
+        battleUnits.forEach(u => {
+          if (u.dead) return;
+          if (u.kind === "hero") return;
+          const bob = u.moving ? Math.sin(nowAnim * 14 + u.id) * 1.2 : 0;
+          ctx.save();
+          ctx.translate(u.x, u.y + bob);
+          ctx.fillStyle = "rgba(0,0,0,0.35)";
+          ctx.beginPath(); ctx.ellipse(0, 6, 7, 2.6, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.scale(u.facing, 1);
+          // gövde + kafa + plazma bıçağı
+          ctx.fillStyle = "#14532d"; ctx.strokeStyle = "#86efac"; ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.roundRect(-4.5, -6, 9, 10, 2.5); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = "#bbf7d0";
+          ctx.beginPath(); ctx.arc(0, -9, 3.6, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#052e16"; ctx.fillRect(0.5, -10, 3, 1.6);
+          ctx.strokeStyle = u.swing > 0.4 ? "#ffffff" : "#4ade80"; ctx.lineWidth = 2; ctx.lineCap = "round";
+          const sw = -0.9 + (1 - u.swing) * 1.4;
+          ctx.beginPath(); ctx.moveTo(4, -2); ctx.lineTo(4 + Math.cos(sw) * 9, -2 + Math.sin(sw) * 9); ctx.stroke();
+          ctx.restore();
+          if (u.hp < u.maxHp) fxHealthBar(ctx, u.x, u.y - 17, 16, 2.6, u.hp / u.maxHp, false);
+        });
+        // Hangar toplanma bayrakları
+        SOCKETS.forEach(s => {
+          const t = s.tower;
+          if (!t || !t.rally || !TOWER_TYPES[t.typeKey].isBarracks) return;
+          if (state.selectedSocketIndex !== SOCKETS.indexOf(s) && rallyEditSocketIdx !== SOCKETS.indexOf(s)) return;
+          ctx.save();
+          ctx.strokeStyle = "rgba(134,239,172,0.55)"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.4;
+          ctx.beginPath(); ctx.arc(t.rally.x, t.rally.y, TOWER_TYPES.hangar.levels[t.level - 1].range, 0, Math.PI * 2); ctx.stroke();
+          ctx.restore();
+        });
+        if (heroUnit) drawHeroUnit(ctx, nowAnim);
+        if (heroMoveMarker) {
+          const k = heroMoveMarker.life / 0.9;
+          ctx.save();
+          ctx.strokeStyle = heroMoveMarker.rally ? "#86efac" : getHeroMeta(state.activeHero).color;
+          ctx.globalAlpha = k; ctx.lineWidth = 2.2;
+          ctx.beginPath(); ctx.ellipse(heroMoveMarker.x, heroMoveMarker.y, 18 * (1.4 - k * 0.4), 9 * (1.4 - k * 0.4), 0, 0, Math.PI * 2); ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      function drawHeroUnit(ctx, nowAnim) {
+        const u = heroUnit;
+        const hm = getHeroMeta(state.activeHero);
+        if (u.dead) {
+          const home = { x: u.homeX + u.offsetX, y: u.homeY + u.offsetY };
+          ctx.save();
+          ctx.globalAlpha = 0.5;
+          ctx.strokeStyle = hm.color; ctx.setLineDash([3, 4]); ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(home.x, home.y - 8, 14, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - u.respawnT / u.respawnTime)); ctx.stroke();
+          ctx.restore();
+          return;
+        }
+        const hover = Math.sin(nowAnim * 3) * 2.5;
+        ctx.save();
+        // gölge yerde, gemi havada
+        ctx.fillStyle = "rgba(0,0,0,0.35)";
+        ctx.beginPath(); ctx.ellipse(u.x, u.y + 6, 13, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+        if (heroSelected) {
+          ctx.strokeStyle = hm.color; ctx.lineWidth = 2; ctx.globalAlpha = 0.6 + Math.sin(nowAnim * 6) * 0.3;
+          ctx.beginPath(); ctx.ellipse(u.x, u.y + 6, 20, 8, 0, 0, Math.PI * 2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        // çekici ışın: durdurduğu düşmana bağlı
+        if (u.target && u.target.blockedBy === u) {
+          ctx.strokeStyle = hm.color; ctx.globalAlpha = 0.45; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.moveTo(u.x, u.y - 8 + hover); ctx.lineTo(u.target.x, u.target.y); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.translate(u.x, u.y - 12 + hover);
+        ctx.scale(u.facing, 1);
+        if (state.qualityMode !== "performance") { ctx.shadowColor = hm.color; ctx.shadowBlur = 12; }
+        ctx.fillStyle = "#0f172a"; ctx.strokeStyle = hm.color; ctx.lineWidth = 2;
+        ctx.beginPath();
+        if (hm.key === "kaan") { ctx.roundRect(-11, -7, 22, 14, 4); }
+        else if (hm.key === "nova") { ctx.moveTo(14, 0); ctx.lineTo(-10, -8); ctx.lineTo(-5, 0); ctx.lineTo(-10, 8); ctx.closePath(); }
+        else { ctx.moveTo(15, 0); ctx.lineTo(-9, -10); ctx.lineTo(-4, 0); ctx.lineTo(-9, 10); ctx.closePath(); }
+        ctx.fill(); ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = hm.color;
+        ctx.beginPath(); ctx.arc(2, 0, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.75)";
+        ctx.beginPath(); ctx.arc(-9 - Math.random() * 2, 0, 2, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        fxHealthBar(ctx, u.x, u.y - 30, 26, 3.2, u.hp / u.maxHp, true);
+      }
+
+      function drawWaveFlags(ctx, nowAnim) {
+        if (!waveFlagsVisible()) return;
+        const keys = upcomingWaveKeys();
+        const counts = {};
+        keys.forEach(k => { counts[k] = (counts[k] || 0) + 1; });
+        const kinds = Object.keys(counts);
+        const secs = waveFlow.secondsLeft;
+        waveFlagPositions().forEach((f, gi) => {
+          ctx.save();
+          ctx.translate(f.x, f.y);
+          const pulse = 1 + Math.sin(nowAnim * 5) * 0.06;
+          ctx.scale(pulse, pulse);
+          ctx.fillStyle = "rgba(0,0,0,0.35)";
+          ctx.beginPath(); ctx.ellipse(0, 18, 12, 4, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(0, 18); ctx.lineTo(0, -6); ctx.stroke();
+          const g = ctx.createRadialGradient(-4, -10, 2, 0, -6, 17);
+          g.addColorStop(0, "#fca5a5"); g.addColorStop(1, "#991b1b");
+          ctx.fillStyle = g; ctx.strokeStyle = "#fde68a"; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(0, -6, 15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          if (Number.isFinite(secs) && secs > 0) {
+            ctx.strokeStyle = "#facc15"; ctx.lineWidth = 3;
+            const frac = Math.max(0, Math.min(1, secs / 15));
+            ctx.beginPath(); ctx.arc(0, -6, 19, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * frac); ctx.stroke();
+          }
+          ctx.fillStyle = "#fff"; ctx.font = "900 13px Orbitron, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+          ctx.fillText("▶", 1, -5.5);
+          ctx.restore();
+          if (gi === 0 && kinds.length) {
+            const w = 16 + kinds.length * 26;
+            const bx = Math.max(6, Math.min(VIRTUAL_W - w - 6, f.x - w / 2));
+            const by = f.y + 24;
+            ctx.save();
+            ctx.fillStyle = "rgba(9,13,32,0.9)"; ctx.strokeStyle = "rgba(246,185,59,0.55)"; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.roundRect(bx, by, w, 22, 8); ctx.fill(); ctx.stroke();
+            ctx.font = "11px sans-serif"; ctx.textBaseline = "middle"; ctx.textAlign = "left";
+            kinds.forEach((k, i) => {
+              ctx.fillStyle = "#fff";
+              ctx.fillText(ENEMY_GLYPH[k] || "•", bx + 8 + i * 26, by + 11.5);
+              ctx.fillStyle = "#fde68a"; ctx.font = "800 8px Orbitron, sans-serif";
+              ctx.fillText(String(counts[k]), bx + 21 + i * 26, by + 15);
+              ctx.font = "11px sans-serif";
+            });
+            ctx.restore();
+          }
+        });
+      }
+
+      function drawMapProps(ctx, nowAnim) {
+        mapProps.forEach(p => {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.fillStyle = "rgba(0,0,0,0.35)";
+          ctx.beginPath(); ctx.ellipse(0, 9, 15, 5, 0, 0, Math.PI * 2); ctx.fill();
+          const ready = p.cd <= 0;
+          if (p.kind === "relay") {
+            ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(-7, 9); ctx.lineTo(0, -4); ctx.lineTo(7, 9); ctx.stroke();
+            ctx.save(); ctx.translate(0, -6); ctx.rotate(-0.5 + Math.sin(p.phase * 0.8) * 0.4);
+            ctx.fillStyle = "#cbd5e1"; ctx.strokeStyle = "#475569"; ctx.lineWidth = 1.2;
+            ctx.beginPath(); ctx.ellipse(0, 0, 11, 5, 0, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = "#475569"; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -8); ctx.stroke();
+            ctx.fillStyle = ready ? "#facc15" : "#64748b"; ctx.beginPath(); ctx.arc(0, -9, 2.2, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+            if (ready && Math.sin(p.phase * 4) > 0.6) { ctx.strokeStyle = "rgba(250,204,21,0.8)"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(6, -14); ctx.lineTo(10, -18); ctx.lineTo(8, -18); ctx.lineTo(12, -23); ctx.stroke(); }
+          } else if (p.kind === "meteor") {
+            const g = ctx.createRadialGradient(-4, -4, 1, 0, 0, 12);
+            g.addColorStop(0, ready ? "#fdba74" : "#78716c"); g.addColorStop(1, ready ? "#7c2d12" : "#292524");
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; const r = 10 + (i % 2 ? 2 : -1); ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r * 0.85); }
+            ctx.closePath(); ctx.fill();
+            if (ready) {
+              ctx.strokeStyle = `rgba(251,146,60,${0.5 + Math.sin(p.phase * 4) * 0.3})`; ctx.lineWidth = 2;
+              ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI * 2); ctx.stroke();
+            }
+          } else if (p.kind === "critter") {
+            p.hop = Math.max(0, (p.hop || 0) - 0.016);
+            const jump = p.hop > 0 ? -Math.sin(p.hop / 0.6 * Math.PI) * 12 : Math.sin(p.phase * 2.5) * 1.2;
+            const wander = Math.sin(p.phase * 0.5) * 8;
+            ctx.translate(wander, jump);
+            ctx.fillStyle = "#c084fc";
+            ctx.beginPath(); ctx.ellipse(0, 2, 8, 6.5, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(-2.5, 0, 2.2, 0, Math.PI * 2); ctx.arc(2.5, 0, 2.2, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "#1e1b4b"; ctx.beginPath(); ctx.arc(-2.2, 0.3, 1.1, 0, Math.PI * 2); ctx.arc(2.8, 0.3, 1.1, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = "#c084fc"; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(-3, -4); ctx.lineTo(-5, -9); ctx.moveTo(3, -4); ctx.lineTo(5, -9); ctx.stroke();
+          }
+          if (!ready && p.kind !== "critter") {
+            ctx.strokeStyle = "rgba(148,163,184,0.7)"; ctx.lineWidth = 2;
+            const full = p.kind === "relay" ? 32 : 38;
+            ctx.beginPath(); ctx.arc(0, 0, 17, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - p.cd / full)); ctx.stroke();
+          }
+          ctx.restore();
+        });
+      }
 
       // TRAINER MODU BUTONLARI
       document.getElementById("btnOpenTrainer").addEventListener("click", () => {
@@ -7177,6 +7878,7 @@
         SoundFX.init();
         SoundFX.uiClick();
         state.paused = true;
+        closeSocketRing();
         document.getElementById("btnPauseToggle").textContent = "Devam Et ▶";
         populatePlayerLevelDropdown();
         updateHUD();
@@ -7800,6 +8502,7 @@
           SoundFX.uiClick();
           triggerHaptic("medium");
           state.activeHero = btn.getAttribute("data-hero") || "vega";
+          refreshFieldHero();
           saveProgress();
           updateTowerUnlockBadges();
           updateSocketInspector();
@@ -7830,6 +8533,7 @@
           state.heroProgress[hKey].lv = Math.min(10, info.lv + 1);
           // Preserve previously earned XP when a gem promotion is used.
           state.activeHero = hKey;
+          refreshFieldHero();
           saveProgress();
           updateTowerUnlockBadges();
           updateHUD();
@@ -8216,8 +8920,8 @@
             target: byId("btnLobbyOpenHeroes"),
             title: L("KAHRAMAN MENÜSÜ", "HEROES MENU"),
             body: L(
-              "Komutanını buradan seçersin. Seçtiğin kahraman her savaşta gezegenin etrafında uçar ve kulelerine <b>kalıcı bonus</b> verir. Hadi içine bakalım.",
-              "Pick your commander here. Your hero flies around the planet in every battle and gives your towers a <b>permanent bonus</b>. Let's look inside."
+              "Komutanını buradan seçersin. Seçtiğin kahraman kulelerine <b>kalıcı bonus</b> verir ve savaşta sahaya iner: sol alttaki portreye, sonra haritada bir yere dokunarak onu istediğin yere gönderirsin. Hadi içine bakalım.",
+              "Pick your commander here. Your hero gives your towers a <b>permanent bonus</b> and joins every battle: tap the portrait at the bottom left, then a spot on the map, to send them anywhere. Let's look inside."
             )
           },
           {

@@ -31,7 +31,7 @@ function createGame(root = path.resolve(__dirname, '..'), seed = 1) {
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},
     window:{devicePixelRatio:1,addEventListener:noop,GameMonetization:{onVipChange:noop,onVipPrice:noop,onGemPrices:noop,onGemGranted:noop,onCatalogChange:noop,getDebugInfo:()=>({testAds:false}),configure:noop,onCatalog:noop,onDiagnostics:noop,subscribe:noop,preloadAds:noop,isInterstitialDue:()=>false,getDiagnostics:()=>({testAds:false})}}
   });
-  for (const name of ['game-balance.js','wave-flow.js', 'space-theme.js', 'world-map.js', 'review-prompt.js','game-audio.js']) {
+  for (const name of ['game-balance.js','wave-flow.js', 'space-theme.js', 'world-map.js', 'battle-terrain.js', 'ring-menu.js', 'battle-units.js', 'review-prompt.js','game-audio.js']) {
     if(name==='game-balance.js' && html.includes('<!-- BALANCE START -->')) continue;
     const file=path.join(root,'www',name);if(fs.existsSync(file)) vm.runInContext(fs.readFileSync(file,'utf8'),sandbox);
   }

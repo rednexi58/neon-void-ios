@@ -225,3 +225,76 @@
   background: linear-gradient(#ffd56e, #f6b93b 50%, #e29a1c); box-shadow: 0 3px 0 #b7791f;
 }
 .gk-tour__next:active { transform: translateY(2px); box-shadow: 0 1px 0 #b7791f; }
+
+/* ---------- battle: radial build menu around a plot */
+.gk-ring { position: absolute; inset: 0; z-index: 25; pointer-events: none; font-family: Inter, system-ui, sans-serif; }
+.gk-ring.hidden { display: none; }
+.gk-ring__halo {
+  position: absolute; border-radius: 50%;
+  border: 2px dashed rgba(246, 185, 59, 0.45); background: radial-gradient(circle, rgba(5, 8, 22, 0.15), rgba(5, 8, 22, 0.42));
+}
+.gk-ring__title {
+  position: absolute; transform: translate(-50%, -100%); white-space: nowrap; pointer-events: none;
+  padding: 3px 9px; border-radius: 999px; background: rgba(9, 13, 32, 0.92); border: 1px solid rgba(246, 185, 59, 0.55);
+  color: #fde68a; font-size: 11px; font-weight: 800; letter-spacing: 0.02em;
+}
+.gk-ring__btn {
+  position: absolute; width: 52px; height: 52px; border-radius: 50%; pointer-events: auto;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 35% 30%, #26315c, #0b1028 72%);
+  border: 2px solid var(--ring-accent, #f6b93b); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+  animation: gk-ring-pop 0.16s ease-out both; color: #fff;
+}
+.gk-ring__btn:active { transform: scale(0.92); }
+@keyframes gk-ring-pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.gk-ring__icon { display: grid; place-items: center; width: 30px; height: 30px; font-size: 20px; line-height: 1; }
+.gk-ring__icon svg { width: 30px; height: 30px; }
+.gk-ring__cost {
+  position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+  padding: 1px 6px; border-radius: 999px; background: #f6b93b; color: #241503;
+  font-size: 10.5px; font-weight: 900; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.gk-ring__label {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  padding: 0 5px; border-radius: 6px; background: rgba(9, 13, 32, 0.95); color: #e2e8f0;
+  font-size: 9px; font-weight: 800; white-space: nowrap;
+}
+.gk-ring__btn.is-dim { filter: saturate(0.4) brightness(0.75); }
+.gk-ring__btn.is-dim .gk-ring__cost { background: #64748b; color: #0f172a; }
+.gk-ring__btn.is-locked { filter: grayscale(1) brightness(0.6); }
+.gk-ring__btn.is-locked .gk-ring__cost { background: #334155; color: #cbd5e1; }
+
+/* Kingdom Rush layout: building happens on the map, the old card dock is retired. */
+body.kr-battle #buildTowerList, body.kr-battle #installedTowerPanel { display: none !important; }
+
+/* ---------- battle: hero dock (portrait with health ring + skill with cooldown) */
+.gk-hero-dock { position: absolute; left: 8px; bottom: 58px; z-index: 12; display: flex; align-items: flex-end; gap: 6px; }
+.gk-hero-dock__portrait {
+  position: relative; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center;
+  background:
+    radial-gradient(circle at 35% 30%, #1e2a52, #0a0f24 70%) padding-box,
+    conic-gradient(var(--hero-color, #facc15) calc(var(--hero-hp, 100) * 1%), rgba(255, 255, 255, 0.12) 0) border-box;
+  border: 4px solid transparent; color: var(--hero-color, #facc15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+.gk-hero-dock__icon svg { width: 24px; height: 24px; }
+.gk-hero-dock.is-selected .gk-hero-dock__portrait { box-shadow: 0 0 0 3px #fde047, 0 6px 16px rgba(0, 0, 0, 0.5); animation: gk-tour-pulse 1s infinite; }
+.gk-hero-dock.is-dead .gk-hero-dock__portrait { filter: grayscale(1) brightness(0.6); }
+.gk-hero-dock__state {
+  position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+  font: 800 9px Orbitron, sans-serif; color: #fde68a; background: rgba(9, 13, 32, 0.92); padding: 1px 5px; border-radius: 6px;
+}
+.gk-hero-dock__state:empty { display: none; }
+.gk-hero-dock__skill {
+  position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #94a3b8;
+  background:
+    radial-gradient(circle at 35% 30%, #2a2140, #0f0a20 72%) padding-box,
+    conic-gradient(rgba(255, 255, 255, 0.12) calc(var(--skill-cd, 0) * 1%), var(--hero-color, #facc15) 0) border-box;
+  border: 3px solid transparent; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+.gk-hero-dock__skill svg { width: 18px; height: 18px; }
+.gk-hero-dock__skill.is-ready { color: var(--hero-color, #facc15); animation: gk-tour-pulse 1.4s infinite; }
+.gk-hero-dock__time { position: absolute; inset: 0; display: grid; place-items: center; font: 900 12px Orbitron, sans-serif; color: #fff; text-shadow: 0 1px 2px #000; }
+.gk-hero-dock__time:empty { display: none; }
+body.kr-battle #socketBadge, body.kr-battle #selectedSocketTitle { display: none !important; }
+#canvasContainer.ring-open #trainerBanner { opacity: 0.18; pointer-events: none; transition: opacity 0.15s; }
