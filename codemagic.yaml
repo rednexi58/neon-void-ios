@@ -145,6 +145,25 @@ workflows:
         auth: integration
         submit_to_testflight: false
 
+  ios-store-listing:
+    name: Gezegeni Koru - Store Listing Sync
+    # Pushes store_assets/ (texts + screenshots) to the App Store version being prepared.
+    # Run it after creating the new version in App Store Connect, before submitting.
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Apple AppStore
+    environment:
+      vars:
+        APP_STORE_APPLE_ID: "6825732487"
+    scripts:
+      - name: Validate store assets
+        script: python3 scripts/asc_store_sync.py --dry-run
+      - name: Install API dependencies
+        script: pip3 install --quiet "PyJWT[crypto]>=2.8"
+      - name: Upload texts and screenshots
+        script: python3 scripts/asc_store_sync.py --metadata --screenshots
+
   ios-ipad-check:
     name: Gezegeni Koru - iPad Simulator Check
     max_build_duration: 60
