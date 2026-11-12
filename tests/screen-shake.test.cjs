@@ -87,6 +87,7 @@ test('closing shop respects lobby origin and an underlying pause menu', () => {
   const openStart = html.indexOf('      let shopReturnToLobby = false;');
   const end = html.indexOf('      // ============================================================================', openStart);
   g.openStartLobby = () => { g.state.paused = true; g.document.getElementById('modalStartLobby').classList.remove('hidden'); };
+  g.updateLobbyUI = () => {};
   vm.runInContext(html.slice(openStart, end), g);
   for (let i = 0; i < 30; i++) {
     g.openShop(true); g.document.getElementById('btnCloseShop').click();

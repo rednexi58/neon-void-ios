@@ -763,7 +763,7 @@
           <span class="font-cyber font-bold text-xs text-amber-300">🦸 AKTİF KAHRAMAN SEÇİMİ (OYUN İÇİ KARAKTERİNİZ)</span>
           <span id="activeCommanderLabel" class="text-[10px] font-cyber font-bold text-cyan-300">Aktif: Amiral Vega</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+        <div id="heroCardsGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
           <!-- AMİRAL VEGA -->
           <div class="p-2.5 rounded-xl border-2 border-cyan-400 bg-cyan-950/40 flex flex-col justify-between gap-2" id="heroCard_vega">
             <button data-hero="vega" class="hero-select-btn text-left transition flex flex-col gap-1 w-full">
@@ -967,7 +967,7 @@
 
       <p class="text-[10px] text-slate-400">İçerik / Content: 2026.11.11.1</p>
       <p id="balanceSummary" class="text-xs text-sky-200">Temel geliştirmeler Gear + elmas ile alınır; bölüm tamamlama şartı yoktur.</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+      <div id="labBasicGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
         <div class="bg-slate-900/90 border border-cyan-500/35 rounded-xl p-3 flex flex-col justify-between gap-2">
           <div>
             <div class="flex justify-between items-center">
@@ -1022,7 +1022,7 @@
       </div>
 
       <!-- ELİT CYBER-CORE YETENEK AĞACI -->
-      <div class="border-t border-fuchsia-500/30 pt-3">
+      <div id="labEliteSection" class="border-t border-fuchsia-500/30 pt-3">
         <div class="flex items-center justify-between mb-2">
           <h3 class="font-cyber font-bold text-xs sm:text-sm text-fuchsia-300">💎 ELİT SİBER-GENETİK MODÜLLER (CYBER-CORE)</h3>
           <span class="text-[10px] px-2 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-200 border border-fuchsia-500/40 font-semibold">Üst Düzey Evrim</span>
@@ -1324,7 +1324,7 @@
   <!-- ========================================================================== -->
   <!-- ANA EKRAN: SEFER HARİTASI (Kingdom Rush tarzı bölüm haritası)               -->
   <!-- ========================================================================== -->
-  <div id="modalStartLobby" class="gk-lobby">
+  <div id="modalStartLobby" class="gk-lobby" data-tour-noscroll>
     <canvas id="wmCanvas" class="gk-lobby__canvas" aria-hidden="true"></canvas>
     <div id="wmScroller" class="gk-lobby__scroller"><div id="wmSpacer"></div></div>
     <div class="gk-lobby__fade-top"></div>
@@ -1370,6 +1370,7 @@
 
     <div id="lobbySettingsMenu" class="gk-pop hidden">
       <button id="btnToggleLangLobby"><b id="lobbyLangLabel">Dil</b><span id="lobbyLangValue">Türkçe</span></button>
+      <button id="btnReplayTour"><b id="lobbyTourLabel">Rehberi izle</b><span>›</span></button>
     </div>
 
     <footer class="gk-lobby__bottom">
@@ -1392,8 +1393,8 @@
           <span id="lobbyNavEndless">Sonsuz</span>
         </button>
         <button id="btnLobbyOpenLab" class="gk-nav__btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M7 14l5-5 5 5"/><path d="M5 4h14"/></svg>
-          <span id="lobbyNavLab">Yükselt</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12"/><path d="M8.5 7h7M8.5 17h7"/></svg>
+          <span id="lobbyNavLab">Evrim</span>
         </button>
         <button id="btnLobbyOpenShop" class="gk-nav__btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16l-1.5 12.5a2 2 0 01-2 1.5h-9a2 2 0 01-2-1.5z"/><path d="M9 10V6a3 3 0 016 0v4"/></svg>
@@ -1598,6 +1599,7 @@
   <script src="wave-flow.js"></script>
     <script src="space-theme.js"></script>
     <script src="world-map.js"></script>
+    <script src="guided-tour.js"></script>
     <script src="review-prompt.js"></script>
   <script src="game-audio.js"></script>
   <script>
@@ -1631,9 +1633,9 @@
             { title: "🎓 EĞİTİM 2/8 • İLK KULENİ KUR", desc: "Alttaki panelden Parçacık Lazer'e (85⚡) dokun. Lazer hem kara hem hava düşmanını vurur; diğer kuleler bölüm ilerledikçe açılır.", focus: "buildTowerList" },
             { title: "🎓 EĞİTİM 3/8 • GÜÇLENDİR (★→★★★)", desc: "Kurduğun kuleye dokunup ⬆ Geliştir ile Lv.2 ve Lv.3'e yükselt. Lv.3'te A veya B uzmanlık dalını seçersin; köşelerdeki ışıklar kulenin seviyesini gösterir." },
             { title: "🎓 EĞİTİM 4/8 • ÖZEL YETENEKLER", desc: "🛰️ Orbital lazer tüm düşmanları vurur, 🛡 Kalkan gezegeni korur, ❄ Buzul herkesi yavaşlatır, 🔧 Onarım can yeniler. Zor anlar için sakla!", focus: "abilityStrip" },
-            { title: "🎓 EĞİTİM 5/8 • KAHRAMANIN", desc: "Gezegenin etrafında dönen gemi senin komutanın! ⚡ Vega lazer/tesla hasarını, 🛠 Kaan kule indirimini, ☄️ Nova kritik vuruşu artırır. Kahramanlar menüsünden değiştir ve seviye atlat." },
-            { title: "🎓 EĞİTİM 6/8 • OTONOM DRONLAR", desc: "Evrim Üssü'nden 🛸 Siber-Dron filosunu açınca dronlar gezegene yaklaşan düşmanları kendiliğinden avlar. Her seviye bir dron daha ekler." },
-            { title: "🎓 EĞİTİM 7/8 • SİBER EVRİM", desc: "Bölüm sonunda kazandığın ⚙ Gear ve 💎 Core ile 🧬 EVRİM'den kalıcı hasar, hız, kritik ve başlangıç enerjisi güçlendirmeleri al. Takıldığın bölümde buraya uğra!", focus: "btnOpenMenuQuick" },
+            { title: "🎓 EĞİTİM 5/8 • KAHRAMANIN", desc: "Gezegenin etrafında dönen gemi senin komutanın! ⚡ Vega lazer/tesla hasarını, 🛠 Kaan kule indirimini, ☄️ Nova kritik vuruşu artırır. Ana ekrandaki alt menüde KAHRAMAN sekmesinden seçilir ve seviye atlatılır — bölümü geçince sana içini adım adım göstereceğiz." },
+            { title: "🎓 EĞİTİM 6/8 • OTONOM DRONLAR", desc: "Ana ekrandaki EVRİM sekmesinden 🛸 Siber-Dron filosunu açınca dronlar gezegene yaklaşan düşmanları kendiliğinden avlar. Her seviye bir dron daha ekler." },
+            { title: "🎓 EĞİTİM 7/8 • SİBER EVRİM", desc: "Bölüm sonunda kazandığın ⚙ parça ve 💎 elmas ile ana ekrandaki 🧬 EVRİM sekmesinden kalıcı hasar, hız, kritik ve başlangıç enerjisi güçlendirmeleri alırsın. Savaş sırasında da bu butondan ulaşabilirsin.", focus: "btnOpenMenuQuick" },
             { title: "🎓 EĞİTİM 8/8 • DALGAYI BAŞLAT!", desc: "Hazırsan sağ üstteki butonla dalgayı başlat. Sonraki dalgaları erken çağırırsan bonus ⚡ kazanırsın; çağırmazsan 7 sn sonra kendiliğinden gelir. Gezegeni koru Komutan!", focus: "btnNextWaveEarly" }
           ]
         },
@@ -1660,9 +1662,9 @@
             { title: "🎓 TUTORIAL 2/8 • BUILD YOUR FIRST TOWER", desc: "Tap Particle Laser (85⚡) in the bottom dock. It hits both ground and air enemies; more towers unlock as you progress.", focus: "buildTowerList" },
             { title: "🎓 TUTORIAL 3/8 • UPGRADE (★→★★★)", desc: "Tap your tower and use ⬆ Upgrade to reach Lv.2 and Lv.3. At Lv.3 you pick specialisation A or B; the corner lights show a tower's level." },
             { title: "🎓 TUTORIAL 4/8 • SPECIAL ABILITIES", desc: "🛰️ Orbital strikes every enemy, 🛡 Shield protects the planet, ❄ Cryo slows everyone, 🔧 Repair restores health. Save them for tough moments!", focus: "abilityStrip" },
-            { title: "🎓 TUTORIAL 5/8 • YOUR HERO", desc: "The ship circling the planet is your commander! ⚡ Vega boosts laser/tesla damage, 🛠 Kaan discounts towers, ☄️ Nova raises crits. Switch and level them in the Heroes menu." },
-            { title: "🎓 TUTORIAL 6/8 • AUTONOMOUS DRONES", desc: "Unlock the 🛸 Cyber-Drone fleet in Evolution and drones hunt enemies near the planet on their own. Each rank adds another drone." },
-            { title: "🎓 TUTORIAL 7/8 • CYBER EVOLUTION", desc: "Spend ⚙ Gear and 💎 Core from each level in 🧬 EVOLVE for permanent damage, speed, crit and starting-energy boosts. Stuck on a level? Come here!", focus: "btnOpenMenuQuick" },
+            { title: "🎓 TUTORIAL 5/8 • YOUR HERO", desc: "The ship circling the planet is your commander! ⚡ Vega boosts laser/tesla damage, 🛠 Kaan discounts towers, ☄️ Nova raises crits. Pick and level them from the HEROES tab on the home screen — after this level we will walk you through it." },
+            { title: "🎓 TUTORIAL 6/8 • AUTONOMOUS DRONES", desc: "Unlock the 🛸 Cyber-Drone fleet from the EVOLVE tab on the home screen and drones hunt enemies near the planet on their own. Each rank adds another drone." },
+            { title: "🎓 TUTORIAL 7/8 • CYBER EVOLUTION", desc: "Spend the ⚙ parts and 💎 gems from each level in the 🧬 EVOLVE tab on the home screen for permanent damage, speed, crit and starting-energy boosts. This button opens it during battle too.", focus: "btnOpenMenuQuick" },
             { title: "🎓 TUTORIAL 8/8 • START THE WAVE!", desc: "When ready, start the wave with the top-right button. Calling later waves early earns bonus ⚡; otherwise they arrive after 7 s. Protect the planet, Commander!", focus: "btnNextWaveEarly" }
           ]
         }
@@ -2437,6 +2439,7 @@
         trainerActive: false,
         trainerStep: 0, // 0..3
         trainerCompletedOnce: false,
+        lobbyTourDone: false,
         levelElapsedSeconds: 0,
         waveIndex: 0,
         totalWaves: 3,
@@ -2617,6 +2620,7 @@
             if (typeof parsed.trainerCompletedOnce === "boolean") {
               state.trainerCompletedOnce = parsed.trainerCompletedOnce;
             }
+            state.lobbyTourDone = parsed.lobbyTourDone === true;
             if (localStorage.getItem("gk_tutorial_shown_once") === "1" || state.unlockedLevel > 1 || Object.keys(state.completedLevels || {}).length > 0) {
               state.trainerCompletedOnce = true;
               state.trainerActive = false;
@@ -2675,6 +2679,7 @@
             completedLevels: state.completedLevels,
             bestTimes: state.bestTimes,
             trainerCompletedOnce: state.trainerCompletedOnce,
+            lobbyTourDone: state.lobbyTourDone,
             qualityMode: state.qualityMode,
             attConsentStatus: state.attConsentStatus,
             musicVol: SoundFX.musicVol,
@@ -7465,7 +7470,7 @@
       function openShop(returnToLobby = false) {
         shopReturnToLobby = returnToLobby;
         state.paused = true;
-        if (returnToLobby) document.getElementById("modalStartLobby").classList.add("hidden");
+        // From the lobby the shop opens on top of the map, so closing it returns there.
         document.getElementById("modalShop").classList.remove("hidden");
       }
       document.getElementById("btnOpenShop").addEventListener("click", () => openShop());
@@ -7486,7 +7491,9 @@
       }
       document.getElementById("btnCloseShop").addEventListener("click", () => {
         document.getElementById("modalShop").classList.add("hidden");
-        if (shopReturnToLobby) openStartLobby();
+        const lobbyVisible = !document.getElementById("modalStartLobby").classList.contains("hidden");
+        if (shopReturnToLobby && lobbyVisible) updateLobbyUI();
+        else if (shopReturnToLobby) openStartLobby();
         else resumeIfNoModalOpen();
         shopReturnToLobby = false;
       });
@@ -8152,7 +8159,7 @@
       if (typeof MutationObserver !== "undefined") new MutationObserver(() => {
         const hidden = document.getElementById("modalStartLobby").classList.contains("hidden");
         if (hidden) { worldMap.hide(); closeLevelSheet(); lobbySettingsMenu.classList.add("hidden"); }
-        else worldMap.show(state.unlockedLevel || 1);
+        else { worldMap.show(state.unlockedLevel || 1); maybeStartLobbyTour(); }
       }).observe(document.getElementById("modalStartLobby"), { attributes: true, attributeFilter: ["class"] });
 
       function updateLobbyUI() {
@@ -8171,16 +8178,152 @@
         document.getElementById("btnCloseLobbyResume").classList.toggle("hidden", !lobbyOpenedFromBattle || state.levelEnded);
         document.getElementById("lobbyLangLabel").textContent = L("Dil", "Language");
         document.getElementById("lobbyLangValue").textContent = state.lang === "en" ? "English" : "Türkçe";
+        document.getElementById("lobbyTourLabel").textContent = L("Rehberi izle", "Watch the guide");
         document.getElementById("lobbyCtaKicker").textContent = L("SIRADAKİ GÖREV", "NEXT MISSION");
         document.getElementById("lobbyStartCampaignBtnText").textContent = L(`BÖLÜM ${lv} · SAVAŞ`, `LEVEL ${lv} · FIGHT`);
         document.getElementById("lobbyNavDaily").textContent = L("Günlük", "Daily");
         document.getElementById("lobbyNavHeroes").textContent = L("Kahraman", "Heroes");
         document.getElementById("lobbyNavEndless").textContent = L("Sonsuz", "Endless");
-        document.getElementById("lobbyNavLab").textContent = L("Yükselt", "Upgrade");
+        document.getElementById("lobbyNavLab").textContent = L("Evrim", "Evolve");
         document.getElementById("lobbyNavShop").textContent = L("Mağaza", "Shop");
         renderDailyLoginModal();
         worldMap.refresh();
       }
+
+      // ANA EKRAN REHBERİ: Kahraman ve Evrim menülerini içine girerek anlatır.
+      // Bölüm 1 geçildikten sonra ana ekran ilk açıldığında bir kez çalışır;
+      // Ayarlar menüsünden istenildiği zaman tekrar izlenebilir.
+      const byId = (id) => () => document.getElementById(id);
+      const openOverLobby = (id, prepare) => () => { if (prepare) prepare(); document.getElementById(id).classList.remove("hidden"); };
+      const closeModal = (id) => () => document.getElementById(id).classList.add("hidden");
+
+      function buildLobbyTourSteps() {
+        const vega = getHeroMeta("vega"), kaan = getHeroMeta("kaan"), nova = getHeroMeta("nova");
+        const xpPerLevel = Balance.heroXp(1);
+        const firstPromo = Balance.heroCost(1);
+        const maxHero = Balance.heroLimit(state);
+        const lv = state.unlockedLevel || 1;
+        return [
+          {
+            target: () => null,
+            title: L("SEFER HARİTASI", "CAMPAIGN MAP"),
+            body: L(
+              "Burası komuta merkezin. 200 bölüm 8 sektöre dağılmış bir yol üzerinde. <b>Altın çerçeveli</b> noktalar geçtiğin bölümler, altlarındaki yıldızlar aldığın puan. Herhangi bir noktaya dokunup o bölümü tekrar oynayabilir, 3 yıldızı kovalayabilirsin.",
+              "This is your command centre. 200 levels sit on one route across 8 sectors. <b>Gold-framed</b> nodes are cleared levels and the stars below them are your score. Tap any node to replay it and chase 3 stars."
+            )
+          },
+          {
+            target: byId("btnLobbyOpenHeroes"),
+            title: L("KAHRAMAN MENÜSÜ", "HEROES MENU"),
+            body: L(
+              "Komutanını buradan seçersin. Seçtiğin kahraman her savaşta gezegenin etrafında uçar ve kulelerine <b>kalıcı bonus</b> verir. Hadi içine bakalım.",
+              "Pick your commander here. Your hero flies around the planet in every battle and gives your towers a <b>permanent bonus</b>. Let's look inside."
+            )
+          },
+          {
+            enter: openOverLobby("modalMissions", () => renderMissionsAndHeroesModal()),
+            target: byId("heroCardsGrid"),
+            title: L("3 KAHRAMAN, 3 OYUN TARZI", "3 HEROES, 3 PLAY STYLES"),
+            body: L(
+              `<ul><li><b>⚡ Amiral Vega</b> — saldırı: ${vega.bonus}.</li><li><b>🛠 Mühendis Kaan</b> — ekonomi: ${kaan.bonus}.</li><li><b>☄ Kaptan Nova</b> — boss avcısı: ${nova.bonus}.</li></ul>Kartın üstüne dokunarak kahramanı seçersin; savaşta hangisi seçiliyse onun bonusu çalışır.`,
+              `<ul><li><b>⚡ Admiral Vega</b> — offence: ${vega.bonus}.</li><li><b>🛠 Engineer Kaan</b> — economy: ${kaan.bonus}.</li><li><b>☄ Captain Nova</b> — boss hunter: ${nova.bonus}.</li></ul>Tap a card to select that hero; only the selected hero's bonus is active in battle.`
+            )
+          },
+          {
+            target: byId("heroCard_vega"),
+            title: L("KAHRAMANI YÜKSELT", "LEVEL UP YOUR HERO"),
+            body: L(
+              `Her kazandığın bölüm seçili kahramana deneyim verir: <b>${xpPerLevel} bölümde bir seviye</b> atlar (en fazla Sv ${maxHero}). Beklemek istemezsen <b>💎 Elmasla +1 Sv</b> butonuyla anında yükseltirsin (Sv 1→2: ${firstPromo} 💎). Her seviye bonusu büyütür.`,
+              `Every level you win gives the selected hero experience: <b>one rank every ${xpPerLevel} levels</b> (up to Lv ${maxHero}). Don't want to wait? The <b>💎 Level Up</b> button ranks up instantly with gems (Lv 1→2: ${firstPromo} 💎). Each rank grows the bonus.`
+            ),
+            leave: closeModal("modalMissions")
+          },
+          {
+            target: byId("btnLobbyOpenLab"),
+            title: L("EVRİM MENÜSÜ", "EVOLUTION MENU"),
+            body: L(
+              "Kalıcı güçlendirmeler burada. Bölüm sonunda kazandığın <b>⚙ parça</b> ve <b>💎 elmas</b> ile alınır ve <b>bütün bölümlerde</b> geçerli olur. İçine girelim.",
+              "Permanent upgrades live here. They cost the <b>⚙ parts</b> and <b>💎 gems</b> you earn after each level and work in <b>every level</b>. Let's go in."
+            )
+          },
+          {
+            enter: openOverLobby("modalLab", () => updateHUD()),
+            target: byId("labBasicGrid"),
+            title: L("TEMEL EVRİMLER", "CORE EVOLUTIONS"),
+            body: L(
+              "<ul><li><b>Foton Hasar</b> — bütün kulelerin hasarı artar.</li><li><b>Atış Bobini</b> — kuleler daha hızlı ateş eder.</li><li><b>Kalkan Kubbesi</b> — gezegenin daha fazla darbe kaldırır.</li><li><b>Füzyon Reaktörü</b> — bölüme daha çok enerjiyle başlarsın.</li></ul>",
+              "<ul><li><b>Photon Damage</b> — every tower hits harder.</li><li><b>Firing Coil</b> — towers fire faster.</li><li><b>Shield Dome</b> — your planet takes more hits.</li><li><b>Fusion Reactor</b> — start each level with more energy.</li></ul>"
+            )
+          },
+          {
+            target: byId("labEliteSection"),
+            title: L("ELİT MODÜLLER", "ELITE MODULES"),
+            body: L(
+              "Elmasla açılan üst düzey güçler: <b>🛸 Dron filosu</b> düşmanları kendiliğinden avlar, <b>💥 Kritik Matrisi</b> kritik şansını, <b>💰 Ganimet Sentezleyici</b> kazandığın parçayı, <b>🛰 Orbital</b> lazerin gücünü artırır. Takıldığın bir bölüm olursa önce buraya uğra.",
+              "Gem-powered upgrades: the <b>🛸 Drone fleet</b> hunts enemies on its own, <b>💥 Crit Matrix</b> raises crit chance, <b>💰 Loot Synthesizer</b> boosts the parts you earn and <b>🛰 Orbital</b> strengthens your laser strike. Stuck on a level? Come here first."
+            ),
+            leave: closeModal("modalLab")
+          },
+          {
+            target: byId("btnLobbyOpenDaily"),
+            title: L("GÜNLÜK ÖDÜL", "DAILY REWARD"),
+            body: L(
+              "Her gün gir, ödülünü al. 7 günlük seri boyunca ödüller büyür; kırmızı nokta alınmamış ödül olduğunu gösterir.",
+              "Log in every day to claim a reward. Rewards grow over a 7-day streak; the red dot means one is waiting."
+            )
+          },
+          {
+            target: byId("btnLobbyStartEndless"),
+            title: L("SONSUZ MOD", "ENDLESS MODE"),
+            body: L(
+              "Bitmeyen dalgalara karşı ne kadar dayanabileceğini dene ve rekorunu sıralamaya yaz.",
+              "See how long you can hold against never-ending waves and put your record on the leaderboard."
+            )
+          },
+          {
+            target: byId("btnLobbyStartCampaign"),
+            title: L("HAZIRSIN KOMUTAN", "READY, COMMANDER"),
+            body: L(
+              `Sıradaki görevin <b>Bölüm ${lv}</b>. Bu rehberi istediğin zaman sağ üstteki ayarlar menüsünden tekrar açabilirsin.`,
+              `Your next mission is <b>Level ${lv}</b>. You can replay this guide any time from the settings menu at the top right.`
+            )
+          }
+        ];
+      }
+
+      function startLobbyTour() {
+        document.getElementById("lobbySettingsMenu").classList.add("hidden");
+        closeLevelSheet();
+        window.GuidedTour.start({
+          steps: buildLobbyTourSteps(),
+          labels: {
+            next: L("İleri", "Next"),
+            done: L("Başla", "Let's go"),
+            skip: L("Geç", "Skip"),
+            stepOf: (i, n) => L(`REHBER ${i}/${n}`, `GUIDE ${i}/${n}`)
+          },
+          onSound: () => SoundFX.uiClick(),
+          onFinish: () => {
+            ["modalMissions", "modalLab"].forEach(id => document.getElementById(id).classList.add("hidden"));
+            state.lobbyTourDone = true;
+            saveProgress();
+            updateLobbyUI();
+          }
+        });
+      }
+
+      function maybeStartLobbyTour() {
+        if (state.lobbyTourDone || (state.unlockedLevel || 1) < 2) return;
+        if (!window.GuidedTour || window.GuidedTour.isActive()) return;
+        setTimeout(() => {
+          const lobbyVisible = !document.getElementById("modalStartLobby").classList.contains("hidden");
+          const otherOpen = ["modalLevelEnd", "modalShop", "modalMissions", "modalLab", "modalDailyLogin", "modalLeaderboard", "modalPrivacyPolicy", "modalIosGuide"]
+            .some(id => { const el = document.getElementById(id); return el && !el.classList.contains("hidden"); });
+          if (lobbyVisible && !otherOpen && !state.lobbyTourDone && !window.GuidedTour.isActive()) startLobbyTour();
+        }, 700);
+      }
+
+      document.getElementById("btnReplayTour").addEventListener("click", () => { SoundFX.uiClick(); startLobbyTour(); });
 
       function hideAllSubModals() {
         ["modalPauseMenu", "modalMissions", "modalLeaderboard", "modalLab", "modalShop", "modalDailyLogin", "modalTowerInfo", "modalIosGuide"].forEach(id => {
@@ -8233,10 +8376,10 @@
         toggleEndlessMode(true);
       });
 
+      // Lobby menus open on top of the map (z-50 over z-40), so closing them lands back on the map.
       document.getElementById("btnLobbyOpenDaily").addEventListener("click", () => {
         SoundFX.uiClick();
         state.paused = true;
-        document.getElementById("modalStartLobby").classList.add("hidden");
         renderDailyLoginModal();
         document.getElementById("modalDailyLogin").classList.remove("hidden");
       });
@@ -8244,7 +8387,6 @@
       document.getElementById("btnLobbyOpenHeroes").addEventListener("click", () => {
         SoundFX.uiClick();
         state.paused = true;
-        document.getElementById("modalStartLobby").classList.add("hidden");
         renderMissionsAndHeroesModal();
         document.getElementById("modalMissions").classList.remove("hidden");
       });
@@ -8254,7 +8396,6 @@
         btnLobbyLb.addEventListener("click", () => {
           SoundFX.uiClick();
           state.paused = true;
-          document.getElementById("modalStartLobby").classList.add("hidden");
           openLeaderboardModal();
         });
       }
@@ -8262,7 +8403,6 @@
       document.getElementById("btnLobbyOpenLab").addEventListener("click", () => {
         SoundFX.uiClick();
         state.paused = true;
-        document.getElementById("modalStartLobby").classList.add("hidden");
         updateHUD();
         document.getElementById("modalLab").classList.remove("hidden");
       });
@@ -8288,6 +8428,7 @@
         state.paused = true;
         updateLobbyUI();
         worldMap.show(state.unlockedLevel || 1);
+        maybeStartLobbyTour();
         window.GameMonetization.start(progressHealthy);
         requestAnimationFrame(gameLoop);
       });
