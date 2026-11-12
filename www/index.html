@@ -1592,6 +1592,7 @@
   <!-- BALANCE END -->
   <script src="wave-flow.js"></script>
     <script src="space-theme.js"></script>
+    <script src="review-prompt.js"></script>
   <script src="game-audio.js"></script>
   <script>
     (function () {
@@ -2447,6 +2448,8 @@
         completedOrFailedCount: 0,
         adClears: 0,
         lastInterstitialClear: 0,
+        reviewPromptsAsked: 0,
+        reviewPromptLastAt: 0,
         waveStartPending: false,
         levelRunId: 0,
         lastEarnedGear: 0,
@@ -2596,6 +2599,8 @@
             state.removeAds = false;
             if (Number.isSafeInteger(parsed.lastInterstitialClear)) state.lastInterstitialClear = Math.max(0, parsed.lastInterstitialClear);
             if (typeof parsed.adClears === "number") state.adClears = Math.max(0, Math.floor(parsed.adClears));
+            if (Number.isSafeInteger(parsed.reviewPromptsAsked)) state.reviewPromptsAsked = Math.max(0, parsed.reviewPromptsAsked);
+            if (Number.isFinite(parsed.reviewPromptLastAt)) state.reviewPromptLastAt = Math.max(0, parsed.reviewPromptLastAt);
             if (typeof parsed.unlockedLevel === "number") state.unlockedLevel = Math.max(1, Math.min(200, parsed.unlockedLevel));
             if (parsed.completedLevels && typeof parsed.completedLevels === "object") {
               state.completedLevels = parsed.completedLevels;
@@ -2658,6 +2663,8 @@
             removeAds: state.removeAds,
             adClears: state.adClears,
             lastInterstitialClear: state.lastInterstitialClear,
+            reviewPromptsAsked: state.reviewPromptsAsked,
+            reviewPromptLastAt: state.reviewPromptLastAt,
             unlockedLevel: state.unlockedLevel,
             completedLevels: state.completedLevels,
             bestTimes: state.bestTimes,
@@ -4503,7 +4510,26 @@
         state.adClears++;
         saveProgress();
         const runId = state.levelRunId;
-        showLevelEndInterstitial().finally(() => { if (state.levelRunId === runId) showVictoryModal(); });
+        showLevelEndInterstitial().catch(() => false).then(adShown => {
+          if (state.levelRunId !== runId) return;
+          showVictoryModal();
+          maybeAskForReview(stars, adShown);
+        });
+      }
+
+      // Rating sheet at a happy moment (rules in review-prompt.js); a short delay lets the
+      // victory screen land first. iOS decides whether the sheet is actually shown.
+      function maybeAskForReview(stars, adShown) {
+        const ask = window.ReviewPrompt?.shouldAsk({
+          level: state.level, stars, adShown: Boolean(adShown), now: Date.now(),
+          asked: state.reviewPromptsAsked || 0, lastAskedAt: state.reviewPromptLastAt || 0
+        });
+        if (!ask || !window.GameMonetization?.isIOS) return false;
+        state.reviewPromptsAsked = (state.reviewPromptsAsked || 0) + 1;
+        state.reviewPromptLastAt = Date.now();
+        saveProgress();
+        setTimeout(() => { window.GameMonetization.requestReview?.(); }, 1600);
+        return true;
       }
 
       function handleGameOver() {

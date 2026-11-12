@@ -48,5 +48,5 @@ test('odd victories show no ad',async()=>{
 });
 test('victory waits for the ad before showing the result screen',()=>{
   const html=fs.readFileSync('www/index.html','utf8');
-  assert.match(html,/showLevelEndInterstitial\(\)\.finally\(\(\) => \{ if \(state\.levelRunId === runId\) showVictoryModal\(\); \}\);/);
+  assert.match(html,/showLevelEndInterstitial\(\)\.catch\(\(\) => false\)\.then\(adShown => \{\s*if \(state\.levelRunId !== runId\) return;\s*showVictoryModal\(\);/);
 });

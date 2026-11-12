@@ -2,7 +2,7 @@ import { isInterstitialDue } from './interstitial-cadence.cjs';
 // This file is compiled by esbuild into www/native-monetization.js.
 // TestFlight uses demo ads (GK_TEST_ADS=1). Production requires GK_TEST_ADS=0.
 import { commitGrant, createDelivery } from './purchase-delivery.cjs';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { presentAd } from './ad-presentation.cjs';
 import { createTrackingGate } from './tracking-permission.cjs';
 import { AdMob, AdmobConsentStatus, InterstitialAdPluginEvents, RewardAdPluginEvents } from '@capacitor-community/admob';
@@ -409,8 +409,29 @@ function initializeAds() {
   return adsInitializing;
 }
 
+// App-local native plugin (ios_config/native/InAppReviewPlugin.swift). Lazy so a missing
+// registration can never break ads or purchases.
+let inAppReview = null;
+function getInAppReview() {
+  if (!inAppReview && typeof registerPlugin === 'function') inAppReview = registerPlugin('InAppReview');
+  return inAppReview;
+}
+
 window.GameMonetization = {
   isInterstitialDue,
+  /** Asks iOS for the rating sheet. iOS decides whether it shows; resolves false off-device. */
+  async requestReview() {
+    if (!IOS) return false;
+    try {
+      const plugin = getInAppReview();
+      if (!plugin) return false;
+      const result = await plugin.requestReview();
+      return Boolean(result && result.requested);
+    } catch (error) {
+      log('In-app review', error);
+      return false;
+    }
+  },
   async openPrivacyOptions() {
     if (!IOS) return;
     await AdMob.showPrivacyOptionsForm();

@@ -32,5 +32,23 @@ fi
 if [ -f "$PODFILE" ]; then
   sed -i '' -E "s/platform :ios, '[0-9.]+'/platform :ios, '15.0'/g" "$PODFILE"
 fi
+# Languages: the game is fully Turkish + English. CFBundleLocalizations makes the App Store
+# list both languages; the lproj InfoPlist.strings localize the ATT prompt per device language.
+plset CFBundleDevelopmentRegion string 'tr'
+/usr/libexec/PlistBuddy -c 'Delete :CFBundleLocalizations' "$PLIST" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c 'Add :CFBundleLocalizations array' "$PLIST"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleLocalizations:0 string tr' "$PLIST"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleLocalizations:1 string en' "$PLIST"
+
+# App-local native code (in-app review plugin) + localized resources into the Xcode project.
+ruby ios_config/add_native_sources.rb
+
+# Root view controller -> MainViewController so app-local plugins get registered.
+STORYBOARD='ios/App/App/Base.lproj/Main.storyboard'
+if ! grep -q 'customClass="MainViewController"' "$STORYBOARD"; then
+  sed -i '' -E 's/customClass="CAPBridgeViewController" customModule="Capacitor"/customClass="MainViewController" customModule="App" customModuleProvider="target"/' "$STORYBOARD"
+fi
+grep -q 'customClass="MainViewController" customModule="App"' "$STORYBOARD" || { echo "Main.storyboard patch failed"; exit 1; }
+echo 'Localizations (tr, en), in-app review plugin and MainViewController configured.'
 # Use the same bundle id and App Store Connect app record as the existing TestFlight app.
 echo 'iOS display name, AdMob app ID and StoreKit 2 deployment target configured.'
