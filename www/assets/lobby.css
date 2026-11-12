@@ -226,47 +226,6 @@
 }
 .gk-tour__next:active { transform: translateY(2px); box-shadow: 0 1px 0 #b7791f; }
 
-/* ---------- battle: radial build menu around a plot */
-.gk-ring { position: absolute; inset: 0; z-index: 25; pointer-events: none; font-family: Inter, system-ui, sans-serif; }
-.gk-ring.hidden { display: none; }
-.gk-ring__halo {
-  position: absolute; border-radius: 50%;
-  border: 2px dashed rgba(246, 185, 59, 0.45); background: radial-gradient(circle, rgba(5, 8, 22, 0.15), rgba(5, 8, 22, 0.42));
-}
-.gk-ring__title {
-  position: absolute; transform: translate(-50%, -100%); white-space: nowrap; pointer-events: none;
-  padding: 3px 9px; border-radius: 999px; background: rgba(9, 13, 32, 0.92); border: 1px solid rgba(246, 185, 59, 0.55);
-  color: #fde68a; font-size: 11px; font-weight: 800; letter-spacing: 0.02em;
-}
-.gk-ring__btn {
-  position: absolute; width: 52px; height: 52px; border-radius: 50%; pointer-events: auto;
-  display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(circle at 35% 30%, #26315c, #0b1028 72%);
-  border: 2px solid var(--ring-accent, #f6b93b); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
-  animation: gk-ring-pop 0.16s ease-out both; color: #fff;
-}
-.gk-ring__btn:active { transform: scale(0.92); }
-@keyframes gk-ring-pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.gk-ring__icon { display: grid; place-items: center; width: 30px; height: 30px; font-size: 20px; line-height: 1; }
-.gk-ring__icon svg { width: 30px; height: 30px; }
-.gk-ring__cost {
-  position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
-  padding: 1px 6px; border-radius: 999px; background: #f6b93b; color: #241503;
-  font-size: 10.5px; font-weight: 900; white-space: nowrap; font-variant-numeric: tabular-nums;
-}
-.gk-ring__label {
-  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-  padding: 0 5px; border-radius: 6px; background: rgba(9, 13, 32, 0.95); color: #e2e8f0;
-  font-size: 9px; font-weight: 800; white-space: nowrap;
-}
-.gk-ring__btn.is-dim { filter: saturate(0.4) brightness(0.75); }
-.gk-ring__btn.is-dim .gk-ring__cost { background: #64748b; color: #0f172a; }
-.gk-ring__btn.is-locked { filter: grayscale(1) brightness(0.6); }
-.gk-ring__btn.is-locked .gk-ring__cost { background: #334155; color: #cbd5e1; }
-
-/* Kingdom Rush layout: building happens on the map, the old card dock is retired. */
-body.kr-battle #buildTowerList, body.kr-battle #installedTowerPanel { display: none !important; }
-
 /* ---------- battle: hero dock (portrait with health ring + skill with cooldown) */
 .gk-hero-dock { position: absolute; left: 8px; bottom: 58px; z-index: 12; display: flex; align-items: flex-end; gap: 6px; }
 .gk-hero-dock__portrait {
@@ -296,7 +255,19 @@ body.kr-battle #buildTowerList, body.kr-battle #installedTowerPanel { display: n
 .gk-hero-dock__skill.is-ready { color: var(--hero-color, #facc15); animation: gk-tour-pulse 1.4s infinite; }
 .gk-hero-dock__time { position: absolute; inset: 0; display: grid; place-items: center; font: 900 12px Orbitron, sans-serif; color: #fff; text-shadow: 0 1px 2px #000; }
 .gk-hero-dock__time:empty { display: none; }
-body.kr-battle #socketBadge, body.kr-battle #selectedSocketTitle { display: none !important; }
-#canvasContainer.ring-open #trainerBanner { opacity: 0.18; pointer-events: none; transition: opacity 0.15s; }
 /* Long hints wrap instead of running off screen. */
 #toastNotification { width: max-content; max-width: calc(100vw - 28px); white-space: normal; line-height: 1.35; }
+
+/* Battle dock: seven tower cards (Drone Hangar included) in one row. */
+#buildTowerList { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+#buildTowerList .tower-build-btn > div:first-of-type { font-size: 8px; }
+.gk-hero-dock.is-ready .gk-hero-dock__portrait { animation: gk-tour-pulse 1.4s infinite; box-shadow: 0 0 0 2px rgba(253, 224, 71, 0.55), 0 6px 16px rgba(0, 0, 0, 0.5); }
+.gk-hero-dock__skill.hidden { display: none; }
+
+/* Alt komut satırı: dar ekranda tek satırda kalsın */
+#dockCommandRow > div > button { white-space: nowrap; }
+@media (max-width: 400px) {
+  #dockCommandRow > div { gap: 4px; }
+  #dockCommandRow > div > button { padding-left: 6px; padding-right: 6px; font-size: 8.5px; }
+  #dockCommandRow #i18n_evoBtnTitle { font-size: 8.5px; }
+}

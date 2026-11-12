@@ -138,7 +138,7 @@
     @media (max-width: 380px) { #modalShop > .shop-panel { padding: 12px; } #modalShop h2 { font-size: 13px; } }
   </style>
 </head>
-<body class="kr-battle">
+<body>
   <div class="app-shell">
     <!-- DİKEY 9:16 MOBİL OYUN ÇERÇEVESİ -->
     <div class="mobile-viewport">
@@ -324,19 +324,26 @@
       <section class="w-full bg-[#060c1b]/98 border-t-2 border-sky-400/40 px-2 py-1.5 shrink-0 z-20 flex flex-col gap-1.5">
 
         <!-- SADELEŞTİRİLMİŞ ÜST BAR: SEÇİLİ CEP + HIZ + KULE BİLGİSİ + EVRİM -->
-        <div class="flex items-center justify-between gap-1">
-          <div class="flex flex-1 items-center gap-1.5 min-w-0 overflow-hidden">
+        <div id="dockCommandRow" class="flex items-center justify-center gap-1">
+          <div id="dockSocketInfo" class="hidden">
             <span id="socketBadge" class="px-1.5 py-0.5 text-[9px] font-cyber font-bold rounded bg-sky-500/20 text-sky-300 border border-sky-400/50 shrink-0">CEP #1</span>
             <span id="selectedSocketTitle" class="font-cyber font-bold text-[10px] text-white truncate">KULE SEÇİN</span>
             <span id="selectedSocketSubtitle" class="hidden">—</span>
           </div>
 
-          <div class="flex items-center gap-1 shrink-0">
+          <div class="flex items-center justify-center gap-1.5 flex-nowrap">
             <button id="btnBottomTowerInfo" class="tactical-btn px-2 py-1 rounded-lg font-cyber font-bold text-[9.5px] text-sky-200 active:scale-95 transition" title="Kule ve Düşman Rehberi">
               ℹ️ Rehber
             </button>
             <button id="btnBottomSpeedControl" class="tactical-btn px-2 py-1 rounded-lg font-cyber font-bold text-[9.5px] text-amber-300 active:scale-95 transition">
               ⏩ <span id="lblBottomSpeed">1x</span>
+            </button>
+            <!-- Bölüm 1 geçildikten sonra Rehber yerine bu iki kısayol görünür -->
+            <button id="btnBottomHeroes" class="hidden tactical-btn px-2 py-1 rounded-lg font-cyber font-bold text-[9.5px] text-yellow-200 active:scale-95 transition">
+              🦸 <span id="lblBottomHeroes">Kahraman</span>
+            </button>
+            <button id="btnBottomShop" class="hidden tactical-btn px-2 py-1 rounded-lg font-cyber font-bold text-[9.5px] text-emerald-200 active:scale-95 transition">
+              🛒 <span id="lblBottomShop">Mağaza</span>
             </button>
             <button id="btnOpenMenuQuick" class="evolution-cta px-2.5 py-1 rounded-lg flex items-center gap-1 active:scale-95 transition shrink-0">
               <span class="text-xs">🧬</span>
@@ -444,7 +451,7 @@
               155 ⚡
             </div>
           </button>
-          <!-- 7. Dron Hangarı (halka menüden kurulur; bu kart ikon ve kurulum kaynağıdır) -->
+          <!-- 7. Dron Hangarı -->
           <button data-tower="hangar" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-emerald-300 active:scale-95 transition flex flex-col items-center text-center justify-between">
             <span class="text-[8px] text-emerald-300 font-semibold leading-none">Yolu Tıkar</span>
             <svg class="w-6 h-6 my-0.5" viewBox="0 0 40 40">
@@ -948,11 +955,11 @@
         </div>
         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-emerald-500/30">
           <div class="font-cyber font-bold text-emerald-300">7. Dron Hangarı (95 ⚡ • Bölüm 2'de Açılır)</div>
-          <p class="text-[11px] text-slate-300 mt-0.5">Yola 2-3 robot asker indirir; <strong>yerdeki düşmanları durdurup</strong> yakın dövüşte tutar. Uçanları durduramaz. Hangara dokunup 🚩 Toplanma ile askerlerin yerini seçersin. Dal A can, Dal B hasar verir.</p>
+          <p class="text-[11px] text-slate-300 mt-0.5">Yola 2-3 robot asker indirir; <strong>yerdeki düşmanları durdurup</strong> yakın dövüşte tutar. Uçanları durduramaz. Hangarı seçip alttaki 🚩 Toplanma tuşuyla askerlerin yerini seçersin. Dal A can, Dal B hasar verir.</p>
         </div>
         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-yellow-500/30">
           <div class="font-cyber font-bold text-yellow-300">⭐ Kahraman</div>
-          <p class="text-[11px] text-slate-300 mt-0.5">Sol alttaki portreye dokun, sonra haritada bir yere dokun: kahraman oraya uçar, bir düşmanı çekici ışınla tutar ve ateş eder. ★ tuşu özel yeteneğidir. Düşerse bir süre sonra gezegenin yanında yeniden doğar.</p>
+          <p class="text-[11px] text-slate-300 mt-0.5">Sol alttaki portreye dokun, sonra haritada bir yere dokun: kahraman oraya iner, düşmanı durdurur ve 60 saniye savaşır, sonra ayrılır. 30 saniye şarj olunca tekrar indirebilirsin. ★ tuşu özel yeteneğidir.</p>
         </div>
         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-amber-500/30">
           <div class="font-cyber font-bold text-amber-300">6. Makineli Top (175 ⚡ • Bölüm 5'te Açılır)</div>
@@ -1634,7 +1641,6 @@
     <script src="world-map.js"></script>
     <script src="guided-tour.js"></script>
     <script src="battle-terrain.js"></script>
-    <script src="ring-menu.js"></script>
     <script src="battle-units.js"></script>
     <script src="review-prompt.js"></script>
   <script src="game-audio.js"></script>
@@ -1665,11 +1671,11 @@
           tName_emp: "Gelişmiş Tesla",
           tName_railgun: "Makineli Top",
           trainerSteps: [
-            { title: "🎓 EĞİTİM 1/8 • PLATFORMA DOKUN", desc: "Haritada altın halkayla parlayan taş platforma dokun. Kuleler sadece yol kenarındaki bu platformlara kurulur." },
-            { title: "🎓 EĞİTİM 2/8 • İLK KULENİ KUR", desc: "Platformun etrafında açılan halkadan Parçacık Lazer'i (85⚡) seç. Lazer hem kara hem hava düşmanını vurur; diğer kuleler bölüm ilerledikçe açılır." },
-            { title: "🎓 EĞİTİM 3/8 • GÜÇLENDİR (★→★★★)", desc: "Kurduğun kuleye tekrar dokun: halkada ⬆ Yükselt, 🎯 Hedef ve 💲 Sat çıkar. Lv.3'te A veya B uzmanlık dalını seçersin." },
-            { title: "🎓 EĞİTİM 4/8 • KAHRAMANINI YÖNET", desc: "Sol alttaki portre senin kahramanın. Portreye dokun, sonra haritada bir yere dokun: kahraman oraya uçar, düşmanı durdurup savaşır. Yanındaki ★ tuşu özel yeteneğidir.", focus: "heroDock" },
-            { title: "🎓 EĞİTİM 5/8 • DRON HANGARI", desc: "Bölüm 2'de açılan Dron Hangarı yola robot askerler indirir; yerdeki düşmanları durdurup tutar. Hangara dokunup 🚩 Toplanma ile askerlerin bekleyeceği yeri seçebilirsin." },
+            { title: "🎓 EĞİTİM 1/8 • PLATFORM SEÇ", desc: "Haritada altın halkayla parlayan taş platforma dokun. Kuleler sadece yol kenarındaki bu platformlara kurulur." },
+            { title: "🎓 EĞİTİM 2/8 • İLK KULENİ KUR", desc: "Alttaki panelden Parçacık Lazer'e (85⚡) dokun. Lazer hem kara hem hava düşmanını vurur; diğer kuleler bölüm ilerledikçe açılır.", focus: "buildTowerList" },
+            { title: "🎓 EĞİTİM 3/8 • GÜÇLENDİR (★→★★★)", desc: "Kurduğun kuleye dokun; alttaki panelde ⬆ Yükselt, 🎯 Hedef ve Sat çıkar. Seçili kuleye tekrar dokunmak da yükseltir. Lv.3'te A veya B uzmanlık dalını seçersin." },
+            { title: "🎓 EĞİTİM 4/8 • KAHRAMANINI YÖNET", desc: "Sol alttaki portre senin kahramanın. Portreye dokun, sonra haritada bir yere dokun: kahraman oraya iner, düşmanı durdurup 60 saniye savaşır ve gider. Sonra şarj olur, tekrar indirirsin. ★ tuşu özel yeteneğidir.", focus: "heroDock" },
+            { title: "🎓 EĞİTİM 5/8 • DRON HANGARI", desc: "Bölüm 2'de açılan Dron Hangarı yola robot askerler indirir; yerdeki düşmanları durdurup tutar. Hangarı seçip alttaki 🚩 Toplanma tuşuyla askerlerin bekleyeceği yeri seçebilirsin." },
             { title: "🎓 EĞİTİM 6/8 • ÖZEL YETENEKLER", desc: "🛰️ Orbital lazer tüm düşmanları vurur, 🛡 Kalkan gezegeni korur, ❄ Buzul herkesi yavaşlatır, 🔧 Onarım can yeniler. Zor anlar için sakla!", focus: "abilityStrip" },
             { title: "🎓 EĞİTİM 7/8 • HARİTA SÜRPRİZLERİ", desc: "Haritadaki 📡 röleye dokunursan enerji verir, ☄️ meteor kayasına dokunursan gezegene en yakın düşmana fırlar. Arada bir dolmalarını bekle." },
             { title: "🎓 EĞİTİM 8/8 • DALGAYI BAŞLAT!", desc: "Kapının yanındaki kırmızı ▶ bayrağa ya da sağ üstteki butona dokunarak dalgayı başlat. Bayrağın altında gelecek düşmanlar görünür; erken çağırırsan bonus ⚡ kazanırsın." }
@@ -1695,10 +1701,10 @@
           tName_railgun: "Autocannon",
           trainerSteps: [
             { title: "🎓 TUTORIAL 1/8 • TAP A PLOT", desc: "Tap the stone plot glowing with a gold ring. Towers can only be built on these plots beside the road." },
-            { title: "🎓 TUTORIAL 2/8 • BUILD YOUR FIRST TOWER", desc: "Pick Particle Laser (85⚡) from the ring that opens around the plot. It hits both ground and air enemies; more towers unlock as you progress." },
-            { title: "🎓 TUTORIAL 3/8 • UPGRADE (★→★★★)", desc: "Tap your tower again: the ring offers ⬆ Upgrade, 🎯 Target and 💲 Sell. At Lv.3 you pick specialisation A or B." },
-            { title: "🎓 TUTORIAL 4/8 • COMMAND YOUR HERO", desc: "The portrait at the bottom left is your hero. Tap it, then tap anywhere on the map: your hero flies there, holds enemies and fights. The ★ button next to it is the special skill.", focus: "heroDock" },
-            { title: "🎓 TUTORIAL 5/8 • DRONE HANGAR", desc: "Unlocked at level 2, the Drone Hangar drops robot troops on the road that stop and hold ground enemies. Tap the hangar and use 🚩 Rally to choose where they wait." },
+            { title: "🎓 TUTORIAL 2/8 • BUILD YOUR FIRST TOWER", desc: "Tap Particle Laser (85⚡) in the bottom panel. It hits both ground and air enemies; more towers unlock as you progress.", focus: "buildTowerList" },
+            { title: "🎓 TUTORIAL 3/8 • UPGRADE (★→★★★)", desc: "Tap your tower; the bottom panel shows ⬆ Upgrade, 🎯 Target and Sell. Tapping the selected tower again also upgrades it. At Lv.3 you pick specialisation A or B." },
+            { title: "🎓 TUTORIAL 4/8 • COMMAND YOUR HERO", desc: "The portrait at the bottom left is your hero. Tap it, then tap a spot on the map: your hero drops in, holds enemies and fights for 60 seconds, then leaves to recharge. The ★ button is the special skill.", focus: "heroDock" },
+            { title: "🎓 TUTORIAL 5/8 • DRONE HANGAR", desc: "Unlocked at level 2, the Drone Hangar drops robot troops on the road that stop and hold ground enemies. Select the hangar and use the 🚩 Rally button below to choose where they wait." },
             { title: "🎓 TUTORIAL 6/8 • SPECIAL ABILITIES", desc: "🛰️ Orbital strikes every enemy, 🛡 Shield protects the planet, ❄ Cryo slows everyone, 🔧 Repair restores health. Save them for tough moments!", focus: "abilityStrip" },
             { title: "🎓 TUTORIAL 7/8 • MAP SURPRISES", desc: "Tap the 📡 relay on the map for energy, or the ☄️ meteor rock to hurl it at the enemy closest to your planet. Give them time to recharge." },
             { title: "🎓 TUTORIAL 8/8 • START THE WAVE!", desc: "Tap the red ▶ flag by the gate or the top-right button to start the wave. The flag shows which enemies are coming; calling early earns bonus ⚡." }
@@ -2082,12 +2088,12 @@
           "Doesn't attack; generates <strong>⚡ energy every 6 seconds</strong> during waves. Build it early to afford more towers. Branch A boosts output, Branch B speeds up nearby towers."
         ],
         [
-          "Yola 2-3 robot asker indirir; <strong>yerdeki düşmanları durdurup</strong> yakın dövüşte tutar. Uçanları durduramaz. Hangara dokunup 🚩 Toplanma ile askerlerin yerini seçersin. Dal A can, Dal B hasar verir.",
-          "Drops 2-3 robot troops on the road that <strong>stop ground enemies</strong> and hold them in melee. They cannot stop flyers. Tap the hangar and use 🚩 Rally to choose where they stand. Branch A adds health, Branch B damage."
+          "Yola 2-3 robot asker indirir; <strong>yerdeki düşmanları durdurup</strong> yakın dövüşte tutar. Uçanları durduramaz. Hangarı seçip alttaki 🚩 Toplanma tuşuyla askerlerin yerini seçersin. Dal A can, Dal B hasar verir.",
+          "Drops 2-3 robot troops on the road that <strong>stop ground enemies</strong> and hold them in melee. They cannot stop flyers. Select the hangar and use the 🚩 Rally button below to choose where they stand. Branch A adds health, Branch B damage."
         ],
         [
-          "Sol alttaki portreye dokun, sonra haritada bir yere dokun: kahraman oraya uçar, bir düşmanı çekici ışınla tutar ve ateş eder. ★ tuşu özel yeteneğidir. Düşerse bir süre sonra gezegenin yanında yeniden doğar.",
-          "Tap the portrait at the bottom left, then a spot on the map: your hero flies there, holds one enemy with a tractor beam and opens fire. The ★ button is the special skill. If the hero falls, they respawn by the planet after a while."
+          "Sol alttaki portreye dokun, sonra haritada bir yere dokun: kahraman oraya iner, düşmanı durdurur ve 60 saniye savaşır, sonra ayrılır. 30 saniye şarj olunca tekrar indirebilirsin. ★ tuşu özel yeteneğidir.",
+          "Tap the portrait at the bottom left, then a spot on the map: your hero drops in, holds enemies and fights for 60 seconds, then leaves. After a 30 second recharge you can drop them again. The ★ button is the special skill."
         ],
         [
           "Uzun menzilli çift namlulu zırh delici. <strong>Zırhlı Yengeç Kruvazör</strong> ve <strong>4 Büyük Boss</strong> katilidir.",
@@ -3510,7 +3516,6 @@
 
         supplyPods = [];
         supplyPodTimer = 11;
-        closeSocketRing();
         rallyEditSocketIdx = -1;
         resetBattleUnits();
         createMapProps();
@@ -4575,7 +4580,6 @@
       // 9. BÖLÜM SONU, HIZ REKORU KAYDI VE REKLAM KURALI (İLK 3 BÖLÜM REKLAMSIZ!)
       // ============================================================================
       function handleLevelVictory() {
-        closeSocketRing();
         heroSelected = false;
         if (state.levelEnded) return;
         state.levelEnded = true;
@@ -4683,7 +4687,6 @@
       }
 
       function handleGameOver() {
-        closeSocketRing();
         heroSelected = false;
         state.levelEnded = true;
         SoundFX.isBossAtmosphere = false;
@@ -4955,7 +4958,7 @@
         canvasResizePending = false;
         canvasSizeInitialized = true;
       }
-      window.addEventListener("resize", () => { resizeCanvas(); if (typeof closeSocketRing === "function") closeSocketRing(); });
+      window.addEventListener("resize", resizeCanvas);
       if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
         const ro = new ResizeObserver(() => resizeCanvas());
         ro.observe(canvas.parentElement);
@@ -6522,7 +6525,7 @@
       }
 
       function updateHUD() {
-        refreshSocketRing(false);
+        updateDockShortcuts();
         const diff = calculateDifficulty(state.level, state.waveIndex);
         document.getElementById("hudLevelNum").textContent = state.level;
         document.getElementById("hudWaveNum").textContent = `${Math.min(state.waveIndex + 1, state.totalWaves)}/${state.totalWaves}`;
@@ -6648,7 +6651,11 @@
 
           document.getElementById("instTowerName").textContent = locName;
           document.getElementById("instTowerTargetTag").textContent = getTowerTargetLabel(t.typeKey);
-          if (tDef.isEconomy) {
+          if (tDef.isBarracks) {
+            document.getElementById("instTowerDmg").textContent = effDmg;
+            document.getElementById("instTowerRate").textContent = L(`${lvStats.soldiers} asker`, `${lvStats.soldiers} troops`);
+            document.getElementById("instTowerRange").textContent = lvStats.range + "m";
+          } else if (tDef.isEconomy) {
             document.getElementById("instTowerDmg").textContent = `+${powerPlantOutput(t, lvStats)}⚡`;
             document.getElementById("instTowerRate").textContent = L(`${tDef.pulseSeconds} sn`, `${tDef.pulseSeconds}s`);
             document.getElementById("instTowerRange").textContent = t.level >= 3 && t.branch === "B" ? tDef.auraRange + "m" : "—";
@@ -6668,7 +6675,7 @@
           };
           const prioBtn = document.getElementById("btnCycleTargetPriority");
           if (prioBtn) {
-            prioBtn.textContent = targetLabels[t.targetMode || "first"];
+            prioBtn.textContent = tDef.isBarracks ? L("🚩 Toplanma", "🚩 Rally") : targetLabels[t.targetMode || "first"];
             prioBtn.classList.toggle("hidden", Boolean(tDef.isEconomy)); // nothing to target
           }
 
@@ -6802,11 +6809,14 @@
             }
             return;
           }
-          // Aynı platforma tekrar dokunmak menüyü kapatır; başka platform menüyü oraya taşır.
-          if (ringMenu.isOpen() && ringSocketIdx === closestIdx) {
-            closeSocketRing();
-            state.selectedSocketIndex = -1;
-            updateSocketInspector();
+          // Seçili kuleye tekrar dokunmak: doğrudan yükselt (Lv.3'te dal değiştir).
+          if (closestIdx === state.selectedSocketIndex && SOCKETS[closestIdx].tower) {
+            const tw = SOCKETS[closestIdx].tower;
+            if (tw.level < 3) {
+              upgradeSelectedTowerOrOpenLab();
+            } else if (TOWER_TYPES[tw.typeKey].branchA) {
+              selectTowerBranch(tw.branch === "B" ? "A" : "B");
+            }
             return;
           }
           state.selectedSocketIndex = closestIdx;
@@ -6815,12 +6825,19 @@
             updateTrainerUI();
           }
           updateSocketInspector();
-          openSocketRing(closestIdx);
         } else {
-          // Boş zemine dokunmak açık menüyü ve seçimi kapatır.
-          if (ringMenu.isOpen() || state.selectedSocketIndex >= 0) {
-            closeSocketRing();
-            state.selectedSocketIndex = -1;
+          // Boş zemine dokununca en yakın boş platform seçilir; alttaki kule listesi ona kurar.
+          let nearestEmptyIdx = -1;
+          let bestEmptyDist = Infinity;
+          SOCKETS.forEach((s, idx) => {
+            if (!s.tower && !(s.crystalHp > 0)) {
+              const dEmpty = Math.hypot(s.x - vx, s.y - vy);
+              if (dEmpty < bestEmptyDist) { bestEmptyDist = dEmpty; nearestEmptyIdx = idx; }
+            }
+          });
+          if (nearestEmptyIdx !== state.selectedSocketIndex) {
+            SoundFX.uiClick();
+            state.selectedSocketIndex = nearestEmptyIdx;
             updateSocketInspector();
           }
         }
@@ -6942,136 +6959,11 @@
         updateSocketInspector();
       });
 
-      // ============================================================================
-      // HALKA MENÜ (Kingdom Rush): platforma dokununca kule seçenekleri etrafında açılır.
-      // Menü sadece görünüm/seçim katmanıdır; asıl işlemler mevcut kur / yükselt / sat
-      // fonksiyonlarına gider, böylece kurallar tek yerde kalır.
-      // ============================================================================
-      const RING_TOWER_ORDER = ["rapid", "plasma", "emp", "railgun", "cryo", "power", "hangar"];
-      const RING_ICONS = {
-        upgrade: '<svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 12l6-6 6 6"/></svg>',
-        sell: '<svg viewBox="0 0 24 24" fill="none" stroke="#fda4af" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M14.5 9.2c-.6-.8-1.5-1.2-2.6-1.2-1.6 0-2.7.8-2.7 2s1.1 1.7 2.7 2 2.8.8 2.8 2.1-1.2 2-2.8 2c-1.2 0-2.2-.5-2.8-1.3M12 6.5V8M12 16v1.5"/></svg>',
-        target: '<svg viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>',
-        rally: '<svg viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4M6 4h11l-2 4 2 4H6"/></svg>',
-        lock: '<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>'
-      };
-      const ringMenu = window.RingMenu.create(document.getElementById("canvasContainer"));
-      let ringSocketIdx = -1;
+      // Dron Hangarı toplanma noktası: hangar seçiliyken alttaki 🚩 tuşu, ardından yola dokunuş.
       let rallyEditSocketIdx = -1;
-
-      function socketScreenPos(sock) {
-        applyCanvasResize();
-        return { x: viewTransform.offsetX + sock.x * viewTransform.scale, y: viewTransform.offsetY + sock.y * viewTransform.scale };
-      }
-
-      function towerIconSvg(typeKey) {
-        const svg = document.querySelector(`.tower-build-btn[data-tower="${typeKey}"] svg`);
-        return svg ? svg.outerHTML : "";
-      }
-
-      function ringItemsForSocket(idx) {
-        const sock = SOCKETS[idx];
-        if (!sock) return { items: [], title: "" };
-        if (!sock.tower) {
-          // Açık kuleler + sıradaki kilitli kule (merak uyandırır, halkayı kalabalıklaştırmaz).
-          const locked = RING_TOWER_ORDER.filter(k => TOWER_TYPES[k] && !isTowerUnlocked(k));
-          const nextLockLv = Math.min(...locked.map(k => TOWER_TYPES[k].unlockLevel));
-          const shown = RING_TOWER_ORDER.filter(k => TOWER_TYPES[k] && (isTowerUnlocked(k) || (TOWER_TYPES[k].unlockLevel === nextLockLv && k === locked.find(l => TOWER_TYPES[l].unlockLevel === nextLockLv))));
-          const items = shown.map(k => {
-            const tDef = TOWER_TYPES[k];
-            const unlocked = isTowerUnlocked(k);
-            const cost = getTowerCostWithHero(tDef.levels[0].cost);
-            return {
-              id: k,
-              icon: unlocked ? towerIconSvg(k) : RING_ICONS.lock,
-              aria: getTowerName(k),
-              cost: unlocked ? `${cost}⚡` : L(`Blm ${tDef.unlockLevel}`, `Lv ${tDef.unlockLevel}`),
-              disabled: !unlocked,
-              dim: unlocked && state.gold < cost,
-              accent: tDef.color,
-              onSelect: () => ringBuild(idx, k)
-            };
-          });
-          return { items, title: L("KULE KUR", "BUILD") };
-        }
-        const t = sock.tower;
-        const tDef = TOWER_TYPES[t.typeKey];
-        const lvStats = tDef.levels[t.level - 1];
-        const items = [];
-        if (t.level < 3) {
-          const nextCost = getTowerCostWithHero(tDef.levels[t.level].cost);
-          items.push({ id: "upgrade", icon: RING_ICONS.upgrade, label: L("Yükselt", "Upgrade"), cost: `${nextCost}⚡`, dim: state.gold < nextCost, accent: "#22d3ee",
-            onSelect: () => { document.getElementById("btnUpgradeTower").click(); refreshSocketRing(true); } });
-        } else if (tDef.branchA && tDef.branchB) {
-          ["A", "B"].forEach(key => {
-            const info = key === "A" ? tDef.branchA : tDef.branchB;
-            const name = (state.lang === "en" ? info.nameEn : info.nameTr).split(":").pop().split("(")[0].trim();
-            const on = (t.branch || "A") === key;
-            items.push({ id: "branch" + key, icon: `<b style="font:900 18px Orbitron,sans-serif;color:${on ? "#fde047" : "#94a3b8"}">${key}</b>`, label: name, cost: on ? L("AKTİF", "ON") : L("SEÇ", "PICK"),
-              accent: on ? "#facc15" : "#475569", onSelect: () => { selectTowerBranch(key); refreshSocketRing(true); } });
-          });
-        }
-        if (tDef.isBarracks) {
-          items.push({ id: "rally", icon: RING_ICONS.rally, label: L("Toplanma", "Rally"), accent: "#4ade80",
-            onSelect: () => { beginRallyEdit(idx); } });
-        } else if (!tDef.isEconomy) {
-          const modeShort = { first: L("İlk", "First"), strong: L("Güçlü", "Strong"), weak: L("Zayıf", "Weak"), flying: L("Uçan", "Flying") };
-          items.push({ id: "target", icon: RING_ICONS.target, label: L("Hedef", "Target"), cost: modeShort[t.targetMode || "first"], accent: "#fbbf24",
-            onSelect: () => { document.getElementById("btnCycleTargetPriority").click(); refreshSocketRing(true); } });
-        }
-        items.push({ id: "sell", icon: RING_ICONS.sell, label: L("Sat", "Sell"), cost: `+${lvStats.refund}⚡`, accent: "#fb7185",
-          onSelect: () => { document.getElementById("btnSellTower").click(); closeSocketRing(); } });
-        return { items, title: `${getTowerName(t.typeKey)} ${"★".repeat(t.level)}` };
-      }
-
-      function openSocketRing(idx) {
-        const sock = SOCKETS[idx];
-        if (!sock) return;
-        ringSocketIdx = idx;
-        const { items, title } = ringItemsForSocket(idx);
-        const pos = socketScreenPos(sock);
-        ringMenu.open(pos.x, pos.y, items, { title, key: `${idx}:${sock.tower ? sock.tower.typeKey + sock.tower.level : "empty"}` });
-        document.getElementById("canvasContainer").classList.add("ring-open");
-      }
-
-      function closeSocketRing() {
-        ringSocketIdx = -1;
-        ringMenu.close();
-        document.getElementById("canvasContainer").classList.remove("ring-open");
-      }
-
-      // Enerji değişince maliyet renklerini günceller; kule seviyesi değiştiyse menüyü yeniden kurar.
-      function refreshSocketRing(force) {
-        if (!ringMenu.isOpen() || ringSocketIdx < 0) return;
-        const sock = SOCKETS[ringSocketIdx];
-        if (!sock) { closeSocketRing(); return; }
-        const key = `${ringSocketIdx}:${sock.tower ? sock.tower.typeKey + sock.tower.level : "empty"}`;
-        if (force || key !== ringMenu.key()) { openSocketRing(ringSocketIdx); return; }
-        ringMenu.update(ringItemsForSocket(ringSocketIdx).items);
-      }
-
-      function ringBuild(idx, typeKey) {
-        const tDef = TOWER_TYPES[typeKey];
-        if (!isTowerUnlocked(typeKey)) {
-          showToast(L(`🔒 ${getTowerName(typeKey)} Bölüm ${tDef.unlockLevel}'de açılır!`, `🔒 ${getTowerName(typeKey)} unlocks at Level ${tDef.unlockLevel}!`));
-          return;
-        }
-        const cost = getTowerCostWithHero(tDef.levels[0].cost);
-        if (state.gold < cost) {
-          showToast(L(`Yetersiz enerji: ${getTowerName(typeKey)} için ${cost}⚡ gerekli.`, `Not enough energy: ${getTowerName(typeKey)} needs ${cost}⚡.`));
-          return;
-        }
-        state.selectedSocketIndex = idx;
-        const btn = document.querySelector(`.tower-build-btn[data-tower="${typeKey}"]`);
-        if (btn) btn.click();
-        state.selectedSocketIndex = -1;
-        closeSocketRing();
-        updateSocketInspector();
-      }
 
       function beginRallyEdit(idx) {
         rallyEditSocketIdx = idx;
-        closeSocketRing();
         showToast(L("🚩 Askerlerin toplanacağı yere, yolun üstüne dokun.", "🚩 Tap a spot on the road for the troops to gather."));
       }
 
@@ -7089,10 +6981,15 @@
       let wavePreview = { idx: -1, keys: [] };
 
       const HERO_COMBAT = {
-        vega: { hp: 200, melee: 9, ranged: { range: 120, dmg: 6, rate: 1.5 }, skillCd: 24, skillTr: "Yıldırım Fırtınası", skillEn: "Lightning Storm" },
-        kaan: { hp: 290, melee: 11, ranged: { range: 95, dmg: 4, rate: 1.2 }, skillCd: 28, skillTr: "EMP Şoku", skillEn: "EMP Shock" },
-        nova: { hp: 180, melee: 8, ranged: { range: 135, dmg: 8, rate: 1.2 }, skillCd: 32, skillTr: "Meteor Yağmuru", skillEn: "Meteor Shower" }
+        vega: { hp: 230, melee: 13, ranged: { range: 120, dmg: 9, rate: 1.6 }, skillCd: 20, skillTr: "Yıldırım Fırtınası", skillEn: "Lightning Storm" },
+        kaan: { hp: 330, melee: 15, ranged: { range: 95, dmg: 6, rate: 1.3 }, skillCd: 22, skillTr: "EMP Şoku", skillEn: "EMP Shock" },
+        nova: { hp: 205, melee: 11, ranged: { range: 135, dmg: 12, rate: 1.3 }, skillCd: 24, skillTr: "Meteor Yağmuru", skillEn: "Meteor Shower" }
       };
+      // Kahraman haritaya indirilir, HERO_DEPLOY_SECONDS savaşır ve ayrılır; sonra şarj olur.
+      const HERO_DEPLOY_SECONDS = 60;
+      const HERO_RECHARGE_SECONDS = 30;
+      let heroDeployLeft = 0;
+      let heroRecharge = 0;
       const ENEMY_GLYPH = { swarm: "🐜", tank: "🦀", flying: "🦇", healer: "✚", stealth: "👻", splitter: "🔷", mini_crystal: "💠", boss: "👑" };
 
       function heroCombatFor(key) { return HERO_COMBAT[key] || HERO_COMBAT.vega; }
@@ -7116,16 +7013,12 @@
         enemyDps: enemyMeleeDps,
         onShot: (u, e) => {
           const hm = getHeroMeta(state.activeHero);
-          laserBeams.push({ x1: u.x, y1: u.y - 10, x2: e.x, y2: e.y, color: hm.color, life: 0.12, width: 2.2 });
+          laserBeams.push({ x1: u.x + u.facing * 12, y1: u.y - 7, x2: e.x, y2: e.y, color: hm.color, life: 0.1, width: 1.8 });
         },
         onDeath: (u) => {
           spawnParticles(u.x, u.y, u.kind === "hero" ? "#facc15" : "#4ade80", 10);
-          if (u.kind === "hero") {
-            heroSelected = false;
-            showToast(L(`💥 ${getHeroMeta(state.activeHero).name} düştü! ${Math.round(u.respawnTime)} sn sonra geri dönecek.`, `💥 ${getHeroMeta(state.activeHero).name} is down! Back in ${Math.round(u.respawnTime)}s.`));
-          }
-        },
-        onRespawn: (u) => { if (u.kind === "hero") floatingTexts.push({ x: u.x, y: u.y - 26, text: L("⚡ KAHRAMAN DÖNDÜ", "⚡ HERO IS BACK"), color: "#fde047", life: 1.2 }); }
+          if (u.kind === "hero") recallHero(true);
+        }
       };
 
       function pointBackAlongPath(path, distBack) {
@@ -7154,26 +7047,65 @@
           dmg: combat.melee * dmgScale,
           rate: 1.4,
           reach: 50,
-          contact: 16,
-          speed: 165,
+          contact: 14,
+          speed: 78,
           regen: 0.04,
-          respawnTime: 20,
+          respawnTime: 999,
           ranged: { range: combat.ranged.range, dmg: combat.ranged.dmg * dmgScale, rate: combat.ranged.rate }
         });
-        heroUnit.skillCd = 4;
+        heroUnit.skillCd = 0;
+        heroUnit.deployed = false;
+      }
+
+      // Kahramanı (x, y) noktasına indirir: ışınlanma efekti, 60 sn görev süresi başlar.
+      function deployHero(x, y) {
+        if (!heroUnit || heroUnit.deployed || heroRecharge > 0) return;
+        const px = Math.max(20, Math.min(VIRTUAL_W - 20, x));
+        const py = Math.max(132, Math.min(VIRTUAL_H - 20, y));
+        heroUnit.homeX = px; heroUnit.homeY = py;
+        heroUnit.x = px; heroUnit.y = py;
+        heroUnit.hp = heroUnit.maxHp;
+        heroUnit.dead = false;
+        heroUnit.target = null;
+        heroUnit.deployed = true;
+        heroDeployLeft = HERO_DEPLOY_SECONDS;
         battleUnits.push(heroUnit);
+        const hm = getHeroMeta(state.activeHero);
+        lightningArcs.push({ x1: px, y1: Math.max(90, py - 160), x2: px, y2: py, color: hm.color, life: 0.35 });
+        shockwaves.push({ x: px, y: py, maxR: 46, r: 6, color: hm.color, life: 0.4 });
+        spawnParticles(px, py, hm.color, 12);
+        floatingTexts.push({ x: px, y: py - 30, text: `${hm.emoji} ${hm.name}`, color: hm.color, life: 1.2 });
+        SoundFX.upgrade(2);
+        triggerHaptic("medium");
+      }
+
+      // Süre dolunca ya da yenilince kahraman ayrılır ve şarj olmaya başlar.
+      function recallHero(fell) {
+        if (!heroUnit || !heroUnit.deployed) return;
+        const hm = getHeroMeta(state.activeHero);
+        window.BattleUnits.release(heroUnit);
+        battleUnits = battleUnits.filter(u => u !== heroUnit);
+        lightningArcs.push({ x1: heroUnit.x, y1: heroUnit.y, x2: heroUnit.x, y2: Math.max(90, heroUnit.y - 160), color: hm.color, life: 0.35 });
+        spawnParticles(heroUnit.x, heroUnit.y, hm.color, 10);
+        heroUnit.deployed = false;
+        heroUnit.dead = false;
+        heroSelected = false;
+        heroDeployLeft = 0;
+        heroRecharge = HERO_RECHARGE_SECONDS;
+        floatingTexts.push({ x: heroUnit.x, y: heroUnit.y - 26, text: fell ? L("💥 Kahraman yenildi", "💥 Hero defeated") : L("👋 Görev tamam!", "👋 Mission done!"), color: hm.color, life: 1.1 });
       }
 
       // Kahraman değişince ya da terfi edince sahadaki gemi yeni istatistiklerle aynı yerde yenilenir.
       function refreshFieldHero() {
         if (!heroUnit) return;
-        const at = { x: heroUnit.homeX, y: heroUnit.homeY, dead: heroUnit.dead, respawnT: heroUnit.respawnT };
+        const was = { deployed: heroUnit.deployed, x: heroUnit.x, y: heroUnit.y, hx: heroUnit.homeX, hy: heroUnit.homeY };
         window.BattleUnits.release(heroUnit);
         battleUnits = battleUnits.filter(u => u !== heroUnit);
         createHeroUnit();
-        heroUnit.homeX = at.x; heroUnit.homeY = at.y;
-        heroUnit.x = at.x; heroUnit.y = at.y;
-        if (at.dead) { heroUnit.dead = true; heroUnit.respawnT = at.respawnT; heroUnit.hp = 0; }
+        if (was.deployed) {
+          Object.assign(heroUnit, { x: was.x, y: was.y, homeX: was.hx, homeY: was.hy, deployed: true });
+          battleUnits.push(heroUnit);
+        }
       }
 
       function resetBattleUnits() {
@@ -7183,6 +7115,8 @@
         heroMoveMarker = null;
         unitScale = 0.6 + 0.4 * calculateDifficulty(state.level, 0).hpMult;
         wavePreview = { idx: -1, keys: [] };
+        heroDeployLeft = 0;
+        heroRecharge = 0;
         createHeroUnit();
       }
 
@@ -7226,13 +7160,21 @@
         });
         battleUnits = kept;
         window.BattleUnits.step(battleUnits, activeEnemies, dt, unitEnv);
-        if (heroUnit) heroUnit.skillCd = Math.max(0, (heroUnit.skillCd || 0) - dt);
+        if (heroUnit) {
+          heroUnit.skillCd = Math.max(0, (heroUnit.skillCd || 0) - dt);
+          if (heroUnit.deployed) {
+            heroDeployLeft -= dt;
+            if (heroDeployLeft <= 0) recallHero(false);
+          } else if (heroRecharge > 0) {
+            heroRecharge = Math.max(0, heroRecharge - dt);
+          }
+        }
         if (heroMoveMarker) { heroMoveMarker.life -= dt; if (heroMoveMarker.life <= 0) heroMoveMarker = null; }
         mapProps.forEach(p => { if (p.cd > 0) p.cd = Math.max(0, p.cd - dt); p.phase = (p.phase || 0) + dt; });
       }
 
       function moveHeroTo(vx, vy) {
-        if (!heroUnit || heroUnit.dead) return;
+        if (!heroUnit || !heroUnit.deployed) return;
         const x = Math.max(20, Math.min(VIRTUAL_W - 20, vx));
         const y = Math.max(132, Math.min(VIRTUAL_H - 20, vy));
         window.BattleUnits.release(heroUnit);
@@ -7244,7 +7186,7 @@
       }
 
       function castHeroSkill() {
-        if (!heroUnit || heroUnit.dead || heroUnit.skillCd > 0 || state.levelEnded) return;
+        if (!heroUnit || !heroUnit.deployed || heroUnit.skillCd > 0 || state.levelEnded) return;
         const key = state.activeHero;
         const combat = heroCombatFor(key);
         const power = unitScale * heroLevelMult() * getDmgMultiplier();
@@ -7391,9 +7333,8 @@
         for (const p of mapProps) {
           if (Math.hypot(p.x - vx, p.y - vy) <= 30) { tapMapProp(p); return true; }
         }
-        if (heroUnit && !heroUnit.dead && Math.hypot(heroUnit.x - vx, (heroUnit.y - 8) - vy) <= 30) {
+        if (heroUnit && heroUnit.deployed && Math.hypot(heroUnit.x - vx, (heroUnit.y - 8) - vy) <= 28) {
           heroSelected = !heroSelected;
-          closeSocketRing();
           SoundFX.uiClick();
           updateHeroDock();
           return true;
@@ -7403,7 +7344,8 @@
           heroSelected = false;
           updateHeroDock();
           if (onSocket) return false;
-          moveHeroTo(vx, vy);
+          if (heroUnit.deployed) moveHeroTo(vx, vy);
+          else deployHero(vx, vy);
           return true;
         }
         return false;
@@ -7416,35 +7358,50 @@
         const hm = getHeroMeta(state.activeHero);
         const combat = heroCombatFor(state.activeHero);
         dock.style.setProperty("--hero-color", hm.color);
-        const ratio = heroUnit.dead ? 0 : heroUnit.hp / heroUnit.maxHp;
-        dock.style.setProperty("--hero-hp", (ratio * 100).toFixed(1));
+        // Halka: sahadayken kalan görev süresi, şarjdayken dolum, hazırsa tam.
+        const ring = heroUnit.deployed ? heroDeployLeft / HERO_DEPLOY_SECONDS : (heroRecharge > 0 ? 1 - heroRecharge / HERO_RECHARGE_SECONDS : 1);
+        dock.style.setProperty("--hero-hp", (ring * 100).toFixed(1));
         dock.classList.toggle("is-selected", heroSelected);
-        dock.classList.toggle("is-dead", heroUnit.dead);
+        dock.classList.toggle("is-dead", !heroUnit.deployed && heroRecharge > 0);
+        dock.classList.toggle("is-ready", !heroUnit.deployed && heroRecharge <= 0);
         const portrait = document.getElementById("heroDockPortrait");
         if (portrait.dataset.hero !== hm.key) { portrait.dataset.hero = hm.key; portrait.innerHTML = HERO_ICONS[hm.key] || HERO_ICONS.vega; }
-        document.getElementById("heroDockState").textContent = heroUnit.dead ? `${Math.ceil(heroUnit.respawnT)}s` : (heroSelected ? L("NEREYE?", "WHERE?") : "");
+        let label = "";
+        if (heroSelected) label = heroUnit.deployed ? L("NEREYE?", "WHERE?") : L("İNDİR", "DROP");
+        else if (heroUnit.deployed) label = `${Math.ceil(heroDeployLeft)}s`;
+        else if (heroRecharge > 0) label = `${Math.ceil(heroRecharge)}s`;
+        else label = L("HAZIR", "READY");
+        document.getElementById("heroDockState").textContent = label;
         const cdRatio = heroUnit.skillCd > 0 ? heroUnit.skillCd / combat.skillCd : 0;
-        dock.style.setProperty("--skill-cd", (cdRatio * 100).toFixed(1));
+        dock.style.setProperty("--skill-cd", (heroUnit.deployed ? cdRatio * 100 : 100).toFixed(1));
         const skillBtn = document.getElementById("btnHeroSkill");
-        skillBtn.classList.toggle("is-ready", cdRatio === 0 && !heroUnit.dead);
+        skillBtn.classList.toggle("is-ready", heroUnit.deployed && cdRatio === 0);
+        skillBtn.classList.toggle("hidden", !heroUnit.deployed);
         skillBtn.title = state.lang === "en" ? combat.skillEn : combat.skillTr;
-        document.getElementById("heroSkillTime").textContent = heroUnit.skillCd > 0 ? String(Math.ceil(heroUnit.skillCd)) : "";
+        document.getElementById("heroSkillTime").textContent = heroUnit.deployed && heroUnit.skillCd > 0 ? String(Math.ceil(heroUnit.skillCd)) : "";
       }
 
       document.getElementById("btnHeroSelect").addEventListener("click", (e) => {
         e.stopPropagation();
         SoundFX.init();
-        if (!heroUnit || heroUnit.dead) { showToast(L("Kahraman yeniden doğuyor…", "Hero is respawning…")); return; }
+        if (!heroUnit || state.levelEnded) return;
+        if (!heroUnit.deployed && heroRecharge > 0) {
+          showToast(L(`Kahraman şarj oluyor: ${Math.ceil(heroRecharge)} sn`, `Hero recharging: ${Math.ceil(heroRecharge)}s`));
+          return;
+        }
         heroSelected = !heroSelected;
-        closeSocketRing();
         SoundFX.uiClick();
-        if (heroSelected) showToast(L("🎯 Kahramanı göndermek için haritada bir yere dokun.", "🎯 Tap anywhere on the map to send your hero."));
+        if (heroSelected) {
+          showToast(heroUnit.deployed
+            ? L("🎯 Kahramanın gideceği yere dokun.", "🎯 Tap where your hero should go.")
+            : L(`🦸 Kahramanı indirmek için haritada bir yere dokun (${HERO_DEPLOY_SECONDS} sn savaşır).`, `🦸 Tap the map to drop your hero (fights for ${HERO_DEPLOY_SECONDS}s).`));
+        }
         updateHeroDock();
       });
       document.getElementById("btnHeroSkill").addEventListener("click", (e) => {
         e.stopPropagation();
         SoundFX.init();
-        if (!heroUnit || heroUnit.dead) return;
+        if (!heroUnit || !heroUnit.deployed) { showToast(L("Önce kahramanı haritaya indir.", "Drop your hero on the map first.")); return; }
         if (heroUnit.skillCd > 0) { showToast(L(`Yetenek ${Math.ceil(heroUnit.skillCd)} sn sonra hazır.`, `Skill ready in ${Math.ceil(heroUnit.skillCd)}s.`)); return; }
         castHeroSkill();
       });
@@ -7493,50 +7450,65 @@
         }
       }
 
+      // Kahraman: küçük insan komutan. Her kahramanın zırh rengi ve silahı farklı.
       function drawHeroUnit(ctx, nowAnim) {
         const u = heroUnit;
+        if (!u.deployed) return;
         const hm = getHeroMeta(state.activeHero);
-        if (u.dead) {
-          const home = { x: u.homeX + u.offsetX, y: u.homeY + u.offsetY };
-          ctx.save();
-          ctx.globalAlpha = 0.5;
-          ctx.strokeStyle = hm.color; ctx.setLineDash([3, 4]); ctx.lineWidth = 1.5;
-          ctx.beginPath(); ctx.arc(home.x, home.y - 8, 14, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - u.respawnT / u.respawnTime)); ctx.stroke();
-          ctx.restore();
-          return;
-        }
-        const hover = Math.sin(nowAnim * 3) * 2.5;
+        const walk = u.moving ? Math.sin(nowAnim * 12) : 0;
         ctx.save();
-        // gölge yerde, gemi havada
-        ctx.fillStyle = "rgba(0,0,0,0.35)";
-        ctx.beginPath(); ctx.ellipse(u.x, u.y + 6, 13, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(0,0,0,0.38)";
+        ctx.beginPath(); ctx.ellipse(u.x, u.y + 7, 9, 3.2, 0, 0, Math.PI * 2); ctx.fill();
         if (heroSelected) {
           ctx.strokeStyle = hm.color; ctx.lineWidth = 2; ctx.globalAlpha = 0.6 + Math.sin(nowAnim * 6) * 0.3;
-          ctx.beginPath(); ctx.ellipse(u.x, u.y + 6, 20, 8, 0, 0, Math.PI * 2); ctx.stroke();
+          ctx.beginPath(); ctx.ellipse(u.x, u.y + 7, 17, 7, 0, 0, Math.PI * 2); ctx.stroke();
           ctx.globalAlpha = 1;
         }
-        // çekici ışın: durdurduğu düşmana bağlı
-        if (u.target && u.target.blockedBy === u) {
-          ctx.strokeStyle = hm.color; ctx.globalAlpha = 0.45; ctx.lineWidth = 3;
-          ctx.beginPath(); ctx.moveTo(u.x, u.y - 8 + hover); ctx.lineTo(u.target.x, u.target.y); ctx.stroke();
-          ctx.globalAlpha = 1;
+        ctx.translate(u.x, u.y - 1 - Math.abs(walk) * 1.2);
+        ctx.scale(u.facing * 1.25, 1.25);
+        // bacaklar
+        ctx.strokeStyle = "#1e293b"; ctx.lineWidth = 2.4; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(-1.8, 1); ctx.lineTo(-1.8 - walk * 2.2, 6.5); ctx.moveTo(1.8, 1); ctx.lineTo(1.8 + walk * 2.2, 6.5); ctx.stroke();
+        // pelerin (Nova) / sırt çantası (Kaan)
+        if (hm.key === "nova") {
+          ctx.fillStyle = "#7c3aed";
+          ctx.beginPath(); ctx.moveTo(-3, -8); ctx.lineTo(-6.5 - walk, 3); ctx.lineTo(-1, 2); ctx.closePath(); ctx.fill();
+        } else if (hm.key === "kaan") {
+          ctx.fillStyle = "#475569"; ctx.fillRect(-6, -7, 3.2, 7);
         }
-        ctx.translate(u.x, u.y - 12 + hover);
-        ctx.scale(u.facing, 1);
-        if (state.qualityMode !== "performance") { ctx.shadowColor = hm.color; ctx.shadowBlur = 12; }
-        ctx.fillStyle = "#0f172a"; ctx.strokeStyle = hm.color; ctx.lineWidth = 2;
-        ctx.beginPath();
-        if (hm.key === "kaan") { ctx.roundRect(-11, -7, 22, 14, 4); }
-        else if (hm.key === "nova") { ctx.moveTo(14, 0); ctx.lineTo(-10, -8); ctx.lineTo(-5, 0); ctx.lineTo(-10, 8); ctx.closePath(); }
-        else { ctx.moveTo(15, 0); ctx.lineTo(-9, -10); ctx.lineTo(-4, 0); ctx.lineTo(-9, 10); ctx.closePath(); }
-        ctx.fill(); ctx.stroke();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = hm.color;
-        ctx.beginPath(); ctx.arc(2, 0, 3, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = "rgba(255,255,255,0.75)";
-        ctx.beginPath(); ctx.arc(-9 - Math.random() * 2, 0, 2, 0, Math.PI * 2); ctx.fill();
+        // gövde zırhı
+        ctx.fillStyle = hm.color; ctx.strokeStyle = "#0f172a"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.roundRect(-3.6, -8.5, 7.2, 10, 2.2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "rgba(15,23,42,0.55)"; ctx.fillRect(-3.6, -2.6, 7.2, 1.6);
+        // kafa + kask vizörü
+        ctx.fillStyle = "#f1c27d";
+        ctx.beginPath(); ctx.arc(0, -11.5, 3.2, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#0f172a";
+        ctx.beginPath(); ctx.arc(0, -12.3, 3.5, Math.PI * 1.05, Math.PI * 1.95); ctx.fill();
+        ctx.fillStyle = hm.color; ctx.fillRect(0.6, -12.6, 3, 1.4);
+        // silah
+        const firing = u.swing > 0.5 || (u.rangedCd > (1 / u.ranged.rate) - 0.08);
+        if (hm.key === "kaan") {
+          ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(3, -5); ctx.lineTo(8, -10 + u.swing * 6); ctx.stroke();
+          ctx.beginPath(); ctx.arc(8.8, -10.8 + u.swing * 6, 1.8, 0, Math.PI * 2); ctx.stroke();
+        } else if (hm.key === "nova") {
+          ctx.strokeStyle = "#a78bfa"; ctx.lineWidth = 1.6;
+          ctx.beginPath(); ctx.moveTo(4, 4); ctx.lineTo(5.5, -14); ctx.stroke();
+          ctx.fillStyle = firing ? "#ffffff" : "#c4b5fd";
+          ctx.beginPath(); ctx.arc(5.6, -15, 2.3, 0, Math.PI * 2); ctx.fill();
+        } else {
+          ctx.fillStyle = "#334155"; ctx.fillRect(1.5, -6.5, 9, 2.4);
+          ctx.fillStyle = hm.color; ctx.fillRect(9, -6.2, 2, 1.8);
+          if (firing) { ctx.fillStyle = "#fef08a"; ctx.beginPath(); ctx.arc(12, -5.3, 2.4, 0, Math.PI * 2); ctx.fill(); }
+        }
         ctx.restore();
-        fxHealthBar(ctx, u.x, u.y - 30, 26, 3.2, u.hp / u.maxHp, true);
+        fxHealthBar(ctx, u.x, u.y - 26, 22, 3, u.hp / u.maxHp, true);
+        // görev süresi: sağlık çubuğunun altında ince çizgi
+        ctx.save();
+        ctx.fillStyle = "rgba(15,23,42,0.85)"; ctx.fillRect(u.x - 11, u.y - 22, 22, 1.8);
+        ctx.fillStyle = hm.color; ctx.fillRect(u.x - 11, u.y - 22, 22 * Math.max(0, heroDeployLeft / HERO_DEPLOY_SECONDS), 1.8);
+        ctx.restore();
       }
 
       function drawWaveFlags(ctx, nowAnim) {
@@ -7723,6 +7695,26 @@
       });
 
       // ALT TAKTİK KOMUTA BARI BUTONLARI
+      // Alt satır kısayolları: Bölüm 1'de Rehber, sonrasında Kahraman ve Mağaza (Evrim her zaman).
+      function updateDockShortcuts() {
+        const veteran = (state.unlockedLevel || 1) > 1;
+        document.getElementById("btnBottomTowerInfo").classList.toggle("hidden", veteran);
+        document.getElementById("btnBottomHeroes").classList.toggle("hidden", !veteran);
+        document.getElementById("btnBottomShop").classList.toggle("hidden", !veteran);
+        document.getElementById("lblBottomHeroes").textContent = L("Kahraman", "Heroes");
+        document.getElementById("lblBottomShop").textContent = L("Mağaza", "Shop");
+      }
+      document.getElementById("btnBottomHeroes").addEventListener("click", () => {
+        SoundFX.uiClick();
+        state.paused = true;
+        renderMissionsAndHeroesModal();
+        document.getElementById("modalMissions").classList.remove("hidden");
+      });
+      document.getElementById("btnBottomShop").addEventListener("click", () => {
+        SoundFX.uiClick();
+        openShop(false);
+      });
+
       document.getElementById("btnBottomTowerInfo").addEventListener("click", () => {
         SoundFX.uiClick();
         document.getElementById("modalTowerInfo").classList.remove("hidden");
@@ -7878,7 +7870,6 @@
         SoundFX.init();
         SoundFX.uiClick();
         state.paused = true;
-        closeSocketRing();
         document.getElementById("btnPauseToggle").textContent = "Devam Et ▶";
         populatePlayerLevelDropdown();
         updateHUD();
@@ -8225,6 +8216,7 @@
         const sock = SOCKETS[state.selectedSocketIndex];
         if (!sock || !sock.tower) return;
         SoundFX.uiClick();
+        if (TOWER_TYPES[sock.tower.typeKey].isBarracks) { beginRallyEdit(state.selectedSocketIndex); return; }
         const order = ["first", "strong", "weak", "flying"];
         const cur = sock.tower.targetMode || "first";
         sock.tower.targetMode = order[(order.indexOf(cur) + 1) % order.length];
@@ -8920,8 +8912,8 @@
             target: byId("btnLobbyOpenHeroes"),
             title: L("KAHRAMAN MENÜSÜ", "HEROES MENU"),
             body: L(
-              "Komutanını buradan seçersin. Seçtiğin kahraman kulelerine <b>kalıcı bonus</b> verir ve savaşta sahaya iner: sol alttaki portreye, sonra haritada bir yere dokunarak onu istediğin yere gönderirsin. Hadi içine bakalım.",
-              "Pick your commander here. Your hero gives your towers a <b>permanent bonus</b> and joins every battle: tap the portrait at the bottom left, then a spot on the map, to send them anywhere. Let's look inside."
+              "Komutanını buradan seçersin. Seçtiğin kahraman kulelerine <b>kalıcı bonus</b> verir ve savaşta sahaya iner: sol alttaki portreye, sonra haritada bir yere dokunarak onu 60 saniyeliğine istediğin yere indirirsin. Hadi içine bakalım.",
+              "Pick your commander here. Your hero gives your towers a <b>permanent bonus</b> and joins every battle: tap the portrait at the bottom left, then a spot on the map, to drop them in for 60 seconds. Let's look inside."
             )
           },
           {
