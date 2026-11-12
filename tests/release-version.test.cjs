@@ -1,10 +1,10 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-test('store version is 1.2 and is applied by the iOS settings script', () => {
+test('store version is 1.3 and is applied by the iOS settings script', () => {
   const v = fs.readFileSync('ios_config/APP_VERSION', 'utf8').trim();
   assert.match(v, /^\d+\.\d+(\.\d+)?$/);
-  assert.equal(v, '1.2');
+  assert.equal(v, '1.3');
   const sh = fs.readFileSync('ios_config/apply_ios_settings.sh', 'utf8');
   assert.match(sh, /MARKETING_VERSION/);
   assert.match(sh, /CFBundleShortVersionString/);

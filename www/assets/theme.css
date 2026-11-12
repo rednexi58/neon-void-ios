@@ -38,8 +38,7 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 #modalShop > div,
 #modalLevelEnd > div,
 #modalIosGuide > div,
-#modalDailyLogin > div,
-#modalStartLobby > div {
+#modalDailyLogin > div {
   background: var(--gk-panel-bg) !important;
   border-color: var(--gk-panel-border) !important;
   border-width: 1px !important;
@@ -75,28 +74,7 @@ button:not(:disabled):active { transform: scale(0.97); }
 button:disabled { opacity: 0.55; cursor: default; filter: saturate(0.7); }
 button:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
 
-/* 4. Lobby --------------------------------------------------------------------- */
-/* Quick-access tiles: labels must fit their tile on 375pt phones. */
-#modalStartLobby button[id^="btnLobbyOpen"] {
-  min-width: 0;
-  padding-left: 2px !important;
-  padding-right: 2px !important;
-  font-size: 9.5px;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-}
-#modalStartLobby button[id^="btnLobbyOpen"] > span:last-child {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-#btnLobbyStartCampaign {
-  box-shadow: 0 10px 30px rgba(34, 211, 238, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
-}
-#btnLobbyStartEndless {
-  box-shadow: 0 10px 30px rgba(192, 38, 211, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.10) inset;
-}
+/* 4. Lobby: styles live in lobby.css (campaign map shell). */
 
 /* 5. Store --------------------------------------------------------------------- */
 #modalShop .btn-buy-gems,
@@ -128,8 +106,7 @@ button:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
   #modalShop > div,
   #modalLevelEnd > div,
   #modalIosGuide > div,
-  #modalDailyLogin > div,
-  #modalStartLobby > div {
+  #modalDailyLogin > div {
     zoom: var(--gk-ipad-scale);
     /* zoom also scales viewport units; keep the scaled panel inside the screen. */
     max-height: calc(92dvh / var(--gk-ipad-scale)) !important;
