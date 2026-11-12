@@ -160,6 +160,21 @@ button:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
   min-height: 2.1em;
 }
 
+/* 9b. Cards must fit the fixed 76px dock on every iPhone: the small role tag stays on ONE
+   line (ellipsis if a translation is long) and the icon drops its vertical margin.
+   Without this, a two-line tag pushed the price row below the screen on 393pt iPhones. */
+.tower-build-btn > span:first-child {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tower-build-btn > svg { width: 1.3rem; height: 1.3rem; margin-top: 1px; margin-bottom: 1px; }
+
+/* 9c. HUD resource box: the VIP pill is compact so the level/wave column is never clipped. */
+#badgeRemoveAds { letter-spacing: 0.04em; }
+
 /* 10. Tutorial focus: pulsing amber outline on the element the current step explains. */
 .gk-trainer-focus {
   position: relative;

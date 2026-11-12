@@ -150,7 +150,7 @@
             <div class="flex flex-col leading-tight">
               <div class="flex items-center gap-1 text-[9px] text-sky-300 font-semibold">
                 <span id="i18n_hudResourceLbl">Enerji:</span>
-                <span id="badgeRemoveAds" class="hidden px-1 py-0.2 text-[8px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded">REKLAMSIZ</span>
+                <span id="badgeRemoveAds" class="hidden px-1 py-0.2 text-[8px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded" title="Reklamsız / Ad-free">VIP</span>
               </div>
               <div class="flex items-center gap-1 mt-0.5">
                 <span class="text-amber-400 text-xs">⚡</span>
@@ -336,7 +336,7 @@
         </div>
 
         <!-- DURUM A: "KULELER" — 6 ÖZEL İKONLU BİLİM KURGU KULE KARTI (SABİT 76px YÜKSEKLİK) -->
-        <div id="buildTowerList" class="grid grid-cols-6 gap-1 h-[76px]">
+        <div id="buildTowerList" class="grid grid-cols-6 gap-1 h-[80px]">
           <!-- 1. Parçacık Lazer -->
           <button data-tower="rapid" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-cyan-300 active:scale-95 transition flex flex-col items-center text-center justify-between">
             <span class="text-[8px] text-cyan-300 font-semibold leading-none" id="i18n_tagRapid">Kara+Hava</span>
@@ -407,7 +407,7 @@
 
           <!-- 5. Donma Birimi (Tek Yavaşlatma / Dondurma Kulesi) -->
           <button data-tower="cryo" class="tower-build-btn relative group p-1 rounded-xl tactical-glass hover:border-cyan-200 active:scale-95 transition flex flex-col items-center text-center justify-between">
-            <span class="text-[8px] text-cyan-200 font-semibold leading-none">Tekli Dondurma</span>
+            <span class="text-[8px] text-cyan-200 font-semibold leading-none">Dondurur</span>
             <svg class="w-6 h-6 my-0.5" viewBox="0 0 40 40">
               <ellipse cx="20" cy="33" rx="13" ry="5" fill="#0f172a" stroke="#67e8f9" stroke-width="1.5"/>
               <polygon points="20,6 27,20 24,32 16,32 13,20" fill="#06b6d4" stroke="#ecfeff" stroke-width="1.5"/>
@@ -1710,7 +1710,7 @@
         },
         cryo: {
           nameTr: "Donma Birimi", nameEn: "Cryo Unit",
-          tagTr: "Tekli Dondurma", tagEn: "Single Freeze",
+          tagTr: "Dondurur", tagEn: "Freezes",
           targetTr: "Kara + Hava", targetEn: "Ground + Air",
           specTr: "%76 Yavaşlatma (Blm.3)", specEn: "76% Slow (Lv.3)"
         },
@@ -1801,7 +1801,7 @@
         ["AoE Kara", "AoE Ground"],
         ["Yıldırım", "Lightning"],
         ["Zırh Delici", "Armor Pierce"],
-        ["Tekli Dondurma", "Single Freeze"],
+        ["Dondurur", "Freezes"],
         ["Donma Birimi", "Cryo Unit"],
         ["Enerji Üretir", "Makes Energy"],
         ["Enerji Santrali", "Power Plant"],
