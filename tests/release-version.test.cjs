@@ -14,7 +14,7 @@ test('app-ads.txt lists the AdMob publisher', () => {
 });
 test('ASO metadata fits App Store limits', () => {
   const m = require('../store_assets/metadata/aso.json');
-  for (const o of Object.values(m)) {
+  for (const o of Object.values(m)) { // tr, en (US), en_GB
     assert.ok([...o.name].length <= 30 && [...o.subtitle].length <= 30);
     assert.ok(Buffer.byteLength(o.keywords) <= 100);
     assert.ok([...o.promotionalText].length <= 170);
