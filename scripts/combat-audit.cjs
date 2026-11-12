@@ -35,7 +35,7 @@ function simulate(root,level,mode,seed) {
   g.state.heroProgress.vega=profile.heroProgress.vega;
   g.startLevel(level);while(shop(g)){};g.beginWaveAfterInterstitial();
   let t=0,nextBuy=0;
-  for(;t<900&&!g.state.levelEnded;t+=.05){if(t>=nextBuy){while(shop(g)){};nextBuy=t+.5;}g.tick(.05);}
+  for(;t<900&&!g.state.levelEnded;t+=.05){if(t>=nextBuy){while(shop(g)){};nextBuy=t+.5;}if(g.autoHero)g.autoHero();g.tick(.05);}
   return {level,mode,seed,win:g.state.levelEnded&&g.state.baseHp>0,seconds:Math.round(t),hp:g.state.baseHp,wave:g.state.waveIndex+1,towers:g.sockets.filter(s=>s.tower).length,skills:{...g.state.skills},initial:profile.initial,remaining:{gear:profile.gear,gems:profile.cyberCore}};
 }
 module.exports={simulate,shop,coverage};

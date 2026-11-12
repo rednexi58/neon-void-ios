@@ -45,7 +45,9 @@ function createGame(root = path.resolve(__dirname, '..'), seed = 1) {
     globalThis.game={state,SoundFX,renderHUD,TOWER_TYPES,ENEMY_ARCHETYPES,SECTOR_PRESETS,calculateDifficulty,getHeroInfo,getStartingGold,getMaxBaseHp,syncAutonomousDrones,getCritChance,getDmgMultiplier,getRateMultiplier,getBountyMultiplier,getBaseSkillCost,getEliteSkillCoreCost,tryUpgradeSkill,applyDamageToEnemy,startLevel,buildWaveQueue,beginWaveAfterInterstitial,updateSimulation,saveProgress,loadProgress,handleLevelVictory,handleGameOver,grantDailyReward,DAILY_MISSIONS,DAILY_REWARDS_TABLE,refreshDailyMissions,getTodayKey,drawCombatDrone,
       get sockets(){return SOCKETS;},get paths(){return ACTIVE_PATHS;},get enemies(){return activeEnemies;},get drones(){return autonomousDrones;},get texts(){return floatingTexts;},
       tick(dt){ updateSimulation(dt); floatingTexts=[]; particles=[]; },
-      get waveActive(){return waveInProgress;},get queue(){return spawnQueue;},get waveFlow(){return waveFlow;},get shockwaves(){return shockwaves;}};
+      get waveActive(){return waveInProgress;},get queue(){return spawnQueue;},get waveFlow(){return waveFlow;},get shockwaves(){return shockwaves;},
+      deployHero,get heroUnit(){return heroUnit;},get heroRecharge(){return heroRecharge;},
+      autoHero(){ if(!heroUnit||heroUnit.deployed||heroRecharge>0||!waveInProgress) return; const p=ACTIVE_PATHS[0]; if(!p||!p.length) return; const a=p[p.length-2],b=p[p.length-1]; deployHero(a.x+(b.x-a.x)*0.5,a.y+(b.y-a.y)*0.5); }};
   })();`);
   vm.runInContext(source,sandbox);
   return { ...sandbox.game, api:sandbox.game, sandbox, elements, handlers };
