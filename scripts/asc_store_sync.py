@@ -241,8 +241,15 @@ class MetadataSync:
 
 
 class ScreenshotSync:
-    def __init__(self, client: AscClient):
+    """Replaces the managed screenshot sets; optionally empties other iPhone/iPad size sets.
+
+    Apple scales the largest set down to smaller devices, but only when the smaller size has no
+    screenshots of its own. A stale smaller set therefore hides the new screenshots on those devices.
+    """
+
+    def __init__(self, client: AscClient, prune_other_sizes: bool = False):
         self._client = client
+        self._prune = prune_other_sizes
 
     def run(self, locs: dict[str, dict], shot_sets: list[ShotSet]) -> None:
         for locale, (_, folder) in LOCALES.items():
@@ -257,6 +264,19 @@ class ScreenshotSync:
                     else self._create_set(loc["id"], shot_set.display_type)
                 self._replace(set_id, shot_set.files)
                 print(f"  {locale} {shot_set.prefix}: {len(shot_set.files)} screenshots uploaded")
+            if self._prune:
+                self._prune_other_sizes(locale, existing)
+
+    def _prune_other_sizes(self, locale: str, existing: dict[str, dict]) -> None:
+        managed = {display_type for display_type, _ in DISPLAY_TYPES.values()}
+        for display_type, shot_set in existing.items():
+            if display_type in managed or not display_type.startswith(("APP_IPHONE", "APP_IPAD")):
+                continue
+            old = self._client.get_all(f"/appScreenshotSets/{shot_set['id']}/appScreenshots")
+            for shot in old:
+                self._client.request("DELETE", f"/appScreenshots/{shot['id']}")
+            if old:
+                print(f"  {locale} {display_type}: removed {len(old)} stale screenshots so the new ones scale down")
 
     def _create_set(self, loc_id: str, display_type: str) -> str:
         res = self._client.request("POST", "/appScreenshotSets", {"data": {
@@ -314,6 +334,8 @@ def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--metadata", action="store_true", help="upload description, keywords, promo text, what's new")
     parser.add_argument("--screenshots", action="store_true", help="replace the screenshots")
+    parser.add_argument("--prune-other-sizes", action="store_true",
+                        help="empty iPhone/iPad screenshot sets of sizes not in the repo, so the new ones are used")
     parser.add_argument("--dry-run", action="store_true", help="only validate local files")
     args = parser.parse_args(argv)
     try:
@@ -333,7 +355,7 @@ def main(argv: list[str]) -> int:
             MetadataSync(client).run(locs, texts)
         if args.screenshots:
             print("Screenshots:")
-            ScreenshotSync(client).run(locs, shot_sets)
+            ScreenshotSync(client, args.prune_other_sizes).run(locs, shot_sets)
         print("Store listing sync finished")
         return 0
     except SyncError as e:

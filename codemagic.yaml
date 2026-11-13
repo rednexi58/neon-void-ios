@@ -162,7 +162,7 @@ workflows:
       - name: Install API dependencies
         script: pip3 install --quiet "PyJWT[crypto]>=2.8"
       - name: Upload texts and screenshots
-        script: python3 scripts/asc_store_sync.py --metadata --screenshots
+        script: python3 scripts/asc_store_sync.py --metadata --screenshots --prune-other-sizes
 
   ios-ipad-check:
     name: Gezegeni Koru - iPad Simulator Check
