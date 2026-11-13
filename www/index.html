@@ -2538,6 +2538,7 @@
         completedOrFailedCount: 0,
         adClears: 0,
         lastInterstitialClear: 0,
+        lastInterstitialAt: 0,
         reviewPromptsAsked: 0,
         reviewPromptLastAt: 0,
         waveStartPending: false,
@@ -2688,6 +2689,7 @@
             // VIP ownership is never accepted from an editable local save; StoreKit restores it.
             state.removeAds = false;
             if (Number.isSafeInteger(parsed.lastInterstitialClear)) state.lastInterstitialClear = Math.max(0, parsed.lastInterstitialClear);
+            if (Number.isSafeInteger(parsed.lastInterstitialAt)) state.lastInterstitialAt = Math.max(0, parsed.lastInterstitialAt);
             if (typeof parsed.adClears === "number") state.adClears = Math.max(0, Math.floor(parsed.adClears));
             if (Number.isSafeInteger(parsed.reviewPromptsAsked)) state.reviewPromptsAsked = Math.max(0, parsed.reviewPromptsAsked);
             if (Number.isFinite(parsed.reviewPromptLastAt)) state.reviewPromptLastAt = Math.max(0, parsed.reviewPromptLastAt);
@@ -2754,6 +2756,7 @@
             removeAds: state.removeAds,
             adClears: state.adClears,
             lastInterstitialClear: state.lastInterstitialClear,
+            lastInterstitialAt: state.lastInterstitialAt,
             reviewPromptsAsked: state.reviewPromptsAsked,
             reviewPromptLastAt: state.reviewPromptLastAt,
             unlockedLevel: state.unlockedLevel,
@@ -3641,7 +3644,8 @@
         beginWaveAfterInterstitial();
       }
 
-      // Natural break after a won level: every 2nd victory (interstitial-cadence.cjs), after a short
+      // Natural break after a won level, paced by interstitial-cadence.cjs (from level 6, every 3rd win,
+      // 3+ minutes apart), after a short
       // celebration so the win registers first. Resolves when the ad is closed or unavailable.
       async function showLevelEndInterstitial(celebrateMs = 1100) {
         if (!window.GameMonetization?.isInterstitialDue(state)) return false;
@@ -3651,7 +3655,7 @@
         try {
           if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(true);
           shown = Boolean(await window.GameMonetization.showInterstitial());
-          if (shown) { state.lastInterstitialClear = clears; saveProgress(); }
+          if (shown) { state.lastInterstitialClear = clears; state.lastInterstitialAt = Date.now(); saveProgress(); }
         } catch (error) { console.warn("AdMob geçiş reklamı", error); }
         finally { if (typeof SoundFX !== "undefined") SoundFX.setAdMuted(false); lastTime = performance.now(); }
         return shown;

@@ -1,6 +1,6 @@
 {
   "name": "gezegeni-savun-ios",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Gezegeni Koru \u2014 iOS/TestFlight with AdMob and Apple VIP StoreKit",
   "private": true,
   "scripts": {
