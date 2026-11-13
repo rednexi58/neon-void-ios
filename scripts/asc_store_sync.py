@@ -116,6 +116,45 @@ def load_texts() -> dict[str, dict[str, str]]:
 
 # ---------------------------------------------------------------- API client
 
+def resolve_private_key(raw: str, _depth: int = 0) -> str:
+    """Return the .p8 key as PEM text.
+
+    CI systems hand the key over in different shapes; codemagic-cli-tools accepts all of these, so we do too:
+    PEM text (with real or escaped newlines), '@file:<path>', '@env:<VAR>', a bare file path, or base64 of the PEM.
+    """
+    import base64
+    value = raw.strip()
+    if _depth > 3:
+        raise SyncError("APP_STORE_CONNECT_PRIVATE_KEY references loop")
+    if value.startswith("@file:"):
+        return resolve_private_key(Path(os.path.expanduser(value[6:])).read_text(), _depth + 1)
+    if value.startswith("@env:"):
+        return resolve_private_key(os.environ.get(value[5:], ""), _depth + 1)
+    if "-----BEGIN" in value:
+        pem = value.replace("\\n", "\n")
+        if "\n" not in pem.strip():  # single-line PEM: rebuild the 64-column body
+            head, body, tail = pem.partition("-----BEGIN PRIVATE KEY-----")[1], \
+                pem.split("-----BEGIN PRIVATE KEY-----")[-1].split("-----END PRIVATE KEY-----")[0].replace(" ", ""), \
+                "-----END PRIVATE KEY-----"
+            pem = head + "\n" + "\n".join(body[i:i + 64] for i in range(0, len(body), 64)) + "\n" + tail + "\n"
+        return pem
+    if len(value) < 1024 and os.path.isfile(os.path.expanduser(value)):
+        return resolve_private_key(Path(os.path.expanduser(value)).read_text(), _depth + 1)
+    try:
+        decoded = base64.b64decode(value, validate=False).decode("utf-8")
+    except (ValueError, UnicodeDecodeError):
+        decoded = ""
+    if "-----BEGIN" in decoded:
+        return resolve_private_key(decoded, _depth + 1)
+    if value and all(c.isalnum() or c in "+/=" for c in value):
+        # Raw base64 of the DER body without PEM armor.
+        body = value
+        return "-----BEGIN PRIVATE KEY-----\n" + "\n".join(body[i:i + 64] for i in range(0, len(body), 64)) \
+            + "\n-----END PRIVATE KEY-----\n"
+    shape = f"length {len(value)}, starts with {value[:6]!r}" if not value.startswith("-") else f"length {len(value)}"
+    raise SyncError(f"APP_STORE_CONNECT_PRIVATE_KEY is in an unknown format ({shape})")
+
+
 class AscClient:
     """Minimal App Store Connect API client: JWT auth, JSON requests, error reporting."""
 
@@ -129,7 +168,7 @@ class AscClient:
         missing = [n for n in names if not os.environ.get(n)]
         if missing:
             raise SyncError("missing credentials: " + ", ".join(missing))
-        key = os.environ["APP_STORE_CONNECT_PRIVATE_KEY"].replace("\\n", "\n")
+        key = resolve_private_key(os.environ["APP_STORE_CONNECT_PRIVATE_KEY"])
         return cls(os.environ[names[0]], os.environ[names[1]], key)
 
     def _auth(self) -> str:
